@@ -1,0 +1,22 @@
+﻿@{
+	Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Hello World</title>
+	</head>
+	<body>
+		Hello World
+		
+		@Html.React("HelloWorld", new
+		{
+			name = "Daniel"
+		})
+		
+		<script src="http://fb.me/react-0.9.0.min.js"></script>
+		<script src="~/Scripts/HelloWorld.react.js"></script>
+		@Html.ReactInitJavaScript()
+	</body>
+</html>
