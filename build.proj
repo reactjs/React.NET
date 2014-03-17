@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build;Test;Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<Major>0</Major>
+		<Minor>1</Minor>
+		<Build>0-dev</Build>
+		<Revision>0</Revision>
+		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
+	<UsingTask
+		AssemblyFile="src\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll"
+		TaskName="Xunit.Runner.MSBuild.xunit"
+	/>
+
+	<Target Name="RestorePackages">
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="tools\NuGet\nuget.exe restore src\React.NET.sln"
+		/>
+	</Target>
+
+	<Target Name="UpdateVersion">
+		<GitVersion LocalPath="$(MSBuildProjectDirectory)">
+			<Output TaskParameter="CommitHash" PropertyName="Revision" />
+		</GitVersion>
+		<AssemblyInfo
+			CodeLanguage="CS"
+			OutputFile="src\SharedAssemblyVersionInfo.cs"
+			AssemblyVersion="$(Major).$(Minor)"
+			AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
+			AssemblyInformationalVersion="$(Major).$(Minor).$(Build)"
+			/>
+	</Target>
+
+	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
+		<MSBuild Projects="src\React.NET.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607" />
+	</Target>
+
+	<Target Name="Test" DependsOnTargets="Build">
+		<ItemGroup>
+			<TestAssemblies Include="bin/DebugTests/**/React.Tests*.dll" />
+			<TestAssemblies Include="bin/ReleaseTests/**/React.Tests*.dll" />
+		</ItemGroup>
+		<xunit Assemblies="@(TestAssemblies)" />
+	</Target>
+
+	<!-- Create NuGet package -->
+	<Target Name="Package" DependsOnTargets="Build">
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="tools\NuGet\nuget.exe pack src\React.Mvc4\React.Mvc4.csproj -IncludeReferencedProjects -Prop Configuration=Release"
+		/>
+	</Target>
+</Project>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>React.NET (MVC 4)</title>
+		<authors>Daniel Lo Nigro, Facebook</authors>
+		<owners>Daniel Lo Nigro, Facebook</owners>
+		<licenseUrl>https://github.com/reactjs/React.NET#licence</licenseUrl>
+		<projectUrl>https://github.com/reactjs/React.NET</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>ReactJS tools for .NET. Please refer to project site (https://github.com/reactjs/React.NET) for more details, usage examples and sample code.</description>
+		<releaseNotes>Please refer to project site (https://github.com/reactjs/React.NET) for more details, release notes, usage examples and sample code.</releaseNotes>
+		<copyright>Copyright 2013</copyright>
+		<tags>asp.net mvc asp jquery javascript js react facebook reactjs</tags>
+	</metadata>
+
+	<files>
+	</files>
+</package>
