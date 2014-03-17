@@ -37,7 +37,15 @@
 		string GetInitJavaScript();
 
 		/// <summary>
-		/// Transform the specified JSX into regular JavaScript
+		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// <returns>File contents</returns>
+		string LoadJsxFile(string filename);
+
+		/// <summary>
+		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
+		/// <see cref="LoadJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>

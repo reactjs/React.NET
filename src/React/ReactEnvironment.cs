@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Web;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -19,6 +19,10 @@ namespace React
 		/// Format string used for React component container IDs
 		/// </summary>
 		private const string CONTAINER_ELEMENT_NAME = "react{0}";
+		/// <summary>
+		/// Cache key for JSX to JavaScript compilation
+		/// </summary>
+		private const string JSX_CACHE_KEY = "JSX_{0}";
 
 		/// <summary>
 		/// The JavaScript engine used in this environment
@@ -28,6 +32,9 @@ namespace React
 		/// Site-wide configuration
 		/// </summary>
 		private readonly IReactSiteConfiguration _config;
+
+		private readonly ICache _cache;
+
 		/// <summary>
 		/// Number of components instantiated in this environment
 		/// </summary>
@@ -46,13 +53,16 @@ namespace React
 		/// </summary>
 		/// <param name="engine">The JavaScript engine</param>
 		/// <param name="config">The site-wide configuration</param>
+		/// <param name="cache">The cache to use for JSX compilation</param>
 		public ReactEnvironment(
 			IJavascriptEngine engine, 
-			IReactSiteConfiguration config
+			IReactSiteConfiguration config,
+			ICache cache
 		)
 		{
 			_engine = engine;
 			_config = config;
+			_cache = cache;
 
 			LoadStandardScripts();
 			LoadExtraScripts();
@@ -75,7 +85,7 @@ namespace React
 		{
 			foreach (var file in _config.Scripts)
 			{
-				var contents = File.ReadAllText(file);
+				var contents = LoadJsxFile(file);
 				Execute(contents);
 			}
 		}
@@ -86,13 +96,6 @@ namespace React
 		/// <param name="code">JavaScript to execute</param>
 		public void Execute(string code)
 		{
-			// Convert JSX to JavaScript if required
-			// TODO: Cache this
-			if (code.Contains("@jsx"))
-			{
-				code = TransformJsx(code);
-			}
-
 			_engine.Execute(code);
 		}
 
@@ -143,7 +146,38 @@ namespace React
 		}
 
 		/// <summary>
-		/// Transforms JSX into regular JavaScript.
+		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// <returns>File contents</returns>
+		public string LoadJsxFile(string filename)
+		{
+			return _cache.GetOrInsert(
+				key: string.Format(JSX_CACHE_KEY, filename),
+				slidingExpiration: TimeSpan.FromMinutes(30),
+				cacheDependencyFiles: new[] { filename },
+				getData: () =>
+				{
+					Trace.WriteLine(string.Format("Parsing JSX from {0}", filename));
+
+					var contents = File.ReadAllText(filename);
+					// Just return directly if there's no JSX annotation
+					if (contents.Contains("@jsx"))
+					{
+						return TransformJsx(contents);
+					}
+					else
+					{
+						return contents;
+					}
+
+				}
+			);
+		}
+
+		/// <summary>
+		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
+		/// <see cref="LoadJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>

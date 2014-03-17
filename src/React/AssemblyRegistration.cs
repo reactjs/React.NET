@@ -29,6 +29,7 @@ namespace React
 
 			// Unique per request
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
+			container.Register<ICache, AspNetCache>().AsPerRequestSingleton();
 			container.Register<HttpContextBase>((c, o) => new HttpContextWrapper(HttpContext.Current));
 			container.Register<HttpServerUtilityBase>((c, o) => c.Resolve<HttpContextBase>().Server);
 

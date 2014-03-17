@@ -70,11 +70,13 @@
     <Compile Include="..\SharedAssemblyVersionInfo.cs">
       <Link>SharedAssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AspNetCache.cs" />
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="ConfigurationFactory.cs" />
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
     <Compile Include="IAssemblyRegistration.cs" />
+    <Compile Include="ICache.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="IReactComponent.cs" />
     <Compile Include="IReactEnvironment.cs" />
