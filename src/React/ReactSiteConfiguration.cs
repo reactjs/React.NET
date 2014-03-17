@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace React
@@ -8,6 +9,19 @@ namespace React
 	/// </summary>
 	public class ReactSiteConfiguration : IReactSiteConfiguration
 	{
+		private readonly Func<string, string> _pathResolverFunc;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ReactSiteConfiguration"/> class.
+		/// </summary>
+		/// <param name="pathResolverFunc">
+		/// Function used to convert site relative paths to system absolute
+		/// </param>
+		public ReactSiteConfiguration(Func<string, string> pathResolverFunc)
+		{
+			_pathResolverFunc = pathResolverFunc;
+		}
+
 		/// <summary>
 		/// All the scripts that have been added to this configuration
 		/// </summary>
@@ -24,7 +38,7 @@ namespace React
 		/// <returns>This configuration, for chaining</returns>
 		public IReactSiteConfiguration AddScript(string filename)
 		{
-			_scriptFiles.Add(filename);
+			_scriptFiles.Add(_pathResolverFunc(filename));
 			return this;
 		}
 

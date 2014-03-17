@@ -4,7 +4,9 @@
 	{
 		public void Configure(IReactSiteConfiguration config)
 		{
-			config.AddScript("~/Scripts/HelloWorld.react.js");
+			config
+				.AddScript("~/Scripts/HelloWorld.react.js")
+				.AddScript("~/Scripts/HelloWorld2.react.jsx");
 		}
 	}
 }

@@ -18,6 +18,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests", "React.Tests\React.Tests.csproj", "{D7C645EB-7B85-45D5-AAA6-CAD3DE704381}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F-49BD-4B79-8AD4-67962230E76B}"
+	ProjectSection(SolutionItems) = preProject
+		..\build.proj = ..\build.proj
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

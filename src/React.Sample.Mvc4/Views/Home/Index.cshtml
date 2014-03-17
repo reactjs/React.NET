@@ -6,11 +6,21 @@
 <html>
 	<head>
 		<title>Hello World</title>
+		<style>
+			.awesome {
+				border: 1px dotted red;
+			}
+		</style>
 	</head>
 	<body>
 		Hello World
 		
 		@Html.React("HelloWorld", new
+		{
+			name = "Daniel"
+		})
+		
+		@Html.React("HelloWorld2", new
 		{
 			name = "Daniel"
 		})

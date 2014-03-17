@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using React.Exceptions;
 using React.TinyIoC;
 
@@ -48,7 +49,9 @@ namespace React
 
 			// Instantiate IReactSiteInitializer to get configuration.
 			var initializer = (IReactSiteInitializer) Activator.CreateInstance(initializerTypes[0]);
-			var config = new ReactSiteConfiguration();
+			var config = new ReactSiteConfiguration(
+				pathResolverFunc: container.Resolve<HttpServerUtilityBase>().MapPath
+			);
 			initializer.Configure(config);
 			return config;
 		}

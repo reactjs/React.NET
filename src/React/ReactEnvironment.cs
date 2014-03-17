@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Web;
+using Newtonsoft.Json;
 using React.Exceptions;
 
 namespace React
@@ -28,10 +29,6 @@ namespace React
 		/// </summary>
 		private readonly IReactSiteConfiguration _config;
 		/// <summary>
-		/// Server utilities
-		/// </summary>
-		private readonly HttpServerUtilityBase _server;
-		/// <summary>
 		/// Number of components instantiated in this environment
 		/// </summary>
 		private int _maxContainerId = 0;
@@ -49,16 +46,14 @@ namespace React
 		/// </summary>
 		/// <param name="engine">The JavaScript engine</param>
 		/// <param name="config">The site-wide configuration</param>
-		/// <param name="server">Server utilities</param>
 		public ReactEnvironment(
 			IJavascriptEngine engine, 
-			IReactSiteConfiguration config,
-			HttpServerUtilityBase server
+			IReactSiteConfiguration config
 		)
 		{
 			_engine = engine;
 			_config = config;
-			_server = server;
+
 			LoadStandardScripts();
 			LoadExtraScripts();
 		}
@@ -80,10 +75,8 @@ namespace React
 		{
 			foreach (var file in _config.Scripts)
 			{
-				// TODO: Move MapPath call elsewhere?
-				var fullPath = _server.MapPath(file);
-				var contents = File.ReadAllText(fullPath);
-				_engine.Execute(contents);
+				var contents = File.ReadAllText(file);
+				Execute(contents);
 			}
 		}
 
@@ -93,6 +86,13 @@ namespace React
 		/// <param name="code">JavaScript to execute</param>
 		public void Execute(string code)
 		{
+			// Convert JSX to JavaScript if required
+			// TODO: Cache this
+			if (code.Contains("@jsx"))
+			{
+				code = TransformJsx(code);
+			}
+
 			_engine.Execute(code);
 		}
 
@@ -156,10 +156,13 @@ namespace React
 				_jsxTransformerLoaded = true;
 			}
 
-			_engine.SetVariable("input", input);
 			try
 			{
-				var output = _engine.Execute<string>(@"global.JSXTransformer.transform(input).code");
+				var encodedInput = JsonConvert.SerializeObject(input);
+				var output = _engine.Execute<string>(string.Format(
+					"global.JSXTransformer.transform({0}).code",
+					encodedInput
+				));
 				return output;
 			}
 			catch (Exception ex)
