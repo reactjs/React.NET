@@ -34,14 +34,74 @@ To be written
 
 Manual Installation
 -------------------
-To be written
+1. Compile React.NET by running `build.bat`
+2. Reference React.dll and React.Mvc4.dll (if using MVC 4) in your Web Application project
+3. See usage example below
 
 Usage
 =====
-To be written
+Create a React component
+
+```javascript
+// HelloWorld.react.js
+var HelloWorld = React.createClass({
+	render: function () {
+		return React.DOM.div(null, 'Hello ', this.props.name);
+	}
+});
+```
+
+Modify `App_Start\ReactConfig.cs` to reference your component
+
+```csharp
+public class ReactConfig : IReactSiteInitializer
+{
+	public void Configure(IReactSiteConfiguration config)
+	{
+		config.AddScript("~/Scripts/HelloWorld.react.js");
+	}
+}
+```
+
+Call `Html.React` to render a component server-side
+
+```csharp
+@Html.React("HelloWorld", new
+{
+	name = "Daniel"
+})
+```
+
+Render your scripts normally (through your preferred minifier/combiner or just directly) and call `Html.ReactInitJavaScript` to render initialisation scripts
+
+```csharp
+<script src="http://fb.me/react-0.9.0.min.js"></script>
+<script src="~/Scripts/HelloWorld.react.js"></script>
+@Html.ReactInitJavaScript()
+```
+
+Hit the page and admire the server-rendered beauty:
+
+```html
+<div id="react1">
+	<div data-reactid=".2aubxk2hwsu" data-react-checksum="-1025167618">
+		<span data-reactid=".2aubxk2hwsu.0">Hello </span>
+		<span data-reactid=".2aubxk2hwsu.1">Daniel</span>
+	</div>
+</div>
+
+<script src="http://fb.me/react-0.9.0.min.js"></script>
+<script src="/Scripts/HelloWorld.react.js"></script>
+<script>React.renderComponent(HelloWorld({"name":"Daniel"}), document.getElementById("react1"));</script>
+```
+
+The server-rendered HTML will automatically be reused by React client-side, meaning your initial render will be super fast.
 
 Changelog
 =========
+1.0 - ??? 2014
+-------------------
+ - Initial release
 
 Licence
 =======
