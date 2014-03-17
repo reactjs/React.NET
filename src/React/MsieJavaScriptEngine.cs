@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using MsieJavaScriptEngine;
 
 namespace React
@@ -64,6 +65,24 @@ namespace React
 		public void SetVariable<T>(string name, T value)
 		{
 			_engine.SetVariableValue(name, value);
+		}
+
+		/// <summary>
+		/// Determines if the current system environment supports the MSIE JavaScript engine.
+		/// </summary>
+		/// <returns><c>true</c> if this engine is supported</returns>
+		public static bool IsSupported()
+		{
+			try
+			{
+				// ReSharper disable once UnusedVariable
+				var engine = new MsieJavascriptEngine();
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 	}
 }

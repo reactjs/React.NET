@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System.Diagnostics;
+using System.Web;
 using React.TinyIoC;
 
 namespace React
@@ -31,9 +32,28 @@ namespace React
 			container.Register<HttpContextBase>((c, o) => new HttpContextWrapper(HttpContext.Current));
 			container.Register<HttpServerUtilityBase>((c, o) => c.Resolve<HttpContextBase>().Server);
 
-			// TODO: Move JavaScript executors to separate assemblies
-			container.Register<IJavascriptEngine, JintJavascriptEngine>().AsPerRequestSingleton();
-			//container.Register<IJavaScriptExecutor, MsieJavaScriptExecutor>().AsPerRequestSingleton();
+			RegisterJavascriptEngine(container);
+		}
+
+		/// <summary>
+		/// Registers the most appropriate JavaScript engine for the current environment. If the 
+		/// MSIE engine is supported, use it, otherwise use Jint.
+		/// </summary>
+		/// <param name="container">IoC container</param>
+		private void RegisterJavascriptEngine(TinyIoCContainer container)
+		{
+			// Try to use MSIE JavaScript engine, but fall back to Jint if MSIE is not supported
+			// by the current operating system environment.
+			if (MsieJavascriptEngine.IsSupported())
+			{
+				Trace.WriteLine("Using MsieJavascriptEngine");
+				container.Register<IJavascriptEngine, MsieJavascriptEngine>().AsPerRequestSingleton();
+			}
+			else
+			{
+				Trace.WriteLine("No MSIE support; using JintJavascriptEngine");
+				container.Register<IJavascriptEngine, JintJavascriptEngine>().AsPerRequestSingleton();
+			}
 		}
 	}
 }
