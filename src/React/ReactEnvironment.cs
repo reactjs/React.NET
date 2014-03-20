@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -27,12 +28,14 @@ namespace React
 		/// <summary>
 		/// The JavaScript engine used in this environment
 		/// </summary>
-		private readonly IJavascriptEngine _engine;
+		private readonly IJsEngine _engine; 
 		/// <summary>
 		/// Site-wide configuration
 		/// </summary>
 		private readonly IReactSiteConfiguration _config;
-
+		/// <summary>
+		/// Cache used for storing compiled JSX
+		/// </summary>
 		private readonly ICache _cache;
 
 		/// <summary>
@@ -55,11 +58,13 @@ namespace React
 		/// <param name="config">The site-wide configuration</param>
 		/// <param name="cache">The cache to use for JSX compilation</param>
 		public ReactEnvironment(
-			IJavascriptEngine engine, 
+			IJsEngine engine,
 			IReactSiteConfiguration config,
 			ICache cache
 		)
 		{
+			// TODO: Scoping of engines. Engines can be reused if executed JavaScript has no 
+			// side-effects. This will improve performance
 			_engine = engine;
 			_config = config;
 			_cache = cache;
@@ -74,7 +79,7 @@ namespace React
 		private void LoadStandardScripts()
 		{
 			_engine.Execute("var global = global || {};");
-			_engine.LoadFromResource("React.Resources.react-0.9.0.js");
+			_engine.ExecuteResource("React.Resources.react-0.9.0.js", GetType().Assembly);
 			_engine.Execute("var React = global.React");
 		}
 
@@ -107,7 +112,7 @@ namespace React
 		/// <returns>Result of the JavaScript code</returns>
 		public T Execute<T>(string code)
 		{
-			return _engine.Execute<T>(code);
+			return _engine.Evaluate<T>(code);
 		}
 
 		/// <summary>
@@ -186,14 +191,14 @@ namespace React
 			// Lazily load the JSX transformer JavaScript
 			if (!_jsxTransformerLoaded)
 			{
-				_engine.LoadFromResource("React.Resources.JSXTransformer.js");
+				_engine.ExecuteResource("React.Resources.JSXTransformer.js", GetType().Assembly);
 				_jsxTransformerLoaded = true;
 			}
 
 			try
 			{
 				var encodedInput = JsonConvert.SerializeObject(input);
-				var output = _engine.Execute<string>(string.Format(
+				var output = _engine.Evaluate<string>(string.Format(
 					"global.JSXTransformer.transform({0}).code",
 					encodedInput
 				));

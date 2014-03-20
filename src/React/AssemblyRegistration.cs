@@ -1,5 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web;
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Msie;
+using JavaScriptEngineSwitcher.Msie.Configuration;
+using React.Exceptions;
 using React.TinyIoC;
 
 namespace React
@@ -26,6 +32,12 @@ namespace React
 		{
 			// One instance shared for the whole app
 			container.Register<IReactSiteConfiguration>(ConfigurationFactory.GetConfiguration);
+			// Force MSIE to use Chakra ActiveScript engine.
+			// Chakra JS RT engine runs out of stack space when processing JSX
+			container.Register<MsieConfiguration>(new MsieConfiguration
+			{
+				EngineMode = JsEngineMode.ChakraActiveScript
+			});
 
 			// Unique per request
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
@@ -37,24 +49,59 @@ namespace React
 		}
 
 		/// <summary>
-		/// Registers the most appropriate JavaScript engine for the current environment. If the 
-		/// MSIE engine is supported, use it, otherwise use Jint.
+		/// Registers the most appropriate JavaScript engine for the current environment.
 		/// </summary>
 		/// <param name="container">IoC container</param>
 		private void RegisterJavascriptEngine(TinyIoCContainer container)
 		{
-			// Try to use MSIE JavaScript engine, but fall back to Jint if MSIE is not supported
-			// by the current operating system environment.
-			if (MsieJavascriptEngine.IsSupported())
+			// TODO: Implement shared engines rather than creating a new one per request
+			// Stateless scripts can reuse engines.
+			var type = GetJavascriptEngineType(container);
+			container.Register(typeof(IJsEngine), type).AsPerRequestSingleton();
+		}
+
+		/// <summary>
+		/// Gets the type of the most appropriate JavaScript engine for the current environment
+		/// </summary>
+		/// <param name="container"></param>
+		/// <returns></returns>
+		private Type GetJavascriptEngineType(TinyIoCContainer container)
+		{
+			var availableEngines = new List<Type>
 			{
-				Trace.WriteLine("Using MsieJavascriptEngine");
-				container.Register<IJavascriptEngine, MsieJavascriptEngine>().AsPerRequestSingleton();
-			}
-			else
+				typeof(MsieJsEngine)
+				// TODO: Add Jint
+				// TODO: Add V8
+			};
+			foreach (var engineType in availableEngines)
 			{
-				Trace.WriteLine("No MSIE support; using JintJavascriptEngine");
-				container.Register<IJavascriptEngine, JintJavascriptEngine>().AsPerRequestSingleton();
+				IJsEngine engine = null;
+				try
+				{
+					// Perform a sanity test to ensure this engine is usable
+					engine = (IJsEngine) container.Resolve(engineType);
+					if (engine.Evaluate<int>("1 + 1") == 2)
+					{
+						// Success! Use this one.
+						return engineType;
+					}
+				}
+				catch (Exception ex)
+				{
+					// This engine threw an exception, try the next one
+					Trace.WriteLine(string.Format("Error initialising {0}: {1}", engineType, ex));
+				}
+				finally
+				{
+					if (engine != null)
+					{
+						engine.Dispose();
+					}
+				}
 			}
+			
+			// Epic fail, none of the engines worked. Nothing we can do now.
+			throw new ReactException("No usable JavaScript engine found :(");
 		}
 	}
 }

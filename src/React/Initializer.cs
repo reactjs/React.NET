@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Web;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using React.TinyIoC;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Initializer), "Initialize")]
 
@@ -17,6 +20,7 @@ namespace React
 		public static void Initialize()
 		{
 			InitializeIoC();
+			DynamicModuleUtility.RegisterModule(typeof(IocPerRequestDisposal));
 		}
 
 		/// <summary>
@@ -60,6 +64,18 @@ namespace React
 		private static bool IsComponentRegistration(Type type)
 		{
 			return type.GetInterfaces().Contains(typeof(IAssemblyRegistration));
+		}
+
+		/// <summary>
+		/// Handles disposing per-request IoC instances at the end of the request
+		/// </summary>
+		internal class IocPerRequestDisposal : IHttpModule
+		{
+			public void Init(HttpApplication context)
+			{
+				context.EndRequest += (sender, args) => HttpContextLifetimeProvider.DisposeAll();
+			}
+			public void Dispose() { }
 		}
 	}
 }
