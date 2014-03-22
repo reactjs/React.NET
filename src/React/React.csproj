@@ -48,10 +48,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.1.1.2\lib\net40\JavaScriptEngineSwitcher.Msie.dll</HintPath>
     </Reference>
-    <Reference Include="Jint, Version=2.1.0.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\Jint.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -85,14 +81,19 @@
     <Compile Include="ConfigurationFactory.cs" />
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
+    <Compile Include="AspNetFileSystem.cs" />
     <Compile Include="IAssemblyRegistration.cs" />
     <Compile Include="ICache.cs" />
+    <Compile Include="IFileSystem.cs" />
+    <Compile Include="IJsxHandler.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="IReactComponent.cs" />
     <Compile Include="IReactEnvironment.cs" />
     <Compile Include="IReactSiteConfiguration.cs" />
     <Compile Include="IReactSiteInitializer.cs" />
     <Compile Include="Exceptions\JsxException.cs" />
+    <Compile Include="JsxHandler.cs" />
+    <Compile Include="JsxHandlerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactComponent.cs" />
     <Compile Include="ReactEnvironment.cs" />

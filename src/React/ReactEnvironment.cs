@@ -37,6 +37,10 @@ namespace React
 		/// Cache used for storing compiled JSX
 		/// </summary>
 		private readonly ICache _cache;
+		/// <summary>
+		/// File system wrapper
+		/// </summary>
+		private readonly IFileSystem _fileSystem;
 
 		/// <summary>
 		/// Number of components instantiated in this environment
@@ -57,10 +61,12 @@ namespace React
 		/// <param name="engine">The JavaScript engine</param>
 		/// <param name="config">The site-wide configuration</param>
 		/// <param name="cache">The cache to use for JSX compilation</param>
+		/// <param name="fileSystem">File system wrapper</param>
 		public ReactEnvironment(
 			IJsEngine engine,
 			IReactSiteConfiguration config,
-			ICache cache
+			ICache cache,
+			IFileSystem fileSystem
 		)
 		{
 			// TODO: Scoping of engines. Engines can be reused if executed JavaScript has no 
@@ -68,6 +74,7 @@ namespace React
 			_engine = engine;
 			_config = config;
 			_cache = cache;
+			_fileSystem = fileSystem;
 
 			LoadStandardScripts();
 			LoadExtraScripts();
@@ -157,15 +164,17 @@ namespace React
 		/// <returns>File contents</returns>
 		public string LoadJsxFile(string filename)
 		{
+			var fullPath = _fileSystem.MapPath(filename);
+
 			return _cache.GetOrInsert(
 				key: string.Format(JSX_CACHE_KEY, filename),
 				slidingExpiration: TimeSpan.FromMinutes(30),
-				cacheDependencyFiles: new[] { filename },
+				cacheDependencyFiles: new[] { fullPath },
 				getData: () =>
 				{
 					Trace.WriteLine(string.Format("Parsing JSX from {0}", filename));
 
-					var contents = File.ReadAllText(filename);
+					var contents = _fileSystem.ReadAsString(filename);
 					// Just return directly if there's no JSX annotation
 					if (contents.Contains("@jsx"))
 					{

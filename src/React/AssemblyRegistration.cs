@@ -40,10 +40,14 @@ namespace React
 			});
 
 			// Unique per request
+			container.Register<IFileSystem, AspNetFileSystem>().AsPerRequestSingleton();
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
 			container.Register<ICache, AspNetCache>().AsPerRequestSingleton();
+			container.Register<IJsxHandler, JsxHandler>().AsPerRequestSingleton();
 			container.Register<HttpContextBase>((c, o) => new HttpContextWrapper(HttpContext.Current));
 			container.Register<HttpServerUtilityBase>((c, o) => c.Resolve<HttpContextBase>().Server);
+			container.Register<HttpRequestBase>((c, o) => c.Resolve<HttpContextBase>().Request);
+			container.Register<HttpResponseBase>((c, o) => c.Resolve<HttpContextBase>().Response);
 
 			RegisterJavascriptEngine(container);
 		}

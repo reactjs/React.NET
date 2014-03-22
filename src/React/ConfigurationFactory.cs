@@ -49,9 +49,7 @@ namespace React
 
 			// Instantiate IReactSiteInitializer to get configuration.
 			var initializer = (IReactSiteInitializer) Activator.CreateInstance(initializerTypes[0]);
-			var config = new ReactSiteConfiguration(
-				pathResolverFunc: container.Resolve<HttpServerUtilityBase>().MapPath
-			);
+			var config = new ReactSiteConfiguration();
 			initializer.Configure(config);
 			return config;
 		}
