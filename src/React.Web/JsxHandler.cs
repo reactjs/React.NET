@@ -10,7 +10,7 @@
 using System.Web;
 using System.Web.Caching;
 
-namespace React
+namespace React.Web
 {
 	/// <summary>
 	/// ASP.NET handler that transforms JSX into JavaScript.
@@ -53,6 +53,8 @@ namespace React
 			// Only cache on the server-side for now
 			_response.AddCacheDependency(new CacheDependency(_fileSystem.MapPath(relativePath)));
 			_response.Cache.SetCacheability(HttpCacheability.Server);
+			_response.Cache.SetLastModifiedFromFileDependencies();
+			_response.Cache.SetETagFromFileDependencies();
 
 			_response.ContentType = "text/javascript";
 			_response.Write(result);

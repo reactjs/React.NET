@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Web;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Msie;
 using JavaScriptEngineSwitcher.Msie.Configuration;
@@ -48,16 +47,7 @@ namespace React
 				EngineMode = JsEngineMode.ChakraActiveScript
 			});
 
-			// Unique per request
-			container.Register<IFileSystem, AspNetFileSystem>().AsPerRequestSingleton();
-			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
-			container.Register<ICache, AspNetCache>().AsPerRequestSingleton();
-			container.Register<IJsxHandler, JsxHandler>().AsPerRequestSingleton();
-			container.Register<HttpContextBase>((c, o) => new HttpContextWrapper(HttpContext.Current));
-			container.Register<HttpServerUtilityBase>((c, o) => c.Resolve<HttpContextBase>().Server);
-			container.Register<HttpRequestBase>((c, o) => c.Resolve<HttpContextBase>().Request);
-			container.Register<HttpResponseBase>((c, o) => c.Resolve<HttpContextBase>().Response);
-
+			container.Register<IReactEnvironment, ReactEnvironment>().AsReactSingleton();
 			RegisterJavascriptEngine(container);
 		}
 
@@ -70,7 +60,7 @@ namespace React
 			// TODO: Implement shared engines rather than creating a new one per request
 			// Stateless scripts can reuse engines.
 			var type = GetJavascriptEngineType(container);
-			container.Register(typeof(IJsEngine), type).AsPerRequestSingleton();
+			container.Register(typeof(IJsEngine), type).AsReactSingleton();
 		}
 
 		/// <summary>

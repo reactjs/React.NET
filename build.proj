@@ -14,6 +14,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Build>0-dev</Build>
 		<Revision>0</Revision>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
+		<SolutionFile>src\React.sln</SolutionFile>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
@@ -25,7 +26,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Target Name="RestorePackages">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe restore src\React.NET.sln"
+			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
 		/>
 	</Target>
 
@@ -43,7 +44,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
-		<MSBuild Projects="src\React.NET.sln" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607" />
+		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607" />
 	</Target>
 
 	<Target Name="Test" DependsOnTargets="Build">
@@ -58,7 +59,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Target Name="Package" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe pack src\React.Mvc4\React.Mvc4.csproj -IncludeReferencedProjects -Prop Configuration=Release"
+			Command="tools\NuGet\nuget.exe pack src\React.Web.Mvc4\React.Web.Mvc4.csproj -IncludeReferencedProjects -Prop Configuration=Release"
 		/>
 	</Target>
 </Project>

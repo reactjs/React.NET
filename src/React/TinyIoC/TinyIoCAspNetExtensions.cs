@@ -46,9 +46,33 @@ namespace React.TinyIoC
 
     public static class TinyIoCAspNetExtensions
     {
-        public static TinyIoC.TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoC.TinyIoCContainer.RegisterOptions registerOptions)
+        public static TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoCContainer.RegisterOptions registerOptions)
         {
             return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(registerOptions, new HttpContextLifetimeProvider(), "per request singleton");
         }
+
+	    /// <summary>
+	    /// Determines if this library is executing in the context of an ASP.NET web application.
+	    /// </summary>
+	    //private static readonly Lazy<bool> _isInAspNet = new Lazy<bool>(() => HttpContext.Current != null);
+	    public static bool? IsInAspNet { get; set; }
+
+	    /// <summary>
+	    /// If in the context of an ASP.NET web application, register this type as a per-request
+	    /// singleton. Otherwise, register it as a regular singleton 
+	    /// </summary>
+	    /// <param name="registerOptions">TinyIoC registration options</param>
+	    /// <returns>TinyIoC registration</returns>
+	    public static TinyIoCContainer.RegisterOptions AsReactSingleton(this TinyIoCContainer.RegisterOptions registerOptions)
+	    {
+		    if (IsInAspNet == null)
+		    {
+			    throw new Exception("IsInAspNet not set yet!");
+		    }
+
+		    return IsInAspNet.Value
+			    ? registerOptions.AsPerRequestSingleton()
+			    : registerOptions.AsSingleton();
+	    }
     }
 }

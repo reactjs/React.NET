@@ -13,7 +13,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Caching;
 
-namespace React
+namespace React.Web
 {
 	/// <summary>
 	/// Implementation of <see cref="ICache"/> using ASP.NET cache.

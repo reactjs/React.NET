@@ -11,33 +11,31 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using React.TinyIoC;
-
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Initializer), "Initialize")]
 
 namespace React
 {
 	/// <summary>
 	/// Handles initialisation of React.NET. This is only called once, at application start.
 	/// </summary>
-	internal static class Initializer
+	public static class Initializer
 	{
 		/// <summary>
 		/// Intialise React.NET
 		/// </summary>
-		public static void Initialize()
+		public static void Initialize(bool isInAspNet)
 		{
-			InitializeIoC();
-			DynamicModuleUtility.RegisterModule(typeof(IocPerRequestDisposal));
+			InitializeIoC(isInAspNet);
 		}
 
 		/// <summary>
 		/// Initialises the IoC container by finding all <see cref="IAssemblyRegistration"/> 
 		/// implementations and calling their <see cref="IAssemblyRegistration.Register"/> methods.
 		/// </summary>
-		private static void InitializeIoC()
+		private static void InitializeIoC(bool isInAspNet)
 		{
+			TinyIoCAspNetExtensions.IsInAspNet = isInAspNet;
+
 			var types = AppDomain.CurrentDomain.GetAssemblies()
 				// Only bother checking React assemblies
 				.Where(IsReactAssembly)
@@ -47,7 +45,7 @@ namespace React
 			foreach (var type in types)
 			{
 				var reg = (IAssemblyRegistration)Activator.CreateInstance(type);
-				reg.Register(AssemblyRegistration.Container);
+				reg.Register(React.AssemblyRegistration.Container);
 			}
 		}
 
@@ -73,18 +71,6 @@ namespace React
 		private static bool IsComponentRegistration(Type type)
 		{
 			return type.GetInterfaces().Contains(typeof(IAssemblyRegistration));
-		}
-
-		/// <summary>
-		/// Handles disposing per-request IoC instances at the end of the request
-		/// </summary>
-		internal class IocPerRequestDisposal : IHttpModule
-		{
-			public void Init(HttpApplication context)
-			{
-				context.EndRequest += (sender, args) => HttpContextLifetimeProvider.DisposeAll();
-			}
-			public void Dispose() { }
 		}
 	}
 }

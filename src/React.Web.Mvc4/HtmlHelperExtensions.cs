@@ -10,8 +10,10 @@
 using System.Web;
 using System.Web.Mvc;
 
-namespace React.Mvc
+namespace React.Web.Mvc
 {
+	using AssemblyRegistration = React.AssemblyRegistration;
+
 	/// <summary>
 	/// HTML Helpers for utilising React from an ASP.NET MVC application.
 	/// </summary>

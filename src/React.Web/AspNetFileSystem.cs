@@ -10,7 +10,7 @@
 using System.IO;
 using System.Web;
 
-namespace React
+namespace React.Web
 {
 	/// <summary>
 	/// Handles file system functionality, such as reading files. Maps all paths from 

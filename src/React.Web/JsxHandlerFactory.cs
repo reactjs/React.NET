@@ -9,7 +9,7 @@
 
 using System.Web;
 
-namespace React
+namespace React.Web
 {
 	/// <summary>
 	/// Handles creation and execution of <see cref="IJsxHandler"/> instances.
@@ -22,7 +22,7 @@ namespace React
 		/// <param name="context">The request context</param>
 		public void ProcessRequest(HttpContext context)
 		{
-			var handler = AssemblyRegistration.Container.Resolve<IJsxHandler>();
+			var handler = React.AssemblyRegistration.Container.Resolve<IJsxHandler>();
 			handler.Execute();
 		}
 

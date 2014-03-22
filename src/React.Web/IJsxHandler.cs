@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace React
+namespace React.Web
 {
 	/// <summary>
 	/// ASP.NET handler that transforms JSX into JavaScript.

@@ -7,8 +7,8 @@
     <ProjectGuid>{662D52AC-1EE9-4372-BD74-379F9AC56451}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>React.Mvc4</RootNamespace>
-    <AssemblyName>React.Mvc4</AssemblyName>
+    <RootNamespace>React.Web.Mvc</RootNamespace>
+    <AssemblyName>React.Web.Mvc4</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -88,6 +88,10 @@
     <None Include="React.Mvc4.nuspec" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\React.Web\React.Web.csproj">
+      <Project>{134edd16-8dc8-4983-a2e0-b38dab1ecf1c}</Project>
+      <Name>React.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\React\React.csproj">
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
       <Name>React</Name>
