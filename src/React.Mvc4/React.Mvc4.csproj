@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="React.Mvc4.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React\React.csproj">
