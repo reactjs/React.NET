@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using React.Exceptions;
@@ -32,11 +33,19 @@ namespace React
 		/// Cache key for JSX to JavaScript compilation
 		/// </summary>
 		private const string JSX_CACHE_KEY = "JSX_{0}";
+		/// <summary>
+		/// JavaScript variable set when user-provided scripts have been loaded
+		/// </summary>
+		private const string USER_SCRIPTS_LOADED_KEY = "_ReactNET_UserScripts_Loaded";
+		/// <summary>
+		/// Stack size to use for JSXTransformer if the default stack is insufficient
+		/// </summary>
+		private const int LARGE_STACK_SIZE = 2 * 1024 * 1024;
 
 		/// <summary>
-		/// The JavaScript engine used in this environment
+		/// Factory to create JavaScript engines
 		/// </summary>
-		private readonly IJsEngine _engine; 
+		private readonly IJavaScriptEngineFactory _engineFactory;
 		/// <summary>
 		/// Site-wide configuration
 		/// </summary>
@@ -58,56 +67,70 @@ namespace React
 		/// List of all components instantiated in this environment
 		/// </summary>
 		private readonly IList<IReactComponent> _components = new List<IReactComponent>();
-		/// <summary>
-		/// Whether the JSX Transformer has been loaded
-		/// </summary>
-		private bool _jsxTransformerLoaded = false;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReactEnvironment"/> class.
 		/// </summary>
-		/// <param name="engine">The JavaScript engine</param>
+		/// <param name="engineFactory">The JavaScript engine factory</param>
 		/// <param name="config">The site-wide configuration</param>
 		/// <param name="cache">The cache to use for JSX compilation</param>
 		/// <param name="fileSystem">File system wrapper</param>
 		public ReactEnvironment(
-			IJsEngine engine,
+			IJavaScriptEngineFactory engineFactory,
 			IReactSiteConfiguration config,
 			ICache cache,
 			IFileSystem fileSystem
 		)
 		{
-			// TODO: Scoping of engines. Engines can be reused if executed JavaScript has no 
-			// side-effects. This will improve performance
-			_engine = engine;
+			_engineFactory = engineFactory;
 			_config = config;
 			_cache = cache;
 			_fileSystem = fileSystem;
-
-			LoadStandardScripts();
-			LoadExtraScripts();
 		}
 
 		/// <summary>
-		/// Loads standard React and JSXTransformer scripts.
+		/// Gets the JavaScript engine for the current thread. If an engine has not yet been 
+		/// created, create it and execute the startup scripts.
 		/// </summary>
-		private void LoadStandardScripts()
+		private IJsEngine Engine
 		{
-			_engine.Execute("var global = global || {};");
-			_engine.ExecuteResource("React.Resources.react-0.9.0.js", GetType().Assembly);
-			_engine.Execute("var React = global.React");
+			get
+			{
+				return _engineFactory.GetEngineForCurrentThread(InitialiseEngine);
+			}
 		}
 
 		/// <summary>
-		/// Loads any user-supplied scripts from the configuration.
+		/// Loads standard React and JSXTransformer scripts into the engine.
 		/// </summary>
-		private void LoadExtraScripts()
+		private void InitialiseEngine(IJsEngine engine)
 		{
+			// Load standard React scripts
+			engine.Execute("var global = global || {};");
+			// TODO: Handle errors "thrown" by console.error / console.warn?
+			engine.Execute("var console = console || { log: function() {}, error: function() {}, warn: function() {} };");
+			engine.ExecuteResource("React.Resources.react-0.9.0.js", GetType().Assembly);
+			engine.ExecuteResource("React.Resources.JSXTransformer.js", GetType().Assembly);
+			engine.Execute("var React = global.React");
+		}
+
+		/// <summary>
+		/// Ensures any user-provided scripts have been loaded
+		/// </summary>
+		private void EnsureUserScriptsLoaded()
+		{
+			// Scripts already loaded into this environment, don't load them again
+			if (Engine.HasVariable(USER_SCRIPTS_LOADED_KEY))
+			{
+				return;
+			}
+
 			foreach (var file in _config.Scripts)
 			{
 				var contents = LoadJsxFile(file);
 				Execute(contents);
 			}
+			Engine.SetVariableValue(USER_SCRIPTS_LOADED_KEY, true);
 		}
 
 		/// <summary>
@@ -116,7 +139,7 @@ namespace React
 		/// <param name="code">JavaScript to execute</param>
 		public void Execute(string code)
 		{
-			_engine.Execute(code);
+			Engine.Execute(code);
 		}
 
 		/// <summary>
@@ -127,7 +150,7 @@ namespace React
 		/// <returns>Result of the JavaScript code</returns>
 		public T Execute<T>(string code)
 		{
-			return _engine.Evaluate<T>(code);
+			return Engine.Evaluate<T>(code);
 		}
 
 		/// <summary>
@@ -139,6 +162,7 @@ namespace React
 		/// <returns>The component</returns>
 		public IReactComponent CreateComponent<T>(string componentName, T props)
 		{
+			EnsureUserScriptsLoaded();
 			_maxContainerId++;
 			var containerId = string.Format(CONTAINER_ELEMENT_NAME, _maxContainerId);
 			var component = new ReactComponent(this, componentName, containerId)
@@ -205,17 +229,10 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public string TransformJsx(string input)
 		{
-			// Lazily load the JSX transformer JavaScript
-			if (!_jsxTransformerLoaded)
-			{
-				_engine.ExecuteResource("React.Resources.JSXTransformer.js", GetType().Assembly);
-				_jsxTransformerLoaded = true;
-			}
-
 			try
 			{
 				var encodedInput = JsonConvert.SerializeObject(input);
-				var output = _engine.Evaluate<string>(string.Format(
+				var output = ExecuteWithLargerStackIfRequired<string>(string.Format(
 					"global.JSXTransformer.transform({0}).code",
 					encodedInput
 				));
@@ -224,6 +241,55 @@ namespace React
 			catch (Exception ex)
 			{
 				throw new JsxException(ex.Message, ex);
+			}
+		}
+
+		/// <summary>
+		/// Attempts to execute the provided JavaScript code using the current engine. If an 
+		/// exception is thrown, retries the execution using a new thread (and hence a new engine)
+		/// with a larger maximum stack size.
+		/// This is required because JSXTransformer uses a huge stack which ends up being larger 
+		/// than what ASP.NET allows by default (256 KB).
+		/// </summary>
+		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
+		/// <param name="code">JavaScript code to execute</param>
+		/// <returns>Result returned from JavaScript code</returns>
+		private T ExecuteWithLargerStackIfRequired<T>(string code)
+		{
+			try
+			{
+				return Engine.Evaluate<T>(code);
+			}
+			catch (Exception)
+			{
+				// Assume the exception MAY be an "out of stack space" error. Try running the code 
+				// in a different thread with larger stack. If the same exception occurs, we know
+				// it wasn't a stack space issue.
+				T result = default(T);
+				Exception innerEx = null;
+				var thread = new Thread(() =>
+				{
+					try
+					{
+						// New engine will be created here (as this is a new thread)
+						result = Engine.Evaluate<T>(code);
+						_engineFactory.DisposeEngineForCurrentThread();
+					}
+					catch (Exception threadEx)
+					{
+						// Unhandled exceptions in threads kill the whole process.
+						// Pass the exception back to the parent thread to rethrow.
+						innerEx = threadEx;
+					}
+				}, LARGE_STACK_SIZE);
+				thread.Start();
+				thread.Join();
+				// Rethrow any exceptions that occured in the thread
+				if (innerEx != null)
+				{
+					throw innerEx;
+				}
+				return result;
 			}
 		}
 	}

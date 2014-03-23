@@ -7,13 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Msie;
 using JavaScriptEngineSwitcher.Msie.Configuration;
-using React.Exceptions;
 using React.TinyIoC;
 
 namespace React
@@ -48,63 +43,7 @@ namespace React
 			});
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsReactSingleton();
-			RegisterJavascriptEngine(container);
-		}
-
-		/// <summary>
-		/// Registers the most appropriate JavaScript engine for the current environment.
-		/// </summary>
-		/// <param name="container">IoC container</param>
-		private void RegisterJavascriptEngine(TinyIoCContainer container)
-		{
-			// TODO: Implement shared engines rather than creating a new one per request
-			// Stateless scripts can reuse engines.
-			var type = GetJavascriptEngineType(container);
-			container.Register(typeof(IJsEngine), type).AsReactSingleton();
-		}
-
-		/// <summary>
-		/// Gets the type of the most appropriate JavaScript engine for the current environment
-		/// </summary>
-		/// <param name="container"></param>
-		/// <returns></returns>
-		private Type GetJavascriptEngineType(TinyIoCContainer container)
-		{
-			var availableEngines = new List<Type>
-			{
-				typeof(MsieJsEngine)
-				// TODO: Add Jint
-				// TODO: Add V8
-			};
-			foreach (var engineType in availableEngines)
-			{
-				IJsEngine engine = null;
-				try
-				{
-					// Perform a sanity test to ensure this engine is usable
-					engine = (IJsEngine) container.Resolve(engineType);
-					if (engine.Evaluate<int>("1 + 1") == 2)
-					{
-						// Success! Use this one.
-						return engineType;
-					}
-				}
-				catch (Exception ex)
-				{
-					// This engine threw an exception, try the next one
-					Trace.WriteLine(string.Format("Error initialising {0}: {1}", engineType, ex));
-				}
-				finally
-				{
-					if (engine != null)
-					{
-						engine.Dispose();
-					}
-				}
-			}
-			
-			// Epic fail, none of the engines worked. Nothing we can do now.
-			throw new ReactException("No usable JavaScript engine found :(");
+			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsReactSingleton();
 		}
 	}
 }
