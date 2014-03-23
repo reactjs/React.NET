@@ -118,6 +118,8 @@ Hit the page and admire the server-rendered beauty:
 The server-rendered HTML will automatically be reused by React client-side, 
 meaning your initial render will be super fast.
 
+For a more in-depth example, take a look at the included sample application (React.Samples.Mvc4).
+
 Changelog
 =========
 1.0 - ??? 2014

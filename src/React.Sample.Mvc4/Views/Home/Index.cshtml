@@ -1,33 +1,24 @@
-﻿@{
-	Layout = null;
-}
+﻿@model React.Sample.Mvc4.ViewModels.IndexViewModel
 <!DOCTYPE html>
-
 <html>
-	<head>
-		<title>Hello World</title>
-		<style>
-			.awesome {
-				border: 1px dotted red;
-			}
-		</style>
-	</head>
-	<body>
-		Hello World
+<head>
+	<title>React.NET Sample</title>
+	<link rel="stylesheet" href="~/Content/Sample.css" />
+</head>
+<body>
+	<p>
+		This is an example of React.NET's server-side rendering. The initial state of this 
+		comments box is rendered server-side, and additional data is loaded via AJAX and rendered
+		client-side.
+	</p>
+	
+	<!-- Render the component server-side, passing initial props -->
+	@Html.React("CommentsBox", new { initialComments = Model.Comments })
 		
-		@Html.React("HelloWorld", new
-		{
-			name = "Daniel"
-		})
-		
-		@Html.React("HelloWorld2", new
-		{
-			name = "Daniel"
-		})
-		
-		<script src="http://fb.me/react-0.9.0.min.js"></script>
-		<script src="~/Scripts/HelloWorld.react.js"></script>
-		<script src="~/Scripts/HelloWorld2.react.jsx"></script>
-		@Html.ReactInitJavaScript()
-	</body>
+	<!-- Load all required scripts (React + the site's scripts) -->
+	<script src="http://fb.me/react-0.9.0.min.js"></script>
+	<script src="@Url.Content("~/Content/Sample.jsx")"></script>
+	<!-- Render the code to initialise the component -->
+	@Html.ReactInitJavaScript()
+</body>
 </html>

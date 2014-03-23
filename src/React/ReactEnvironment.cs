@@ -273,13 +273,16 @@ namespace React
 					{
 						// New engine will be created here (as this is a new thread)
 						result = Engine.Evaluate<T>(code);
-						_engineFactory.DisposeEngineForCurrentThread();
 					}
 					catch (Exception threadEx)
 					{
 						// Unhandled exceptions in threads kill the whole process.
 						// Pass the exception back to the parent thread to rethrow.
 						innerEx = threadEx;
+					}
+					finally
+					{
+						_engineFactory.DisposeEngineForCurrentThread();
 					}
 				}, LARGE_STACK_SIZE);
 				thread.Start();

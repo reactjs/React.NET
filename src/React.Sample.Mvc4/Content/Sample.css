@@ -7,14 +7,17 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace React.Sample.Mvc4
-{
-	public class ReactConfig : IReactSiteInitializer
-	{
-		public void Configure(IReactSiteConfiguration config)
-		{
-			config
-				.AddScript("~/Content/Sample.jsx");
-		}
-	}
+body {
+	font-family: Calibri, Verdana, sans-serif;
+}
+
+.commentList {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.commentList li {
+	border-bottom: 1px solid #999;
+	padding: 0.5em 0;
 }
