@@ -1,3 +1,4 @@
+#pragma warning disable 1572, 1573, 1574, 1591, 1711, 1712
 //===============================================================================
 // TinyIoC
 //
@@ -3896,3 +3897,4 @@ namespace System.Reflection
     }
 }
 #endif
+#pragma warning restore

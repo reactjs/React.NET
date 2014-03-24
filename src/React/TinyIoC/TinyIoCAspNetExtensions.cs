@@ -2,9 +2,10 @@ using System;
 using System.Linq;
 using System.Web;
 
+#pragma warning disable 1591
 namespace React.TinyIoC
 {
-    public class HttpContextLifetimeProvider : TinyIoCContainer.ITinyIoCObjectLifetimeProvider
+	public class HttpContextLifetimeProvider : TinyIoCContainer.ITinyIoCObjectLifetimeProvider
     {
         private const string PREFIX = "TinyIoC.HttpContext.";
         private readonly string _KeyName = PREFIX + Guid.NewGuid();
@@ -76,3 +77,4 @@ namespace React.TinyIoC
 	    }
     }
 }
+#pragma warning restore

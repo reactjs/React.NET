@@ -63,7 +63,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Target Name="Package" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Prop Configuration=Release"
+			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release"
 		/>
 	</Target>
 </Project>
