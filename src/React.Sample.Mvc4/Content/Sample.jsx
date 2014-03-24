@@ -18,12 +18,16 @@ var CommentsBox = React.createClass({
 		return {
 			comments: this.props.initialComments,
 			page: 1,
-			hasMore: true
+			hasMore: true,
+			loadingMore: false
 		};
 	},
 	loadMoreClicked: function(evt) {
 		var nextPage = this.state.page + 1;
-		this.setState({ page: nextPage });
+		this.setState({
+			page: nextPage,
+			loadingMore: true
+		});
 
 		var url = evt.target.href;
 		var xhr = new XMLHttpRequest();
@@ -32,7 +36,8 @@ var CommentsBox = React.createClass({
 			var data = JSON.parse(xhr.responseText);
 			this.setState({
 				comments: this.state.comments.concat(data.comments),
-				hasMore: data.hasMore
+				hasMore: data.hasMore,
+				loadingMore: false
 			});
 		}.bind(this);
 		xhr.send();
@@ -54,16 +59,16 @@ var CommentsBox = React.createClass({
 		);
 	},
 	renderMoreLink: function() {
-		if (this.state.hasMore) {
+		if (this.state.loadingMore) {
+			return <em>Loading...</em>;
+		} else if (this.state.hasMore) {
 			return (
 				<a href={'comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked}>
 					Load More
 				</a>
 			);
 		} else {
-			return (
-				<em>No more comments</em>
-			);
+			return <em>No more comments</em>;
 		}
 	}
 });
