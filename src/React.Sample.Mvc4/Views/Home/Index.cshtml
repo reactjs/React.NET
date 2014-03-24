@@ -1,4 +1,5 @@
-﻿@model React.Sample.Mvc4.ViewModels.IndexViewModel
+﻿@using System.Web.Optimization
+@model React.Sample.Mvc4.ViewModels.IndexViewModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,7 @@
 		
 	<!-- Load all required scripts (React + the site's scripts) -->
 	<script src="http://fb.me/react-0.9.0.min.js"></script>
-	<script src="@Url.Content("~/Content/Sample.jsx")"></script>
+	@Scripts.Render("~/bundles/main")
 	<!-- Render the code to initialise the component -->
 	@Html.ReactInitJavaScript()
 </body>

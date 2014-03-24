@@ -205,18 +205,8 @@ namespace React
 				getData: () =>
 				{
 					Trace.WriteLine(string.Format("Parsing JSX from {0}", filename));
-
 					var contents = _fileSystem.ReadAsString(filename);
-					// Just return directly if there's no JSX annotation
-					if (contents.Contains("@jsx"))
-					{
-						return TransformJsx(contents);
-					}
-					else
-					{
-						return contents;
-					}
-
+					return TransformJsx(contents);
 				}
 			);
 		}
@@ -229,6 +219,12 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public string TransformJsx(string input)
 		{
+			// Just return directly if there's no JSX annotation
+			if (!input.Contains("@jsx"))
+			{
+				return input;
+			}
+
 			try
 			{
 				var encodedInput = JsonConvert.SerializeObject(input);

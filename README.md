@@ -7,12 +7,10 @@ React.NET is a library that makes it easier to use Facebook's
 Features
 =========
  * On-the-fly **JSX to JavaScript compilation** for development purposes
+ * JSX to JavaScript precompilation via 
+   [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
  * **Server-side component rendering** to make your initial render super-fast
    (experimental!)
- * More coming soon:
-   * JSX to JavaScript **precompilation** via MSBuild or ASP.NET 
-     combination/minification
-   * **Mono** compatibility
 
 Requirements
 ============
@@ -64,6 +62,42 @@ Hit a JSX file in your browser (eg. `/Scripts/HelloWorld.react.jsx`) and observe
 the magnificence of JSX being compiled into JavaScript with no precompilation
 necessary. Note: This is good for fast iteration during development, but for 
 production you will want to precompile for best performance.
+
+ASP.NET Bundling and Minification Support
+-----------------------------------------
+React.NET supports the use of Microsoft's 
+[ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
+library to compile JSX into JavaScript and minify it along with all your other 
+JavaScript. Simply create a `JsxBundle` containing any number of JSX or regular
+JavaScript files:
+
+```csharp
+// In BundleConfig.cs
+bundles.Add(new JsxBundle("~/bundles/main").Include(
+	// Add your JSX files here
+	"~/Content/HelloWorld.react.jsx",
+	"~/Content/AnythingElse.react.jsx",
+	// You can include regular JavaScript files in the bundle too
+	"~/Content/ajax.js",
+));
+```
+
+`JsxBundle` will compile your JSX to JavaScript and then minify it. For more 
+control (eg. if you want to run other transforms as well), you can use 
+`JsxTransform` directly:
+
+```csharp
+// In BundleConfig.cs
+bundles.Add(new Bundle("~/bundles/main", new IBundleTransform[]
+{
+	// This works the same as JsxBundle (transform then minify) but you could 
+	//add your own transforms as well.
+	new JsxTransform(),
+	new JsMinify(),
+}).Include(
+	"~/Content/HelloWorld.react.jsx"
+));
+```
 
 Server-Side Component Rendering
 -------------------------------
