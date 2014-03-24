@@ -11,18 +11,18 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<metadata>
 		<id>$id$</id>
 		<version>$version$</version>
-		<title>React.NET (MVC 4)</title>
-		<authors>Daniel Lo Nigro, Facebook</authors>
-		<owners>Daniel Lo Nigro, Facebook</owners>
+		<title>React.NET (MVC 4 and 5)</title>
+		<authors>Daniel Lo Nigro</authors>
+		<owners>Daniel Lo Nigro</owners>
 		<licenseUrl>https://github.com/reactjs/React.NET#licence</licenseUrl>
-		<projectUrl>https://github.com/reactjs/React.NET</projectUrl>
+		<projectUrl>http://reactjs.net/</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>ReactJS tools for .NET. Please refer to project site (https://github.com/reactjs/React.NET) for more details, usage examples and sample code.</description>
-		<releaseNotes>Please refer to project site (https://github.com/reactjs/React.NET) for more details, release notes, usage examples and sample code.</releaseNotes>
-		<copyright>Copyright 2013</copyright>
+		<iconUrl>http://facebook.github.io/react/img/logo_og.png</iconUrl>
+		<description>ReactJS tools for ASP.NET MVC 4 and 5. Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</description>
+		<copyright>Copyright 2014 Facebook, Inc</copyright>
 		<tags>asp.net mvc asp jquery javascript js react facebook reactjs</tags>
 	</metadata>
-
 	<files>
+		<file src="Content\Views\web.config.transform" target="Content\Views" />
 	</files>
 </package>

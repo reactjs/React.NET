@@ -119,7 +119,7 @@ namespace React
 		private void EnsureUserScriptsLoaded()
 		{
 			// Scripts already loaded into this environment, don't load them again
-			if (Engine.HasVariable(USER_SCRIPTS_LOADED_KEY))
+			if (Engine.HasVariable(USER_SCRIPTS_LOADED_KEY) || _config == null)
 			{
 				return;
 			}

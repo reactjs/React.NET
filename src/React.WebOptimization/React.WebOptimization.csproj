@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="React.WebOptimization.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React.Web\React.Web.csproj">
@@ -78,6 +79,9 @@
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
       <Name>React</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

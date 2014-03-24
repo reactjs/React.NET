@@ -1,0 +1,17 @@
+﻿<configuration>
+	<system.web>
+		<!-- Uncomment if using IIS 7 Classic Mode or IIS 6 -->
+		<!--
+		<httpHandlers>
+			<add verb="GET" path="*.jsx" type="React.Web.JsxHandlerFactory, React.Web" />
+		</httpHandlers>
+		-->
+	</system.web>
+
+	<system.webServer>
+		<handlers>
+			<remove name="ReactJsx" />
+			<add name="ReactJsx" verb="GET" path="*.jsx" type="React.Web.JsxHandlerFactory, React.Web" preCondition="integratedMode" />
+		</handlers>
+	</system.webServer>
+</configuration>

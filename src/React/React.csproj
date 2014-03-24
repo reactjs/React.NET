@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="React.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\es5-shim.js" />

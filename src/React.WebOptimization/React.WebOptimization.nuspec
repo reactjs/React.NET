@@ -1,0 +1,28 @@
+﻿<?xml version="1.0"?>
+<!--
+Copyright (c) 2014, Facebook, Inc.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree. An additional grant
+of patent rights can be found in the PATENTS file in the same directory.
+-->
+<package>
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>React.NET - JSX for ASP.NET Web Optimization Framework</title>
+		<authors>Daniel Lo Nigro</authors>
+		<owners>Daniel Lo Nigro</owners>
+		<licenseUrl>https://github.com/reactjs/React.NET#licence</licenseUrl>
+		<projectUrl>http://reactjs.net/</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<iconUrl>http://facebook.github.io/react/img/logo_og.png</iconUrl>
+		<description>Allows you to compile JSX to JavaScript in the ASP.NET Web Optimization Framework.</description>
+		<copyright>Copyright 2014 Facebook, Inc</copyright>
+		<tags>asp.net mvc asp jquery javascript js react facebook reactjs optimization jsmin bundling minification webgrease</tags>
+	</metadata>
+	<files>
+		<file src="readme.txt" target="" />
+	</files>
+</package>

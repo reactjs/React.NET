@@ -16,6 +16,12 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
 		<SolutionFile>src\React.sln</SolutionFile>
 	</PropertyGroup>
+	<ItemGroup>
+		<PackageAssemblies Include="React" />
+		<PackageAssemblies Include="React.Web" />
+		<PackageAssemblies Include="React.Web.Mvc4" />
+		<PackageAssemblies Include="React.WebOptimization" />
+	</ItemGroup>
 
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
 	<UsingTask
@@ -49,17 +55,15 @@ of patent rights can be found in the PATENTS file in the same directory.
 
 	<Target Name="Test" DependsOnTargets="Build">
 		<ItemGroup>
-			<TestAssemblies Include="bin/DebugTests/**/React.Tests*.dll" />
 			<TestAssemblies Include="bin/ReleaseTests/**/React.Tests*.dll" />
 		</ItemGroup>
 		<xunit Assemblies="@(TestAssemblies)" />
 	</Target>
 
-	<!-- Create NuGet package -->
 	<Target Name="Package" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe pack src\React.Web.Mvc4\React.Web.Mvc4.csproj -IncludeReferencedProjects -Prop Configuration=Release"
+			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Prop Configuration=Release"
 		/>
 	</Target>
 </Project>
