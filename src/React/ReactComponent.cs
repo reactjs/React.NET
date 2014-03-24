@@ -8,6 +8,7 @@
  */
 
 using Newtonsoft.Json;
+using React.Exceptions;
 
 namespace React
 {
@@ -56,6 +57,7 @@ namespace React
 		/// <returns>HTML</returns>
 		public string RenderHtml()
 		{
+			EnsureComponentExists();
 			var html = _environment.Execute<string>(
 				string.Format("React.renderComponentToString({0})", GetComponentInitialiser())
 			);
@@ -80,6 +82,21 @@ namespace React
 				GetComponentInitialiser(),
 				JsonConvert.SerializeObject(_containerId)
 			);
+		}
+
+		/// <summary>
+		/// Ensures that this component exists in global scope
+		/// </summary>
+		private void EnsureComponentExists()
+		{
+			if (!_environment.HasVariable(_componentName))
+			{
+				throw new ReactInvalidComponentException(string.Format(
+					"Could not find a component named '{0}'. Did you forget to add it to " +
+					"App_Start\\ReactConfig.cs?",
+					_componentName
+				));
+			}
 		}
 
 		/// <summary>

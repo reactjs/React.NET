@@ -153,6 +153,16 @@ namespace React
 		}
 
 		/// <summary>
+		/// Determines if the specified variable exists in the JavaScript engine
+		/// </summary>
+		/// <param name="name">Name of the variable</param>
+		/// <returns><c>true</c> if the variable exists; <c>false</c> otherwise</returns>
+		public bool HasVariable(string name)
+		{
+			return Engine.HasVariable(name);
+		}
+
+		/// <summary>
 		/// Creates an instance of the specified React JavaScript component.
 		/// </summary>
 		/// <typeparam name="T">Type of the props</typeparam>

@@ -72,6 +72,7 @@
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
+    <Compile Include="Exceptions\ReactInvalidComponentException.cs" />
     <Compile Include="IAssemblyRegistration.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="IFileSystem.cs" />
