@@ -4,6 +4,9 @@ React.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and 
 [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
 
+**It is currently under development and there is no stable release at the moment.
+Coming soon!**
+
 Features
 =========
  * On-the-fly **JSX to JavaScript compilation** for development purposes
