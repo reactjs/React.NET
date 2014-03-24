@@ -7,13 +7,15 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Mvc4.ReactConfig), "Configure")]
+
 namespace React.Sample.Mvc4
 {
-	public class ReactConfig : IReactSiteInitializer
+	public static class ReactConfig
 	{
-		public void Configure(IReactSiteConfiguration config)
+		public static void Configure()
 		{
-			config
+			ReactSiteConfiguration.Configuration = new ReactSiteConfiguration()
 				.AddScript("~/Content/Sample.jsx");
 		}
 	}

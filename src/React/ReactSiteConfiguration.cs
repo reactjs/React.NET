@@ -23,6 +23,11 @@ namespace React
 		private readonly IList<string> _scriptFiles = new List<string>();
 
 		/// <summary>
+		/// Gets or sets the site-side configuration
+		/// </summary>
+		public static IReactSiteConfiguration Configuration { get; set; }
+
+		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
 		/// React components and their dependencies.
 		/// </summary>

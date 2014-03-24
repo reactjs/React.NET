@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-			<HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -70,7 +70,6 @@
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
-    <Compile Include="ConfigurationFactory.cs" />
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
     <Compile Include="IAssemblyRegistration.cs" />
@@ -81,7 +80,6 @@
     <Compile Include="IReactComponent.cs" />
     <Compile Include="IReactEnvironment.cs" />
     <Compile Include="IReactSiteConfiguration.cs" />
-    <Compile Include="IReactSiteInitializer.cs" />
     <Compile Include="Exceptions\JsxException.cs" />
     <Compile Include="JavaScriptEngineFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

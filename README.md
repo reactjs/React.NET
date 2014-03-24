@@ -104,11 +104,15 @@ Server-Side Component Rendering
 Modify `App_Start\ReactConfig.cs` to reference your components
 
 ```csharp
-public class ReactConfig : IReactSiteInitializer
+namespace MyApp
 {
-	public void Configure(IReactSiteConfiguration config)
+	public static class ReactConfig
 	{
-		config.AddScript("~/Scripts/HelloWorld.react.jsx");
+		public static void Configure()
+		{
+			ReactSiteConfiguration.Configuration = new ReactSiteConfiguration()
+				.AddScript("~/Scripts/HelloWorld.react.jsx");
+		}
 	}
 }
 ```

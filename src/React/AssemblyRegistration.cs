@@ -34,7 +34,7 @@ namespace React
 		public void Register(TinyIoCContainer container)
 		{
 			// One instance shared for the whole app
-			container.Register<IReactSiteConfiguration>(ConfigurationFactory.GetConfiguration);
+			container.Register<IReactSiteConfiguration>((c, o) => ReactSiteConfiguration.Configuration);
 			// Force MSIE to use Chakra ActiveScript engine.
 			// Chakra JS RT engine runs out of stack space when processing JSX
 			container.Register<MsieConfiguration>(new MsieConfiguration
