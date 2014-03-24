@@ -104,10 +104,10 @@
     <None Include="React.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\es5-shim.js" />
+    <EmbeddedResource Include="Resources\react-with-addons.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\react-0.9.0.js" />
+    <EmbeddedResource Include="Resources\shims.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -104,12 +104,10 @@ namespace React
 		/// </summary>
 		private void InitialiseEngine(IJsEngine engine)
 		{
-			// Load standard React scripts
-			engine.Execute("var global = global || {};");
-			// TODO: Handle errors "thrown" by console.error / console.warn?
-			engine.Execute("var console = console || { log: function() {}, error: function() {}, warn: function() {} };");
-			engine.ExecuteResource("React.Resources.react-0.9.0.js", GetType().Assembly);
-			engine.ExecuteResource("React.Resources.JSXTransformer.js", GetType().Assembly);
+			var thisAssembly = GetType().Assembly;
+			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
+			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
+			engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
 			engine.Execute("var React = global.React");
 		}
 
