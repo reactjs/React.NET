@@ -41,12 +41,15 @@ namespace React
 		/// Should handle initialisation.
 		/// </param>
 		/// <returns>The JavaScript engine</returns>
-		public IJsEngine GetEngineForCurrentThread(Action<IJsEngine> onNewEngine)
+		public IJsEngine GetEngineForCurrentThread(Action<IJsEngine> onNewEngine = null)
 		{
 			return _engines.GetOrAdd(Thread.CurrentThread.ManagedThreadId, id =>
 			{
 				var engine = _factory();
-				onNewEngine(engine);
+				if (onNewEngine != null)
+				{
+					onNewEngine(engine);
+				}
 				return engine;
 			});
 		}

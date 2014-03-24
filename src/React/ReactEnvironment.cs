@@ -21,7 +21,6 @@ namespace React
 	/// <summary>
 	/// Request-specific React.NET environment. This is unique to the individual request and is 
 	/// not shared.
-	/// TODO: This is probably not thread safe at all (especially JSXTransformer)
 	/// </summary>
 	public class ReactEnvironment : IReactEnvironment
 	{
@@ -250,7 +249,7 @@ namespace React
 		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
 		/// <param name="code">JavaScript code to execute</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		private T ExecuteWithLargerStackIfRequired<T>(string code)
+		internal T ExecuteWithLargerStackIfRequired<T>(string code)
 		{
 			try
 			{
