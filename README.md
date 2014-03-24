@@ -131,10 +131,11 @@ Call `Html.ReactInitJavaScript` to render initialisation scripts. Note that this
 does **not** load the JavaScript for your component, it only renders the 
 initialisation code.
 
-```csharp
+```html
 <!-- Load all your scripts normally before calling ReactInitJavaScript -->
+<!-- Assumes minification/combination is configured as per previous section -->
 <script src="http://fb.me/react-0.9.0.min.js"></script>
-<script src="~/Scripts/HelloWorld.react.jsx"></script>
+@Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```
 
