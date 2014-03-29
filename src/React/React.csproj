@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="React.nuspec" />
+    <None Include="React.nutrans" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\react-with-addons.js" />

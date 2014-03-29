@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="React.WebOptimization.nuspec" />
+    <None Include="React.WebOptimization.nutrans" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React.Web\React.Web.csproj">

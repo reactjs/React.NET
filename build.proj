@@ -31,6 +31,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		AssemblyFile="src\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll"
 		TaskName="Xunit.Runner.MSBuild.xunit"
 	/>
+	<UsingTask 
+		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v12.0\Web\Microsoft.Web.Publishing.Tasks.dll"
+		TaskName="TransformXml"
+	/>
 
 	<Target Name="RestorePackages">
 		<Exec
@@ -70,7 +74,15 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<xunit Assemblies="@(TestAssemblies)" />
 	</Target>
 
-	<Target Name="Package" DependsOnTargets="Build">
+	<Target Name="GenerateNuSpecs">
+		<TransformXml
+			Source="src/template.nuspec"
+			Transform="src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).nutrans"
+			Destination="src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).nuspec"
+		/>
+	</Target>
+
+	<Target Name="Package" DependsOnTargets="Build;GenerateNuSpecs">
 		<!-- Delete old packages -->
 		<RemoveDir Directories="$(PackageOutputDir)" />
 		
