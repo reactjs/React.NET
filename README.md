@@ -27,13 +27,42 @@ Requirements
 
 Installation
 ============
-Via released [NuGet package](#)
-----------------------------
-To be written
+
+Via released NuGet package
+--------------------------
+The best way of installing React.NET is via NuGet. There are several NuGet 
+packages available:
+ * [React](#) - The core React library. Contains the main functionality of React
+   and JSX.  You will normally use this through an integration library like
+   React.Mvc4.
+ * [React.Mvc4](#) - Integration with ASP.NET MVC 4 and 5
+ * [React.WebOptimizer](#) - Integration with 
+   [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification).
+   Use this to combine and minify your JavaScript.
+
+These packages can be installed either via the UI in Visual Studio, or via the 
+Package Manager Console:
+```
+Install-Package React.Mvc4
+```
+
+Now skip down to the [usage section](#usage)
 
 Via latest development build
 ----------------------------
-To be written
+Development builds are automatically built after every change. Use these if you
+want the very latest bleeding-edge version. These are located on a custom 
+package server (http://reactjs.net/dev/packages/) so you need to add this as a
+package source in Visual Studio:
+
+1. Click Tools → NuGet Package Manager → Package Manager Settings
+2. Click Package Sources
+3. Click the plus icon, enter name as "React.NET Dev" and URL as 
+   http://reactjs.net/dev/packages/
+4. When adding the packages to your application, manually select "React.NET Dev"
+   as the package source, and ensure "Include Prerelease" is enabled.
+
+Now skip down to the [usage section](#usage)
 
 Manual Installation
 -------------------
