@@ -19,7 +19,7 @@ using React.Exceptions;
 namespace React
 {
 	/// <summary>
-	/// Request-specific React.NET environment. This is unique to the individual request and is 
+	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is 
 	/// not shared.
 	/// </summary>
 	public class ReactEnvironment : IReactEnvironment

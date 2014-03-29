@@ -13,7 +13,7 @@ using System.Collections.ObjectModel;
 namespace React
 {
 	/// <summary>
-	/// Site-wide configuration for React.NET
+	/// Site-wide configuration for ReactJS.NET
 	/// </summary>
 	public class ReactSiteConfiguration : IReactSiteConfiguration
 	{

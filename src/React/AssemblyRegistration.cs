@@ -14,7 +14,7 @@ using React.TinyIoC;
 namespace React
 {
 	/// <summary>
-	/// Handles registration of core React.NET components.
+	/// Handles registration of core ReactJS.NET components.
 	/// </summary>
 	public class AssemblyRegistration : IAssemblyRegistration
 	{

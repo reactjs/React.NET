@@ -13,7 +13,7 @@ using React.TinyIoC;
 namespace React.Web
 {
 	/// <summary>
-	/// Handles registration of React.NET components that are only applicable
+	/// Handles registration of ReactJS.NET components that are only applicable
 	/// in the context of an ASP.NET web application.
 	/// </summary>
 	public class AssemblyRegistration : IAssemblyRegistration

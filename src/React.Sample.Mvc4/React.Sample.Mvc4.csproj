@@ -135,10 +135,6 @@
     </Content>
     <Content Include="Views\Web.config" />
   </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="packages.config" />
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React.Web.Mvc4\React.Web.Mvc4.csproj">
       <Project>{662d52ac-1ee9-4372-bd74-379f9ac56451}</Project>
@@ -156,6 +152,9 @@
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
       <Name>React</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />

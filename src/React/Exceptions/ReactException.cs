@@ -12,7 +12,7 @@ using System;
 namespace React.Exceptions
 {
 	/// <summary>
-	/// Base class for all React.NET exceptions
+	/// Base class for all ReactJS.NET exceptions
 	/// </summary>
 	public class ReactException : Exception
 	{

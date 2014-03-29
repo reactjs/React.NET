@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace React
 {
 	/// <summary>
-	/// Site-wide configuration for React.NET
+	/// Site-wide configuration for ReactJS.NET
 	/// </summary>
 	public interface IReactSiteConfiguration
 	{

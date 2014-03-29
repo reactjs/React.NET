@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("React.WebOptimization")]
-[assembly: AssemblyDescription("Microsoft.AspNet.Web.Optimization integration for React.NET library")]
+[assembly: AssemblyDescription("Microsoft.AspNet.Web.Optimization integration for ReactJS.NET")]
 [assembly: ComVisible(false)]
 [assembly: Guid("4eeccfed-b6e0-4aa3-94fb-033567973387")]
 

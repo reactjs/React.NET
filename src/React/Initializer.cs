@@ -16,12 +16,12 @@ using React.TinyIoC;
 namespace React
 {
 	/// <summary>
-	/// Handles initialisation of React.NET. This is only called once, at application start.
+	/// Handles initialisation of ReactJS.NET. This is only called once, at application start.
 	/// </summary>
 	public static class Initializer
 	{
 		/// <summary>
-		/// Intialise React.NET
+		/// Intialise ReactJS.NET
 		/// </summary>
 		public static void Initialize(bool isInAspNet)
 		{
@@ -50,11 +50,11 @@ namespace React
 		}
 
 		/// <summary>
-		/// Determines if the specified assembly is part of React.NET
+		/// Determines if the specified assembly is part of ReactJS.NET
 		/// </summary>
 		/// <param name="assembly">The assembly</param>
 		/// <returns>
-		///   <c>true</c> if this is a React.NET assembly; otherwise, <c>false</c>.
+		///   <c>true</c> if this is a ReactJS.NET assembly; otherwise, <c>false</c>.
 		/// </returns>
 		private static bool IsReactAssembly(Assembly assembly)
 		{

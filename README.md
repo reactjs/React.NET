@@ -1,6 +1,6 @@
-React.NET
+ReactJS.NET
 =========
-React.NET is a library that makes it easier to use Facebook's
+ReactJS.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and 
 [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
 
@@ -66,7 +66,7 @@ Now skip down to the [usage section](#usage)
 
 Manual Installation
 -------------------
-1. Compile React.NET by running `build.bat`
+1. Compile ReactJS.NET by running `build.bat`
 2. Reference React.dll and React.Mvc4.dll (if using MVC 4) in your Web
    Application project
 3. See usage example below
@@ -97,7 +97,7 @@ production you will want to precompile for best performance.
 
 ASP.NET Bundling and Minification Support
 -----------------------------------------
-React.NET supports the use of Microsoft's 
+ReactJS.NET supports the use of Microsoft's 
 [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
 library to compile JSX into JavaScript and minify it along with all your other 
 JavaScript. Simply create a `JsxBundle` containing any number of JSX or regular
@@ -166,7 +166,7 @@ initialisation code.
 ```html
 <!-- Load all your scripts normally before calling ReactInitJavaScript -->
 <!-- Assumes minification/combination is configured as per previous section -->
-<script src="http://fb.me/react-0.9.0.min.js"></script>
+<script src="http://fb.me/react-0.10.0.min.js"></script>
 @Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```
@@ -181,7 +181,7 @@ Hit the page and admire the server-rendered beauty:
 	</div>
 </div>
 
-<script src="http://fb.me/react-0.9.0.min.js"></script>
+<script src="http://fb.me/react-0.10.0.min.js"></script>
 <script src="/Scripts/HelloWorld.react.js"></script>
 <script>React.renderComponent(HelloWorld({"name":"Daniel"}), document.getElementById("react1"));</script>
 ```
@@ -199,7 +199,7 @@ Changelog
 
 Licence
 =======
-BSD License for React.NET
+BSD License for ReactJS.NET
 
 Copyright (c) 2014, Facebook, Inc. All rights reserved.
 

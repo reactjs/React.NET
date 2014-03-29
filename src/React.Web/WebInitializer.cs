@@ -17,12 +17,12 @@ using React.Web;
 namespace React.Web
 {
 	/// <summary>
-	/// Handles initialisation of React.NET. This is only called once, at application start.
+	/// Handles initialisation of ReactJS.NET. This is only called once, at application start.
 	/// </summary>
 	internal static class WebInitializer
 	{
 		/// <summary>
-		/// Intialise React.NET
+		/// Intialise ReactJS.NET
 		/// </summary>
 		public static void Initialize()
 		{
