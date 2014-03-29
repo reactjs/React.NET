@@ -13,8 +13,11 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Minor>1</Minor>
 		<Build>0-dev</Build>
 		<Revision>0</Revision>
+		<DevBuild>true</DevBuild>
+		<DevNuGetServer>http://reactjs.net/dev/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
 		<SolutionFile>src\React.sln</SolutionFile>
+		<PackageOutputDir>output</PackageOutputDir>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageAssemblies Include="React" />
@@ -40,6 +43,13 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<GitVersion LocalPath="$(MSBuildProjectDirectory)">
 			<Output TaskParameter="CommitHash" PropertyName="Revision" />
 		</GitVersion>
+		<!--TODO: Only do this if a dev build -->
+		<Time Format="yyyyMMdd-HHmm">
+			<Output TaskParameter="FormattedTime" PropertyName="Date" />
+		</Time>
+		<PropertyGroup>
+			<Build>$(Build)-$(Date)</Build>
+		</PropertyGroup>
 		<AssemblyInfo
 			CodeLanguage="CS"
 			OutputFile="src\SharedAssemblyVersionInfo.cs"
@@ -61,9 +71,22 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</Target>
 
 	<Target Name="Package" DependsOnTargets="Build">
+		<!-- Delete old packages -->
+		<RemoveDir Directories="$(PackageOutputDir)" />
+		
+		<!-- Create new packages -->
+		<MakeDir Directories="$(PackageOutputDir)" />
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release"
+			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release -OutputDirectory output"
+		/>
+	</Target>
+
+	<Target Name="Push">
+		<!-- Push packages to dev build server -->
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="tools\NuGet\nuget.exe push $(PackageOutputDir)\*.symbols.nupkg -Source $(DevNuGetServer) -NonInteractive"
 		/>
 	</Target>
 </Project>
