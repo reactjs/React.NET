@@ -10,8 +10,10 @@ Coming soon!**
 Features
 =========
  * On-the-fly **JSX to JavaScript compilation** for development purposes
- * JSX to JavaScript precompilation via 
-   [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
+ * JSX to JavaScript compilation via popular minification/combination 
+   libraries:
+   * [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
+   * [Cassette](http://getcassette.net/)
  * **Server-side component rendering** to make your initial render super-fast
    (experimental!)
 
@@ -23,7 +25,7 @@ Requirements
  * A JavaScript engine:
    * [MsieJavaScriptEngine](https://github.com/Taritsyn/MsieJavaScriptEngine) -
      Windows only and requires IE9 or above to be installed on the server
-   * ~~[Jint](https://github.com/sebastienros/jint) - Slower but cross-platform~~
+   * Other engines coming soon
 
 Installation
 ============

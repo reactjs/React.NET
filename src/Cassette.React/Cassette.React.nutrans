@@ -1,0 +1,21 @@
+﻿<?xml version="1.0"?>
+<!--
+Copyright (c) 2014, Facebook, Inc.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree. An additional grant
+of patent rights can be found in the PATENTS file in the same directory.
+-->
+<package
+	xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<metadata>
+		<title xdt:Transform="Insert">ReactJS.NET - JSX for Cassette</title>
+		<description xdt:Transform="Insert">
+			Allows you to compile JSX to JavaScript using Cassette
+		</description>
+		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs cassette</tags>
+	</metadata>
+	
+</package>
