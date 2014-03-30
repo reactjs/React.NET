@@ -78,6 +78,8 @@ namespace React.Tests.Core
 				// Need to ensure engine is disposed in same thread as it was created in
 				factory.DisposeEngineForCurrentThread();
 			});
+			thread.Start();
+			thread.Join();
 
 			var engine3 = factory.GetEngineForCurrentThread();
 
