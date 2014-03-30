@@ -20,7 +20,7 @@ Features
 Requirements
 ============
  * ASP.NET 4.0 or higher
- * ASP.NET MVC 4 (support for other versions will come eventually)
+ * ASP.NET MVC 3, 4 or 5
  * [JSON.NET](http://james.newtonking.com/json)
  * A JavaScript engine:
    * [MsieJavaScriptEngine](https://github.com/Taritsyn/MsieJavaScriptEngine) -
@@ -38,9 +38,11 @@ packages available:
    and JSX.  You will normally use this through an integration library like
    React.Mvc4.
  * [React.Mvc4](#) - Integration with ASP.NET MVC 4 and 5
- * [React.WebOptimizer](#) - Integration with 
+ * [React.Mvc3](#) - Integration with ASP.NET MVC 3
+ * [System.Web.Optimization.React](#) - Integration with 
    [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification).
    Use this to combine and minify your JavaScript.
+ * [Cassette.React] - Integration with [Cassette](http://getcassette.net/)
 
 These packages can be installed either via the UI in Visual Studio, or via the 
 Package Manager Console:
