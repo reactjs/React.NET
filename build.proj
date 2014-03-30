@@ -23,7 +23,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="React" />
 		<PackageAssemblies Include="React.Web" />
 		<PackageAssemblies Include="React.Web.Mvc4" />
-		<PackageAssemblies Include="React.WebOptimization" />
+		<PackageAssemblies Include="System.Web.Optimization.React" />
 		<PackageAssemblies Include="Cassette.React" />
 	</ItemGroup>
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{889CEF81-75D6-4BAB-8E2C-B64B7CA97C77}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>React.WebOptimization</RootNamespace>
-    <AssemblyName>React.WebOptimization</AssemblyName>
+    <RootNamespace>System.Web.Optimization.React</RootNamespace>
+    <AssemblyName>System.Web.Optimization.React</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
@@ -17,22 +17,22 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\React.WebOptimization\</OutputPath>
+    <OutputPath>..\..\bin\Debug\System.Web.Optimization.React\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Debug\React.WebOptimization\React.WebOptimization.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Debug\System.Web.Optimization.React\System.Web.Optimization.React.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release\React.WebOptimization\</OutputPath>
+    <OutputPath>..\..\bin\Release\System.Web.Optimization.React\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Release\React.WebOptimization\React.WebOptimization.XML</DocumentationFile>
+    <DocumentationFile>..\..\bin\Release\System.Web.Optimization.React\System.Web.Optimization.React.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="React.WebOptimization.nutrans" />
+    <None Include="System.Web.Optimization.nutrans" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React.Web\React.Web.csproj">

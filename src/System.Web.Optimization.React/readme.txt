@@ -1,5 +1,5 @@
-﻿To complete the installation of React.WebOptimization, you need to create one or more bundles 
-containing your JSX files:
+﻿To complete the installation of System.Web.Optimization.React, you need to create one or more
+bundles containing your JSX files:
 
 // In BundleConfig.cs
 bundles.Add(new JsxBundle("~/bundles/main").Include(

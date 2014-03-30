@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Web", "React.Web\Reac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Web.Mvc4", "React.Web.Mvc4\React.Web.Mvc4.csproj", "{662D52AC-1EE9-4372-BD74-379F9AC56451}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.WebOptimization", "React.WebOptimization\React.WebOptimization.csproj", "{889CEF81-75D6-4BAB-8E2C-B64B7CA97C77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Web.Optimization.React", "System.Web.Optimization.React\System.Web.Optimization.React.csproj", "{889CEF81-75D6-4BAB-8E2C-B64B7CA97C77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Cassette", "React.Sample.Cassette\React.Sample.Cassette.csproj", "{F1EB6834-80A5-411C-90FD-CECC05715A10}"
 EndProject

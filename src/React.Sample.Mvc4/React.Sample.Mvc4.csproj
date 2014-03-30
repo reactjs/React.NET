@@ -140,9 +140,9 @@
       <Project>{662d52ac-1ee9-4372-bd74-379f9ac56451}</Project>
       <Name>React.Web.Mvc4</Name>
     </ProjectReference>
-    <ProjectReference Include="..\React.WebOptimization\React.WebOptimization.csproj">
+    <ProjectReference Include="..\System.Web.Optimization.React\System.Web.Optimization.React.csproj">
       <Project>{889cef81-75d6-4bab-8e2c-b64b7ca97c77}</Project>
-      <Name>React.WebOptimization</Name>
+      <Name>System.Web.Optimization.React</Name>
     </ProjectReference>
     <ProjectReference Include="..\React.Web\React.Web.csproj">
       <Project>{134edd16-8dc8-4983-a2e0-b38dab1ecf1c}</Project>

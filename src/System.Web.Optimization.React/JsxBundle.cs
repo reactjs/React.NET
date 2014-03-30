@@ -7,9 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System.Web.Optimization;
-
-namespace React.WebOptimization
+namespace System.Web.Optimization.React
 {
 	/// <summary>
 	/// Represents a bundle that compiles JSX to JavaScript before minifying.

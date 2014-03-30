@@ -8,7 +8,7 @@
  */
 
 using System.Web.Optimization;
-using React.WebOptimization;
+using System.Web.Optimization.React;
 
 namespace React.Sample.Mvc4
 {

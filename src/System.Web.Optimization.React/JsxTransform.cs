@@ -7,9 +7,9 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System.Web.Optimization;
+using React;
 
-namespace React.WebOptimization
+namespace System.Web.Optimization.React
 {
 	/// <summary>
 	/// Transforms JSX into regular JavaScript. Should be included before any minification 
