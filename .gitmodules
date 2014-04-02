@@ -1,0 +1,3 @@
+[submodule "site/packages"]
+	path = site/packages
+	url = http://github.com/Daniel15/Simple-NuGet-Server.git

@@ -1,0 +1,10 @@
+name: ReactJS.NET
+markdown: redcarpet
+pygments: true
+doc-sections:
+ - id: getting-started
+   title: Getting Started
+ - id: guides
+   title: Guides
+ - id: dev
+   title: Development

@@ -1,0 +1,16 @@
+<div class="nav-docs">
+  {% for section in site.doc-sections %}
+    <h3>{{ section.title }}</h3>
+    <ul>
+      {% for site_page in site.pages %}
+        {% if site_page.url contains section.id | prepend:'/' %}
+          <li>
+            <a href="{{ site_page.url }}"{% if page.url == site_page.url %} class="active"{% endif %}>
+              {{ site_page.title }}
+            </a>
+          <li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</div>
