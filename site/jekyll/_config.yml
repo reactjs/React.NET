@@ -8,3 +8,5 @@ doc-sections:
    title: Guides
  - id: dev
    title: Development
+assets:
+ css_compressor: sass

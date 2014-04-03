@@ -13,8 +13,7 @@
   <meta property="og:description" content=".NET integration for ReactJS" />
   <meta property="fb:app_id" content="1417169611875552" />
 
-  <link rel="stylesheet" href="/css/syntax.css" />
-  <link rel="stylesheet" href="/css/react.css" />
+  {% stylesheet main %}
 
   <script type="text/javascript" src="//use.typekit.net/vqa1hcx.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
@@ -33,7 +32,6 @@
     <div class="nav-main">
       <div class="wrap">
         <a class="nav-home" href="/">
-          <img class="nav-logo" alt="" src="/img/logo_small.png" width="38" height="38" />
           {{ site.name }}
         </a>
         <ul class="nav-site">
@@ -47,7 +45,12 @@
     {{ content }}
 
     <footer class="wrap">
-      <div class="right">&copy; 2014 Facebook Inc.</div>
+      <div class="right">
+        &copy; 2014 Facebook Inc.
+        <a href="https://github.com/reactjs/React.NET/blob/master/site/jekyll{{ page.url | replace:'.html','.md' }}" target="_blank">
+          Edit this page on GitHub
+        </a>
+      </div>
     </footer>
   </div>
 
