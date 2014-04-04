@@ -8,9 +8,9 @@ Release Versions
 The best way to install ReactJS.NET is via NuGet. There are several NuGet
 packages available:
 
- * [React](#) - The core React library. Contains the main functionality of React
-   and JSX.  You will normally use this through an integration library like
-   React.Mvc4.
+ * [React.Core](#) - The core React library. Contains the main functionality of
+   React and JSX.  You will normally use this through an integration library
+   like React.Mvc4.
  * [React.Mvc4](#) - Integration with ASP.NET MVC 4 and 5
  * [React.Mvc3](#) - Integration with ASP.NET MVC 3
  * [System.Web.Optimization.React](#) - Integration with
@@ -30,13 +30,13 @@ Development Builds
 ------------------
 Development builds are automatically built after every change. Use these if you
 want the very latest bleeding-edge version. These are located on a [custom
-package server](http://reactjs.net/dev/packages/) so you need to add this as a
+package server](http://reactjs.net/packages/) so you need to add this as a
 package source in Visual Studio:
 
 1. Click Tools &rarr; NuGet Package Manager &rarr; Package Manager Settings
 2. Click Package Sources
 3. Click the plus icon, enter name as "ReactJS.NET Dev" and URL as
-   http://reactjs.net/dev/packages/
+   http://reactjs.net/packages/
 4. When adding the packages to your application, manually select "ReactJS.NET
    Dev" as the package source, and ensure "Include Prerelease" is enabled.
 
