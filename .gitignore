@@ -2,6 +2,7 @@ _old/
 src/SharedAssemblyVersionInfo.cs
 *.nupkg
 src/**/*.nuspec
+!src/template.nuspec
 site/jekyll/_site
 
 ## Ignore Visual Studio temporary files, build results, and
