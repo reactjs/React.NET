@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F
 		..\dev-build-push.bat = ..\dev-build-push.bat
 		..\dev-build.bat = ..\dev-build.bat
 		..\README.md = ..\README.md
+		..\release-build-push.bat = ..\release-build-push.bat
+		..\release-build.bat = ..\release-build.bat
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 		template.nuspec = template.nuspec
 	EndProjectSection

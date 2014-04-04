@@ -11,6 +11,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" 
 	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
+		<id xdt:Transform="Replace">React.Core</id>
 		<title xdt:Transform="Insert">ReactJS.NET Core</title>
 		<description xdt:Transform="Insert">
 			ReactJS tools for .NET. Important: This package does not do much on its own; you probably 
