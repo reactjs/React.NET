@@ -11,7 +11,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<PropertyGroup>
 		<Major>0</Major>
 		<Minor>1</Minor>
-		<Build>0-dev</Build>
+		<Build>0</Build>
 		<Revision>0</Revision>
 		<DevBuild>true</DevBuild>
 		<DevNuGetServer>http://reactjs.net/dev/packages/</DevNuGetServer>
@@ -23,6 +23,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="React" />
 		<PackageAssemblies Include="React.Web" />
 		<PackageAssemblies Include="React.Web.Mvc4" />
+		<PackageAssemblies Include="React.Web.Mvc3" />
 		<PackageAssemblies Include="System.Web.Optimization.React" />
 		<PackageAssemblies Include="Cassette.React" />
 	</ItemGroup>
@@ -52,8 +53,9 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Time Format="yyyyMMdd-HHmm">
 			<Output TaskParameter="FormattedTime" PropertyName="Date" />
 		</Time>
-		<PropertyGroup>
-			<Build>$(Build)-$(Date)</Build>
+		<!-- Prepend date to build version if a dev build-->
+		<PropertyGroup Condition="$(BuildType) != 'Release'">
+			<Build>$(Build)-dev-$(Date)</Build>
 		</PropertyGroup>
 		<AssemblyInfo
 			CodeLanguage="CS"
@@ -96,10 +98,18 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</Target>
 
 	<Target Name="Push">
-		<!-- Push packages to dev build server -->
+		<!-- For dev -->
 		<Exec
+			Condition="$(BuildType) != 'Release'"
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe push $(PackageOutputDir)\*.symbols.nupkg -Source $(DevNuGetServer) -NonInteractive"
 		/>
+
+		<!-- For release -->
+		<Exec
+			Condition="$(BuildType) == 'Release'"
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="tools\NuGet\nuget.exe push $(PackageOutputDir)\*.nupkg -NonInteractive"
+				/>
 	</Target>
 </Project>
