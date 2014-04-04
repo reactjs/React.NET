@@ -12,9 +12,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
 		<title xdt:Transform="Insert">ReactJS.NET - JSX for Cassette</title>
-		<description xdt:Transform="Insert">
-			Allows you to compile JSX to JavaScript using Cassette
-		</description>
+		<description xdt:Transform="Insert">Allows you to compile JSX to JavaScript using Cassette</description>
 		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs cassette</tags>
 	</metadata>
 	
