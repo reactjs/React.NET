@@ -1,12 +1,8 @@
-ReactJS.NET
+[ReactJS.NET](http://reactjs.net/)
 ===========
 ReactJS.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and
-[JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#. To get
-started, [take a look at the documentation](http://reactjs.net/getting-started/getting-started.html).
-
-**It is currently under development and there is no stable release at the moment.
-Coming soon!**
+[JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
 
 Features
 ========
@@ -17,6 +13,36 @@ Features
    * Cassette
  * [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
    to make your initial render super-fast (experimental!)
+
+Quick Start
+===========
+Install the package
+```
+Install-Package React.Mvc4
+```
+
+Create JSX files
+```javascript
+// /Scripts/HelloWorld.jsx
+/** @jsx React.DOM */
+var HelloWorld = React.createClass({
+    render: function () {
+        return (
+            <div>Hello {this.props.name}</div>
+        );
+    }
+});
+```
+
+Reference the JSX files from your HTML
+```html
+<script src="@Url.Content("~/Scripts/HelloWorld.jsx")"></script>
+```
+
+Now you can use the `HelloWorld` component.
+
+For information on more advanced topics (including precompilation and
+server-side rendering), check out [the documentation](http://reactjs.net/docs)
 
 Licence
 =======
