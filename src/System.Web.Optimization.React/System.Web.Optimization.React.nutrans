@@ -12,9 +12,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
 		<title xdt:Transform="Insert">ReactJS.NET - JSX for ASP.NET Web Optimization Framework</title>
-		<description xdt:Transform="Insert">
-			Allows you to compile JSX to JavaScript in the ASP.NET Web Optimization Framework.
-		</description>
+		<description xdt:Transform="Insert">Allows you to compile JSX to JavaScript in the ASP.NET Web Optimization Framework.</description>
 	</metadata>
 	<files xdt:Transform="Insert">
 		<file src="readme.txt" target="" />
