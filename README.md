@@ -6,7 +6,7 @@ ReactJS.NET is a library that makes it easier to use Facebook's
 
 Features
 ========
- * On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/getting-started.html)
+ * On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/download.html)
  * JSX to JavaScript compilation via popular minification/combination
    libraries:
    * [ASP.NET Bundling and Minification](http://reactjs.net/guides/weboptimizer.html)
