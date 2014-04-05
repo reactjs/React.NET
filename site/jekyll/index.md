@@ -1,6 +1,6 @@
 ---
 layout: default
-title: A JavaScript library for building user interfaces
+title: React integration for ASP.NET MVC
 id: home
 ---
 <div class="hero">
