@@ -26,6 +26,9 @@
     ga('create', 'UA-25623237-6', 'reactjs.net');
     ga('send', 'pageview');
   </script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+  <![endif]-->
 </head>
 <body>
   <div class="container">
@@ -35,7 +38,7 @@
           {{ site.name }}
         </a>
         <ul class="nav-site">
-          <li><a href="/getting-started/getting-started.html"{% if page.sectionid == 'docs' %} class="active"{% endif %}>Docs</a></li>
+          <li><a href="/docs"{% if page.sectionid == 'docs' %} class="active"{% endif %}>Docs</a></li>
           <li><a href="/download">Download</a></li>
           <li><a href="http://github.com/reactjs/React.NET">GitHub</a>
         </ul>

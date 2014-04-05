@@ -1,6 +1,39 @@
 /**
  * CSS overrides for ReactJS.NET
  */
-.nav-main .nav-home {
+.nav-main .nav-home,
+.hero strong {
   color: #ff87d6;
+}
+
+.hero {
+  height: auto;
+  padding-bottom: 50px;
+}
+
+#examples {
+  p {
+    max-width: none;
+  }
+  .example {
+    overflow: hidden;
+  }
+  .example-desc {
+    width: 270px;
+    float: left;
+  }
+  .example-code {
+    width: 620px;
+    float: right;
+
+    p {
+      display: none;
+    }
+    .highlight {
+      padding: 4px;
+    }
+    .highlight:after {
+      display: none;
+    }
+  }
 }
