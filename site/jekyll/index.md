@@ -18,9 +18,9 @@ id: home
       [React](http://facebook.github.io/react/) and
       [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C# and
       other .NET languages, focusing specifically on ASP.NET MVC (although it
-      also works in other environments). It assumes you already know the basics
-      of React and its usage. If not, check out the
-      [React tutorial](http://facebook.github.io/react/docs/tutorial.html) first.
+      also works in other environments). Take a look at
+      [the tutorial](/getting-started/tutorial.html) to see how easy it is to
+      get started with React and ReactJS.NET!
     </p>
     <div id="examples">
       <div class="example">
@@ -109,7 +109,8 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
   <hr class="home-divider" />
   <section class="home-bottom-section">
     <div class="buttons-unit">
-      <a href="/download" class="button">Get Started</a>
+      <a href="/getting-started/download.html" class="button">Get Started</a>
+      <a href="/getting-started/tutorial.html" class="button">Tutorial</a>
     </div>
   </section>
 </section>

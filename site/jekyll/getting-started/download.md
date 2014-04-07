@@ -1,4 +1,5 @@
 ---
+id: download
 layout: docs
 title: Downloading and Installing
 ---

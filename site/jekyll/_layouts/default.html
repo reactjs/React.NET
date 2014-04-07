@@ -38,8 +38,9 @@
           {{ site.name }}
         </a>
         <ul class="nav-site">
-          <li><a href="/docs"{% if page.sectionid == 'docs' %} class="active"{% endif %}>Docs</a></li>
-          <li><a href="/download">Download</a></li>
+          <li><a href="/docs"{% if page.sectionid == 'docs' and page.id != 'tutorial' and page.id != 'download' %} class="active"{% endif %}>Docs</a></li>
+          <li><a href="/getting-started/tutorial.html"{% if page.id == 'tutorial' %} class="active"{% endif %}>Tutorial</a></li>
+          <li><a href="/getting-started/download.html"{% if page.id == 'download' %} class="active"{% endif %}>Download</a></li>
           <li><a href="http://github.com/reactjs/React.NET">GitHub</a>
         </ul>
       </div>
