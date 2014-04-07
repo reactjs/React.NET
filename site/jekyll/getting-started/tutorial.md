@@ -529,7 +529,7 @@ var CommentBox = React.createClass({
   },
   componentWillMount: function() {
     this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (
@@ -657,7 +657,7 @@ var CommentBox = React.createClass({
   },
   componentWillMount: function() {
     this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (
@@ -734,7 +734,7 @@ var CommentBox = React.createClass({
   },
   componentWillMount: function() {
     this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (
@@ -794,7 +794,7 @@ var CommentBox = React.createClass({
   },
   componentWillMount: function() {
     this.loadCommentsFromServer();
-    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+    window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (
@@ -875,9 +875,9 @@ If you go to this URL in your browser, you should notice that the code has been 
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using JavaScript. This enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to ensure the `setInterval` call for polling for new comments is only executed client-side. Finally, we will remove the `loadCommentsFromServer` call from `getInitialState`, since it is no longer required.
+We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to ensure the `setInterval` call for polling for new comments is only executed client-side, by moving it to the `componentDidMount` method. Finally, we will remove the `loadCommentsFromServer` call from `getInitialState`, since it is no longer required.
 
-```javascript{28,31-35}
+```javascript{28,30-32}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
@@ -907,12 +907,8 @@ var CommentBox = React.createClass({
   getInitialState: function() {
     return { data: this.props.initialData };
   },
-  componentWillMount: function() {
-    //this.loadCommentsFromServer();
-    // Only do this in the browser, not on the server-side.
-    if (typeof window !== 'undefined') {
-      window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
-    }
+  componentDidMount: function() {
+    window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (
