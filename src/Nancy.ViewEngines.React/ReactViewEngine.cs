@@ -6,19 +6,36 @@ using React;
 
 namespace Nancy.ViewEngines.React
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ReactViewEngine : IViewEngine
     {
         private readonly IEnumerable<string> _extensions = new[] { "jsx", "js" };
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IEnumerable<string> Extensions
         {
             get { return _extensions; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewEngineStartupContext"></param>
         public void Initialize(ViewEngineStartupContext viewEngineStartupContext)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewLocationResult"></param>
+        /// <param name="model"></param>
+        /// <param name="renderContext"></param>
+        /// <returns></returns>
         public Response RenderView(ViewLocationResult viewLocationResult, dynamic model, IRenderContext renderContext)
         {
             return new HtmlResponse(statusCode: HttpStatusCode.OK, contents: stream => {
@@ -30,6 +47,13 @@ namespace Nancy.ViewEngines.React
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewLocationResult"></param>
+        /// <param name="model"></param>
+        /// <param name="renderContext"></param>
+        /// <returns></returns>
         public string RenderComponent(ViewLocationResult viewLocationResult, dynamic model, IRenderContext renderContext)
         {
             string content;
