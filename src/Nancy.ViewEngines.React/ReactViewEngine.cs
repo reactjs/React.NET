@@ -11,14 +11,14 @@ namespace Nancy.ViewEngines.React
     /// </summary>
     public class ReactViewEngine : IViewEngine
     {
-        private readonly IEnumerable<string> _extensions = new[] { "jsx", "js" };
+        private static readonly IEnumerable<string> SupportedExtensions = new[] { "jsx" };
 
         /// <summary>
         /// 
         /// </summary>
         public IEnumerable<string> Extensions
         {
-            get { return _extensions; }
+            get { return SupportedExtensions; }
         }
 
         /// <summary>
