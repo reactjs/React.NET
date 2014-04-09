@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Nancy.Responses;
@@ -70,7 +69,7 @@ namespace Nancy.ViewEngines.React
                     jsEngine,
                     new ReactSiteConfiguration(),
                     new NullCache(),
-                    new NullReactFileSystem());
+                    new NullFileSystem());
 
                 // this is bad and should be cached instead
                 var js = react.TransformJsx(content);
@@ -89,20 +88,6 @@ namespace Nancy.ViewEngines.React
         private string GetComponentName(ViewLocationResult viewLocationResult)
         {
             return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(viewLocationResult.Name);
-        }
-
-        // we don't use this currently
-        class NullReactFileSystem : IFileSystem
-        {
-            public string MapPath(string relativePath)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string ReadAsString(string relativePath)
-            {
-                throw new NotImplementedException();
-            }
         }
 
     }
