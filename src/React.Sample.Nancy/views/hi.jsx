@@ -12,5 +12,3 @@ var Hi = React.createClass({
 		)
 	}
 });
-
-module.exports = Hi;

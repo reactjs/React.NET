@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Nancy.Responses;
 using React;
@@ -71,21 +72,23 @@ namespace Nancy.ViewEngines.React
                     new NullReactCache(),
                     new NullReactFileSystem());
 
-                react.Execute("module = { exports: {} };");
-
                 // this is bad and should be cached instead
                 var js = react.TransformJsx(content);
                 react.Execute(js);
 
-                // ugly hack for now as ReactJS.NET CreateComponent requires variable name and doesn't support common js modules :(
-                react.Execute(";var __ReactComponent__ = module.exports;");
+                var componentName = GetComponentName(viewLocationResult);
 
-                IReactComponent component = react.CreateComponent<object>("__ReactComponent__", model);
+                IReactComponent component = react.CreateComponent<object>(componentName, model);
 
                 var html = component.RenderHtml();
 
                 return html;
             }
+        }
+
+        private string GetComponentName(ViewLocationResult viewLocationResult)
+        {
+            return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(viewLocationResult.Name);
         }
 
         // we don't use this currently
