@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\bin\Debug\React.Web\React.Web.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -65,6 +65,7 @@
     <Compile Include="AspNetFileSystem.cs" />
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="IJsxHandler.cs" />
+    <Compile Include="TinyIoCAspNetExtensions.cs" />
     <Compile Include="WebInitializer.cs" />
     <Compile Include="JsxHandler.cs" />
     <Compile Include="JsxHandlerFactory.cs" />

@@ -9,8 +9,8 @@
 
 using System.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using React.TinyIoC;
 using React.Web;
+using React.Web.TinyIoC;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(WebInitializer), "Initialize")]
 
@@ -26,7 +26,7 @@ namespace React.Web
 		/// </summary>
 		public static void Initialize()
 		{
-			Initializer.Initialize(isInAspNet: true);
+			Initializer.Initialize(() => new HttpContextLifetimeProvider());
 			DynamicModuleUtility.RegisterModule(typeof(IocPerRequestDisposal));
 		}
 

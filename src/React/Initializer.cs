@@ -10,7 +10,6 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using React.TinyIoC;
 
 namespace React
@@ -23,19 +22,18 @@ namespace React
 		/// <summary>
 		/// Intialise ReactJS.NET
 		/// </summary>
-		public static void Initialize(bool isInAspNet)
+		public static void Initialize(Func<TinyIoCContainer.ITinyIoCObjectLifetimeProvider> requestLifetimeProviderFactory)
 		{
-			InitializeIoC(isInAspNet);
+			InitializeIoC(requestLifetimeProviderFactory);
 		}
 
 		/// <summary>
 		/// Initialises the IoC container by finding all <see cref="IAssemblyRegistration"/> 
 		/// implementations and calling their <see cref="IAssemblyRegistration.Register"/> methods.
 		/// </summary>
-		private static void InitializeIoC(bool isInAspNet)
+		private static void InitializeIoC(Func<TinyIoCContainer.ITinyIoCObjectLifetimeProvider> requestLifetimeProviderFactory)
 		{
-			TinyIoCAspNetExtensions.IsInAspNet = isInAspNet;
-
+			TinyIoCExtensions.RequestLifetimeProviderFactory = requestLifetimeProviderFactory;
 			var types = AppDomain.CurrentDomain.GetAssemblies()
 				// Only bother checking React assemblies
 				.Where(IsReactAssembly)

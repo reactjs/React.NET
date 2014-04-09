@@ -42,8 +42,8 @@ namespace React
 				EngineMode = JsEngineMode.ChakraActiveScript
 			});
 
-			container.Register<IReactEnvironment, ReactEnvironment>().AsReactSingleton();
-			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsReactSingleton();
+			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
+			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsPerRequestSingleton();
 		}
 	}
 }
