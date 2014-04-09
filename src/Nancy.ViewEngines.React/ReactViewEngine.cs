@@ -92,16 +92,6 @@ namespace Nancy.ViewEngines.React
         }
 
         // we don't use this currently
-        class NullReactCache : ICache
-        {
-            public T GetOrInsert<T>(string key, TimeSpan slidingExpiration, Func<T> getData, IEnumerable<string> cacheDependencyFiles = null,
-                IEnumerable<string> cacheDependencyKeys = null)
-            {
-                return getData();
-            }
-        }
-
-        // we don't use this currently
         class NullReactFileSystem : IFileSystem
         {
             public string MapPath(string relativePath)
