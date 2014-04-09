@@ -6,7 +6,7 @@ namespace React
     /// <summary>
     /// Implementation of <see cref="ICache"/> that never caches.
     /// </summary>
-    public class NullReactCache : ICache
+    public class NullCache : ICache
     {
         /// <summary>
         /// Get an item from the cache. If it doesn't exist, call the function to load it

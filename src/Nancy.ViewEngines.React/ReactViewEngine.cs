@@ -69,7 +69,7 @@ namespace Nancy.ViewEngines.React
                 var react = new ReactEnvironment(
                     jsEngine,
                     new ReactSiteConfiguration(),
-                    new NullReactCache(),
+                    new NullCache(),
                     new NullReactFileSystem());
 
                 // this is bad and should be cached instead
