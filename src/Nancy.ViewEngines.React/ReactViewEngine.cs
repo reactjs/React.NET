@@ -8,18 +8,18 @@ using React;
 namespace Nancy.ViewEngines.React
 {
     /// <summary>
-    /// 
+    /// Nancy React View Engine
     /// </summary>
     public class ReactViewEngine : IViewEngine
     {
-        private static readonly IEnumerable<string> SupportedExtensions = new[] { "jsx" };
+        private static readonly ISet<string> _extensions = new HashSet<string>(new[] { "jsx" });
 
         /// <summary>
         /// 
         /// </summary>
         public IEnumerable<string> Extensions
         {
-            get { return SupportedExtensions; }
+            get { return _extensions; }
         }
 
         /// <summary>
