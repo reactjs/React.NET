@@ -9,6 +9,7 @@
 
 using System.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using React.TinyIoC;
 using React.Web;
 using React.Web.TinyIoC;
 
@@ -26,8 +27,23 @@ namespace React.Web
 		/// </summary>
 		public static void Initialize()
 		{
-			Initializer.Initialize(() => new HttpContextLifetimeProvider());
+			Initializer.Initialize(AsPerRequestSingleton);
 			DynamicModuleUtility.RegisterModule(typeof(IocPerRequestDisposal));
+		}
+
+		/// <summary>
+		/// Registers a class such that every ASP.NET web request has a single instance of it.
+		/// Instances will be stored in HttpContext.
+		/// </summary>
+		/// <param name="registerOptions">Registration options</param>
+		/// <returns>Registration options (for chaining)</returns>
+		private static TinyIoCContainer.RegisterOptions AsPerRequestSingleton(TinyIoCContainer.RegisterOptions registerOptions)
+		{
+			return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(
+				registerOptions,
+				new HttpContextLifetimeProvider(),
+				"per request singleton"
+			);
 		}
 
 		/// <summary>

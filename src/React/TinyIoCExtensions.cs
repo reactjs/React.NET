@@ -9,6 +9,7 @@
 
 using System;
 using React.TinyIoC;
+using RegisterOptions = React.TinyIoC.TinyIoCContainer.RegisterOptions;
 
 namespace React
 {
@@ -20,7 +21,7 @@ namespace React
 		/// <summary>
 		/// Gets or sets the factory used to create per-request lifetime providers
 		/// </summary>
-		internal static Func<TinyIoCContainer.ITinyIoCObjectLifetimeProvider> RequestLifetimeProviderFactory { private get; set; }
+		internal static Func<RegisterOptions, RegisterOptions> AsRequestLifetime { private get; set; }
 
 		/// <summary>
 		/// Registers a class in IoC that uses a singleton per "request". This is generally in the
@@ -30,20 +31,16 @@ namespace React
 		/// <returns>The class registration (fluent interface)</returns>
 		public static TinyIoCContainer.RegisterOptions AsPerRequestSingleton(this TinyIoCContainer.RegisterOptions registerOptions)
 		{
-			if (RequestLifetimeProviderFactory == null)
+			if (AsRequestLifetime == null)
 			{
 				throw new Exception(
-					"RequestLifetimeProviderFactory needs to be set for per-request ReactJS.NET " +
+					"AsRequestLifetime needs to be set for per-request ReactJS.NET " +
 					"assembly registrations to work. Please ensure you are calling " +
 					"React.Initializer.Initialize() before using any ReactJS.NET functionality."
 				);
 			}
 
-			return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(
-				registerOptions,
-				RequestLifetimeProviderFactory(),
-				"per request singleton"
-			);
+			return AsRequestLifetime(registerOptions);
 		}
 	}
 }

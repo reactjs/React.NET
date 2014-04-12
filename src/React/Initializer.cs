@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using React.TinyIoC;
+using RegisterOptions = React.TinyIoC.TinyIoCContainer.RegisterOptions;
 
 namespace React
 {
@@ -22,18 +23,24 @@ namespace React
 		/// <summary>
 		/// Intialise ReactJS.NET
 		/// </summary>
-		public static void Initialize(Func<TinyIoCContainer.ITinyIoCObjectLifetimeProvider> requestLifetimeProviderFactory)
+		/// <param name="requestLifetimeRegistration">
+		/// A function used to register IoC components with a per-request lifetime
+		/// </param>
+		public static void Initialize(Func<RegisterOptions, RegisterOptions> requestLifetimeRegistration)
 		{
-			InitializeIoC(requestLifetimeProviderFactory);
+			InitializeIoC(requestLifetimeRegistration);
 		}
 
 		/// <summary>
 		/// Initialises the IoC container by finding all <see cref="IAssemblyRegistration"/> 
 		/// implementations and calling their <see cref="IAssemblyRegistration.Register"/> methods.
 		/// </summary>
-		private static void InitializeIoC(Func<TinyIoCContainer.ITinyIoCObjectLifetimeProvider> requestLifetimeProviderFactory)
+		/// <param name="requestLifetimeRegistration">
+		/// A function used to register IoC components with a per-request lifetime
+		/// </param>
+		private static void InitializeIoC(Func<RegisterOptions, RegisterOptions> requestLifetimeRegistration)
 		{
-			TinyIoCExtensions.RequestLifetimeProviderFactory = requestLifetimeProviderFactory;
+			TinyIoCExtensions.AsRequestLifetime = requestLifetimeRegistration;
 			var types = AppDomain.CurrentDomain.GetAssemblies()
 				// Only bother checking React assemblies
 				.Where(IsReactAssembly)
