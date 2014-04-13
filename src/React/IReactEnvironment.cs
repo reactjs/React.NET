@@ -16,6 +16,11 @@ namespace React
 	public interface IReactEnvironment
 	{
 		/// <summary>
+		/// Determines if this JavaScript engine supports the JSX transformer.
+		/// </summary>
+		bool EngineSupportsJsxTransformer { get; }
+
+		/// <summary>
 		/// Executes the provided JavaScript code.
 		/// </summary>
 		/// <param name="code">JavaScript to execute</param>

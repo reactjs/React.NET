@@ -50,9 +50,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.1.3\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
+    <Reference Include="JavaScriptEngineSwitcher.Jint, Version=1.1.5.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Jint.1.1.5\lib\net40\JavaScriptEngineSwitcher.Jint.dll</HintPath>
+    </Reference>
     <Reference Include="JavaScriptEngineSwitcher.Msie, Version=1.1.4.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.1.1.4\lib\net40\JavaScriptEngineSwitcher.Msie.dll</HintPath>
+    </Reference>
+    <Reference Include="Jint, Version=2.1.0.0, Culture=neutral, PublicKeyToken=2e92ba9c8d81157f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Jint.1.1.5\lib\net40\Jint.dll</HintPath>
     </Reference>
     <Reference Include="MsieJavaScriptEngine, Version=1.4.2.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,6 +83,7 @@
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
+    <Compile Include="Exceptions\JsxUnsupportedEngineException.cs" />
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
     <Compile Include="Exceptions\ReactInvalidComponentException.cs" />
@@ -89,6 +98,7 @@
     <Compile Include="IReactEnvironment.cs" />
     <Compile Include="IReactSiteConfiguration.cs" />
     <Compile Include="Exceptions\JsxException.cs" />
+    <Compile Include="JavaScriptEngineExtensions.cs" />
     <Compile Include="JavaScriptEngineFactory.cs" />
     <Compile Include="JsxTransformer.cs" />
     <Compile Include="NullCache.cs" />

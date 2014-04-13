@@ -86,6 +86,7 @@ namespace React
 				return input;
 			}
 
+			EnsureJsxTransformerSupported();
 			try
 			{
 				var encodedInput = JsonConvert.SerializeObject(input);
@@ -98,6 +99,18 @@ namespace React
 			catch (Exception ex)
 			{
 				throw new JsxException(ex.Message, ex);
+			}
+		}
+
+		/// <summary>
+		/// Ensures that the current JavaScript engine supports JSXTransformer. Throws an exception
+		/// if it doesn't.
+		/// </summary>
+		private void EnsureJsxTransformerSupported()
+		{
+			if (!_environment.EngineSupportsJsxTransformer)
+			{
+				throw new JsxUnsupportedEngineException();
 			}
 		}
 	}

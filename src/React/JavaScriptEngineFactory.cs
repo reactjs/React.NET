@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Jint;
 using JavaScriptEngineSwitcher.Msie;
 using JavaScriptEngineSwitcher.Msie.Configuration;
 using React.Exceptions;
@@ -77,16 +78,16 @@ namespace React
 		{
 			var availableEngineFactories = new List<Func<IJsEngine>>
 			{
-				// TODO JS RT
-				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript })
-				// TODO: Add Jint
-				// TODO: Add V8
+				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
+				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
+				() => new JintJsEngine()
 			};
 			foreach (var engineFactory in availableEngineFactories)
 			{
-				var engine = engineFactory();
+				IJsEngine engine = null;
 				try
 				{
+					engine = engineFactory();
 					// Perform a sanity test to ensure this engine is usable
 					if (engine.Evaluate<int>("1 + 1") == 2)
 					{

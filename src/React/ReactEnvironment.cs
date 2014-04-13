@@ -109,6 +109,14 @@ namespace React
 		}
 
 		/// <summary>
+		/// Determines if this JavaScript engine supports the JSX transformer.
+		/// </summary>
+		public bool EngineSupportsJsxTransformer
+		{
+			get { return Engine.SupportsJsxTransformer(); }
+		}
+
+		/// <summary>
 		/// Loads standard React and JSXTransformer scripts into the engine.
 		/// </summary>
 		private void InitialiseEngine(IJsEngine engine)
@@ -116,8 +124,13 @@ namespace React
 			var thisAssembly = GetType().Assembly;
 			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
 			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
-			engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
 			engine.Execute("var React = global.React");
+
+			// Only load JSX Transformer if engine supports it
+			if (engine.SupportsJsxTransformer())
+			{
+				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+			}
 		}
 
 		/// <summary>
