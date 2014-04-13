@@ -8,12 +8,14 @@
  */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace React.Exceptions
 {
 	/// <summary>
 	/// Thrown when a non-existent component is rendered.
 	/// </summary>
+	[Serializable]
 	public class ReactInvalidComponentException : ReactException
 	{
 		/// <summary>
@@ -28,5 +30,10 @@ namespace React.Exceptions
 		/// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
 		public ReactInvalidComponentException(string message, Exception innerException)
 			: base(message, innerException) { }
+		/// <summary>
+		/// Used by deserialization
+		/// </summary>
+		protected ReactInvalidComponentException(SerializationInfo info, StreamingContext context) 
+			: base(info, context) { }
 	}
 }

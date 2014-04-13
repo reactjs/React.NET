@@ -8,12 +8,14 @@
  */
 
 using System;
+using System.Runtime.Serialization;
 
 namespace React.Exceptions
 {
 	/// <summary>
 	/// Thrown when an error occurs with parsing JSX.
 	/// </summary>
+	[Serializable]
 	public class JsxException : ReactException
 	{
 		/// <summary>
@@ -28,5 +30,11 @@ namespace React.Exceptions
 		/// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
 		public JsxException(string message, Exception innerException)
 			: base(message, innerException) { }
+
+		/// <summary>
+		/// Used by deserialization
+		/// </summary>
+		protected JsxException(SerializationInfo info, StreamingContext context) 
+			: base(info, context) { }
 	}
 }
