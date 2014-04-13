@@ -7,7 +7,6 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System.IO;
 using System.Web;
 
 namespace React.Web
@@ -16,7 +15,7 @@ namespace React.Web
 	/// Handles file system functionality, such as reading files. Maps all paths from 
 	/// application-relative (~/...) to full paths using ASP.NET's MapPath method.
 	/// </summary>
-	public class AspNetFileSystem : IFileSystem
+	public class AspNetFileSystem : FileSystemBase
 	{
 		/// <summary>
 		/// The ASP.NET server utilities
@@ -37,19 +36,9 @@ namespace React.Web
 		/// </summary>
 		/// <param name="relativePath">App-relative path of the file</param>
 		/// <returns>Full path of the file</returns>
-		public string MapPath(string relativePath)
+		public override string MapPath(string relativePath)
 		{
 			return _serverUtility.MapPath(relativePath);
-		}
-
-		/// <summary>
-		/// Reads the contents of a file as a string.
-		/// </summary>
-		/// <param name="relativePath">App-relative path of the file</param>
-		/// <returns>Contents of the file</returns>
-		public string ReadAsString(string relativePath)
-		{
-			return File.ReadAllText(MapPath(relativePath));
 		}
 	}
 }

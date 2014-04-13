@@ -49,6 +49,9 @@
     <Reference Include="Cassette.Aspnet">
       <HintPath>..\packages\Cassette.Aspnet.2.4.1\lib\net40\Cassette.Aspnet.dll</HintPath>
     </Reference>
+    <Reference Include="Cassette.MSBuild">
+      <HintPath>..\packages\Cassette.MSBuild.2.4.1\lib\net40\Cassette.MSBuild.dll</HintPath>
+    </Reference>
     <Reference Include="Cassette.Views">
       <HintPath>..\packages\Cassette.Views.2.4.1\lib\net40\Cassette.Views.dll</HintPath>
     </Reference>
@@ -177,6 +180,9 @@
   <ItemGroup>
     <Content Include="Content\Sample.jsx" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Cassette.targets" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -205,6 +211,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+	<Target Name="Bundle" AfterTargets="Build">
+		<Exec Command="&quot;$(msbuildtoolspath)\msbuild.exe&quot; $(ProjectDirectory)cassette.targets /p:OutputPath=$(OutputPath) /t:Bundle /nr:false" />
+	</Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

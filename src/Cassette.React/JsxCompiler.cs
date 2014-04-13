@@ -17,6 +17,17 @@ namespace Cassette.React
 	/// </summary>
 	public class JsxCompiler : ICompiler
 	{
+		private readonly IReactEnvironment _environment;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JsxCompiler"/> class.
+		/// </summary>
+		/// <param name="environment">The ReactJS.NET environment</param>
+		public JsxCompiler(IReactEnvironment environment)
+		{
+			_environment = environment;
+		}
+
 		/// <summary>
 		/// Compiles the specified JSX file into JavaScript
 		/// </summary>
@@ -25,8 +36,7 @@ namespace Cassette.React
 		/// <returns>JavaScript</returns>
 		public CompileResult Compile(string source, CompileContext context)
 		{
-			var environment = AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-			var output = environment.TransformJsx(source);
+			var output = _environment.TransformJsx(source);
 			return new CompileResult(output, Enumerable.Empty<string>());
 		}
 	}

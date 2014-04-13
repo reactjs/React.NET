@@ -7,7 +7,9 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.Diagnostics;
 using System.Web;
+using System.Web.Hosting;
 using React.TinyIoC;
 
 namespace React.Web
@@ -24,6 +26,15 @@ namespace React.Web
 		/// <param name="container">Container to register components in</param>
 		public void Register(TinyIoCContainer container)
 		{
+			if (!IsInAspNet())
+			{
+				Trace.WriteLine(
+					"Warning: The current application references React.Web but is not an " +
+					"ASP.NET Web Application. Not running webapp IoC initialisation!"
+				);
+				return;
+			}
+
 			// Unique per request
 			container.Register<IFileSystem, AspNetFileSystem>().AsPerRequestSingleton();
 			container.Register<ICache, AspNetCache>().AsPerRequestSingleton();
@@ -34,6 +45,16 @@ namespace React.Web
 			container.Register<HttpServerUtilityBase>((c, o) => c.Resolve<HttpContextBase>().Server);
 			container.Register<HttpRequestBase>((c, o) => c.Resolve<HttpContextBase>().Request);
 			container.Register<HttpResponseBase>((c, o) => c.Resolve<HttpContextBase>().Response);
+		}
+
+		/// <summary>
+		/// Determines if the current application is running in the context of an ASP.NET
+		/// Web Application
+		/// </summary>
+		/// <returns><c>true</c> if in an ASP.NET web app; <c>false</c> otherwise</returns>
+		public static bool IsInAspNet()
+		{
+			return HostingEnvironment.IsHosted;
 		}
 	}
 }

@@ -56,11 +56,15 @@
     <Compile Include="..\SharedAssemblyVersionInfo.cs">
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="AssemblyRegistration.cs" />
+    <Compile Include="CassetteMSBuildStartup.cs" />
     <Compile Include="InsertIntoPipelineJsxBundleProcessor.cs" />
     <Compile Include="JsxBundleProcessor.cs" />
     <Compile Include="JsxCompiler.cs" />
     <Compile Include="JsxFileSearchModifier.cs" />
+    <Compile Include="MSBuildUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReactContainerConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Cassette.React.nutrans" />

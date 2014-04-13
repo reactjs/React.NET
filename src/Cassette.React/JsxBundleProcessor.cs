@@ -10,6 +10,7 @@
 using System;
 using Cassette.BundleProcessing;
 using Cassette.Scripts;
+using React;
 
 namespace Cassette.React
 {
@@ -20,14 +21,17 @@ namespace Cassette.React
 	public class JsxBundleProcessor : IBundleProcessor<ScriptBundle>
 	{
 		private readonly CassetteSettings _settings;
+		private readonly IReactEnvironment _environment;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JsxBundleProcessor"/> class.
 		/// </summary>
 		/// <param name="settings">Cassette settings.</param>
-		public JsxBundleProcessor(CassetteSettings settings)
+		/// <param name="environment">The ReactJS.NET environment</param>
+		public JsxBundleProcessor(CassetteSettings settings, IReactEnvironment environment)
 		{
 			_settings = settings;
+			_environment = environment;
 		}
 
 		/// <summary>
@@ -41,7 +45,7 @@ namespace Cassette.React
 				if (asset.Path.EndsWith(".jsx", StringComparison.InvariantCultureIgnoreCase))
 				{
 					asset.AddAssetTransformer(
-						new CompileAsset(new JsxCompiler(), _settings.SourceDirectory)
+						new CompileAsset(new JsxCompiler(_environment), _settings.SourceDirectory)
 					);
 				}
 			}

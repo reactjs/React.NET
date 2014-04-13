@@ -10,7 +10,6 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using React.TinyIoC;
 using RegisterOptions = React.TinyIoC.TinyIoCContainer.RegisterOptions;
 
 namespace React
@@ -63,7 +62,11 @@ namespace React
 		/// </returns>
 		private static bool IsReactAssembly(Assembly assembly)
 		{
-			return assembly.FullName.StartsWith("React,") || assembly.FullName.StartsWith("React.");
+			var nameWithoutVersion = assembly.FullName.Split(',')[0];
+			return
+				nameWithoutVersion == "React" || 
+				nameWithoutVersion.StartsWith("React.") ||
+				nameWithoutVersion.EndsWith(".React");
 		}
 
 		/// <summary>

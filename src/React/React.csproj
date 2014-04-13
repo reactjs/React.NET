@@ -78,6 +78,7 @@
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
     <Compile Include="Exceptions\ReactInvalidComponentException.cs" />
+    <Compile Include="FileSystemBase.cs" />
     <Compile Include="IAssemblyRegistration.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="IFileSystem.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="IReactSiteConfiguration.cs" />
     <Compile Include="Exceptions\JsxException.cs" />
     <Compile Include="JavaScriptEngineFactory.cs" />
+    <Compile Include="NullCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactComponent.cs" />
     <Compile Include="ReactEnvironment.cs" />
@@ -101,6 +103,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="React.nutrans" />
+    <Compile Include="SimpleFileSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\react-with-addons.js" />

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    The web application csproj file has been modified to execute the Bundle target.
+    So after a build, the Cassette bundles will be saved into a cache directory.
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">    
+    <UsingTask AssemblyFile="$(OutputPath)\Cassette.MSBuild.dll" TaskName="CreateBundles"/>
+    <Target Name="Bundle">
+        <CreateBundles />
+        <!--
+        CreateBundles has the following optional properties:
+            Source: The root directory of the web application.
+            Bin:    The directory containing the web application assemblies. Default is "bin".
+            Output: The directory to save the created bundles to. Default is "cassette-cache".
+            AppVirtualPath: The web application's virtual path. Default is "/".
+            IncludeOtherFiles: When true, non-bundled files such as images referenced by stylesheets are also copied to the output directory. Default is false.
+            
+        The Web.config must also have the following section:
+            <cassette cacheDirectory="cassette-cache" />
+        -->
+    </Target>
+</Project>
