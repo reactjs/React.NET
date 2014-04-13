@@ -211,7 +211,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-	<Target Name="Bundle" AfterTargets="Build">
+	<Target Name="Bundle" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<Exec Command="&quot;$(msbuildtoolspath)\msbuild.exe&quot; $(ProjectDirectory)cassette.targets /p:OutputPath=$(OutputPath) /t:Bundle /nr:false" />
 	</Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

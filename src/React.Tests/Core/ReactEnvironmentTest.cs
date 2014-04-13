@@ -17,31 +17,6 @@ namespace React.Tests.Core
 	public class ReactEnvironmentTest
 	{
 		[Fact]
-		public void ShouldNotTransformJsxIfNoAnnotationPresent()
-		{
-			var mocks = new Mocks();
-			var environment = mocks.CreateReactEnvironment();
-			var input = "<div>Hello World</div>";
-
-			var output = environment.TransformJsx(input);
-			Assert.Equal(input, output);
-		}
-
-		[Fact]
-		public void ShouldTransformJsxIfAnnotationPresent()
-		{
-			var mocks = new Mocks();
-			var environment = mocks.CreateReactEnvironment();
-
-			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
-			environment.TransformJsx(input);
-
-			mocks.Engine.Verify(x => x.Evaluate<string>(
-				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
-			));
-		}
-
-		[Fact]
 		public void ExecuteWithLargerStackIfRequiredWithNoNewThread()
 		{
 			var mocks = new Mocks();

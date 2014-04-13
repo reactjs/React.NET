@@ -30,6 +30,18 @@ namespace React
 		T Execute<T>(string code);
 
 		/// <summary>
+		/// Attempts to execute the provided JavaScript code using the current engine. If an 
+		/// exception is thrown, retries the execution using a new thread (and hence a new engine)
+		/// with a larger maximum stack size.
+		/// This is required because JSXTransformer uses a huge stack which ends up being larger 
+		/// than what ASP.NET allows by default (256 KB).
+		/// </summary>
+		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
+		/// <param name="code">JavaScript code to execute</param>
+		/// <returns>Result returned from JavaScript code</returns>
+		T ExecuteWithLargerStackIfRequired<T>(string code);
+
+		/// <summary>
 		/// Determines if the specified variable exists in the JavaScript engine
 		/// </summary>
 		/// <param name="name">Name of the variable</param>

@@ -9,12 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
-using Newtonsoft.Json;
-using React.Exceptions;
 
 namespace React
 {
@@ -28,10 +25,7 @@ namespace React
 		/// Format string used for React component container IDs
 		/// </summary>
 		private const string CONTAINER_ELEMENT_NAME = "react{0}";
-		/// <summary>
-		/// Cache key for JSX to JavaScript compilation
-		/// </summary>
-		private const string JSX_CACHE_KEY = "JSX_{0}";
+
 		/// <summary>
 		/// JavaScript variable set when user-provided scripts have been loaded
 		/// </summary>
@@ -57,6 +51,10 @@ namespace React
 		/// File system wrapper
 		/// </summary>
 		private readonly IFileSystem _fileSystem;
+		/// <summary>
+		/// JSX Transformer instance for this environment
+		/// </summary>
+		private readonly Lazy<IJsxTransformer> _jsxTransformer;
 
 		/// <summary>
 		/// Number of components instantiated in this environment
@@ -85,6 +83,9 @@ namespace React
 			_config = config;
 			_cache = cache;
 			_fileSystem = fileSystem;
+			_jsxTransformer = new Lazy<IJsxTransformer>(() => 
+				new JsxTransformer(this, _cache, _fileSystem)
+			);
 		}
 
 		/// <summary>
@@ -97,6 +98,14 @@ namespace React
 			{
 				return _engineFactory.GetEngineForCurrentThread(InitialiseEngine);
 			}
+		}
+
+		/// <summary>
+		/// Gets the JSX Transformer for this environment.
+		/// </summary>
+		public IJsxTransformer JsxTransformer
+		{
+			get { return _jsxTransformer.Value; }
 		}
 
 		/// <summary>
@@ -124,7 +133,7 @@ namespace React
 
 			foreach (var file in _config.Scripts)
 			{
-				var contents = LoadJsxFile(file);
+				var contents = JsxTransformer.LoadJsxFile(file);
 				Execute(contents);
 			}
 			Engine.SetVariableValue(USER_SCRIPTS_LOADED_KEY, true);
@@ -201,21 +210,10 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>File contents</returns>
+		[Obsolete("Use JsxTransformer.LoadJsxFile")]
 		public string LoadJsxFile(string filename)
 		{
-			var fullPath = _fileSystem.MapPath(filename);
-
-			return _cache.GetOrInsert(
-				key: string.Format(JSX_CACHE_KEY, filename),
-				slidingExpiration: TimeSpan.FromMinutes(30),
-				cacheDependencyFiles: new[] { fullPath },
-				getData: () =>
-				{
-					Trace.WriteLine(string.Format("Parsing JSX from {0}", filename));
-					var contents = _fileSystem.ReadAsString(filename);
-					return TransformJsx(contents);
-				}
-			);
+			return JsxTransformer.LoadJsxFile(filename);
 		}
 
 		/// <summary>
@@ -224,27 +222,10 @@ namespace React
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>
+		[Obsolete("Use JsxTransformer.TransformJsx")]
 		public string TransformJsx(string input)
 		{
-			// Just return directly if there's no JSX annotation
-			if (!input.Contains("@jsx"))
-			{
-				return input;
-			}
-
-			try
-			{
-				var encodedInput = JsonConvert.SerializeObject(input);
-				var output = ExecuteWithLargerStackIfRequired<string>(string.Format(
-					"global.JSXTransformer.transform({0}).code",
-					encodedInput
-				));
-				return output;
-			}
-			catch (Exception ex)
-			{
-				throw new JsxException(ex.Message, ex);
-			}
+			return JsxTransformer.TransformJsx(input);
 		}
 
 		/// <summary>
@@ -257,7 +238,7 @@ namespace React
 		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
 		/// <param name="code">JavaScript code to execute</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		internal T ExecuteWithLargerStackIfRequired<T>(string code)
+		public T ExecuteWithLargerStackIfRequired<T>(string code)
 		{
 			try
 			{
