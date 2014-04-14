@@ -9,6 +9,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
@@ -55,6 +58,10 @@ namespace React
 		/// JSX Transformer instance for this environment
 		/// </summary>
 		private readonly Lazy<IJsxTransformer> _jsxTransformer;
+		/// <summary>
+		/// Version number of ReactJS.NET
+		/// </summary>
+		private readonly Lazy<string> _version = new Lazy<string>(GetVersion); 
 
 		/// <summary>
 		/// Number of components instantiated in this environment
@@ -114,6 +121,14 @@ namespace React
 		public bool EngineSupportsJsxTransformer
 		{
 			get { return Engine.SupportsJsxTransformer(); }
+		}
+
+		/// <summary>
+		/// Gets the version number of ReactJS.NET
+		/// </summary>
+		public string Version
+		{
+			get { return _version.Value; }
 		}
 
 		/// <summary>
@@ -291,6 +306,19 @@ namespace React
 				}
 				return result;
 			}
+		}
+
+		/// <summary>
+		/// Gets the ReactJS.NET version number. Use <see cref="Version" /> instead.
+		/// </summary>
+		private static string GetVersion()
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+			var rawVersion = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+			var lastDot = rawVersion.LastIndexOf('.');
+			var version = rawVersion.Substring(0, lastDot);
+			var build = rawVersion.Substring(lastDot + 1);
+			return string.Format("{0} (build {1})", version, build);
 		}
 	}
 }

@@ -22,14 +22,6 @@ namespace React
 		string TransformJsxFile(string filename);
 
 		/// <summary>
-		/// Transforms a JSX file without checking if a cached version exists. For most purposes,
-		/// you'll be better off using <see cref="TransformJsxFile" />.
-		/// </summary>
-		/// <param name="filename">Name of the file to transform</param>
-		/// <returns>JavaScript</returns>
-		string TransformJsxFileWithoutCache(string filename);
-
-		/// <summary>
 		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
 		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>

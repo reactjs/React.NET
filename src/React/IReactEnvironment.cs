@@ -23,6 +23,11 @@ namespace React
 		bool EngineSupportsJsxTransformer { get; }
 
 		/// <summary>
+		/// Gets the version number of ReactJS.NET
+		/// </summary>
+		string Version { get; }
+
+		/// <summary>
 		/// Executes the provided JavaScript code.
 		/// </summary>
 		/// <param name="code">JavaScript to execute</param>
