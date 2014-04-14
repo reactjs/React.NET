@@ -10,13 +10,14 @@
 using System;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
-using Xunit;
+using NUnit.Framework;
 
 namespace React.Tests.Core
 {
+	[TestFixture]
 	public class ReactEnvironmentTest
 	{
-		[Fact]
+		[Test]
 		public void ExecuteWithLargerStackIfRequiredWithNoNewThread()
 		{
 			var mocks = new Mocks();
@@ -26,7 +27,7 @@ namespace React.Tests.Core
 			mocks.Engine.Verify(x => x.Evaluate<int>("1+1"));
 		}
 
-		[Fact]
+		[Test]
 		public void ExecuteWithLargerStackIfRequiredWithNewThread()
 		{
 			var mocks = new Mocks();
@@ -50,7 +51,7 @@ namespace React.Tests.Core
 			);
 		}
 
-		[Fact]
+		[Test]
 		public void ExecuteWithLargerStackIfRequiredShouldBubbleExceptions()
 		{
 			var mocks = new Mocks();

@@ -29,10 +29,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</ItemGroup>
 
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
-	<UsingTask
-		AssemblyFile="src\packages\xunit.1.9.2\lib\net20\xunit.runner.msbuild.dll"
-		TaskName="Xunit.Runner.MSBuild.xunit"
-	/>
 	<UsingTask 
 		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v12.0\Web\Microsoft.Web.Publishing.Tasks.dll"
 		TaskName="TransformXml"
@@ -74,7 +70,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<ItemGroup>
 			<TestAssemblies Include="bin/ReleaseTests/**/React.Tests*.dll" />
 		</ItemGroup>
-		<xunit Assemblies="@(TestAssemblies)" />
+		<NUnit
+			ToolPath="src\packages\NUnit.Runners.2.6.3\tools"
+			Assemblies="@(TestAssemblies)"
+		/>
 	</Target>
 
 	<Target Name="GenerateNuSpecs">

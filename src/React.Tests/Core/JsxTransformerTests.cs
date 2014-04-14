@@ -8,14 +8,15 @@
  */
 
 using Moq;
+using NUnit.Framework;
 using React.Exceptions;
-using Xunit;
 
 namespace React.Tests.Core
 {
+	[TestFixture]
 	public class JsxTransformerTests
 	{
-		[Fact]
+		[Test]
 		public void ShouldNotTransformJsxIfNoAnnotationPresent()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -29,10 +30,10 @@ namespace React.Tests.Core
 			const string input = "<div>Hello World</div>";
 
 			var output = jsxTransformer.TransformJsx(input);
-			Assert.Equal(input, output);
+			Assert.AreEqual(input, output);
 		}
 
-		[Fact]
+		[Test]
 		public void ShouldTransformJsxIfAnnotationPresent()
 		{
 			var environment = new Mock<IReactEnvironment>();

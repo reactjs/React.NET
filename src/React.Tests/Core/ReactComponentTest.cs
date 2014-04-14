@@ -1,12 +1,22 @@
-﻿using Moq;
+﻿/*
+ *  Copyright (c) 2014, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+using Moq;
+using NUnit.Framework;
 using React.Exceptions;
-using Xunit;
 
 namespace React.Tests.Core
 {
+	[TestFixture]
 	public class ReactComponentTest
 	{
-		[Fact]
+		[Test]
 		public void RenderHtmlShouldThrowExceptionIfComponentDoesNotExist()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -19,7 +29,7 @@ namespace React.Tests.Core
 			});
 		}
 
-		[Fact]
+		[Test]
 		public void RenderHtmlShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -34,7 +44,7 @@ namespace React.Tests.Core
 			environment.Verify(x => x.Execute<string>(@"React.renderComponentToString(Foo({""hello"":""World""}))"));
 		}
 
-		[Fact]
+		[Test]
 		public void RenderHtmlShouldWrapComponentInDiv()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -48,10 +58,10 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderHtml();
 
-			Assert.Equal(@"<div id=""container"">[HTML]</div>", result);
+			Assert.AreEqual(@"<div id=""container"">[HTML]</div>", result);
 		}
 
-		[Fact]
+		[Test]
 		public void RenderJavaScriptShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -62,7 +72,7 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderJavaScript();
 
-			Assert.Equal(
+			Assert.AreEqual(
 				@"React.renderComponent(Foo({""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);

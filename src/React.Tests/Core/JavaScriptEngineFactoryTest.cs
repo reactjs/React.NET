@@ -9,13 +9,14 @@
 
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
-using Xunit;
+using NUnit.Framework;
 
 namespace React.Tests.Core
 {
+	[TestFixture]
 	public class JavaScriptEngineFactoryTest
 	{
-		[Fact]
+		[Test]
 		public void ShouldCallOnNewEngineWhenCreatingNew()
 		{
 			var factory = new JavaScriptEngineFactory();
@@ -30,7 +31,7 @@ namespace React.Tests.Core
 			Assert.True(called);
 		}
 
-		[Fact]
+		[Test]
 		public void ShouldNotCallOnNewEngineWhenUsingExisting()
 		{
 			var factory = new JavaScriptEngineFactory();
@@ -42,18 +43,18 @@ namespace React.Tests.Core
 			Assert.False(called);
 		}
 
-		[Fact]
+		[Test]
 		public void ShouldReturnSameEngine()
 		{
 			var factory = new JavaScriptEngineFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
 			
-			Assert.Equal(engine1, engine2);
+			Assert.AreEqual(engine1, engine2);
 			factory.DisposeEngineForCurrentThread();
 		}
 
-		[Fact]
+		[Test]
 		public void ShouldReturnNewEngineAfterDisposing()
 		{
 			var factory = new JavaScriptEngineFactory();
@@ -62,10 +63,10 @@ namespace React.Tests.Core
 			var engine2 = factory.GetEngineForCurrentThread();
 			factory.DisposeEngineForCurrentThread();
 
-			Assert.NotEqual(engine1, engine2);
+			Assert.AreNotEqual(engine1, engine2);
 		}
 
-		[Fact]
+		[Test]
 		public void ShouldCreateNewEngineForNewThread()
 		{
 			var factory = new JavaScriptEngineFactory();
@@ -84,9 +85,9 @@ namespace React.Tests.Core
 			var engine3 = factory.GetEngineForCurrentThread();
 
 			// Different threads should have different engines
-			Assert.NotEqual(engine1, engine2);
+			Assert.AreNotEqual(engine1, engine2);
 			// Same thread should share same engine
-			Assert.Equal(engine1, engine3);
+			Assert.AreEqual(engine1, engine3);
 			factory.DisposeEngineForCurrentThread();
 		}
 	}
