@@ -30,6 +30,7 @@ namespace React.Tests.Core
 			const string input = "<div>Hello World</div>";
 
 			var output = jsxTransformer.TransformJsx(input);
+			Assert.IsTrue(false);
 			Assert.AreEqual(input, output);
 		}
 
