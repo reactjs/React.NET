@@ -27,5 +27,12 @@ namespace React
 		/// <param name="relativePath">App-relative path of the file</param>
 		/// <returns>Contents of the file</returns>
 		string ReadAsString(string relativePath);
+
+		/// <summary>
+		/// Writes a string to a file
+		/// </summary>
+		/// <param name="relativePath">App-relative path of the file</param>
+		/// <param name="contents">Contents of the file</param>
+		void WriteAsString(string relativePath, string contents);
 	}
 }

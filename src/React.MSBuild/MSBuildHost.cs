@@ -8,32 +8,38 @@
  */
 
 using System;
-using System.Diagnostics;
-using React;
 
-namespace Cassette.React
+namespace React.MSBuild
 {
 	/// <summary>
-	/// Cassette has two modes of operating - Web (ASP.NET) and MSBuild. IoC registration for web
-	/// is already covered by React.Web. For the MSBuild mode, we need to initialise ReactJS.NET's
-	/// IoC container here.
+	/// Handles initialisation of the MSBuild environment.
 	/// </summary>
-	public class CassetteMSBuildStartup : IStartUpTask
+	internal static class MSBuildHost
 	{
 		/// <summary>
-		/// Handles initialisation of ReactJS.NET in Cassette. Only relevant when running in an
-		/// MSBuild context.
+		/// Hack to use Lazy{T} for thread-safe, once-off initialisation :)
 		/// </summary>
-		public void Start()
-		{
-			if (!MSBuildUtils.IsInMSBuild())
-			{
-				return;
-			}
+		private readonly static Lazy<bool> _initializer = new Lazy<bool>(Initialize); 
 
+		/// <summary>
+		/// Ensures the environment has been initialised.
+		/// </summary>
+		public static bool EnsureInitialized()
+		{
+			return _initializer.Value;
+		}
+
+		/// <summary>
+		/// Actually perform the initialisation of the environment.
+		/// </summary>
+		/// <returns></returns>
+		private static bool Initialize()
+		{
 			// All "per-request" registrations should be singletons in MSBuild, since there's no
 			// such thing as a "request"
 			Initializer.Initialize(requestLifetimeRegistration: registration => registration.AsSingleton());
+
+			return true;
 		}
 	}
 }

@@ -9,6 +9,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -23,6 +24,10 @@ namespace React
 		/// Cache key for JSX to JavaScript compilation
 		/// </summary>
 		private const string JSX_CACHE_KEY = "JSX_{0}";
+		/// <summary>
+		/// Suffix to append to compiled files
+		/// </summary>
+		private const string COMPILED_FILE_SUFFIX = ".generated.js";
 
 		/// <summary>
 		/// Environment this JSX Transformer has been created in
@@ -55,7 +60,7 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>File contents</returns>
-		public string LoadJsxFile(string filename)
+		public string TransformJsxFile(string filename)
 		{
 			var fullPath = _fileSystem.MapPath(filename);
 
@@ -74,7 +79,7 @@ namespace React
 
 		/// <summary>
 		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
-		/// <see cref="LoadJsxFile"/> if loading from a file since this will cache the result.
+		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>
@@ -100,6 +105,34 @@ namespace React
 			{
 				throw new JsxException(ex.Message, ex);
 			}
+		}
+
+		/// <summary>
+		/// Returns the path the specified JSX file's compilation will be cached to if 
+		/// <see cref="TransformAndSaveJsxFile" /> is called.
+		/// </summary>
+		/// <param name="path">Path of the JSX file</param>
+		/// <returns>Output path of the compiled file</returns>
+		public string GetJsxOutputPath(string path)
+		{
+			return Path.Combine(
+				Path.GetDirectoryName(path),
+				Path.GetFileNameWithoutExtension(path) + COMPILED_FILE_SUFFIX
+			);
+		}
+
+		/// <summary>
+		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
+		/// alongside the original file.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// <returns>File contents</returns>
+		public string TransformAndSaveJsxFile(string filename)
+		{
+			var outputPath = GetJsxOutputPath(filename);
+			var result = TransformJsxFile(filename);
+			_fileSystem.WriteAsString(outputPath, result);
+			return outputPath;
 		}
 
 		/// <summary>

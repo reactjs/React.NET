@@ -162,6 +162,9 @@
   <ItemGroup>
     <Content Include="Content\Sample.jsx" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="TransformJsx.proj" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -171,6 +174,11 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <Target Name="TransformJsx" AfterTargets="AfterBuild">
+    <!-- This needs to be ran via Exec since the build locks the React.MSBuild.dll file -->
+    <!-- In a regular project, you could just call this task directly -->
+    <Exec Command="&quot;$(msbuildtoolspath)\msbuild.exe&quot; TransformJsx.proj /nr:false /p:Configuration=$(Configuration)" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

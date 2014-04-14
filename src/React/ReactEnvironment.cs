@@ -146,7 +146,7 @@ namespace React
 
 			foreach (var file in _config.Scripts)
 			{
-				var contents = JsxTransformer.LoadJsxFile(file);
+				var contents = JsxTransformer.TransformJsxFile(file);
 				Execute(contents);
 			}
 			Engine.SetVariableValue(USER_SCRIPTS_LOADED_KEY, true);
@@ -223,10 +223,10 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>File contents</returns>
-		[Obsolete("Use JsxTransformer.LoadJsxFile")]
+		[Obsolete("Use JsxTransformer.TransformJsxFile")]
 		public string LoadJsxFile(string filename)
 		{
-			return JsxTransformer.LoadJsxFile(filename);
+			return JsxTransformer.TransformJsxFile(filename);
 		}
 
 		/// <summary>

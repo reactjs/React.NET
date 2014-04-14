@@ -48,7 +48,7 @@ namespace React.Web
 		public void Execute()
 		{
 			var relativePath = _request.Url.LocalPath;
-			var result = _environment.LoadJsxFile(relativePath);
+			var result = _environment.JsxTransformer.TransformJsxFile(relativePath);
 
 			// Only cache on the server-side for now
 			_response.AddCacheDependency(new CacheDependency(_fileSystem.MapPath(relativePath)));

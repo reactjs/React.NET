@@ -8,6 +8,7 @@
  */
 
 using Moq;
+using React.Exceptions;
 using Xunit;
 
 namespace React.Tests.Core
@@ -42,12 +43,31 @@ namespace React.Tests.Core
 				cache.Object,
 				fileSystem.Object
 			);
+			environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(true);
 			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
 			jsxTransformer.TransformJsx(input);
 
 			environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
 			));
+		}
+
+		public void ShouldThrowIfEngineNotSupported()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var cache = new Mock<ICache>();
+			var fileSystem = new Mock<IFileSystem>();
+			var jsxTransformer = new JsxTransformer(
+				environment.Object,
+				cache.Object,
+				fileSystem.Object
+			);
+			environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(false);
+
+			Assert.Throws<JsxUnsupportedEngineException>(() =>
+			{
+				jsxTransformer.TransformJsx("/** @jsx React.DOM */ <div>Hello world</div>");
+			});
 		}
 	}
 }

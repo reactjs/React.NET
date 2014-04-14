@@ -8,6 +8,7 @@
  */
 
 using System.IO;
+using System.Text;
 
 namespace React
 {
@@ -30,7 +31,17 @@ namespace React
 		/// <returns>Contents of the file</returns>
 		public string ReadAsString(string relativePath)
 		{
-			return File.ReadAllText(MapPath(relativePath));
+			return File.ReadAllText(MapPath(relativePath), Encoding.UTF8);
+		}
+
+		/// <summary>
+		/// Writes a string to a file
+		/// </summary>
+		/// <param name="relativePath">App-relative path of the file</param>
+		/// <param name="contents">Contents of the file</param>
+		public void WriteAsString(string relativePath, string contents)
+		{
+			File.WriteAllText(MapPath(relativePath), contents, Encoding.UTF8);
 		}
 	}
 }

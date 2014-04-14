@@ -36,7 +36,7 @@ namespace Cassette.React
 		/// <returns>JavaScript</returns>
 		public CompileResult Compile(string source, CompileContext context)
 		{
-			var output = _environment.TransformJsx(source);
+			var output = _environment.JsxTransformer.TransformJsx(source);
 			return new CompileResult(output, Enumerable.Empty<string>());
 		}
 	}

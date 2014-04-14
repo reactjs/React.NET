@@ -25,7 +25,7 @@ namespace System.Web.Optimization.React
 		public void Process(BundleContext context, BundleResponse response)
 		{
 			var environment = AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-			response.Content = environment.TransformJsx(response.Content);
+			response.Content = environment.JsxTransformer.TransformJsx(response.Content);
 		}
 	}
 }

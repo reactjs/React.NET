@@ -7,6 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
+
 namespace React
 {
 	/// <summary>
@@ -74,6 +76,7 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>File contents</returns>
+		[Obsolete("Use JsxTransformer.TransformJsxFile")]
 		string LoadJsxFile(string filename);
 
 		/// <summary>
@@ -82,6 +85,12 @@ namespace React
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>
+		[Obsolete("Use JsxTransformer.TransformJsx")]
 		string TransformJsx(string input);
+
+		/// <summary>
+		/// Gets the JSX Transformer for this environment.
+		/// </summary>
+		IJsxTransformer JsxTransformer { get; }
 	}
 }
