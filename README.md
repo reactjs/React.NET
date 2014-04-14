@@ -1,4 +1,4 @@
-[ReactJS.NET](http://reactjs.net/)
+[ReactJS.NET](http://reactjs.net/) [![Build status](http://teamcity.codebetter.com/app/rest/builds/buildType:\(id:bt1242\)/statusIcon)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt1242&guest=1)
 ===========
 ReactJS.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and
