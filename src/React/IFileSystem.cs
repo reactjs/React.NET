@@ -34,5 +34,12 @@ namespace React
 		/// <param name="relativePath">App-relative path of the file</param>
 		/// <param name="contents">Contents of the file</param>
 		void WriteAsString(string relativePath, string contents);
+
+		/// <summary>
+		/// Determines if the specified file exists
+		/// </summary>
+		/// <param name="relativePath">App-relative path of the file</param>
+		/// <returns><c>true</c> if the file exists</returns>
+		bool FileExists(string relativePath);
 	}
 }

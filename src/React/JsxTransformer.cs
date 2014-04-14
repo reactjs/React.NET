@@ -56,25 +56,45 @@ namespace React
 		}
 
 		/// <summary>
-		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
+		/// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
-		/// <returns>File contents</returns>
+		/// <returns>JavaScript</returns>
 		public string TransformJsxFile(string filename)
 		{
 			var fullPath = _fileSystem.MapPath(filename);
 
+			// 1. Check in-memory cache
 			return _cache.GetOrInsert(
 				key: string.Format(JSX_CACHE_KEY, filename),
 				slidingExpiration: TimeSpan.FromMinutes(30),
 				cacheDependencyFiles: new[] { fullPath },
 				getData: () =>
 				{
-					Trace.WriteLine(string.Format("Parsing JSX from {0}", filename));
-					var contents = _fileSystem.ReadAsString(filename);
-					return TransformJsx(contents);
+					// 2. Check on-disk cache
+					var cachePath = GetJsxOutputPath(filename);
+					if (_fileSystem.FileExists(cachePath))
+					{
+						// TODO: Checksum to ensure file hasn't changed
+						return _fileSystem.ReadAsString(cachePath);
+					}
+
+					// 3. Not cached, perform the transformation
+					return TransformJsxFileWithoutCache(filename);
 				}
 			);
+		}
+
+		/// <summary>
+		/// Transforms a JSX file without checking if a cached version exists. For most purposes,
+		/// you'll be better off using <see cref="TransformJsxFile" />.
+		/// </summary>
+		/// <param name="filename">Name of the file to transform</param>
+		/// <returns>JavaScript</returns>
+		public string TransformJsxFileWithoutCache(string filename)
+		{
+			var contents = _fileSystem.ReadAsString(filename);
+			return TransformJsx(contents);	
 		}
 
 		/// <summary>
@@ -130,7 +150,7 @@ namespace React
 		public string TransformAndSaveJsxFile(string filename)
 		{
 			var outputPath = GetJsxOutputPath(filename);
-			var result = TransformJsxFile(filename);
+			var result = TransformJsxFileWithoutCache(filename);
 			_fileSystem.WriteAsString(outputPath, result);
 			return outputPath;
 		}

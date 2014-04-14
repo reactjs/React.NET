@@ -15,15 +15,23 @@ namespace React
 	public interface IJsxTransformer
 	{
 		/// <summary>
-		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
+		/// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
-		/// <returns>File contents</returns>
+		/// <returns>JavaScript</returns>
 		string TransformJsxFile(string filename);
 
 		/// <summary>
+		/// Transforms a JSX file without checking if a cached version exists. For most purposes,
+		/// you'll be better off using <see cref="TransformJsxFile" />.
+		/// </summary>
+		/// <param name="filename">Name of the file to transform</param>
+		/// <returns>JavaScript</returns>
+		string TransformJsxFileWithoutCache(string filename);
+
+		/// <summary>
 		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
-		/// <see cref="JsxTransformer.TransformJsxFile"/> if loading from a file since this will cache the result.
+		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>

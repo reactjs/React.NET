@@ -7,6 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using React.Exceptions;
@@ -16,59 +18,138 @@ namespace React.Tests.Core
 	[TestFixture]
 	public class JsxTransformerTests
 	{
+		private Mock<IReactEnvironment> _environment;
+		private Mock<ICache> _cache;
+		private Mock<IFileSystem> _fileSystem;
+		private JsxTransformer _jsxTransformer;
+
+		[SetUp]
+		public void SetUp()
+		{
+			_environment = new Mock<IReactEnvironment>();
+			_environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(true);
+
+			_cache = new Mock<ICache>();
+			_fileSystem = new Mock<IFileSystem>();
+			_fileSystem.Setup(x => x.MapPath(It.IsAny<string>())).Returns<string>(x => x);
+
+			_jsxTransformer = new JsxTransformer(
+				_environment.Object,
+				_cache.Object,
+				_fileSystem.Object
+			);
+		}
+
 		[Test]
 		public void ShouldNotTransformJsxIfNoAnnotationPresent()
 		{
-			var environment = new Mock<IReactEnvironment>();
-			var cache = new Mock<ICache>();
-			var fileSystem = new Mock<IFileSystem>();
-			var jsxTransformer = new JsxTransformer(
-				environment.Object, 
-				cache.Object, 
-				fileSystem.Object
-			);
 			const string input = "<div>Hello World</div>";
 
-			var output = jsxTransformer.TransformJsx(input);
+			var output = _jsxTransformer.TransformJsx(input);
 			Assert.AreEqual(input, output);
 		}
 
 		[Test]
 		public void ShouldTransformJsxIfAnnotationPresent()
 		{
-			var environment = new Mock<IReactEnvironment>();
-			var cache = new Mock<ICache>();
-			var fileSystem = new Mock<IFileSystem>();
-			var jsxTransformer = new JsxTransformer(
-				environment.Object,
-				cache.Object,
-				fileSystem.Object
-			);
-			environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(true);
 			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
-			jsxTransformer.TransformJsx(input);
+			_jsxTransformer.TransformJsx(input);
 
-			environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
+			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
 			));
 		}
 
+		[Test]
+		public void ShouldWrapExceptionsInJsxExeption()
+		{
+			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
+				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+			)).Throws(new Exception("Something broke..."));
+
+			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
+			Assert.Throws<JsxException>(() => _jsxTransformer.TransformJsx(input));
+		}
+
+		[Test]
 		public void ShouldThrowIfEngineNotSupported()
 		{
-			var environment = new Mock<IReactEnvironment>();
-			var cache = new Mock<ICache>();
-			var fileSystem = new Mock<IFileSystem>();
-			var jsxTransformer = new JsxTransformer(
-				environment.Object,
-				cache.Object,
-				fileSystem.Object
-			);
-			environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(false);
+			_environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(false);
 
 			Assert.Throws<JsxUnsupportedEngineException>(() =>
 			{
-				jsxTransformer.TransformJsx("/** @jsx React.DOM */ <div>Hello world</div>");
+				_jsxTransformer.TransformJsx("/** @jsx React.DOM */ <div>Hello world</div>");
 			});
+		}
+
+		[Test]
+		public void ShouldUseCacheProvider()
+		{
+			_cache.Setup(x => x.GetOrInsert(
+				/*key*/ "JSX_foo.jsx",
+				/*slidingExpiration*/ It.IsAny<TimeSpan>(),
+				/*getData*/ It.IsAny<Func<string>>(),
+				/*cacheDependencyKeys*/ It.IsAny<IEnumerable<string>>(),
+				/*cacheDependencyFiles*/ It.IsAny<IEnumerable<string>>()				
+			)).Returns("/* cached */");
+
+			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			Assert.AreEqual("/* cached */", result);
+		}
+
+		[Test]
+		public void ShouldUseFileSystemCache()
+		{
+			SetUpEmptyCache();
+			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(true);
+			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached */");
+			
+			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			Assert.AreEqual("/* filesystem cached */", result);
+		}
+
+		[Test]
+		public void ShouldTransformJsxIfNoCache()
+		{
+			SetUpEmptyCache();
+			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(false);
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
+
+			_jsxTransformer.TransformJsxFile("foo.jsx");
+			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
+				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+			));
+		}
+
+		[Test]
+		public void ShouldSaveTransformationResult()
+		{
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
+			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
+				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+			)).Returns("React.DOM.div('Hello World')");
+
+			var result = _jsxTransformer.TransformAndSaveJsxFile("foo.jsx");
+			Assert.AreEqual("foo.generated.js", result);
+			_fileSystem.Verify(x => x.WriteAsString("foo.generated.js", "React.DOM.div('Hello World')"));
+		}
+
+		private void SetUpEmptyCache()
+		{
+			_cache.Setup(x => x.GetOrInsert(
+				/*key*/ "JSX_foo.jsx",
+				/*slidingExpiration*/ It.IsAny<TimeSpan>(),
+				/*getData*/ It.IsAny<Func<string>>(),
+				/*cacheDependencyKeys*/ It.IsAny<IEnumerable<string>>(),
+				/*cacheDependencyFiles*/ It.IsAny<IEnumerable<string>>()
+			))
+			.Returns((
+				string key, 
+				TimeSpan slidingExpiration, 
+				Func<string> getData, 
+				IEnumerable<string> cacheDependencyFiles, 
+				IEnumerable<string> cacheDependencyKeys
+			) => getData());
 		}
 	}
 }

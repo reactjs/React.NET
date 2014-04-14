@@ -43,5 +43,15 @@ namespace React
 		{
 			File.WriteAllText(MapPath(relativePath), contents, Encoding.UTF8);
 		}
+
+		/// <summary>
+		/// Determines if the specified file exists
+		/// </summary>
+		/// <param name="relativePath">App-relative path of the file</param>
+		/// <returns><c>true</c> if the file exists</returns>
+		public bool FileExists(string relativePath)
+		{
+			return File.Exists(MapPath(relativePath));
+		}
 	}
 }
