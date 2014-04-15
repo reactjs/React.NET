@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.Diagnostics;
 using React.TinyIoC;
 
 namespace React.MSBuild
@@ -23,6 +24,14 @@ namespace React.MSBuild
 		/// <param name="container">Container to register components in</param>
 		public void Register(TinyIoCContainer container)
 		{
+			if (!MSBuildHost.IsInMSBuild())
+			{
+				Trace.WriteLine(
+					"Warning: React.MSBuild AssemblyRegistration called, but not currently in MSBuild!"
+				);
+				return;
+			}
+
 			container.Register<ICache, NullCache>();
 			container.Register<IFileSystem, SimpleFileSystem>();
 		}

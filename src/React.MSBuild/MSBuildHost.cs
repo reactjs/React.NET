@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 
 namespace React.MSBuild
 {
@@ -40,6 +41,22 @@ namespace React.MSBuild
 			Initializer.Initialize(requestLifetimeRegistration: registration => registration.AsSingleton());
 
 			return true;
+		}
+
+		/// <summary>
+		/// Determines if the current process is MSBuild
+		/// </summary>
+		/// <returns><c>true</c> if we are currently in MSBuild</returns>
+		public static bool IsInMSBuild()
+		{
+			try
+			{
+				return Process.GetCurrentProcess().ProcessName.StartsWith("MSBuild");
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 		}
 	}
 }
