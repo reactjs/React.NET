@@ -35,12 +35,7 @@ namespace React
 		{
 			// One instance shared for the whole app
 			container.Register<IReactSiteConfiguration>((c, o) => ReactSiteConfiguration.Configuration);
-			// Force MSIE to use Chakra ActiveScript engine.
-			// Chakra JS RT engine runs out of stack space when processing JSX
-			container.Register<MsieConfiguration>(new MsieConfiguration
-			{
-				EngineMode = JsEngineMode.ChakraActiveScript
-			});
+			container.Register<IFileCacheHash, FileCacheHash>().AsSingleton();
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsPerRequestSingleton();

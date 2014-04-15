@@ -21,6 +21,7 @@ namespace React.Tests.Core
 		private Mock<IReactEnvironment> _environment;
 		private Mock<ICache> _cache;
 		private Mock<IFileSystem> _fileSystem;
+		private Mock<IFileCacheHash> _fileCacheHash; 
 		private JsxTransformer _jsxTransformer;
 
 		[SetUp]
@@ -33,10 +34,13 @@ namespace React.Tests.Core
 			_fileSystem = new Mock<IFileSystem>();
 			_fileSystem.Setup(x => x.MapPath(It.IsAny<string>())).Returns<string>(x => x);
 
+			_fileCacheHash = new Mock<IFileCacheHash>();
+
 			_jsxTransformer = new JsxTransformer(
 				_environment.Object,
 				_cache.Object,
-				_fileSystem.Object
+				_fileSystem.Object,
+				_fileCacheHash.Object
 			);
 		}
 
@@ -98,15 +102,30 @@ namespace React.Tests.Core
 		}
 
 		[Test]
-		[Ignore("Needs to be fixed")]
-		public void ShouldUseFileSystemCache()
+		public void ShouldUseFileSystemCacheIfHashValid()
 		{
 			SetUpEmptyCache();
 			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(true);
 			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached */");
+			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 			
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
 			Assert.AreEqual("/* filesystem cached */", result);
+		}
+
+		[Test]
+		public void ShouldTransformJsxIfFileCacheHashInvalid()
+		{
+			SetUpEmptyCache();
+			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(true);
+			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached invalid */");
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
+			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
+
+			_jsxTransformer.TransformJsxFile("foo.jsx");
+			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
+				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+			));
 		}
 
 		[Test]
@@ -123,7 +142,6 @@ namespace React.Tests.Core
 		}
 
 		[Test]
-		[Ignore("Needs to be fixed")]
 		public void ShouldSaveTransformationResult()
 		{
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
@@ -131,9 +149,14 @@ namespace React.Tests.Core
 				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
 			)).Returns("React.DOM.div('Hello World')");
 
-			var result = _jsxTransformer.TransformAndSaveJsxFile("foo.jsx");
-			Assert.AreEqual("foo.generated.js", result);
-			_fileSystem.Verify(x => x.WriteAsString("foo.generated.js", "React.DOM.div('Hello World')"));
+			string result = null;
+			_fileSystem.Setup(x => x.WriteAsString("foo.generated.js", It.IsAny<string>())).Callback(
+				(string filename, string contents) => result = contents
+			);
+
+			var resultFilename = _jsxTransformer.TransformAndSaveJsxFile("foo.jsx");
+			Assert.AreEqual("foo.generated.js", resultFilename);
+			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 
 		private void SetUpEmptyCache()

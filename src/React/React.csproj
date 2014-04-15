@@ -88,9 +88,11 @@
     <Compile Include="Exceptions\ReactException.cs" />
     <Compile Include="Exceptions\ReactInvalidComponentException.cs" />
     <Compile Include="FileSystemBase.cs" />
+    <Compile Include="FileCacheHash.cs" />
     <Compile Include="IAssemblyRegistration.cs" />
     <Compile Include="ICache.cs" />
     <Compile Include="IFileSystem.cs" />
+    <Compile Include="IFileCacheHash.cs" />
     <Compile Include="IJavaScriptEngineFactory.cs" />
     <Compile Include="IJsxTransformer.cs" />
     <Compile Include="Initializer.cs" />

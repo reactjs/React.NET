@@ -73,6 +73,7 @@ namespace React.Tests.Core
 			public Mock<IReactSiteConfiguration> Config { get; private set; }
 			public Mock<ICache> Cache { get; private set; }
 			public Mock<IFileSystem> FileSystem { get; private set; }
+			public Mock<IFileCacheHash> FileCacheHash { get; private set; }
 			public Mocks()
 			{
 				Engine = new Mock<IJsEngine>();
@@ -80,6 +81,7 @@ namespace React.Tests.Core
 				Config = new Mock<IReactSiteConfiguration>();
 				Cache = new Mock<ICache>();
 				FileSystem = new Mock<IFileSystem>();
+				FileCacheHash = new Mock<IFileCacheHash>();
 
 				EngineFactory.Setup(x => x.GetEngineForCurrentThread(It.IsAny<Action<IJsEngine>>())).Returns(Engine.Object);
 			}
@@ -90,7 +92,8 @@ namespace React.Tests.Core
 					EngineFactory.Object,
 					Config.Object,
 					Cache.Object,
-					FileSystem.Object
+					FileSystem.Object,
+					FileCacheHash.Object
 				);
 			}
 		}

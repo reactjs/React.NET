@@ -66,6 +66,7 @@
     <Compile Include="..\SharedAssemblyVersionInfo.cs">
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Core\FileCacheHashTests.cs" />
     <Compile Include="Core\JavaScriptEngineFactoryTest.cs" />
     <Compile Include="Core\JsxTransformerTests.cs" />
     <Compile Include="Core\ReactComponentTest.cs" />

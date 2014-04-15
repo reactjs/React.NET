@@ -55,6 +55,11 @@ namespace React
 		/// </summary>
 		private readonly IFileSystem _fileSystem;
 		/// <summary>
+		/// Hash algorithm for file-based cache
+		/// </summary>
+		private readonly IFileCacheHash _fileCacheHash;
+
+		/// <summary>
 		/// JSX Transformer instance for this environment
 		/// </summary>
 		private readonly Lazy<IJsxTransformer> _jsxTransformer;
@@ -79,19 +84,22 @@ namespace React
 		/// <param name="config">The site-wide configuration</param>
 		/// <param name="cache">The cache to use for JSX compilation</param>
 		/// <param name="fileSystem">File system wrapper</param>
+		/// <param name="fileCacheHash">Hash algorithm for file-based cache</param>
 		public ReactEnvironment(
 			IJavaScriptEngineFactory engineFactory,
 			IReactSiteConfiguration config,
 			ICache cache,
-			IFileSystem fileSystem
+			IFileSystem fileSystem,
+			IFileCacheHash fileCacheHash
 		)
 		{
 			_engineFactory = engineFactory;
 			_config = config;
 			_cache = cache;
 			_fileSystem = fileSystem;
+			_fileCacheHash = fileCacheHash;
 			_jsxTransformer = new Lazy<IJsxTransformer>(() => 
-				new JsxTransformer(this, _cache, _fileSystem)
+				new JsxTransformer(this, _cache, _fileSystem, _fileCacheHash)
 			);
 		}
 
