@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="TransformJsx">
+	<!-- ReactJS.NET - Transforms JSX to JavaScript -->
+	<UsingTask AssemblyFile="$(OutputPath)\React.MSBuild.dll" TaskName="TransformJsx" />
+	<Target Name="TransformJsx">
+		<TransformJsx SourceDir="$(MSBuildProjectDirectory)" />
+	</Target>
+</Project>
