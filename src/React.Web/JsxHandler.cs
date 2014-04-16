@@ -51,7 +51,7 @@ namespace React.Web
 			var result = _environment.JsxTransformer.TransformJsxFile(relativePath);
 
 			// Only cache on the server-side for now
-			_response.AddCacheDependency(new CacheDependency(_fileSystem.MapPath(relativePath)));
+			_response.AddFileDependency(_fileSystem.MapPath(relativePath));
 			_response.Cache.SetCacheability(HttpCacheability.Server);
 			_response.Cache.SetLastModifiedFromFileDependencies();
 			_response.Cache.SetETagFromFileDependencies();

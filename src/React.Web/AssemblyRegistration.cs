@@ -37,8 +37,18 @@ namespace React.Web
 
 			// Unique per request
 			container.Register<IFileSystem, AspNetFileSystem>().AsPerRequestSingleton();
-			container.Register<ICache, AspNetCache>().AsPerRequestSingleton();
 			container.Register<IJsxHandler, JsxHandler>().AsPerRequestSingleton();
+
+			// Mono for Mac OS does not properly handle caching
+			// TODO: Remove this once https://bugzilla.xamarin.com/show_bug.cgi?id=19071 is fixed
+			if (SystemEnvironmentUtils.IsRunningOnMac())
+			{
+				container.Register<ICache, NullCache>().AsSingleton();
+			}
+			else
+			{
+				container.Register<ICache, AspNetCache>().AsPerRequestSingleton();	
+			}
 
 			// Wrappers for built-in objects
 			container.Register<HttpContextBase>((c, o) => new HttpContextWrapper(HttpContext.Current));

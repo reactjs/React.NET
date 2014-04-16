@@ -7,8 +7,6 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using JavaScriptEngineSwitcher.Msie;
-using JavaScriptEngineSwitcher.Msie.Configuration;
 using React.TinyIoC;
 
 namespace React

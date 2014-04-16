@@ -83,6 +83,7 @@
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
+    <Compile Include="SystemEnvironmentUtils.cs" />
     <Compile Include="Exceptions\JsxUnsupportedEngineException.cs" />
     <Compile Include="Exceptions\ReactConfigurationException.cs" />
     <Compile Include="Exceptions\ReactException.cs" />
