@@ -71,6 +71,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\React.Web\React.Web.csproj">
+      <Project>{134edd16-8dc8-4983-a2e0-b38dab1ecf1c}</Project>
+      <Name>React.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\React\React.csproj">
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
       <Name>React</Name>

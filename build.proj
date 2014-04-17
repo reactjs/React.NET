@@ -98,18 +98,22 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</Target>
 
 	<Target Name="Push">
-		<!-- For dev -->
+		<CallTarget Targets="PushDev" Condition="$(BuildType) != 'Release'" />
+		<CallTarget Targets="PushRelease" Condition="$(BuildType) == 'Release'" />
+	</Target>
+	<Target Name="PushRelease">
+		<ItemGroup>
+			<PackageFiles Include="$(PackageOutputDir)\*.nupkg" Exclude="$(PackageOutputDir)\*.symbols.nupkg" />
+		</ItemGroup>
 		<Exec
-			Condition="$(BuildType) != 'Release'"
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="tools\NuGet\nuget.exe push %(PackageFiles.Identity) -NonInteractive"
+		/>
+	</Target>
+	<Target Name="PushDev">
+		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe push $(PackageOutputDir)\*.symbols.nupkg -Source $(DevNuGetServer) -NonInteractive"
 		/>
-
-		<!-- For release -->
-		<Exec
-			Condition="$(BuildType) == 'Release'"
-			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe push $(PackageOutputDir)\*.nupkg -NonInteractive"
-				/>
 	</Target>
 </Project>
