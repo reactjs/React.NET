@@ -22,6 +22,12 @@ id: home
       [the tutorial](/getting-started/tutorial.html) to see how easy it is to
       get started with React and ReactJS.NET!
     </p>
+    <p>
+      <em>
+        Latest news:
+        <a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}</a>
+      </em>
+    </p>
     <div id="examples">
       <div class="example">
         <h3>On-the-fly [JSX to JavaScript compilation](/getting-started/usage.html)</h3>

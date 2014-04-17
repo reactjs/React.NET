@@ -8,10 +8,13 @@
   <meta name="viewport" content="width=device-width" />
   <meta property="og:title" content="{{ page.title }} | {{ site.name }}" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="http://reactjs.net{{ page.url }}" />
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
   <meta property="og:image" content="http://facebook.github.io/react/img/logo_og.png" />
   <meta property="og:description" content=".NET integration for ReactJS" />
   <meta property="fb:app_id" content="1417169611875552" />
+
+  <link rel="shortcut icon" href="http://facebook.github.io/react/favicon.ico" />
+  <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml" />
 
   {% stylesheet main %}
 
@@ -41,6 +44,7 @@
           <li><a href="/docs"{% if page.sectionid == 'docs' and page.id != 'tutorial' and page.id != 'download' %} class="active"{% endif %}>Docs</a></li>
           <li><a href="/getting-started/tutorial.html"{% if page.id == 'tutorial' %} class="active"{% endif %}>Tutorial</a></li>
           <li><a href="/getting-started/download.html"{% if page.id == 'download' %} class="active"{% endif %}>Download</a></li>
+          <li><a href="/blog/"{% if page.sectionid == 'blog' %} class="active"{% endif %}>Blog</a></li>
           <li><a href="http://github.com/reactjs/React.NET">GitHub</a>
         </ul>
       </div>
