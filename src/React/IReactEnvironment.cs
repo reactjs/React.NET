@@ -49,9 +49,10 @@ namespace React
 		/// than what ASP.NET allows by default (256 KB).
 		/// </summary>
 		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
-		/// <param name="code">JavaScript code to execute</param>
+		/// <param name="function">JavaScript function to execute</param>
+		/// <param name="args">Arguments to pass to function</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		T ExecuteWithLargerStackIfRequired<T>(string code);
+		T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args);
 
 		/// <summary>
 		/// Determines if the specified variable exists in the JavaScript engine

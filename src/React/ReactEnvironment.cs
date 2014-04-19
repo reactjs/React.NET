@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
@@ -272,13 +271,14 @@ namespace React
 		/// than what ASP.NET allows by default (256 KB).
 		/// </summary>
 		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
-		/// <param name="code">JavaScript code to execute</param>
+		/// <param name="function">JavaScript function to execute</param>
+		/// <param name="args">Arguments to pass to function</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		public T ExecuteWithLargerStackIfRequired<T>(string code)
+		public T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args)
 		{
 			try
 			{
-				return Engine.Evaluate<T>(code);
+				return Engine.CallFunction<T>(function, args);
 			}
 			catch (Exception)
 			{
@@ -292,7 +292,7 @@ namespace React
 					try
 					{
 						// New engine will be created here (as this is a new thread)
-						result = Engine.Evaluate<T>(code);
+						result = Engine.CallFunction<T>(function, args);
 					}
 					catch (Exception threadEx)
 					{

@@ -18,3 +18,7 @@ var console = console || {
 if (!Object.freeze) {
 	Object.freeze = function() { };
 }
+
+function ReactNET_transform(input) {
+	return global.JSXTransformer.transform(input, { harmony: true }).code;
+}

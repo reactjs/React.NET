@@ -60,7 +60,8 @@ namespace React.Tests.Core
 			_jsxTransformer.TransformJsx(input);
 
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
-				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+				"ReactNET_transform",
+				"/** @jsx React.DOM */ <div>Hello World</div>"
 			));
 		}
 
@@ -68,7 +69,8 @@ namespace React.Tests.Core
 		public void ShouldWrapExceptionsInJsxExeption()
 		{
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
-				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+				"ReactNET_transform",
+				"/** @jsx React.DOM */ <div>Hello World</div>"
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
@@ -124,7 +126,8 @@ namespace React.Tests.Core
 
 			_jsxTransformer.TransformJsxFile("foo.jsx");
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
-				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+				"ReactNET_transform",
+				"/** @jsx React.DOM */ <div>Hello World</div>"
 			));
 		}
 
@@ -137,7 +140,8 @@ namespace React.Tests.Core
 
 			_jsxTransformer.TransformJsxFile("foo.jsx");
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
-				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+				"ReactNET_transform",
+				"/** @jsx React.DOM */ <div>Hello World</div>"
 			));
 		}
 
@@ -146,7 +150,8 @@ namespace React.Tests.Core
 		{
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
-				@"global.JSXTransformer.transform(""/** @jsx React.DOM */ <div>Hello World</div>"").code"
+				"ReactNET_transform",
+				"/** @jsx React.DOM */ <div>Hello World</div>"
 			)).Returns("React.DOM.div('Hello World')");
 
 			string result = null;

@@ -23,8 +23,8 @@ namespace React.Tests.Core
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 
-			environment.ExecuteWithLargerStackIfRequired<int>("1+1");
-			mocks.Engine.Verify(x => x.Evaluate<int>("1+1"));
+			environment.ExecuteWithLargerStackIfRequired<int>("foo");
+			mocks.Engine.Verify(x => x.CallFunction<int>("foo"), Times.Exactly(1));
 		}
 
 		[Test]
@@ -34,11 +34,11 @@ namespace React.Tests.Core
 			var environment = mocks.CreateReactEnvironment();
 			// Fail the first time Evaluate is called, succeed the second
 			// http://stackoverflow.com/a/7045636
-			mocks.Engine.Setup(x => x.Evaluate<int>("1+1"))
-				.Callback(() => mocks.Engine.Setup(x => x.Evaluate<int>("1+1")))
+			mocks.Engine.Setup(x => x.CallFunction<int>("foo"))
+				.Callback(() => mocks.Engine.Setup(x => x.CallFunction<int>("foo")))
 				.Throws(new Exception("Out of stack space"));
 				
-			environment.ExecuteWithLargerStackIfRequired<int>("1+1");
+			environment.ExecuteWithLargerStackIfRequired<int>("foo");
 			mocks.EngineFactory.Verify(
 				x => x.GetEngineForCurrentThread(It.IsAny<Action<IJsEngine>>()), 
 				Times.Exactly(2),
@@ -57,12 +57,12 @@ namespace React.Tests.Core
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 			// Always fail
-			mocks.Engine.Setup(x => x.Evaluate<int>("1+1"))
+			mocks.Engine.Setup(x => x.CallFunction<int>("foobar"))
 				.Throws(new Exception("Something bad happened :("));
 
 			Assert.Throws<Exception>(() =>
 			{
-				environment.ExecuteWithLargerStackIfRequired<int>("1+1");
+				environment.ExecuteWithLargerStackIfRequired<int>("foobar");
 			});
 		}
 

@@ -9,7 +9,6 @@
 
 using System;
 using System.IO;
-using Newtonsoft.Json;
 using React.Exceptions;
 
 namespace React
@@ -130,11 +129,10 @@ namespace React
 			EnsureJsxTransformerSupported();
 			try
 			{
-				var encodedInput = JsonConvert.SerializeObject(input);
-				var output = _environment.ExecuteWithLargerStackIfRequired<string>(string.Format(
-					"global.JSXTransformer.transform({0}, {{ harmony: true }}).code",
-					encodedInput
-				));
+				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
+					"ReactNET_transform",
+					input
+				);
 				return output;
 			}
 			catch (Exception ex)
