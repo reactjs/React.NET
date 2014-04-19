@@ -11791,7 +11791,7 @@ var headEl;
 
 var buffer = _dereq_('buffer');
 var transform = _dereq_('jstransform').transform;
-var visitors = _dereq_('./fbtransform/visitors').transformVisitors;
+var visitors = _dereq_('./fbtransform/visitors');
 var docblock = _dereq_('jstransform/src/docblock');
 
 // The source-map library relies on Object.defineProperty, but IE8 doesn't
@@ -11800,16 +11800,23 @@ var docblock = _dereq_('jstransform/src/docblock');
 // the source map in that case.
 var supportsAccessors = Object.prototype.hasOwnProperty('__defineGetter__');
 
-function transformReact(source) {
-  return transform(visitors.react, source, {
+function transformReact(source, options) {
+  var visitorList;
+  if (options && options.harmony) {
+    visitorList = visitors.getAllVisitors();
+  } else {
+    visitorList = visitors.transformVisitors.react;
+  }
+
+  return transform(visitorList, source, {
     sourceMap: supportsAccessors
   });
 }
 
 exports.transform = transformReact;
 
-exports.exec = function(code) {
-  return eval(transformReact(code).code);
+exports.exec = function(code, options) {
+  return eval(transformReact(code, options).code);
 };
 
 var inlineScriptCount = 0;

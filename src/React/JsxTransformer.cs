@@ -132,7 +132,7 @@ namespace React
 			{
 				var encodedInput = JsonConvert.SerializeObject(input);
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(string.Format(
-					"global.JSXTransformer.transform({0}).code",
+					"global.JSXTransformer.transform({0}, {{ harmony: true }}).code",
 					encodedInput
 				));
 				return output;
