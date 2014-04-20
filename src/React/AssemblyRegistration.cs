@@ -7,6 +7,9 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using JavaScriptEngineSwitcher.Jint;
+using JavaScriptEngineSwitcher.Msie;
+using JavaScriptEngineSwitcher.Msie.Configuration;
 using React.TinyIoC;
 
 namespace React
@@ -37,6 +40,20 @@ namespace React
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsPerRequestSingleton();
+
+			// JavaScript engines
+			JavaScriptEngineFactory.AddFactoryWithPriority(
+				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
+				priority: 10
+			);
+			JavaScriptEngineFactory.AddFactoryWithPriority(
+				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
+				priority: 20
+			);
+			JavaScriptEngineFactory.AddFactoryWithPriority(
+				() => new JintJsEngine(),
+				priority: 100
+			);
 		}
 	}
 }

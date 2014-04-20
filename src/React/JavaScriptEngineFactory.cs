@@ -2,11 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.Jint;
-using JavaScriptEngineSwitcher.Msie;
-using JavaScriptEngineSwitcher.Msie.Configuration;
 using React.Exceptions;
 
 namespace React
@@ -16,6 +14,11 @@ namespace React
 	/// </summary>
 	public class JavaScriptEngineFactory : IDisposable, IJavaScriptEngineFactory
 	{
+		/// <summary>
+		/// List of all available JavaScript engines
+		/// </summary>
+		private static readonly IList<FactoryWithPriority> _availableFactories
+			= new List<FactoryWithPriority>();
 		/// <summary>
 		/// Function used to create new JavaScript engine instances.
 		/// </summary>
@@ -32,6 +35,25 @@ namespace React
 		public JavaScriptEngineFactory()
 		{
 			_factory = GetFactory();
+		}
+
+		/// <summary>
+		/// Adds a supported JavaScript engine. When an instance of 
+		/// <see cref="JavaScriptEngineFactory" /> is created, the first functioning JavaScript 
+		/// engine with the lowest priority will be used.
+		/// </summary>
+		/// <param name="factory">Factory method to create new instance of the engine</param>
+		/// <param name="priority">
+		/// Any number. All engines will be sorted by priority, so "better" engines should have
+		/// a lower priority number.
+		/// </param>
+		public static void AddFactoryWithPriority(Func<IJsEngine> factory, int priority)
+		{
+			_availableFactories.Add(new FactoryWithPriority
+			{
+				Factory = factory,
+				Priority = priority
+			});
 		}
 
 		/// <summary>
@@ -76,12 +98,9 @@ namespace React
 		/// <returns>Function to create JavaScript engine</returns>
 		private static Func<IJsEngine> GetFactory()
 		{
-			var availableEngineFactories = new List<Func<IJsEngine>>
-			{
-				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
-				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
-				() => new JintJsEngine()
-			};
+			var availableEngineFactories = _availableFactories
+				.OrderBy(x => x.Priority)
+				.Select(x => x.Factory);
 			foreach (var engineFactory in availableEngineFactories)
 			{
 				IJsEngine engine = null;
@@ -125,6 +144,12 @@ namespace React
 					engine.Value.Dispose();
 				}
 			}
+		}
+
+		private class FactoryWithPriority
+		{
+			public Func<IJsEngine> Factory { get; set; }
+			public int Priority { get; set; }
 		}
 	}
 }
