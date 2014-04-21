@@ -136,6 +136,10 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\React.JavaScriptEngine.VroomJs\React.JavaScriptEngine.VroomJs.csproj">
+      <Project>{b4a5902a-70e2-4fa4-817d-dcc78d31e9b9}</Project>
+      <Name>React.JavaScriptEngine.VroomJs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\React.Web.Mvc4\React.Web.Mvc4.csproj">
       <Project>{662d52ac-1ee9-4372-bd74-379f9ac56451}</Project>
       <Name>React.Web.Mvc4</Name>
