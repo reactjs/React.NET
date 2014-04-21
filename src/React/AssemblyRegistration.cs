@@ -42,18 +42,21 @@ namespace React
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsPerRequestSingleton();
 
 			// JavaScript engines
-			JavaScriptEngineFactory.AddFactoryWithPriority(
-				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
-				priority: 10
-			);
-			JavaScriptEngineFactory.AddFactoryWithPriority(
-				() => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
-				priority: 20
-			);
-			JavaScriptEngineFactory.AddFactoryWithPriority(
-				() => new JintJsEngine(),
-				priority: 100
-			);
+			container.Register(new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
+				Priority = 10
+			}, "MsieChakra");
+			container.Register(new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
+				Priority = 20
+			}, "MsieClassic");
+			container.Register(new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => new JintJsEngine(),
+				Priority = 100
+			}, "Jint");
 		}
 	}
 }

@@ -15,11 +15,6 @@ namespace React
 	public class JavaScriptEngineFactory : IDisposable, IJavaScriptEngineFactory
 	{
 		/// <summary>
-		/// List of all available JavaScript engines
-		/// </summary>
-		private static readonly IList<FactoryWithPriority> _availableFactories
-			= new List<FactoryWithPriority>();
-		/// <summary>
 		/// Function used to create new JavaScript engine instances.
 		/// </summary>
 		private readonly Func<IJsEngine> _factory; 
@@ -32,28 +27,9 @@ namespace React
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
 		/// </summary>
-		public JavaScriptEngineFactory()
+		public JavaScriptEngineFactory(IEnumerable<Registration> availableFactories)
 		{
-			_factory = GetFactory();
-		}
-
-		/// <summary>
-		/// Adds a supported JavaScript engine. When an instance of 
-		/// <see cref="JavaScriptEngineFactory" /> is created, the first functioning JavaScript 
-		/// engine with the lowest priority will be used.
-		/// </summary>
-		/// <param name="factory">Factory method to create new instance of the engine</param>
-		/// <param name="priority">
-		/// Any number. All engines will be sorted by priority, so "better" engines should have
-		/// a lower priority number.
-		/// </param>
-		public static void AddFactoryWithPriority(Func<IJsEngine> factory, int priority)
-		{
-			_availableFactories.Add(new FactoryWithPriority
-			{
-				Factory = factory,
-				Priority = priority
-			});
+			_factory = GetFactory(availableFactories);
 		}
 
 		/// <summary>
@@ -93,12 +69,13 @@ namespace React
 		}
 
 		/// <summary>
-		/// Gets a factory for the most appropriate JavaScript engine for the current environment
+		/// Gets a factory for the most appropriate JavaScript engine for the current environment.
+		/// The first functioning JavaScript engine with the lowest priority will be used.
 		/// </summary>
 		/// <returns>Function to create JavaScript engine</returns>
-		private static Func<IJsEngine> GetFactory()
+		private static Func<IJsEngine> GetFactory(IEnumerable<Registration> availableFactories)
 		{
-			var availableEngineFactories = _availableFactories
+			var availableEngineFactories = availableFactories
 				.OrderBy(x => x.Priority)
 				.Select(x => x.Factory);
 			foreach (var engineFactory in availableEngineFactories)
@@ -146,9 +123,20 @@ namespace React
 			}
 		}
 
-		private class FactoryWithPriority
+		/// <summary>
+		/// Represents a factory for a supported JavaScript engine. 
+		/// </summary>
+		public class Registration
 		{
+			/// <summary>
+			/// Gets or sets the factory for this JavaScript engine
+			/// </summary>
 			public Func<IJsEngine> Factory { get; set; }
+
+			/// <summary>
+			/// Gets or sets the priority for this JavaScript engine. Engines with lower priority
+			/// are preferred.
+			/// </summary>
 			public int Priority { get; set; }
 		}
 	}

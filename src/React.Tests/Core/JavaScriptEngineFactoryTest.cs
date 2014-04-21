@@ -17,21 +17,25 @@ namespace React.Tests.Core
 	[TestFixture]
 	public class JavaScriptEngineFactoryTest
 	{
-		static JavaScriptEngineFactoryTest()
+		private JavaScriptEngineFactory CreateFactory()
 		{
-			// TODO: Make this nicer
-			JavaScriptEngineFactory.AddFactoryWithPriority(() =>
+			var registration = new JavaScriptEngineFactory.Registration
 			{
-				var mockJsEngine = new Mock<IJsEngine>();
-				mockJsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-				return mockJsEngine.Object;
-			}, 1);
+				Factory = () =>
+				{
+					var mockJsEngine = new Mock<IJsEngine>();
+					mockJsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+					return mockJsEngine.Object;
+				},
+				Priority = 1
+			};
+			return new JavaScriptEngineFactory(new[] { registration });
 		}
 
 		[Test]
 		public void ShouldCallOnNewEngineWhenCreatingNew()
 		{
-			var factory = new JavaScriptEngineFactory();
+			var factory = CreateFactory();
 			var called = false;
 			factory.GetEngineForCurrentThread(engine =>
 			{
@@ -46,7 +50,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldNotCallOnNewEngineWhenUsingExisting()
 		{
-			var factory = new JavaScriptEngineFactory();
+			var factory = CreateFactory();
 			var called = false;
 			factory.GetEngineForCurrentThread();
 			factory.GetEngineForCurrentThread(engine => { called = true; });
@@ -58,7 +62,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldReturnSameEngine()
 		{
-			var factory = new JavaScriptEngineFactory();
+			var factory = CreateFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
 			
@@ -69,7 +73,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldReturnNewEngineAfterDisposing()
 		{
-			var factory = new JavaScriptEngineFactory();
+			var factory = CreateFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			factory.DisposeEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
@@ -81,7 +85,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldCreateNewEngineForNewThread()
 		{
-			var factory = new JavaScriptEngineFactory();
+			var factory = CreateFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 
 			IJsEngine engine2 = null;

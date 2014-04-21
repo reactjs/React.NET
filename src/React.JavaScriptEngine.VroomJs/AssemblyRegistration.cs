@@ -28,8 +28,12 @@ namespace React.JavaScriptEngine.VroomJs
 				return;
 			}
 
-			JavaScriptEngineFactory.AddFactoryWithPriority(() => new VroomJsEngine(), priority: 10);
 			VroomJsUtils.EnsureEngineFunctional();
+			container.Register(new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => new VroomJsEngine(),
+				Priority = 10
+			}, "VroomJs");
 		}
 	}
 }
