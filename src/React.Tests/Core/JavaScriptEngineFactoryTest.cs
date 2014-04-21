@@ -9,6 +9,7 @@
 
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
+using Moq;
 using NUnit.Framework;
 
 namespace React.Tests.Core
@@ -16,6 +17,17 @@ namespace React.Tests.Core
 	[TestFixture]
 	public class JavaScriptEngineFactoryTest
 	{
+		static JavaScriptEngineFactoryTest()
+		{
+			// TODO: Make this nicer
+			JavaScriptEngineFactory.AddFactoryWithPriority(() =>
+			{
+				var mockJsEngine = new Mock<IJsEngine>();
+				mockJsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+				return mockJsEngine.Object;
+			}, 1);
+		}
+
 		[Test]
 		public void ShouldCallOnNewEngineWhenCreatingNew()
 		{
