@@ -27,6 +27,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="System.Web.Optimization.React" />
 		<PackageAssemblies Include="Cassette.React" />
 		<PackageAssemblies Include="React.MSBuild" />
+		<PackageAssemblies Include="React.JavaScriptEngine.VroomJs" />
 	</ItemGroup>
 
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
