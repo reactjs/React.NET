@@ -11,7 +11,7 @@ using System;
 using System.Linq;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
-
+using VroomJs;
 using OriginalJsEngine = VroomJs.JsEngine;
 using OriginalJsException = VroomJs.JsException;
 
@@ -24,9 +24,16 @@ namespace React.JavaScriptEngine.VroomJs
 	public class VroomJsEngine : JsEngineBase
 	{
 		/// <summary>
-		/// The VroomJs engine
+		/// The VroomJs engine. One engine is shared for the whole app, and separate contexts are
+		/// used for each instance of this class.
 		/// </summary>
-		private readonly OriginalJsEngine _jsEngine;
+		private static readonly Lazy<OriginalJsEngine> _jsEngine = 
+			new Lazy<JsEngine>(() => new OriginalJsEngine());
+
+		/// <summary>
+		/// The V8 context
+		/// </summary>
+		private readonly JsContext _context;
 
 		/// <summary>
 		/// Name of JavaScript engine
@@ -45,13 +52,23 @@ namespace React.JavaScriptEngine.VroomJs
 		}
 
 		/// <summary>
+		/// The VroomJs engine. One engine is shared for the whole app, and separate contexts are
+		/// used for each instance of this class.
+		/// </summary>
+		private OriginalJsEngine Engine
+		{
+			get { return _jsEngine.Value; }
+		}
+
+		/// <summary>
 		/// Constructs instance of adapter for VroomJs
 		/// </summary>
 		public VroomJsEngine()
 		{
 			try
 			{
-				_jsEngine = new OriginalJsEngine();
+				// We use one engine with multiple contexts
+				_context = Engine.CreateContext();
 			}
 			catch (Exception e)
 			{
@@ -78,10 +95,11 @@ namespace React.JavaScriptEngine.VroomJs
 			OriginalJsException jsException	
 		)
 		{
-			dynamic nativeEx = jsException.NativeException;
-			return new JsRuntimeException(nativeEx.stack, Name, Version)
+			return new JsRuntimeException(jsException.Message, Name, Version)
 			{
-				Category = nativeEx.name,
+				Category = jsException.Type,
+				LineNumber = jsException.Line,
+				ColumnNumber = jsException.Column
 			};
 		}
 
@@ -94,7 +112,7 @@ namespace React.JavaScriptEngine.VroomJs
 		{
 			try
 			{
-				return _jsEngine.Execute(expression);
+				return _context.Execute(expression);
 			}
 			catch (OriginalJsException ex)
 			{
@@ -121,7 +139,7 @@ namespace React.JavaScriptEngine.VroomJs
 		{
 			try
 			{
-				_jsEngine.Execute(code);
+				_context.Execute(code);
 			}
 			catch (OriginalJsException ex)
 			{
@@ -145,7 +163,7 @@ namespace React.JavaScriptEngine.VroomJs
 
 			try
 			{
-				return _jsEngine.Execute(code);
+				return _context.Execute(code);
 			}
 			catch (OriginalJsException ex)
 			{
@@ -185,7 +203,7 @@ namespace React.JavaScriptEngine.VroomJs
 		{
 			try
 			{
-				return _jsEngine.GetVariable(variableName);
+				return _context.GetVariable(variableName);
 			}
 			catch (OriginalJsException ex)
 			{
@@ -214,7 +232,7 @@ namespace React.JavaScriptEngine.VroomJs
 		{
 			try
 			{
-				_jsEngine.SetVariable(variableName, value);
+				_context.SetVariable(variableName, value);
 			}
 			catch (OriginalJsException ex)
 			{
@@ -231,7 +249,7 @@ namespace React.JavaScriptEngine.VroomJs
 			var code = string.Format("{0} = undefined", variableName);
 			try
 			{
-				_jsEngine.Execute(code);
+				_context.Execute(code);
 			}
 			catch (OriginalJsException ex)
 			{
@@ -246,7 +264,7 @@ namespace React.JavaScriptEngine.VroomJs
 		{
 			if (!_disposed)
 			{
-				_jsEngine.Dispose();
+				_context.Dispose();
 				_disposed = true;
 			}
 		}

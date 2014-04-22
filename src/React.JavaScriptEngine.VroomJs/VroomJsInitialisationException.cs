@@ -38,7 +38,7 @@ namespace React.JavaScriptEngine.VroomJs
 		{
 			return
 				"Failed to initialise VroomJs. This is most likely caused by the native library " +
-				"(libvroomjs.so) being out of date or your system lacking a compatible version of " +
+				"(libVroomJsNative.so) being out of date or your system lacking a compatible version of " +
 				"V8. Please run Mono with the `MONO_LOG_LEVEL=debug` environment variable for " +
 				"more debugging information. \n\n " +
 				"More details: " + innerMessage;

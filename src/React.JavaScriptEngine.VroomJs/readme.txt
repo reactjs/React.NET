@@ -5,7 +5,7 @@ accomplished using the following shell commands:
 cd /usr/local/src/
 git clone https://github.com/v8/v8.git
 cd v8
-git checkout 3.15
+git checkout 3.17
 
 # Build V8
 make werror=no library=shared x64.release
@@ -18,8 +18,8 @@ git submodule update --init
 cd lib/VroomJs/libvroomjs/
 
 # Build libvroomjs
-g++ jsengine.cpp managedref.cpp bridge.cpp -o libvroomjs.so -shared -L /usr/local/src/v8/out/x64.release/lib.target/ -I /usr/local/src/v8/include/ -fPIC -Wl,--no-as-needed -lv8 -g
-cp libvroomjs.so /usr/local/lib/
+g++ jscontext.cpp jsengine.cpp managedref.cpp bridge.cpp jsscript.cpp -o libVroomJsNative.so -shared -L /usr/local/src/v8/out/x64.release/lib.target/ -I /usr/local/src/v8/include/ -fPIC -Wl,--no-as-needed -lv8
+cp libVroomJsNative.so /usr/local/lib/
 ldconfig
 
 If VroomJs fails to load, run Mono with the `MONO_LOG_LEVEL=debug` environment variable to get 
