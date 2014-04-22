@@ -8,6 +8,7 @@ cd v8
 git checkout 3.17
 
 # Build V8
+make dependencies
 make werror=no library=shared x64.release
 
 # Get ReactJS.NET's version of libvroomjs
