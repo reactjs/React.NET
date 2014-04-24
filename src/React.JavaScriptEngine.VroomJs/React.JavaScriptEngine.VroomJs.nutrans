@@ -15,9 +15,11 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<description xdt:Transform="Insert">Mono support for ReactJS.NET, using VroomJs and V8. Allows you to use ReactJS.NET on Linux and Mac OS X. Install this package in addition to the regular ReactJS.NET packages (eg. React.Web.Mvc4 for ASP.NET MVC 4 integration).
 Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.
 		</description>
+		<summary xdt:Transform="Insert">Mono (Linux and Mac OS X) support for ReactJS.NET</summary>
 		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs mono linux mac macos v8</tags>
 	</metadata>
 	<files xdt:Transform="Insert">
 		<file src="readme.txt" target="" />
+		<file src="..\..\lib\VroomJs.dll" target="lib\net40" />
 	</files>
 </package>
