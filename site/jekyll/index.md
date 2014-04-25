@@ -18,9 +18,10 @@ id: home
       [React](http://facebook.github.io/react/) and
       [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C# and
       other .NET languages, focusing specifically on ASP.NET MVC (although it
-      also works in other environments). Take a look at
-      [the tutorial](/getting-started/tutorial.html) to see how easy it is to
-      get started with React and ReactJS.NET!
+      also works in other environments). It assumes you already have some basic
+      knowledge about React. It is cross-platform and can run on Linux via Mono.
+      Take a look at [the tutorial](/getting-started/tutorial.html) to see how
+      easy it is to get started with React and ReactJS.NET!
     </p>
     <p>
       <em>
