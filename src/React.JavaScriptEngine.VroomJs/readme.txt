@@ -9,7 +9,8 @@ git checkout 3.17
 
 # Build V8
 make dependencies
-make werror=no library=shared x64.release
+make native werror=no library=shared soname_version=3.17.16.2 -j4
+cp out/native/lib.target/libv8.so.3.17.16.2 /usr/local/lib/
 
 # Get ReactJS.NET's version of libvroomjs
 cd /usr/local/src/
@@ -19,7 +20,7 @@ git submodule update --init
 cd lib/VroomJs/libvroomjs/
 
 # Build libvroomjs
-g++ jscontext.cpp jsengine.cpp managedref.cpp bridge.cpp jsscript.cpp -o libVroomJsNative.so -shared -L /usr/local/src/v8/out/x64.release/lib.target/ -I /usr/local/src/v8/include/ -fPIC -Wl,--no-as-needed -lv8
+g++ jscontext.cpp jsengine.cpp managedref.cpp bridge.cpp jsscript.cpp -o libVroomJsNative.so -shared -L /usr/local/src/v8/out/x64.release/lib.target/ -I /usr/local/src/v8/include/ -fPIC -Wl,--no-as-needed -l:/usr/local/lib/libv8.so.3.17.16.2
 cp libVroomJsNative.so /usr/local/lib/
 ldconfig
 
