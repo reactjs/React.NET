@@ -20,7 +20,7 @@ git submodule update --init
 cd lib/VroomJs/libvroomjs/
 
 # Build libvroomjs
-g++ jscontext.cpp jsengine.cpp managedref.cpp bridge.cpp jsscript.cpp -o libVroomJsNative.so -shared -L /usr/local/src/v8/out/x64.release/lib.target/ -I /usr/local/src/v8/include/ -fPIC -Wl,--no-as-needed -l:/usr/local/lib/libv8.so.3.17.16.2
+g++ jscontext.cpp jsengine.cpp managedref.cpp bridge.cpp jsscript.cpp -o libVroomJsNative.so -shared -L /usr/local/src/v8/out/native/lib.target/ -I /usr/local/src/v8/include/ -fPIC -Wl,--no-as-needed -l:/usr/local/lib/libv8.so.3.17.16.2
 cp libVroomJsNative.so /usr/local/lib/
 ldconfig
 
