@@ -7,8 +7,7 @@ title: MSBuild
 
 ReactJS.NET includes an MSBuild task for compiling JSX into JavaScript. This is
 handy to improve the start time of your application, especially if you have a
-large number of JSX files. Additionally, it is required for use on platforms
-where JSX compilation is not yet supported (such as Mono).
+large number of JSX files.
 
 To use it, first reference the `TransformJsx` task, and then call it wherever
 you like:
