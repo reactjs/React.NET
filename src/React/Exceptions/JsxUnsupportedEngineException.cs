@@ -38,10 +38,9 @@ namespace React.Exceptions
 			return 
 				"The current JavaScript engine does not support compilation of JSX files. If " +
 				"you are on Windows, try upgrading your version of Internet Explorer to 9 or " +
-				"above to use the updated engine. \n\nJSX Transformation is currently " +
-				"unsupported on Mono. If you are using Mono, it is suggested to precompile all " +
-				"JSX files on Windows before deployment. Refer to the ReactJS.NET documentation " +
-				"for more details.";
+				"above to use the updated engine. \n\nIf you are using Mono, ensure that you " +
+				"have installed the React.JavaScriptEngine.VroomJs package and V8 is installed " +
+				"correcty. Refer to the ReactJS.NET documentation for more details.";
 		}
 	}
 }
