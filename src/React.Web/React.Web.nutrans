@@ -12,6 +12,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
 		<title xdt:Transform="Insert">ReactJS.NET for ASP.NET</title>
+		<summary xdt:Transform="Insert">ReactJS tools for ASP.NET</summary>
 		<description xdt:Transform="Insert">ReactJS tools for ASP.NET. If using ASP.NET MVC, also install React.Web.Mvc4. 
 Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.
 		</description>
