@@ -3,7 +3,7 @@ layout: docs
 title: MSBuild
 ---
 
-**New in ReactJS.NET 0.2.0**
+**New in ReactJS.NET 0.2**
 
 ReactJS.NET includes an MSBuild task for compiling JSX into JavaScript. This is
 handy to improve the start time of your application, especially if you have a
