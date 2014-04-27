@@ -37,9 +37,9 @@ namespace React
 			// One instance shared for the whole app
 			container.Register<IReactSiteConfiguration>((c, o) => ReactSiteConfiguration.Configuration);
 			container.Register<IFileCacheHash, FileCacheHash>().AsSingleton();
+			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsSingleton();
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
-			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsPerRequestSingleton();
 
 			// JavaScript engines
 			container.Register(new JavaScriptEngineFactory.Registration

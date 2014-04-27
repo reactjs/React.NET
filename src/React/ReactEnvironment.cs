@@ -21,7 +21,7 @@ namespace React
 	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is 
 	/// not shared.
 	/// </summary>
-	public class ReactEnvironment : IReactEnvironment
+	public class ReactEnvironment : IReactEnvironment, IDisposable
 	{
 		/// <summary>
 		/// Format string used for React component container IDs
@@ -327,6 +327,14 @@ namespace React
 			var version = rawVersion.Substring(0, lastDot);
 			var build = rawVersion.Substring(lastDot + 1);
 			return string.Format("{0} (build {1})", version, build);
+		}
+
+		/// <summary>
+		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			_engineFactory.DisposeEngineForCurrentThread();
 		}
 	}
 }
