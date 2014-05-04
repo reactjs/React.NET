@@ -31,12 +31,21 @@ namespace React.MSBuild
 		public string SourceDir { get; set; }
 
 		/// <summary>
+		/// A value indicating if es6 syntax should be rewritten.
+		/// </summary>
+		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
+		public bool UseHarmony { get; set; }
+
+		/// <summary>
 		/// Executes the task.
 		/// </summary>
 		/// <returns><c>true</c> on success</returns>
 		public override bool Execute()
 		{
 			MSBuildHost.EnsureInitialized();
+			var config = React.AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>();
+			config.UseHarmony = UseHarmony;
+
 			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 
 			Log.LogMessage("Starting TransformJsx");
