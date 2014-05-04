@@ -17,6 +17,8 @@ namespace React
 	/// </summary>
 	public class ReactSiteConfiguration : IReactSiteConfiguration
 	{
+		private static IReactSiteConfiguration _instance = new ReactSiteConfiguration();
+
 		/// <summary>
 		/// All the scripts that have been added to this configuration
 		/// </summary>
@@ -25,7 +27,13 @@ namespace React
 		/// <summary>
 		/// Gets or sets the site-side configuration
 		/// </summary>
-		public static IReactSiteConfiguration Configuration { get; set; }
+		public static IReactSiteConfiguration Configuration
+		{
+			get
+			{
+				return _instance;
+			}
+		}
 
 		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
@@ -48,6 +56,12 @@ namespace React
 		public IList<string> Scripts
 		{
 			get { return new ReadOnlyCollection<string>(_scriptFiles); }
-		} 
+		}
+
+		/// <summary>
+		/// A value indicating if es6 syntax should be rewritten.
+		/// </summary>
+		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
+		public bool UseHarmony { get; set; }
 	}
 }

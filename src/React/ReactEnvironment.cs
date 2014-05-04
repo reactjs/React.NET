@@ -98,7 +98,7 @@ namespace React
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
 			_jsxTransformer = new Lazy<IJsxTransformer>(() => 
-				new JsxTransformer(this, _cache, _fileSystem, _fileCacheHash)
+				new JsxTransformer(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
 		}
 

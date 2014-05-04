@@ -43,6 +43,10 @@ namespace React
 		/// Hash algorithm for file-based cache
 		/// </summary>
 		private readonly IFileCacheHash _fileCacheHash;
+		/// <summary>
+		/// Site-wide configuration
+		/// </summary>
+		private readonly IReactSiteConfiguration _config;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JsxTransformer"/> class.
@@ -51,20 +55,23 @@ namespace React
 		/// <param name="cache">The cache to use for JSX compilation</param>
 		/// <param name="fileSystem">File system wrapper</param>
 		/// <param name="fileCacheHash">Hash algorithm for file-based cache</param>
-		public JsxTransformer(IReactEnvironment environment, ICache cache, IFileSystem fileSystem, IFileCacheHash fileCacheHash)
+		/// <param name="siteConfig">Site-wide configuration</param>
+		public JsxTransformer(IReactEnvironment environment, ICache cache, IFileSystem fileSystem, IFileCacheHash fileCacheHash, IReactSiteConfiguration siteConfig)
 		{
 			_environment = environment;
 			_cache = cache;
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
+			_config = siteConfig;
 		}
 
 		/// <summary>
 		/// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsxFile(string filename)
+		public string TransformJsxFile(string filename, bool? useHarmony = null)
 		{
 			var fullPath = _fileSystem.MapPath(filename);
 
@@ -91,7 +98,7 @@ namespace React
 					}
 
 					// 3. Not cached, perform the transformation
-					return TransformJsxWithHeader(contents, hash);
+					return TransformJsxWithHeader(contents, hash, useHarmony);
 				}
 			);
 		}
@@ -102,14 +109,15 @@ namespace React
 		/// </summary>
 		/// <param name="contents">Contents of the input file</param>
 		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		private string TransformJsxWithHeader(string contents, string hash = null)
+		private string TransformJsxWithHeader(string contents, string hash = null, bool? useHarmony = null)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
-			return GetFileHeader(hash) + TransformJsx(contents);
+			return GetFileHeader(hash) + TransformJsx(contents, useHarmony);
 		}
 
 		/// <summary>
@@ -117,8 +125,9 @@ namespace React
 		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsx(string input)
+		public string TransformJsx(string input, bool? useHarmony = null)
 		{
 			// Just return directly if there's no JSX annotation
 			if (!input.Contains("@jsx"))
@@ -131,7 +140,8 @@ namespace React
 			{
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
-					input
+					input,
+					useHarmony.HasValue ? useHarmony.Value : _config.UseHarmony
 				);
 				return output;
 			}
@@ -177,12 +187,13 @@ namespace React
 		/// alongside the original file.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>File contents</returns>
-		public string TransformAndSaveJsxFile(string filename)
+		public string TransformAndSaveJsxFile(string filename, bool? useHarmony = null)
 		{
 			var outputPath = GetJsxOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);
-			var result = TransformJsxWithHeader(contents);
+			var result = TransformJsxWithHeader(contents, useHarmony: useHarmony);
 			_fileSystem.WriteAsString(outputPath, result);
 			return outputPath;
 		}

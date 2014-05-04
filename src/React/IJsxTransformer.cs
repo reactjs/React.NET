@@ -18,24 +18,27 @@ namespace React
 		/// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsxFile(string filename);
+		string TransformJsxFile(string filename, bool? useHarmony = null);
 
 		/// <summary>
 		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
 		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsx(string input);
+		string TransformJsx(string input, bool? useHarmony = null);
 
 		/// <summary>
 		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
 		/// alongside the original file.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>File contents</returns>
-		string TransformAndSaveJsxFile(string filename);
+		string TransformAndSaveJsxFile(string filename, bool? useHarmony = null);
 
 		/// <summary>
 		/// Returns the path the specified JSX file's compilation will be cached to

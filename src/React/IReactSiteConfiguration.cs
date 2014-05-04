@@ -31,5 +31,11 @@ namespace React
 		/// Gets a list of all the scripts that have been added to this configuration.
 		/// </summary>
 		IList<string> Scripts { get; }
+
+		/// <summary>
+		/// A value indicating if es6 syntax should be rewritten.
+		/// </summary>
+		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
+		bool UseHarmony { get; set; }
 	}
 }

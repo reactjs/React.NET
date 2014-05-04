@@ -40,7 +40,8 @@ namespace React.Tests.Core
 				_environment.Object,
 				_cache.Object,
 				_fileSystem.Object,
-				_fileCacheHash.Object
+				_fileCacheHash.Object,
+				ReactSiteConfiguration.Configuration
 			);
 		}
 
@@ -61,7 +62,8 @@ namespace React.Tests.Core
 
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>"
+				"/** @jsx React.DOM */ <div>Hello World</div>",
+				false
 			));
 		}
 
@@ -70,7 +72,8 @@ namespace React.Tests.Core
 		{
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>"
+				"/** @jsx React.DOM */ <div>Hello World</div>",
+				false
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
@@ -96,7 +99,7 @@ namespace React.Tests.Core
 				/*slidingExpiration*/ It.IsAny<TimeSpan>(),
 				/*getData*/ It.IsAny<Func<string>>(),
 				/*cacheDependencyKeys*/ It.IsAny<IEnumerable<string>>(),
-				/*cacheDependencyFiles*/ It.IsAny<IEnumerable<string>>()				
+				/*cacheDependencyFiles*/ It.IsAny<IEnumerable<string>>()                
 			)).Returns("/* cached */");
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -127,7 +130,8 @@ namespace React.Tests.Core
 			_jsxTransformer.TransformJsxFile("foo.jsx");
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>"
+				"/** @jsx React.DOM */ <div>Hello World</div>",
+				false
 			));
 		}
 
@@ -141,7 +145,8 @@ namespace React.Tests.Core
 			_jsxTransformer.TransformJsxFile("foo.jsx");
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>"
+				"/** @jsx React.DOM */ <div>Hello World</div>",
+				false
 			));
 		}
 
@@ -151,7 +156,8 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>"
+				"/** @jsx React.DOM */ <div>Hello World</div>",
+				false
 			)).Returns("React.DOM.div('Hello World')");
 
 			string result = null;
