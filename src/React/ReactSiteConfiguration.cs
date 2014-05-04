@@ -48,6 +48,12 @@ namespace React
 		public IList<string> Scripts
 		{
 			get { return new ReadOnlyCollection<string>(_scriptFiles); }
-		} 
+		}
+
+		/// <summary>
+		/// A value indicating if es6 syntax should be rewritten.
+		/// </summary>
+		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
+		public bool UseHarmony { get; set; }
 	}
 }

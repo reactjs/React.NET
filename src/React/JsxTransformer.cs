@@ -59,13 +59,13 @@ namespace React
 			_fileCacheHash = fileCacheHash;
 		}
 
-        /// <summary>
-        /// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
-        /// </summary>
-        /// <param name="filename">Name of the file to load</param>
-        /// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
-        /// <returns>JavaScript</returns>
-        public string TransformJsxFile(string filename, bool useHarmony = false)
+		/// <summary>
+		/// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <returns>JavaScript</returns>
+		public string TransformJsxFile(string filename, bool useHarmony = false)
 		{
 			var fullPath = _fileSystem.MapPath(filename);
 
@@ -97,15 +97,15 @@ namespace React
 			);
 		}
 
-        /// <summary>
-        /// Transforms JSX into regular JavaScript, and prepends a header used for caching 
-        /// purposes.
-        /// </summary>
-        /// <param name="contents">Contents of the input file</param>
-        /// <param name="hash">Hash of the input. If null, it will be calculated</param>
-        /// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
-        /// <returns>JavaScript</returns>
-        private string TransformJsxWithHeader(string contents, string hash = null, bool useHarmony = false)
+		/// <summary>
+		/// Transforms JSX into regular JavaScript, and prepends a header used for caching 
+		/// purposes.
+		/// </summary>
+		/// <param name="contents">Contents of the input file</param>
+		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <returns>JavaScript</returns>
+		private string TransformJsxWithHeader(string contents, string hash = null, bool useHarmony = false)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
@@ -114,14 +114,14 @@ namespace React
 			return GetFileHeader(hash) + TransformJsx(contents, useHarmony);
 		}
 
-        /// <summary>
-        /// Transforms JSX into regular JavaScript. The result is not cached. Use 
-        /// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
-        /// </summary>
-        /// <param name="input">JSX</param>
-        /// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
-        /// <returns>JavaScript</returns>
-        public string TransformJsx(string input, bool useHarmony = false)
+		/// <summary>
+		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
+		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
+		/// </summary>
+		/// <param name="input">JSX</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <returns>JavaScript</returns>
+		public string TransformJsx(string input, bool useHarmony = false)
 		{
 			// Just return directly if there's no JSX annotation
 			if (!input.Contains("@jsx"))
@@ -135,7 +135,7 @@ namespace React
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
 					input,
-                    useHarmony
+					useHarmony
 				);
 				return output;
 			}
@@ -176,14 +176,14 @@ namespace React
 			);
 		}
 
-        /// <summary>
-        /// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
-        /// alongside the original file.
-        /// </summary>
-        /// <param name="filename">Name of the file to load</param>
-        /// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
-        /// <returns>File contents</returns>
-        public string TransformAndSaveJsxFile(string filename, bool useHarmony = false)
+		/// <summary>
+		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
+		/// alongside the original file.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <returns>File contents</returns>
+		public string TransformAndSaveJsxFile(string filename, bool useHarmony = false)
 		{
 			var outputPath = GetJsxOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);
