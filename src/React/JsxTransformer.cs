@@ -64,7 +64,7 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsxFile(string filename)
+		public string TransformJsxFile(string filename, bool useHarmony = false)
 		{
 			var fullPath = _fileSystem.MapPath(filename);
 
@@ -91,7 +91,7 @@ namespace React
 					}
 
 					// 3. Not cached, perform the transformation
-					return TransformJsxWithHeader(contents, hash);
+					return TransformJsxWithHeader(contents, hash, useHarmony);
 				}
 			);
 		}
@@ -103,13 +103,13 @@ namespace React
 		/// <param name="contents">Contents of the input file</param>
 		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
 		/// <returns>JavaScript</returns>
-		private string TransformJsxWithHeader(string contents, string hash = null)
+		private string TransformJsxWithHeader(string contents, string hash = null, bool useHarmony = false)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
-			return GetFileHeader(hash) + TransformJsx(contents);
+			return GetFileHeader(hash) + TransformJsx(contents, useHarmony);
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace React
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsx(string input)
+		public string TransformJsx(string input, bool useHarmony = false)
 		{
 			// Just return directly if there's no JSX annotation
 			if (!input.Contains("@jsx"))
@@ -131,7 +131,8 @@ namespace React
 			{
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
-					input
+					input,
+                    useHarmony
 				);
 				return output;
 			}
@@ -178,11 +179,11 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>File contents</returns>
-		public string TransformAndSaveJsxFile(string filename)
+		public string TransformAndSaveJsxFile(string filename, bool useHarmony = false)
 		{
 			var outputPath = GetJsxOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);
-			var result = TransformJsxWithHeader(contents);
+			var result = TransformJsxWithHeader(contents, useHarmony: useHarmony);
 			_fileSystem.WriteAsString(outputPath, result);
 			return outputPath;
 		}

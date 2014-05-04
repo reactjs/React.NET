@@ -19,7 +19,7 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsxFile(string filename);
+		string TransformJsxFile(string filename, bool useHarmony = false);
 
 		/// <summary>
 		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
@@ -27,7 +27,7 @@ namespace React
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsx(string input);
+		string TransformJsx(string input, bool useHarmony = false);
 
 		/// <summary>
 		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
@@ -35,7 +35,7 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <returns>File contents</returns>
-		string TransformAndSaveJsxFile(string filename);
+		string TransformAndSaveJsxFile(string filename, bool useHarmony = false);
 
 		/// <summary>
 		/// Returns the path the specified JSX file's compilation will be cached to

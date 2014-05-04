@@ -19,6 +19,6 @@ if (!Object.freeze) {
 	Object.freeze = function() { };
 }
 
-function ReactNET_transform(input) {
-	return global.JSXTransformer.transform(input, { harmony: true }).code;
+function ReactNET_transform(input, harmony) {
+	return global.JSXTransformer.transform(input, { harmony: !!harmony }).code;
 }
