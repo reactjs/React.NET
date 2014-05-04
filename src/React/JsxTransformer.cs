@@ -65,7 +65,7 @@ namespace React
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsxFile(string filename, bool useHarmony = false)
+		public string TransformJsxFile(string filename, bool? useHarmony = null)
 		{
 			var fullPath = _fileSystem.MapPath(filename);
 
@@ -105,7 +105,7 @@ namespace React
 		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		private string TransformJsxWithHeader(string contents, string hash = null, bool useHarmony = false)
+		private string TransformJsxWithHeader(string contents, string hash = null, bool? useHarmony = null)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
@@ -121,7 +121,7 @@ namespace React
 		/// <param name="input">JSX</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsx(string input, bool useHarmony = false)
+		public string TransformJsx(string input, bool? useHarmony = null)
 		{
 			// Just return directly if there's no JSX annotation
 			if (!input.Contains("@jsx"))
@@ -135,7 +135,7 @@ namespace React
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
 					input,
-					useHarmony
+					useHarmony.HasValue ? useHarmony.Value : _environment.SiteConfiguration.UseHarmony
 				);
 				return output;
 			}
@@ -183,7 +183,7 @@ namespace React
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>File contents</returns>
-		public string TransformAndSaveJsxFile(string filename, bool useHarmony = false)
+		public string TransformAndSaveJsxFile(string filename, bool? useHarmony = null)
 		{
 			var outputPath = GetJsxOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);

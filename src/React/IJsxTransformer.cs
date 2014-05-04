@@ -20,7 +20,7 @@ namespace React
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsxFile(string filename, bool useHarmony = false);
+		string TransformJsxFile(string filename, bool? useHarmony = null);
 
 		/// <summary>
 		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
@@ -29,7 +29,7 @@ namespace React
 		/// <param name="input">JSX</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsx(string input, bool useHarmony = false);
+		string TransformJsx(string input, bool? useHarmony = null);
 
 		/// <summary>
 		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
@@ -38,7 +38,7 @@ namespace React
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>File contents</returns>
-		string TransformAndSaveJsxFile(string filename, bool useHarmony = false);
+		string TransformAndSaveJsxFile(string filename, bool? useHarmony = null);
 
 		/// <summary>
 		/// Returns the path the specified JSX file's compilation will be cached to
