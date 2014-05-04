@@ -15,7 +15,7 @@ namespace React.Sample.Mvc4
 	{
 		public static void Configure()
 		{
-			ReactSiteConfiguration.Configuration = new ReactSiteConfiguration()
+			ReactSiteConfiguration.Configuration
 				.AddScript("~/Content/Sample.jsx");
 		}
 	}

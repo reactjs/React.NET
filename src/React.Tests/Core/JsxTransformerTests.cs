@@ -40,7 +40,8 @@ namespace React.Tests.Core
 				_environment.Object,
 				_cache.Object,
 				_fileSystem.Object,
-				_fileCacheHash.Object
+				_fileCacheHash.Object,
+				ReactSiteConfiguration.Configuration
 			);
 		}
 
