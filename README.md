@@ -18,7 +18,7 @@ Quick Start
 ===========
 Install the package
 ```
-Install-Package React.Mvc4
+Install-Package React.Web.Mvc4
 ```
 
 Create JSX files
