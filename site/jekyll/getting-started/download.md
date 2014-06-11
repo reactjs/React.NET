@@ -12,8 +12,8 @@ packages available:
  * [React.Core](https://www.nuget.org/packages/React.Core/) - The core React library. Contains the main functionality of
    React and JSX.  You will normally use this through an integration library
    like React.Mvc4.
- * [React.Mvc4](https://www.nuget.org/packages/React.Mvc4/) - Integration with ASP.NET MVC 4 and 5.
- * [React.Mvc3](https://www.nuget.org/packages/React.Mvc3/) - Integration with ASP.NET MVC 3.
+ * [React.Web.Mvc4](https://www.nuget.org/packages/React.Web.Mvc4/) - Integration with ASP.NET MVC 4 and 5.
+ * [React.Web.Mvc3](https://www.nuget.org/packages/React.Web.Mvc3/) - Integration with ASP.NET MVC 3.
  * [React.JavaScriptEngine.VroomJs](https://www.nuget.org/packages/React.JavaScriptEngine.VroomJs/) - Support for Mono (Linux) via Google's V8 engine
  * [Cassette.React](https://www.nuget.org/packages/Cassette.React/) - Integration with [Cassette](http://getcassette.net/). The recommended way to combine and minify your JavaScript.
  * [System.Web.Optimization.React](https://www.nuget.org/packages/System.Web.Optimization.React/) - Integration with
@@ -24,7 +24,7 @@ These packages can be installed either via the
 or via the Package Manager Console:
 
 ```
-Install-Package React.Mvc4
+Install-Package React.Web.Mvc4
 ```
 
 Development Builds
