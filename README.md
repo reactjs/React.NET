@@ -1,18 +1,25 @@
-[ReactJS.NET](http://reactjs.net/) [![Build status](http://teamcity.codebetter.com/app/rest/builds/buildType:\(id:bt1242\)/statusIcon)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt1242&guest=1)
+[ReactJS.NET](http://reactjs.net/)
 ===========
+
 ReactJS.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and
 [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
 
+[![Build status](http://img.shields.io/teamcity/codebetter/bt1242.svg)]((http://teamcity.codebetter.com/viewType.html?buildTypeId=bt1242&guest=1))&nbsp;
+![Code coverage](http://img.shields.io/teamcity/coverage/bt1242.svg)&nbsp;
+![NuGet downloads](http://img.shields.io/nuget/dt/React.Core.svg)&nbsp;
+![NuGet version](http://img.shields.io/nuget/v/React.Core.svg)
+
 Features
 ========
- * On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/download.html)
+ * On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/usage.html)
  * JSX to JavaScript compilation via popular minification/combination
    libraries:
    * [ASP.NET Bundling and Minification](http://reactjs.net/guides/weboptimizer.html)
-   * Cassette
+   * [Cassette](http://reactjs.net/guides/cassette.html)
  * [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
    to make your initial render super-fast (experimental!)
+ * [Runs on Linux](http://reactjs.net/guides/mono.html) via Mono and V8
 
 Quick Start
 ===========
