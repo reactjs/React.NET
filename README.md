@@ -50,3 +50,15 @@ Now you can use the `HelloWorld` component.
 
 For information on more advanced topics (including precompilation and
 server-side rendering), check out [the documentation](http://reactjs.net/docs)
+
+Building Manually and Contributing
+----------------------------------
+
+When building your own copy of ReactJS.NET (for example, if implementing a new
+feature or fixing a bug), your first build always needs to be done using the 
+build script (`dev-build.bat`) as this generates a few files required by the 
+build (such as `SharedAssemblyVersionInfo.cs`). Once this build is completed, 
+you can open `React.sln` in Visual Studio and compile directly from Visual
+Studio. Please refer to the [documentation page on 
+contributing](http://reactjs.net/dev/contributing.html) for more information on
+contributing to ReactJS.NET.
