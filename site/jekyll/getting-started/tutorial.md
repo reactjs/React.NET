@@ -706,7 +706,7 @@ var CommentForm = React.createClass({
 
 Now that the callbacks are in place, all we have to do is submit to the server and refresh the list:
 
-```javascript{12-21}
+```javascript{12-21,44}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
@@ -719,8 +719,8 @@ var CommentBox = React.createClass({
   },
   handleCommentSubmit: function(comment) {
     var data = new FormData();
-    data.append('Author', comment.Author);
-    data.append('Text', comment.Text);
+    data.append('Author', comment.author);
+    data.append('Text', comment.text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
@@ -748,6 +748,11 @@ var CommentBox = React.createClass({
     );
   }
 });
+
+React.renderComponent(
+  <CommentBox url="/comments" submitUrl="/comments/new" pollInterval={2000} />,
+  document.getElementById('content')
+);
 ```
 
 ## Congrats!
