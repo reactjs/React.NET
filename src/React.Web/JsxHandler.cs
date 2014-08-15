@@ -58,6 +58,8 @@ namespace React.Web
 
 			_response.ContentType = "text/javascript";
 			_response.Write(result);
+
+            _environment.Dispose();
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace React
 	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is 
 	/// not shared.
 	/// </summary>
-	public interface IReactEnvironment
+	public interface IReactEnvironment : IDisposable
 	{
 		/// <summary>
 		/// Determines if this JavaScript engine supports the JSX transformer.
