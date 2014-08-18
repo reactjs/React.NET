@@ -15,7 +15,7 @@ namespace React
 	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is 
 	/// not shared.
 	/// </summary>
-	public interface IReactEnvironment
+	public interface IReactEnvironment : IDisposable
 	{
 		/// <summary>
 		/// Determines if this JavaScript engine supports the JSX transformer.
@@ -69,6 +69,12 @@ namespace React
 		/// <param name="props">Props to use</param>
 		/// <returns>The component</returns>
 		IReactComponent CreateComponent<T>(string componentName, T props);
+
+		/// <summary>
+		/// The current site configuration.
+		/// </summary>
+		/// <returns>The current site configuration.</returns>
+		IReactSiteConfiguration SiteConfiguration { get; }
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will 

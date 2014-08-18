@@ -115,6 +115,18 @@ namespace React
 		}
 
 		/// <summary>
+		/// The current site configuration.
+		/// </summary>
+		/// <returns>The current site configuration.</returns>
+		public IReactSiteConfiguration SiteConfiguration
+		{
+			get
+			{
+				return _config;
+			}
+		}
+
+		/// <summary>
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
 		public IJsxTransformer JsxTransformer

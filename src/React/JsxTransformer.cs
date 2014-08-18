@@ -43,10 +43,6 @@ namespace React
 		/// Hash algorithm for file-based cache
 		/// </summary>
 		private readonly IFileCacheHash _fileCacheHash;
-		/// <summary>
-		/// Site-wide configuration
-		/// </summary>
-		private readonly IReactSiteConfiguration _config;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JsxTransformer"/> class.
@@ -55,14 +51,12 @@ namespace React
 		/// <param name="cache">The cache to use for JSX compilation</param>
 		/// <param name="fileSystem">File system wrapper</param>
 		/// <param name="fileCacheHash">Hash algorithm for file-based cache</param>
-		/// <param name="siteConfig">Site-wide configuration</param>
-		public JsxTransformer(IReactEnvironment environment, ICache cache, IFileSystem fileSystem, IFileCacheHash fileCacheHash, IReactSiteConfiguration siteConfig)
+		public JsxTransformer(IReactEnvironment environment, ICache cache, IFileSystem fileSystem, IFileCacheHash fileCacheHash)
 		{
 			_environment = environment;
 			_cache = cache;
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
-			_config = siteConfig;
 		}
 
 		/// <summary>
@@ -141,7 +135,7 @@ namespace React
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
 					input,
-					useHarmony.HasValue ? useHarmony.Value : _config.UseHarmony
+					useHarmony.HasValue ? useHarmony.Value : _environment.SiteConfiguration.UseHarmony
 				);
 				return output;
 			}
