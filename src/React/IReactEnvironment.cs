@@ -71,6 +71,12 @@ namespace React
 		IReactComponent CreateComponent<T>(string componentName, T props);
 
 		/// <summary>
+		/// The current site configuration.
+		/// </summary>
+		/// <returns>The current site configuration.</returns>
+		IReactSiteConfiguration SiteConfiguration { get; }
+
+		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will 
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
