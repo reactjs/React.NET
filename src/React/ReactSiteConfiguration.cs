@@ -17,23 +17,20 @@ namespace React
 	/// </summary>
 	public class ReactSiteConfiguration : IReactSiteConfiguration
 	{
-		private static IReactSiteConfiguration _instance = new ReactSiteConfiguration();
+		/// <summary>
+		/// Gets or sets the site-side configuration
+		/// </summary>
+		public static IReactSiteConfiguration Configuration { get; set; }
+
+		static ReactSiteConfiguration()
+		{
+			Configuration = new ReactSiteConfiguration();
+		}
 
 		/// <summary>
 		/// All the scripts that have been added to this configuration
 		/// </summary>
 		private readonly IList<string> _scriptFiles = new List<string>();
-
-		/// <summary>
-		/// Gets or sets the site-side configuration
-		/// </summary>
-		public static IReactSiteConfiguration Configuration
-		{
-			get
-			{
-				return _instance;
-			}
-		}
 
 		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
