@@ -2,6 +2,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="TransformJsx">    
 	<UsingTask AssemblyFile="..\..\bin\$(Configuration)\React.MSBuild\React.MSBuild.dll" TaskName="TransformJsx" />
 	<Target Name="TransformJsx">
-		<TransformJsx SourceDir="$(MSBuildProjectDirectory)" />
+		<TransformJsx SourceDir="$(MSBuildProjectDirectory)" UseHarmony="true" />
 	</Target>
 </Project>

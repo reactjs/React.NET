@@ -14,7 +14,7 @@ var CommentsBox = React.createClass({
 		initialComments: React.PropTypes.array.isRequired,
 		commentsPerPage: React.PropTypes.number.isRequired
 	},
-	getInitialState: function() {
+	getInitialState() {
 		return {
 			comments: this.props.initialComments,
 			page: 1,
@@ -22,7 +22,7 @@ var CommentsBox = React.createClass({
 			loadingMore: false
 		};
 	},
-	loadMoreClicked: function(evt) {
+	loadMoreClicked(evt) {
 		var nextPage = this.state.page + 1;
 		this.setState({
 			page: nextPage,
@@ -43,7 +43,7 @@ var CommentsBox = React.createClass({
 		xhr.send();
 		return false;
 	},
-	render: function() {
+	render() {
 		var commentNodes = this.state.comments.map(function (comment) {
 			return <Comment author={comment.Author}>{comment.Text}</Comment>;
 		});
@@ -58,7 +58,7 @@ var CommentsBox = React.createClass({
 			</div>
 		);
 	},
-	renderMoreLink: function() {
+	renderMoreLink() {
 		if (this.state.loadingMore) {
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
@@ -77,7 +77,7 @@ var Comment = React.createClass({
 	propTypes: {
 		author: React.PropTypes.object.isRequired
 	},
-	render: function() {
+	render() {
 		return (
 			<li>
 				<Avatar author={this.props.author} />
@@ -92,7 +92,7 @@ var Avatar = React.createClass({
 	propTypes: {
 		author: React.PropTypes.object.isRequired	
 	},
-	render: function() {
+	render() {
 		return (
 			<img
 				src={this.getPhotoUrl(this.props.author)}
@@ -103,7 +103,7 @@ var Avatar = React.createClass({
 			/>
 		);
 	},
-	getPhotoUrl: function(author) {
+	getPhotoUrl(author) {
 		return 'http://graph.facebook.com/' + author.Facebook + '/picture';
 	}
 });

@@ -63,5 +63,14 @@ namespace React
 		/// </summary>
 		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
 		public bool UseHarmony { get; set; }
+
+		/// <summary>
+		/// Specifies whether ES6 (harmony) syntax should be transformed
+		/// </summary>
+		public IReactSiteConfiguration SetUseHarmony(bool useHarmony)
+		{
+			UseHarmony = useHarmony;
+			return this;
+		}
 	}
 }
