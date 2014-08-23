@@ -1,7 +1,7 @@
 /**
- * JSXTransformer v0.11.0-alpha
+ * JSXTransformer v0.11.1
  */
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.JSXTransformer=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.JSXTransformer=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -57,24 +57,19 @@ function Buffer (subject, encoding, noZero) {
 
   var type = typeof subject
 
-  // Workaround: node's base64 implementation allows for non-padded strings
-  // while base64-js does not.
-  if (encoding === 'base64' && type === 'string') {
-    subject = stringtrim(subject)
-    while (subject.length % 4 !== 0) {
-      subject = subject + '='
-    }
-  }
-
   // Find the length
   var length
   if (type === 'number')
-    length = coerce(subject)
-  else if (type === 'string')
+    length = subject > 0 ? subject >>> 0 : 0
+  else if (type === 'string') {
+    if (encoding === 'base64')
+      subject = base64clean(subject)
     length = Buffer.byteLength(subject, encoding)
-  else if (type === 'object')
-    length = coerce(subject.length) // assume that object is array-like
-  else
+  } else if (type === 'object' && subject !== null) { // assume object is array-like
+    if (subject.type === 'Buffer' && Array.isArray(subject.data))
+      subject = subject.data
+    length = +subject.length > 0 ? Math.floor(+subject.length) : 0
+  } else
     throw new Error('First argument needs to be a number, array or string.')
 
   var buf
@@ -94,11 +89,12 @@ function Buffer (subject, encoding, noZero) {
     buf._set(subject)
   } else if (isArrayish(subject)) {
     // Treat array-ish objects as a byte array
-    for (i = 0; i < length; i++) {
-      if (Buffer.isBuffer(subject))
+    if (Buffer.isBuffer(subject)) {
+      for (i = 0; i < length; i++)
         buf[i] = subject.readUInt8(i)
-      else
-        buf[i] = subject[i]
+    } else {
+      for (i = 0; i < length; i++)
+        buf[i] = ((subject[i] % 256) + 256) % 256
     }
   } else if (type === 'string') {
     buf.write(subject, 0, encoding)
@@ -134,12 +130,12 @@ Buffer.isEncoding = function (encoding) {
 }
 
 Buffer.isBuffer = function (b) {
-  return !!(b !== null && b !== undefined && b._isBuffer)
+  return !!(b != null && b._isBuffer)
 }
 
 Buffer.byteLength = function (str, encoding) {
   var ret
-  str = str + ''
+  str = str.toString()
   switch (encoding || 'utf8') {
     case 'hex':
       ret = str.length / 2
@@ -169,8 +165,7 @@ Buffer.byteLength = function (str, encoding) {
 }
 
 Buffer.concat = function (list, totalLength) {
-  assert(isArray(list), 'Usage: Buffer.concat(list, [totalLength])\n' +
-      'list should be an Array.')
+  assert(isArray(list), 'Usage: Buffer.concat(list[, length])')
 
   if (list.length === 0) {
     return new Buffer(0)
@@ -179,7 +174,7 @@ Buffer.concat = function (list, totalLength) {
   }
 
   var i
-  if (typeof totalLength !== 'number') {
+  if (totalLength === undefined) {
     totalLength = 0
     for (i = 0; i < list.length; i++) {
       totalLength += list[i].length
@@ -196,10 +191,28 @@ Buffer.concat = function (list, totalLength) {
   return buf
 }
 
+Buffer.compare = function (a, b) {
+  assert(Buffer.isBuffer(a) && Buffer.isBuffer(b), 'Arguments must be Buffers')
+  var x = a.length
+  var y = b.length
+  for (var i = 0, len = Math.min(x, y); i < len && a[i] === b[i]; i++) {}
+  if (i !== len) {
+    x = a[i]
+    y = b[i]
+  }
+  if (x < y) {
+    return -1
+  }
+  if (y < x) {
+    return 1
+  }
+  return 0
+}
+
 // BUFFER INSTANCE METHODS
 // =======================
 
-function _hexWrite (buf, string, offset, length) {
+function hexWrite (buf, string, offset, length) {
   offset = Number(offset) || 0
   var remaining = buf.length - offset
   if (!length) {
@@ -223,35 +236,30 @@ function _hexWrite (buf, string, offset, length) {
     assert(!isNaN(byte), 'Invalid hex string')
     buf[offset + i] = byte
   }
-  Buffer._charsWritten = i * 2
   return i
 }
 
-function _utf8Write (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(utf8ToBytes(string), buf, offset, length)
+function utf8Write (buf, string, offset, length) {
+  var charsWritten = blitBuffer(utf8ToBytes(string), buf, offset, length)
   return charsWritten
 }
 
-function _asciiWrite (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(asciiToBytes(string), buf, offset, length)
+function asciiWrite (buf, string, offset, length) {
+  var charsWritten = blitBuffer(asciiToBytes(string), buf, offset, length)
   return charsWritten
 }
 
-function _binaryWrite (buf, string, offset, length) {
-  return _asciiWrite(buf, string, offset, length)
+function binaryWrite (buf, string, offset, length) {
+  return asciiWrite(buf, string, offset, length)
 }
 
-function _base64Write (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(base64ToBytes(string), buf, offset, length)
+function base64Write (buf, string, offset, length) {
+  var charsWritten = blitBuffer(base64ToBytes(string), buf, offset, length)
   return charsWritten
 }
 
-function _utf16leWrite (buf, string, offset, length) {
-  var charsWritten = Buffer._charsWritten =
-    blitBuffer(utf16leToBytes(string), buf, offset, length)
+function utf16leWrite (buf, string, offset, length) {
+  var charsWritten = blitBuffer(utf16leToBytes(string), buf, offset, length)
   return charsWritten
 }
 
@@ -285,26 +293,26 @@ Buffer.prototype.write = function (string, offset, length, encoding) {
   var ret
   switch (encoding) {
     case 'hex':
-      ret = _hexWrite(this, string, offset, length)
+      ret = hexWrite(this, string, offset, length)
       break
     case 'utf8':
     case 'utf-8':
-      ret = _utf8Write(this, string, offset, length)
+      ret = utf8Write(this, string, offset, length)
       break
     case 'ascii':
-      ret = _asciiWrite(this, string, offset, length)
+      ret = asciiWrite(this, string, offset, length)
       break
     case 'binary':
-      ret = _binaryWrite(this, string, offset, length)
+      ret = binaryWrite(this, string, offset, length)
       break
     case 'base64':
-      ret = _base64Write(this, string, offset, length)
+      ret = base64Write(this, string, offset, length)
       break
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      ret = _utf16leWrite(this, string, offset, length)
+      ret = utf16leWrite(this, string, offset, length)
       break
     default:
       throw new Error('Unknown encoding')
@@ -317,9 +325,7 @@ Buffer.prototype.toString = function (encoding, start, end) {
 
   encoding = String(encoding || 'utf8').toLowerCase()
   start = Number(start) || 0
-  end = (end !== undefined)
-    ? Number(end)
-    : end = self.length
+  end = (end === undefined) ? self.length : Number(end)
 
   // Fastpath empty strings
   if (end === start)
@@ -328,26 +334,26 @@ Buffer.prototype.toString = function (encoding, start, end) {
   var ret
   switch (encoding) {
     case 'hex':
-      ret = _hexSlice(self, start, end)
+      ret = hexSlice(self, start, end)
       break
     case 'utf8':
     case 'utf-8':
-      ret = _utf8Slice(self, start, end)
+      ret = utf8Slice(self, start, end)
       break
     case 'ascii':
-      ret = _asciiSlice(self, start, end)
+      ret = asciiSlice(self, start, end)
       break
     case 'binary':
-      ret = _binarySlice(self, start, end)
+      ret = binarySlice(self, start, end)
       break
     case 'base64':
-      ret = _base64Slice(self, start, end)
+      ret = base64Slice(self, start, end)
       break
     case 'ucs2':
     case 'ucs-2':
     case 'utf16le':
     case 'utf-16le':
-      ret = _utf16leSlice(self, start, end)
+      ret = utf16leSlice(self, start, end)
       break
     default:
       throw new Error('Unknown encoding')
@@ -360,6 +366,16 @@ Buffer.prototype.toJSON = function () {
     type: 'Buffer',
     data: Array.prototype.slice.call(this._arr || this, 0)
   }
+}
+
+Buffer.prototype.equals = function (b) {
+  assert(Buffer.isBuffer(b), 'Argument must be a Buffer')
+  return Buffer.compare(this, b) === 0
+}
+
+Buffer.prototype.compare = function (b) {
+  assert(Buffer.isBuffer(b), 'Argument must be a Buffer')
+  return Buffer.compare(this, b)
 }
 
 // copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
@@ -390,14 +406,15 @@ Buffer.prototype.copy = function (target, target_start, start, end) {
   var len = end - start
 
   if (len < 100 || !Buffer._useTypedArrays) {
-    for (var i = 0; i < len; i++)
+    for (var i = 0; i < len; i++) {
       target[i + target_start] = this[i + start]
+    }
   } else {
     target._set(this.subarray(start, start + len), target_start)
   }
 }
 
-function _base64Slice (buf, start, end) {
+function base64Slice (buf, start, end) {
   if (start === 0 && end === buf.length) {
     return base64.fromByteArray(buf)
   } else {
@@ -405,7 +422,7 @@ function _base64Slice (buf, start, end) {
   }
 }
 
-function _utf8Slice (buf, start, end) {
+function utf8Slice (buf, start, end) {
   var res = ''
   var tmp = ''
   end = Math.min(buf.length, end)
@@ -422,20 +439,21 @@ function _utf8Slice (buf, start, end) {
   return res + decodeUtf8Char(tmp)
 }
 
-function _asciiSlice (buf, start, end) {
+function asciiSlice (buf, start, end) {
   var ret = ''
   end = Math.min(buf.length, end)
 
-  for (var i = start; i < end; i++)
+  for (var i = start; i < end; i++) {
     ret += String.fromCharCode(buf[i])
+  }
   return ret
 }
 
-function _binarySlice (buf, start, end) {
-  return _asciiSlice(buf, start, end)
+function binarySlice (buf, start, end) {
+  return asciiSlice(buf, start, end)
 }
 
-function _hexSlice (buf, start, end) {
+function hexSlice (buf, start, end) {
   var len = buf.length
 
   if (!start || start < 0) start = 0
@@ -448,19 +466,38 @@ function _hexSlice (buf, start, end) {
   return out
 }
 
-function _utf16leSlice (buf, start, end) {
+function utf16leSlice (buf, start, end) {
   var bytes = buf.slice(start, end)
   var res = ''
   for (var i = 0; i < bytes.length; i += 2) {
-    res += String.fromCharCode(bytes[i] + bytes[i+1] * 256)
+    res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256)
   }
   return res
 }
 
 Buffer.prototype.slice = function (start, end) {
   var len = this.length
-  start = clamp(start, len, 0)
-  end = clamp(end, len, len)
+  start = ~~start
+  end = end === undefined ? len : ~~end
+
+  if (start < 0) {
+    start += len;
+    if (start < 0)
+      start = 0
+  } else if (start > len) {
+    start = len
+  }
+
+  if (end < 0) {
+    end += len
+    if (end < 0)
+      end = 0
+  } else if (end > len) {
+    end = len
+  }
+
+  if (end < start)
+    end = start
 
   if (Buffer._useTypedArrays) {
     return Buffer._augment(this.subarray(start, end))
@@ -498,7 +535,7 @@ Buffer.prototype.readUInt8 = function (offset, noAssert) {
   return this[offset]
 }
 
-function _readUInt16 (buf, offset, littleEndian, noAssert) {
+function readUInt16 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -523,14 +560,14 @@ function _readUInt16 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readUInt16LE = function (offset, noAssert) {
-  return _readUInt16(this, offset, true, noAssert)
+  return readUInt16(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readUInt16BE = function (offset, noAssert) {
-  return _readUInt16(this, offset, false, noAssert)
+  return readUInt16(this, offset, false, noAssert)
 }
 
-function _readUInt32 (buf, offset, littleEndian, noAssert) {
+function readUInt32 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -563,11 +600,11 @@ function _readUInt32 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readUInt32LE = function (offset, noAssert) {
-  return _readUInt32(this, offset, true, noAssert)
+  return readUInt32(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readUInt32BE = function (offset, noAssert) {
-  return _readUInt32(this, offset, false, noAssert)
+  return readUInt32(this, offset, false, noAssert)
 }
 
 Buffer.prototype.readInt8 = function (offset, noAssert) {
@@ -587,7 +624,7 @@ Buffer.prototype.readInt8 = function (offset, noAssert) {
     return this[offset]
 }
 
-function _readInt16 (buf, offset, littleEndian, noAssert) {
+function readInt16 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -598,7 +635,7 @@ function _readInt16 (buf, offset, littleEndian, noAssert) {
   if (offset >= len)
     return
 
-  var val = _readUInt16(buf, offset, littleEndian, true)
+  var val = readUInt16(buf, offset, littleEndian, true)
   var neg = val & 0x8000
   if (neg)
     return (0xffff - val + 1) * -1
@@ -607,14 +644,14 @@ function _readInt16 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readInt16LE = function (offset, noAssert) {
-  return _readInt16(this, offset, true, noAssert)
+  return readInt16(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readInt16BE = function (offset, noAssert) {
-  return _readInt16(this, offset, false, noAssert)
+  return readInt16(this, offset, false, noAssert)
 }
 
-function _readInt32 (buf, offset, littleEndian, noAssert) {
+function readInt32 (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset !== undefined && offset !== null, 'missing offset')
@@ -625,7 +662,7 @@ function _readInt32 (buf, offset, littleEndian, noAssert) {
   if (offset >= len)
     return
 
-  var val = _readUInt32(buf, offset, littleEndian, true)
+  var val = readUInt32(buf, offset, littleEndian, true)
   var neg = val & 0x80000000
   if (neg)
     return (0xffffffff - val + 1) * -1
@@ -634,14 +671,14 @@ function _readInt32 (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readInt32LE = function (offset, noAssert) {
-  return _readInt32(this, offset, true, noAssert)
+  return readInt32(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readInt32BE = function (offset, noAssert) {
-  return _readInt32(this, offset, false, noAssert)
+  return readInt32(this, offset, false, noAssert)
 }
 
-function _readFloat (buf, offset, littleEndian, noAssert) {
+function readFloat (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset + 3 < buf.length, 'Trying to read beyond buffer length')
@@ -651,14 +688,14 @@ function _readFloat (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readFloatLE = function (offset, noAssert) {
-  return _readFloat(this, offset, true, noAssert)
+  return readFloat(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readFloatBE = function (offset, noAssert) {
-  return _readFloat(this, offset, false, noAssert)
+  return readFloat(this, offset, false, noAssert)
 }
 
-function _readDouble (buf, offset, littleEndian, noAssert) {
+function readDouble (buf, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
     assert(offset + 7 < buf.length, 'Trying to read beyond buffer length')
@@ -668,11 +705,11 @@ function _readDouble (buf, offset, littleEndian, noAssert) {
 }
 
 Buffer.prototype.readDoubleLE = function (offset, noAssert) {
-  return _readDouble(this, offset, true, noAssert)
+  return readDouble(this, offset, true, noAssert)
 }
 
 Buffer.prototype.readDoubleBE = function (offset, noAssert) {
-  return _readDouble(this, offset, false, noAssert)
+  return readDouble(this, offset, false, noAssert)
 }
 
 Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
@@ -686,9 +723,10 @@ Buffer.prototype.writeUInt8 = function (value, offset, noAssert) {
   if (offset >= this.length) return
 
   this[offset] = value
+  return offset + 1
 }
 
-function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
+function writeUInt16 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -706,17 +744,18 @@ function _writeUInt16 (buf, value, offset, littleEndian, noAssert) {
         (value & (0xff << (8 * (littleEndian ? i : 1 - i)))) >>>
             (littleEndian ? i : 1 - i) * 8
   }
+  return offset + 2
 }
 
 Buffer.prototype.writeUInt16LE = function (value, offset, noAssert) {
-  _writeUInt16(this, value, offset, true, noAssert)
+  return writeUInt16(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeUInt16BE = function (value, offset, noAssert) {
-  _writeUInt16(this, value, offset, false, noAssert)
+  return writeUInt16(this, value, offset, false, noAssert)
 }
 
-function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
+function writeUInt32 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -733,14 +772,15 @@ function _writeUInt32 (buf, value, offset, littleEndian, noAssert) {
     buf[offset + i] =
         (value >>> (littleEndian ? i : 3 - i) * 8) & 0xff
   }
+  return offset + 4
 }
 
 Buffer.prototype.writeUInt32LE = function (value, offset, noAssert) {
-  _writeUInt32(this, value, offset, true, noAssert)
+  return writeUInt32(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeUInt32BE = function (value, offset, noAssert) {
-  _writeUInt32(this, value, offset, false, noAssert)
+  return writeUInt32(this, value, offset, false, noAssert)
 }
 
 Buffer.prototype.writeInt8 = function (value, offset, noAssert) {
@@ -758,9 +798,10 @@ Buffer.prototype.writeInt8 = function (value, offset, noAssert) {
     this.writeUInt8(value, offset, noAssert)
   else
     this.writeUInt8(0xff + value + 1, offset, noAssert)
+  return offset + 1
 }
 
-function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
+function writeInt16 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -774,20 +815,21 @@ function _writeInt16 (buf, value, offset, littleEndian, noAssert) {
     return
 
   if (value >= 0)
-    _writeUInt16(buf, value, offset, littleEndian, noAssert)
+    writeUInt16(buf, value, offset, littleEndian, noAssert)
   else
-    _writeUInt16(buf, 0xffff + value + 1, offset, littleEndian, noAssert)
+    writeUInt16(buf, 0xffff + value + 1, offset, littleEndian, noAssert)
+  return offset + 2
 }
 
 Buffer.prototype.writeInt16LE = function (value, offset, noAssert) {
-  _writeInt16(this, value, offset, true, noAssert)
+  return writeInt16(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeInt16BE = function (value, offset, noAssert) {
-  _writeInt16(this, value, offset, false, noAssert)
+  return writeInt16(this, value, offset, false, noAssert)
 }
 
-function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
+function writeInt32 (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -801,20 +843,21 @@ function _writeInt32 (buf, value, offset, littleEndian, noAssert) {
     return
 
   if (value >= 0)
-    _writeUInt32(buf, value, offset, littleEndian, noAssert)
+    writeUInt32(buf, value, offset, littleEndian, noAssert)
   else
-    _writeUInt32(buf, 0xffffffff + value + 1, offset, littleEndian, noAssert)
+    writeUInt32(buf, 0xffffffff + value + 1, offset, littleEndian, noAssert)
+  return offset + 4
 }
 
 Buffer.prototype.writeInt32LE = function (value, offset, noAssert) {
-  _writeInt32(this, value, offset, true, noAssert)
+  return writeInt32(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeInt32BE = function (value, offset, noAssert) {
-  _writeInt32(this, value, offset, false, noAssert)
+  return writeInt32(this, value, offset, false, noAssert)
 }
 
-function _writeFloat (buf, value, offset, littleEndian, noAssert) {
+function writeFloat (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -828,17 +871,18 @@ function _writeFloat (buf, value, offset, littleEndian, noAssert) {
     return
 
   ieee754.write(buf, value, offset, littleEndian, 23, 4)
+  return offset + 4
 }
 
 Buffer.prototype.writeFloatLE = function (value, offset, noAssert) {
-  _writeFloat(this, value, offset, true, noAssert)
+  return writeFloat(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeFloatBE = function (value, offset, noAssert) {
-  _writeFloat(this, value, offset, false, noAssert)
+  return writeFloat(this, value, offset, false, noAssert)
 }
 
-function _writeDouble (buf, value, offset, littleEndian, noAssert) {
+function writeDouble (buf, value, offset, littleEndian, noAssert) {
   if (!noAssert) {
     assert(value !== undefined && value !== null, 'missing value')
     assert(typeof littleEndian === 'boolean', 'missing or invalid endian')
@@ -853,14 +897,15 @@ function _writeDouble (buf, value, offset, littleEndian, noAssert) {
     return
 
   ieee754.write(buf, value, offset, littleEndian, 52, 8)
+  return offset + 8
 }
 
 Buffer.prototype.writeDoubleLE = function (value, offset, noAssert) {
-  _writeDouble(this, value, offset, true, noAssert)
+  return writeDouble(this, value, offset, true, noAssert)
 }
 
 Buffer.prototype.writeDoubleBE = function (value, offset, noAssert) {
-  _writeDouble(this, value, offset, false, noAssert)
+  return writeDouble(this, value, offset, false, noAssert)
 }
 
 // fill(value, start=0, end=buffer.length)
@@ -869,11 +914,6 @@ Buffer.prototype.fill = function (value, start, end) {
   if (!start) start = 0
   if (!end) end = this.length
 
-  if (typeof value === 'string') {
-    value = value.charCodeAt(0)
-  }
-
-  assert(typeof value === 'number' && !isNaN(value), 'value is not a number')
   assert(end >= start, 'end < start')
 
   // Fill 0 bytes; we're done
@@ -883,9 +923,20 @@ Buffer.prototype.fill = function (value, start, end) {
   assert(start >= 0 && start < this.length, 'start out of bounds')
   assert(end >= 0 && end <= this.length, 'end out of bounds')
 
-  for (var i = start; i < end; i++) {
-    this[i] = value
+  var i
+  if (typeof value === 'number') {
+    for (i = start; i < end; i++) {
+      this[i] = value
+    }
+  } else {
+    var bytes = utf8ToBytes(value.toString())
+    var len = bytes.length
+    for (i = start; i < end; i++) {
+      this[i] = bytes[i % len]
+    }
   }
+
+  return this
 }
 
 Buffer.prototype.inspect = function () {
@@ -911,8 +962,9 @@ Buffer.prototype.toArrayBuffer = function () {
       return (new Buffer(this)).buffer
     } else {
       var buf = new Uint8Array(this.length)
-      for (var i = 0, len = buf.length; i < len; i += 1)
+      for (var i = 0, len = buf.length; i < len; i += 1) {
         buf[i] = this[i]
+      }
       return buf.buffer
     }
   } else {
@@ -922,11 +974,6 @@ Buffer.prototype.toArrayBuffer = function () {
 
 // HELPER FUNCTIONS
 // ================
-
-function stringtrim (str) {
-  if (str.trim) return str.trim()
-  return str.replace(/^\s+|\s+$/g, '')
-}
 
 var BP = Buffer.prototype
 
@@ -948,6 +995,8 @@ Buffer._augment = function (arr) {
   arr.toString = BP.toString
   arr.toLocaleString = BP.toString
   arr.toJSON = BP.toJSON
+  arr.equals = BP.equals
+  arr.compare = BP.compare
   arr.copy = BP.copy
   arr.slice = BP.slice
   arr.readUInt8 = BP.readUInt8
@@ -985,23 +1034,21 @@ Buffer._augment = function (arr) {
   return arr
 }
 
-// slice(start, end)
-function clamp (index, len, defaultValue) {
-  if (typeof index !== 'number') return defaultValue
-  index = ~~index;  // Coerce to integer.
-  if (index >= len) return len
-  if (index >= 0) return index
-  index += len
-  if (index >= 0) return index
-  return 0
+var INVALID_BASE64_RE = /[^+\/0-9A-z]/g
+
+function base64clean (str) {
+  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+  str = stringtrim(str).replace(INVALID_BASE64_RE, '')
+  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+  while (str.length % 4 !== 0) {
+    str = str + '='
+  }
+  return str
 }
 
-function coerce (length) {
-  // Coerce length to a number (possibly NaN), round up
-  // in case it's fractional (e.g. 123.456) then do a
-  // double negate to coerce a NaN to 0. Easy, right?
-  length = ~~Math.ceil(+length)
-  return length < 0 ? 0 : length
+function stringtrim (str) {
+  if (str.trim) return str.trim()
+  return str.replace(/^\s+|\s+$/g, '')
 }
 
 function isArray (subject) {
@@ -1025,14 +1072,15 @@ function utf8ToBytes (str) {
   var byteArray = []
   for (var i = 0; i < str.length; i++) {
     var b = str.charCodeAt(i)
-    if (b <= 0x7F)
-      byteArray.push(str.charCodeAt(i))
-    else {
+    if (b <= 0x7F) {
+      byteArray.push(b)
+    } else {
       var start = i
       if (b >= 0xD800 && b <= 0xDFFF) i++
       var h = encodeURIComponent(str.slice(start, i+1)).substr(1).split('%')
-      for (var j = 0; j < h.length; j++)
+      for (var j = 0; j < h.length; j++) {
         byteArray.push(parseInt(h[j], 16))
+      }
     }
   }
   return byteArray
@@ -1066,7 +1114,6 @@ function base64ToBytes (str) {
 }
 
 function blitBuffer (src, dst, offset, length) {
-  var pos
   for (var i = 0; i < length; i++) {
     if ((i + offset >= dst.length) || (i >= src.length))
       break
@@ -1753,6 +1800,7 @@ parseYieldExpression: true
         ClassBody: 'ClassBody',
         ClassDeclaration: 'ClassDeclaration',
         ClassExpression: 'ClassExpression',
+        ClassProperty: 'ClassProperty',
         ComprehensionBlock: 'ComprehensionBlock',
         ComprehensionExpression: 'ComprehensionExpression',
         ConditionalExpression: 'ConditionalExpression',
@@ -1782,11 +1830,16 @@ parseYieldExpression: true
         NewExpression: 'NewExpression',
         ObjectExpression: 'ObjectExpression',
         ObjectPattern: 'ObjectPattern',
+        ObjectTypeAnnotation: 'ObjectTypeAnnotation',
+        OptionalParameter: 'OptionalParameter',
+        ParametricTypeAnnotation: 'ParametricTypeAnnotation',
+        ParametricallyTypedIdentifier: 'ParametricallyTypedIdentifier',
         Program: 'Program',
         Property: 'Property',
         ReturnStatement: 'ReturnStatement',
         SequenceExpression: 'SequenceExpression',
         SpreadElement: 'SpreadElement',
+        SpreadProperty: 'SpreadProperty',
         SwitchCase: 'SwitchCase',
         SwitchStatement: 'SwitchStatement',
         TaggedTemplateExpression: 'TaggedTemplateExpression',
@@ -1801,6 +1854,7 @@ parseYieldExpression: true
         UpdateExpression: 'UpdateExpression',
         VariableDeclaration: 'VariableDeclaration',
         VariableDeclarator: 'VariableDeclarator',
+        VoidTypeAnnotation: 'VoidTypeAnnotation',
         WhileStatement: 'WhileStatement',
         WithStatement: 'WithStatement',
         XJSIdentifier: 'XJSIdentifier',
@@ -1812,6 +1866,7 @@ parseYieldExpression: true
         XJSClosingElement: 'XJSClosingElement',
         XJSOpeningElement: 'XJSOpeningElement',
         XJSAttribute: 'XJSAttribute',
+        XJSSpreadAttribute: 'XJSSpreadAttribute',
         XJSText: 'XJSText',
         YieldExpression: 'YieldExpression'
     };
@@ -1860,6 +1915,7 @@ parseYieldExpression: true
         ParameterAfterRestParameter: 'Rest parameter must be final parameter of an argument list',
         DefaultRestParameter: 'Rest parameter can not have a default value',
         ElementAfterSpreadElement: 'Spread must be the final element of an element list',
+        PropertyAfterSpreadProperty: 'A rest property must be the final property of an object literal',
         ObjectPatternAsRestParameter: 'Invalid rest parameter',
         ObjectPatternAsSpread: 'Invalid spread argument',
         StrictFunctionName:  'Function name may not be eval or arguments in strict mode',
@@ -3342,7 +3398,7 @@ parseYieldExpression: true
         },
 
         createFunctionDeclaration: function (id, params, defaults, body, rest, generator, expression,
-                                             returnType) {
+                                             returnType, parametricType) {
             return {
                 type: Syntax.FunctionDeclaration,
                 id: id,
@@ -3352,12 +3408,13 @@ parseYieldExpression: true
                 rest: rest,
                 generator: generator,
                 expression: expression,
-                returnType: returnType
+                returnType: returnType,
+                parametricType: parametricType
             };
         },
 
         createFunctionExpression: function (id, params, defaults, body, rest, generator, expression,
-                                            returnType) {
+                                            returnType, parametricType) {
             return {
                 type: Syntax.FunctionExpression,
                 id: id,
@@ -3367,7 +3424,8 @@ parseYieldExpression: true
                 rest: rest,
                 generator: generator,
                 expression: expression,
-                returnType: returnType
+                returnType: returnType,
+                parametricType: parametricType
             };
         },
 
@@ -3384,21 +3442,49 @@ parseYieldExpression: true
             };
         },
 
-        createTypeAnnotation: function (typeIdentifier, paramTypes, returnType, nullable) {
+        createTypeAnnotation: function (typeIdentifier, parametricType, params, returnType, nullable) {
             return {
                 type: Syntax.TypeAnnotation,
                 id: typeIdentifier,
-                paramTypes: paramTypes,
+                parametricType: parametricType,
+                params: params,
                 returnType: returnType,
                 nullable: nullable
             };
         },
 
-        createTypeAnnotatedIdentifier: function (identifier, annotation) {
+        createParametricTypeAnnotation: function (parametricTypes) {
+            return {
+                type: Syntax.ParametricTypeAnnotation,
+                params: parametricTypes
+            };
+        },
+
+        createVoidTypeAnnotation: function () {
+            return {
+                type: Syntax.VoidTypeAnnotation
+            };
+        },
+
+        createObjectTypeAnnotation: function (properties) {
+            return {
+                type: Syntax.ObjectTypeAnnotation,
+                properties: properties
+            };
+        },
+
+        createTypeAnnotatedIdentifier: function (identifier, annotation, isOptionalParam) {
             return {
                 type: Syntax.TypeAnnotatedIdentifier,
                 id: identifier,
                 annotation: annotation
+            };
+        },
+
+        createOptionalParameter: function (identifier) {
+            return {
+                type: Syntax.OptionalParameter,
+                id: identifier
             };
         },
 
@@ -3407,6 +3493,13 @@ parseYieldExpression: true
                 type: Syntax.XJSAttribute,
                 name: name,
                 value: value
+            };
+        },
+
+        createXJSSpreadAttribute: function (argument) {
+            return {
+                type: Syntax.XJSSpreadAttribute,
+                argument: argument
             };
         },
 
@@ -3536,14 +3629,15 @@ parseYieldExpression: true
             };
         },
 
-        createProperty: function (kind, key, value, method, shorthand) {
+        createProperty: function (kind, key, value, method, shorthand, computed) {
             return {
                 type: Syntax.Property,
                 key: key,
                 value: value,
                 kind: kind,
                 method: method,
-                shorthand: shorthand
+                shorthand: shorthand,
+                computed: computed
             };
         },
 
@@ -3672,6 +3766,13 @@ parseYieldExpression: true
             };
         },
 
+        createSpreadProperty: function (argument) {
+            return {
+                type: Syntax.SpreadProperty,
+                argument: argument
+            };
+        },
+
         createTaggedTemplateExpression: function (tag, quasi) {
             return {
                 type: Syntax.TaggedTemplateExpression,
@@ -3703,6 +3804,13 @@ parseYieldExpression: true
             };
         },
 
+        createClassProperty: function (propertyIdentifier) {
+            return {
+                type: Syntax.ClassProperty,
+                id: propertyIdentifier
+            };
+        },
+
         createClassBody: function (body) {
             return {
                 type: Syntax.ClassBody,
@@ -3710,21 +3818,24 @@ parseYieldExpression: true
             };
         },
 
-        createClassExpression: function (id, superClass, body) {
+        createClassExpression: function (id, superClass, body, parametricType) {
             return {
                 type: Syntax.ClassExpression,
                 id: id,
                 superClass: superClass,
-                body: body
+                body: body,
+                parametricType: parametricType
             };
         },
 
-        createClassDeclaration: function (id, superClass, body) {
+        createClassDeclaration: function (id, superClass, body, parametricType, superParametricType) {
             return {
                 type: Syntax.ClassDeclaration,
                 id: id,
                 superClass: superClass,
-                body: body
+                body: body,
+                parametricType: parametricType,
+                superParametricType: superParametricType
             };
         },
 
@@ -4080,7 +4191,8 @@ parseYieldExpression: true
             options.rest || null,
             options.generator,
             body.type !== Syntax.BlockStatement,
-            options.returnTypeAnnotation
+            options.returnType,
+            options.parametricType
         ));
     }
 
@@ -4103,7 +4215,8 @@ parseYieldExpression: true
             defaults: tmp.defaults,
             rest: tmp.rest,
             generator: options.generator,
-            returnTypeAnnotation: tmp.returnTypeAnnotation
+            returnType: tmp.returnType,
+            parametricType: options.parametricType
         });
 
         strict = previousStrict;
@@ -4114,7 +4227,9 @@ parseYieldExpression: true
 
     function parseObjectPropertyKey() {
         var marker = markerCreate(),
-            token = lex();
+            token = lex(),
+            propertyKey,
+            result;
 
         // Note: This function is called only from parseObjectProperty(), where
         // EOF and Punctuator tokens are already filtered out.
@@ -4126,43 +4241,60 @@ parseYieldExpression: true
             return markerApply(marker, delegate.createLiteral(token));
         }
 
+        if (token.type === Token.Punctuator && token.value === '[') {
+            // For computed properties we should skip the [ and ], and
+            // capture in marker only the assignment expression itself.
+            marker = markerCreate();
+            propertyKey = parseAssignmentExpression();
+            result = markerApply(marker, propertyKey);
+            expect(']');
+            return result;
+        }
+
         return markerApply(marker, delegate.createIdentifier(token.value));
     }
 
     function parseObjectProperty() {
-        var token, key, id, value, param, expr,
+        var token, key, id, value, param, expr, computed,
             marker = markerCreate();
 
         token = lookahead;
+        computed = (token.value === '[');
 
-        if (token.type === Token.Identifier) {
+        if (token.type === Token.Identifier || computed) {
 
             id = parseObjectPropertyKey();
 
             // Property Assignment: Getter and Setter.
 
             if (token.value === 'get' && !(match(':') || match('('))) {
+                computed = (lookahead.value === '[');
                 key = parseObjectPropertyKey();
                 expect('(');
                 expect(')');
-                return markerApply(marker, delegate.createProperty('get', key, parsePropertyFunction({ generator: false }), false, false));
+                return markerApply(marker, delegate.createProperty('get', key, parsePropertyFunction({ generator: false }), false, false, computed));
             }
             if (token.value === 'set' && !(match(':') || match('('))) {
+                computed = (lookahead.value === '[');
                 key = parseObjectPropertyKey();
                 expect('(');
                 token = lookahead;
                 param = [ parseTypeAnnotatableIdentifier() ];
                 expect(')');
-                return markerApply(marker, delegate.createProperty('set', key, parsePropertyFunction({ params: param, generator: false, name: token }), false, false));
+                return markerApply(marker, delegate.createProperty('set', key, parsePropertyFunction({ params: param, generator: false, name: token }), false, false, computed));
             }
             if (match(':')) {
                 lex();
-                return markerApply(marker, delegate.createProperty('init', id, parseAssignmentExpression(), false, false));
+                return markerApply(marker, delegate.createProperty('init', id, parseAssignmentExpression(), false, false, computed));
             }
             if (match('(')) {
-                return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: false }), true, false));
+                return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: false }), true, false, computed));
             }
-            return markerApply(marker, delegate.createProperty('init', id, id, false, true));
+            if (computed) {
+                // Computed properties can only be used with full notation.
+                throwUnexpected(lookahead);
+            }
+            return markerApply(marker, delegate.createProperty('init', id, id, false, true, false));
         }
         if (token.type === Token.EOF || token.type === Token.Punctuator) {
             if (!match('*')) {
@@ -4170,23 +4302,31 @@ parseYieldExpression: true
             }
             lex();
 
+            computed = (lookahead.type === Token.Punctuator && lookahead.value === '[');
+
             id = parseObjectPropertyKey();
 
             if (!match('(')) {
                 throwUnexpected(lex());
             }
 
-            return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: true }), true, false));
+            return markerApply(marker, delegate.createProperty('init', id, parsePropertyMethodFunction({ generator: true }), true, false, computed));
         }
         key = parseObjectPropertyKey();
         if (match(':')) {
             lex();
-            return markerApply(marker, delegate.createProperty('init', key, parseAssignmentExpression(), false, false));
+            return markerApply(marker, delegate.createProperty('init', key, parseAssignmentExpression(), false, false, false));
         }
         if (match('(')) {
-            return markerApply(marker, delegate.createProperty('init', key, parsePropertyMethodFunction({ generator: false }), true, false));
+            return markerApply(marker, delegate.createProperty('init', key, parsePropertyMethodFunction({ generator: false }), true, false, false));
         }
         throwUnexpected(lex());
+    }
+
+    function parseObjectSpreadProperty() {
+        var marker = markerCreate();
+        expect('...');
+        return markerApply(marker, delegate.createSpreadProperty(parseAssignmentExpression()));
     }
 
     function parseObjectInitialiser() {
@@ -4196,33 +4336,37 @@ parseYieldExpression: true
         expect('{');
 
         while (!match('}')) {
-            property = parseObjectProperty();
-
-            if (property.key.type === Syntax.Identifier) {
-                name = property.key.name;
+            if (match('...')) {
+                property = parseObjectSpreadProperty();
             } else {
-                name = toString(property.key.value);
-            }
-            kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+                property = parseObjectProperty();
 
-            key = '$' + name;
-            if (Object.prototype.hasOwnProperty.call(map, key)) {
-                if (map[key] === PropertyKind.Data) {
-                    if (strict && kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.StrictDuplicateProperty);
-                    } else if (kind !== PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    }
+                if (property.key.type === Syntax.Identifier) {
+                    name = property.key.name;
                 } else {
-                    if (kind === PropertyKind.Data) {
-                        throwErrorTolerant({}, Messages.AccessorDataProperty);
-                    } else if (map[key] & kind) {
-                        throwErrorTolerant({}, Messages.AccessorGetSet);
-                    }
+                    name = toString(property.key.value);
                 }
-                map[key] |= kind;
-            } else {
-                map[key] = kind;
+                kind = (property.kind === 'init') ? PropertyKind.Data : (property.kind === 'get') ? PropertyKind.Get : PropertyKind.Set;
+
+                key = '$' + name;
+                if (Object.prototype.hasOwnProperty.call(map, key)) {
+                    if (map[key] === PropertyKind.Data) {
+                        if (strict && kind === PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.StrictDuplicateProperty);
+                        } else if (kind !== PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        }
+                    } else {
+                        if (kind === PropertyKind.Data) {
+                            throwErrorTolerant({}, Messages.AccessorDataProperty);
+                        } else if (map[key] & kind) {
+                            throwErrorTolerant({}, Messages.AccessorGetSet);
+                        }
+                    }
+                    map[key] |= kind;
+                } else {
+                    map[key] = kind;
+                }
             }
 
             properties.push(property);
@@ -4724,10 +4868,17 @@ parseYieldExpression: true
             expr.type = Syntax.ObjectPattern;
             for (i = 0, len = expr.properties.length; i < len; i += 1) {
                 property = expr.properties[i];
-                if (property.kind !== 'init') {
-                    throwError({}, Messages.InvalidLHSInAssignment);
+                if (property.type === Syntax.SpreadProperty) {
+                    if (i < len - 1) {
+                        throwError({}, Messages.PropertyAfterSpreadProperty);
+                    }
+                    reinterpretAsAssignmentBindingPattern(property.argument);
+                } else {
+                    if (property.kind !== 'init') {
+                        throwError({}, Messages.InvalidLHSInAssignment);
+                    }
+                    reinterpretAsAssignmentBindingPattern(property.value);
                 }
-                reinterpretAsAssignmentBindingPattern(property.value);
             }
         } else if (expr.type === Syntax.ArrayExpression) {
             expr.type = Syntax.ArrayPattern;
@@ -4761,10 +4912,17 @@ parseYieldExpression: true
             expr.type = Syntax.ObjectPattern;
             for (i = 0, len = expr.properties.length; i < len; i += 1) {
                 property = expr.properties[i];
-                if (property.kind !== 'init') {
-                    throwError({}, Messages.InvalidLHSInFormalsList);
+                if (property.type === Syntax.SpreadProperty) {
+                    if (i < len - 1) {
+                        throwError({}, Messages.PropertyAfterSpreadProperty);
+                    }
+                    reinterpretAsDestructuredParameter(options, property.argument);
+                } else {
+                    if (property.kind !== 'init') {
+                        throwError({}, Messages.InvalidLHSInFormalsList);
+                    }
+                    reinterpretAsDestructuredParameter(options, property.value);
                 }
-                reinterpretAsDestructuredParameter(options, property.value);
             }
         } else if (expr.type === Syntax.ArrayExpression) {
             expr.type = Syntax.ArrayPattern;
@@ -5014,12 +5172,73 @@ parseYieldExpression: true
 
     // 12.2 Variable Statement
 
+    function parseObjectTypeAnnotation() {
+        var isMethod, marker, properties = [], property, propertyKey,
+            propertyTypeAnnotation;
+
+        expect('{');
+
+        while (!match('}')) {
+            marker = markerCreate();
+            propertyKey = parseObjectPropertyKey();
+            isMethod = match('(');
+            propertyTypeAnnotation = parseTypeAnnotation();
+            properties.push(markerApply(marker, delegate.createProperty(
+                'init',
+                propertyKey,
+                propertyTypeAnnotation,
+                isMethod,
+                false
+            )));
+
+            if (!match('}')) {
+                if (match(',') || match(';')) {
+                    lex();
+                } else {
+                    throwUnexpected(lookahead);
+                }
+            }
+        }
+
+        expect('}');
+
+        return delegate.createObjectTypeAnnotation(properties);
+    }
+
+    function parseVoidTypeAnnotation() {
+        var marker = markerCreate();
+        expectKeyword('void');
+        return markerApply(marker, delegate.createVoidTypeAnnotation());
+    }
+
+    function parseParametricTypeAnnotation() {
+        var marker = markerCreate(), typeIdentifier, paramTypes = [];
+
+        expect('<');
+        while (!match('>')) {
+            paramTypes.push(parseVariableIdentifier());
+            if (!match('>')) {
+                expect(',');
+            }
+        }
+        expect('>');
+
+        return markerApply(marker, delegate.createParametricTypeAnnotation(
+            paramTypes
+        ));
+    }
+
     function parseTypeAnnotation(dontExpectColon) {
-        var typeIdentifier = null, paramTypes = null, returnType = null,
-            nullable = false, marker = markerCreate();
+        var typeIdentifier = null, params = null, returnType = null,
+            nullable = false, marker = markerCreate(), returnTypeMarker = null,
+            parametricType, annotation;
 
         if (!dontExpectColon) {
             expect(':');
+        }
+
+        if (match('{')) {
+            return markerApply(marker, parseObjectTypeAnnotation());
         }
 
         if (match('?')) {
@@ -5029,30 +5248,39 @@ parseYieldExpression: true
 
         if (lookahead.type === Token.Identifier) {
             typeIdentifier = parseVariableIdentifier();
-        }
-
-        if (match('(')) {
+            if (match('<')) {
+                parametricType = parseParametricTypeAnnotation();
+            }
+        } else if (match('(')) {
             lex();
-            paramTypes = [];
+            params = [];
             while (lookahead.type === Token.Identifier || match('?')) {
-                paramTypes.push(parseTypeAnnotation(true));
+                params.push(parseTypeAnnotatableIdentifier(
+                    true, /* requireTypeAnnotation */
+                    true /* canBeOptionalParam */
+                ));
                 if (!match(')')) {
                     expect(',');
                 }
             }
             expect(')');
+
+            returnTypeMarker = markerCreate();
             expect('=>');
 
-            if (matchKeyword('void')) {
-                lex();
+            returnType = parseTypeAnnotation(true);
+        } else {
+            if (!matchKeyword('void')) {
+                throwUnexpected(lookahead);
             } else {
-                returnType = parseTypeAnnotation(true);
+                return parseVoidTypeAnnotation();
             }
         }
 
         return markerApply(marker, delegate.createTypeAnnotation(
             typeIdentifier,
-            paramTypes,
+            parametricType,
+            params,
             returnType,
             nullable
         ));
@@ -5069,12 +5297,25 @@ parseYieldExpression: true
         return markerApply(marker, delegate.createIdentifier(token.value));
     }
 
-    function parseTypeAnnotatableIdentifier() {
+    function parseTypeAnnotatableIdentifier(requireTypeAnnotation, canBeOptionalParam) {
         var marker = markerCreate(),
-            ident = parseVariableIdentifier();
+            ident = parseVariableIdentifier(),
+            isOptionalParam = false;
 
-        if (match(':')) {
-            return markerApply(marker, delegate.createTypeAnnotatedIdentifier(ident, parseTypeAnnotation()));
+        if (canBeOptionalParam && match('?')) {
+            expect('?');
+            isOptionalParam = true;
+        }
+
+        if (requireTypeAnnotation || match(':')) {
+            ident = markerApply(marker, delegate.createTypeAnnotatedIdentifier(
+                ident,
+                parseTypeAnnotation()
+            ));
+        }
+
+        if (isOptionalParam) {
+            ident = markerApply(marker, delegate.createOptionalParameter(ident));
         }
 
         return ident;
@@ -6004,18 +6245,24 @@ parseYieldExpression: true
             reinterpretAsDestructuredParameter(options, param);
         } else {
             // Typing rest params is awkward, so punting on that for now
-            param = rest
+            param =
+                rest
                 ? parseVariableIdentifier()
-                : parseTypeAnnotatableIdentifier();
+                : parseTypeAnnotatableIdentifier(
+                    false, /* requireTypeAnnotation */
+                    true /* canBeOptionalParam */
+                );
+
             validateParam(options, token, token.value);
-            if (match('=')) {
-                if (rest) {
-                    throwErrorTolerant(lookahead, Messages.DefaultRestParameter);
-                }
-                lex();
-                def = parseAssignmentExpression();
-                ++options.defaultCount;
+        }
+
+        if (match('=')) {
+            if (rest) {
+                throwErrorTolerant(lookahead, Messages.DefaultRestParameter);
             }
+            lex();
+            def = parseAssignmentExpression();
+            ++options.defaultCount;
         }
 
         if (rest) {
@@ -6061,7 +6308,7 @@ parseYieldExpression: true
         }
 
         if (match(':')) {
-            options.returnTypeAnnotation = parseTypeAnnotation();
+            options.returnType = parseTypeAnnotation();
         }
 
         return markerApply(marker, options);
@@ -6069,7 +6316,7 @@ parseYieldExpression: true
 
     function parseFunctionDeclaration() {
         var id, body, token, tmp, firstRestricted, message, previousStrict, previousYieldAllowed, generator,
-            marker = markerCreate();
+            marker = markerCreate(), parametricType;
 
         expectKeyword('function');
 
@@ -6082,6 +6329,10 @@ parseYieldExpression: true
         token = lookahead;
 
         id = parseVariableIdentifier();
+
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
 
         if (strict) {
             if (isRestrictedWord(token.value)) {
@@ -6119,12 +6370,12 @@ parseYieldExpression: true
         state.yieldAllowed = previousYieldAllowed;
 
         return markerApply(marker, delegate.createFunctionDeclaration(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false,
-            tmp.returnTypeAnnotation));
+            tmp.returnType, parametricType));
     }
 
     function parseFunctionExpression() {
         var token, id = null, firstRestricted, message, tmp, body, previousStrict, previousYieldAllowed, generator,
-            marker = markerCreate();
+            marker = markerCreate(), parametricType;
 
         expectKeyword('function');
 
@@ -6136,20 +6387,27 @@ parseYieldExpression: true
         }
 
         if (!match('(')) {
-            token = lookahead;
-            id = parseVariableIdentifier();
-            if (strict) {
-                if (isRestrictedWord(token.value)) {
-                    throwErrorTolerant(token, Messages.StrictFunctionName);
+            if (!match('<')) {
+                token = lookahead;
+                id = parseVariableIdentifier();
+
+                if (strict) {
+                    if (isRestrictedWord(token.value)) {
+                        throwErrorTolerant(token, Messages.StrictFunctionName);
+                    }
+                } else {
+                    if (isRestrictedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictFunctionName;
+                    } else if (isStrictModeReservedWord(token.value)) {
+                        firstRestricted = token;
+                        message = Messages.StrictReservedWord;
+                    }
                 }
-            } else {
-                if (isRestrictedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictFunctionName;
-                } else if (isStrictModeReservedWord(token.value)) {
-                    firstRestricted = token;
-                    message = Messages.StrictReservedWord;
-                }
+            }
+
+            if (match('<')) {
+                parametricType = parseParametricTypeAnnotation();
             }
         }
 
@@ -6175,7 +6433,7 @@ parseYieldExpression: true
         state.yieldAllowed = previousYieldAllowed;
 
         return markerApply(marker, delegate.createFunctionExpression(id, tmp.params, tmp.defaults, body, tmp.rest, generator, false,
-            tmp.returnTypeAnnotation));
+            tmp.returnType, parametricType));
     }
 
     function parseYieldExpression() {
@@ -6203,7 +6461,8 @@ parseYieldExpression: true
 
     function parseMethodDefinition(existingPropNames) {
         var token, key, param, propType, isValidDuplicateProp = false,
-            marker = markerCreate();
+            marker = markerCreate(), token2, parametricType,
+            parametricTypeMarker, annotationMarker;
 
         if (lookahead.value === 'static') {
             propType = ClassPropertyType["static"];
@@ -6223,6 +6482,7 @@ parseYieldExpression: true
         }
 
         token = lookahead;
+        //parametricTypeMarker = markerCreate();
         key = parseObjectPropertyKey();
 
         if (token.value === 'get' && !match('(')) {
@@ -6288,6 +6548,10 @@ parseYieldExpression: true
             ));
         }
 
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
+
         // It is a syntax error if any other properties have the same name as a
         // non-getter, non-setter method
         if (existingPropNames[propType].hasOwnProperty(key.name)) {
@@ -6301,7 +6565,21 @@ parseYieldExpression: true
             propType,
             '',
             key,
-            parsePropertyMethodFunction({ generator: false })
+            parsePropertyMethodFunction({
+                generator: false,
+                parametricType: parametricType
+            })
+        ));
+    }
+
+    function parseClassProperty(existingPropNames) {
+        var marker = markerCreate(), propertyIdentifier;
+
+        propertyIdentifier = parseTypeAnnotatableIdentifier();
+        expect(';');
+
+        return markerApply(marker, delegate.createClassProperty(
+            propertyIdentifier
         ));
     }
 
@@ -6310,6 +6588,14 @@ parseYieldExpression: true
             lex();
             return;
         }
+
+        var doubleLookahead = lookahead2();
+        if (doubleLookahead.type === Token.Punctuator) {
+            if (doubleLookahead.value === ':') {
+                return parseClassProperty(existingProps);
+            }
+        }
+
         return parseMethodDefinition(existingProps);
     }
 
@@ -6338,7 +6624,8 @@ parseYieldExpression: true
     }
 
     function parseClassExpression() {
-        var id, previousYieldAllowed, superClass = null, marker = markerCreate();
+        var id, previousYieldAllowed, superClass = null, marker = markerCreate(),
+            parametricType;
 
         expectKeyword('class');
 
@@ -6346,6 +6633,10 @@ parseYieldExpression: true
             id = parseVariableIdentifier();
         }
 
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
+
         if (matchKeyword('extends')) {
             expectKeyword('extends');
             previousYieldAllowed = state.yieldAllowed;
@@ -6354,16 +6645,21 @@ parseYieldExpression: true
             state.yieldAllowed = previousYieldAllowed;
         }
 
-        return markerApply(marker, delegate.createClassExpression(id, superClass, parseClassBody()));
+        return markerApply(marker, delegate.createClassExpression(id, superClass, parseClassBody(), parametricType));
     }
 
     function parseClassDeclaration() {
-        var id, previousYieldAllowed, superClass = null, marker = markerCreate();
+        var id, previousYieldAllowed, superClass = null, marker = markerCreate(),
+            parametricType, superParametricType;
 
         expectKeyword('class');
 
         id = parseVariableIdentifier();
 
+        if (match('<')) {
+            parametricType = parseParametricTypeAnnotation();
+        }
+
         if (matchKeyword('extends')) {
             expectKeyword('extends');
             previousYieldAllowed = state.yieldAllowed;
@@ -6372,7 +6668,7 @@ parseYieldExpression: true
             state.yieldAllowed = previousYieldAllowed;
         }
 
-        return markerApply(marker, delegate.createClassDeclaration(id, superClass, parseClassBody()));
+        return markerApply(marker, delegate.createClassDeclaration(id, superClass, parseClassBody(), parametricType, superParametricType));
     }
 
     // 15 Program
@@ -6999,7 +7295,7 @@ parseYieldExpression: true
             if (ch === '&') {
                 str += scanXJSEntity();
             } else {
-                ch = source.charAt(index++);
+                index++;
                 if (isLineTerminator(ch.charCodeAt(0))) {
                     ++lineNumber;
                     lineStart = index;
@@ -7160,8 +7456,35 @@ parseYieldExpression: true
         return markerApply(marker, delegate.createXJSExpressionContainer(expression));
     }
 
+    function parseXJSSpreadAttribute() {
+        var expression, origInXJSChild, origInXJSTag, marker = markerCreate();
+
+        origInXJSChild = state.inXJSChild;
+        origInXJSTag = state.inXJSTag;
+        state.inXJSChild = false;
+        state.inXJSTag = false;
+
+        expect('{');
+        expect('...');
+
+        expression = parseAssignmentExpression();
+
+        state.inXJSChild = origInXJSChild;
+        state.inXJSTag = origInXJSTag;
+
+        expect('}');
+
+        return markerApply(marker, delegate.createXJSSpreadAttribute(expression));
+    }
+
     function parseXJSAttribute() {
-        var name, marker = markerCreate();
+        var name, marker;
+
+        if (match('{')) {
+            return parseXJSSpreadAttribute();
+        }
+
+        marker = markerCreate();
 
         name = parseXJSAttributeName();
 
@@ -7254,7 +7577,6 @@ parseYieldExpression: true
                     break;
                 }
                 state.inXJSChild = true;
-                peek(); // reset lookahead token
                 children.push(parseXJSChild());
             }
             state.inXJSChild = origInXJSChild;
@@ -7284,7 +7606,10 @@ parseYieldExpression: true
     function collectToken() {
         var start, loc, token, range, value;
 
-        skipComment();
+        if (!state.inXJSChild) {
+            skipComment();
+        }
+
         start = index;
         loc = {
             start: {
@@ -7613,7 +7938,7 @@ parseYieldExpression: true
     }
 
     // Sync with *.json manifests.
-    exports.version = '3001.0001.0000-dev-harmony-fb';
+    exports.version = '4001.3001.0000-dev-harmony-fb';
 
     exports.tokenize = tokenize;
 
@@ -9926,7 +10251,8 @@ function _nodeIsClosureScopeBoundary(node, parentNode) {
 
   var parentIsFunction =
     parentNode.type === Syntax.FunctionDeclaration
-    || parentNode.type === Syntax.FunctionExpression;
+    || parentNode.type === Syntax.FunctionExpression
+    || parentNode.type === Syntax.ArrowFunctionExpression;
 
   return node.type === Syntax.BlockStatement && parentIsFunction;
 }
@@ -9968,7 +10294,8 @@ function traverse(node, path, state) {
           localScope: {
             parentNode: parentNode,
             parentScope: state.localScope,
-            identifiers: {}
+            identifiers: {},
+            tempVarIndex: 0
           },
           scopeIsStrict: scopeIsStrict
         });
@@ -10122,13 +10449,13 @@ function transform(visitors, source, options) {
 
   if (options.sourceMap) {
     var SourceMapGenerator = _dereq_('source-map').SourceMapGenerator;
-    state.g.sourceMap = new SourceMapGenerator({file: 'transformed.js'});
+    state.g.sourceMap = new SourceMapGenerator({file: options.filename || 'transformed.js'});
   }
 
   traverse(ast, [], state);
   utils.catchup(source.length, state);
 
-  var ret = {code: state.g.buffer};
+  var ret = {code: state.g.buffer, extra: state.g.extra};
   if (options.sourceMap) {
     ret.sourceMap = state.g.sourceMap;
     ret.sourceMapFilename =  options.filename || 'source.js';
@@ -10159,6 +10486,7 @@ exports.transform = transform;
 /*jslint node: true*/
 var Syntax = _dereq_('esprima-fb').Syntax;
 var leadingIndentRegexp = /(^|\n)( {2}|\t)/g;
+var nonWhiteRegexp = /(\S)/g;
 
 /**
  * A `state` object represents the state of the parser. It has "local" and
@@ -10181,7 +10509,8 @@ function createState(source, rootNode, transformOptions) {
     localScope: {
       parentNode: rootNode,
       parentScope: null,
-      identifiers: {}
+      identifiers: {},
+      tempVarIndex: 0
     },
     /**
      * The name (and, if applicable, expression) of the super class
@@ -10193,6 +10522,11 @@ function createState(source, rootNode, transformOptions) {
      * @type {String}
      */
     mungeNamespace: '',
+    /**
+     * Ref to the node for the current MethodDefinition
+     * @type {Object}
+     */
+    methodNode: null,
     /**
      * Ref to the node for the FunctionExpression of the enclosing
      * MethodDefinition
@@ -10238,6 +10572,11 @@ function createState(source, rootNode, transformOptions) {
        * @type {Number}
        */
       position: 0,
+      /**
+       * Auxiliary data to be returned by transforms
+       * @type {Object}
+       */
+      extra: {},
       /**
        * Buffer containing the result
        * @type {String}
@@ -10379,13 +10718,31 @@ function catchup(end, state, contentTransformer) {
 }
 
 /**
+ * Returns original source for an AST node.
+ * @param {object} node
+ * @param {object} state
+ * @return {string}
+ */
+function getNodeSourceText(node, state) {
+  return state.g.source.substring(node.range[0], node.range[1]);
+}
+
+function replaceNonWhite(value) {
+  return value.replace(nonWhiteRegexp, ' ');
+}
+
+/**
  * Removes all non-whitespace characters
  */
-var reNonWhite = /(\S)/g;
 function stripNonWhite(value) {
-  return value.replace(reNonWhite, function() {
-    return '';
-  });
+  return value.replace(nonWhiteRegexp, '');
+}
+
+/**
+ * Catches up as `catchup` but replaces non-whitespace chars with spaces.
+ */
+function catchupWhiteOut(end, state) {
+  catchup(end, state, replaceNonWhite);
 }
 
 /**
@@ -10694,6 +11051,7 @@ function getBoundaryNode(path) {
 
 exports.append = append;
 exports.catchup = catchup;
+exports.catchupWhiteOut = catchupWhiteOut;
 exports.catchupWhiteSpace = catchupWhiteSpace;
 exports.catchupNewlines = catchupNewlines;
 exports.containsChildOfType = containsChildOfType;
@@ -10712,6 +11070,7 @@ exports.updateIndent = updateIndent;
 exports.updateState = updateState;
 exports.analyzeAndTraverse = analyzeAndTraverse;
 exports.getOrderedChildren = getOrderedChildren;
+exports.getNodeSourceText = getNodeSourceText;
 
 },{"./docblock":18,"esprima-fb":6}],21:[function(_dereq_,module,exports){
 /**
@@ -10755,6 +11114,8 @@ exports.getOrderedChildren = getOrderedChildren;
  *
  */
 var restParamVisitors = _dereq_('./es6-rest-param-visitors');
+var destructuringVisitors = _dereq_('./es6-destructuring-visitors');
+
 var Syntax = _dereq_('esprima-fb').Syntax;
 var utils = _dereq_('../src/utils');
 
@@ -10762,9 +11123,16 @@ var utils = _dereq_('../src/utils');
  * @public
  */
 function visitArrowFunction(traverse, node, path, state) {
-  // Prologue.
+  var notInExpression = (path[0].type === Syntax.ExpressionStatement);
+
+  // Wrap a function into a grouping operator, if it's not
+  // in the expression position.
+  if (notInExpression) {
+    utils.append('(', state);
+  }
+
   utils.append('function', state);
-  renderParams(node, state);
+  renderParams(traverse, node, path, state);
 
   // Skip arrow.
   utils.catchupWhiteSpace(node.body.range[0], state);
@@ -10785,17 +11153,24 @@ function visitArrowFunction(traverse, node, path, state) {
 
   utils.catchupWhiteSpace(node.range[1], state);
 
+  // Close wrapper if not in the expression.
+  if (notInExpression) {
+    utils.append(')', state);
+  }
+
   return false;
 }
 
-function renderParams(node, state) {
+function renderParams(traverse, node, path, state) {
   // To preserve inline typechecking directives, we
   // distinguish between parens-free and paranthesized single param.
   if (isParensFreeSingleParam(node, state) || !node.params.length) {
     utils.append('(', state);
   }
   if (node.params.length !== 0) {
-    utils.catchup(node.params[node.params.length - 1].range[1], state);
+    path.unshift(node);
+    traverse(node.params, path, state);
+    path.unshift();
   }
   utils.append(')', state);
 }
@@ -10809,12 +11184,28 @@ function renderExpressionBody(traverse, node, path, state) {
   // Wrap simple expression bodies into a block
   // with explicit return statement.
   utils.append('{', state);
+
+  // Special handling of rest param.
   if (node.rest) {
     utils.append(
       restParamVisitors.renderRestParamSetup(node),
       state
     );
   }
+
+  // Special handling of destructured params.
+  destructuringVisitors.renderDestructuredComponents(
+    node,
+    utils.updateState(state, {
+      localScope: {
+        parentNode: state.parentNode,
+        parentScope: state.parentScope,
+        identifiers: state.identifiers,
+        tempVarIndex: 0
+      }
+    })
+  );
+
   utils.append('return ', state);
   renderStatementBody(traverse, node, path, state);
   utils.append(';}', state);
@@ -10834,7 +11225,7 @@ exports.visitorList = [
 ];
 
 
-},{"../src/utils":20,"./es6-rest-param-visitors":25,"esprima-fb":6}],22:[function(_dereq_,module,exports){
+},{"../src/utils":20,"./es6-destructuring-visitors":23,"./es6-rest-param-visitors":26,"esprima-fb":6}],22:[function(_dereq_,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -10979,6 +11370,16 @@ function _shouldMungeIdentifier(node, state) {
  * @param {object} state
  */
 function visitClassMethod(traverse, node, path, state) {
+  if (node.kind === 'get' || node.kind === 'set') {
+    throw new Error(
+      'This transform does not support ' + node.kind + 'ter methods for ES6 ' +
+      'classes. (line: ' + node.loc.start.line + ', col: ' +
+      node.loc.start.column + ')'
+    );
+  }
+  state = utils.updateState(state, {
+    methodNode: node
+  });
   utils.catchup(node.range[0], state);
   path.unshift(node);
   traverse(node.value, path, state);
@@ -11005,35 +11406,48 @@ function visitClassFunctionExpression(traverse, node, path, state) {
   if (methodNode.key.name === 'constructor') {
     utils.append('function ' + state.className, state);
   } else {
-    var methodName = methodNode.key.name;
-    if (_shouldMungeIdentifier(methodNode.key, state)) {
-      methodName = _getMungedName(methodName, state);
+    var methodAccessor;
+    var prototypeOrStatic = methodNode["static"] ? '' : '.prototype';
+
+    if (methodNode.key.type === Syntax.Identifier) {
+      // foo() {}
+      methodAccessor = methodNode.key.name;
+      if (_shouldMungeIdentifier(methodNode.key, state)) {
+        methodAccessor = _getMungedName(methodAccessor, state);
+      }
+      methodAccessor = '.' + methodAccessor;
+    } else if (methodNode.key.type === Syntax.Literal) {
+      // 'foo bar'() {}
+      methodAccessor = '[' + JSON.stringify(methodNode.key.value) + ']';
     }
 
-    var prototypeOrStatic = methodNode["static"] ? '' : 'prototype.';
     utils.append(
-      state.className + '.' + prototypeOrStatic + methodName + '=function',
+      state.className + prototypeOrStatic +
+      methodAccessor + '=function',
       state
     );
   }
   utils.move(methodNode.key.range[1], state);
+  utils.append('(', state);
 
   var params = node.params;
   if (params.length > 0) {
+    utils.move(params[0].range[0], state);
     for (var i = 0; i < params.length; i++) {
       utils.catchup(node.params[i].range[0], state);
       path.unshift(node);
       traverse(params[i], path, state);
       path.shift();
     }
-  } else {
-    utils.append('(', state);
   }
   utils.append(')', state);
   utils.catchupWhiteSpace(node.body.range[0], state);
   utils.append('{', state);
   if (!state.scopeIsStrict) {
     utils.append('"use strict";', state);
+    state = utils.updateState(state, {
+      scopeIsStrict: true
+    });
   }
   utils.move(node.body.range[0] + '{'.length, state);
 
@@ -11248,7 +11662,8 @@ visitPrivateIdentifier.test = function(node, path, state) {
 
     // Always munge function parameters
     if (path[0].type === Syntax.FunctionExpression
-        || path[0].type === Syntax.FunctionDeclaration) {
+        || path[0].type === Syntax.FunctionDeclaration
+        || path[0].type === Syntax.ArrowFunctionExpression) {
       for (var i = 0; i < path[0].params.length; i++) {
         if (path[0].params[i] === node) {
           return true;
@@ -11269,7 +11684,17 @@ function visitSuperCallExpression(traverse, node, path, state) {
   var superClassName = state.superClass.name;
 
   if (node.callee.type === Syntax.Identifier) {
-    utils.append(superClassName + '.call(', state);
+    if (_isConstructorMethod(state.methodNode)) {
+      utils.append(superClassName + '.call(', state);
+    } else {
+      var protoProp = SUPER_PROTO_IDENT_PREFIX + superClassName;
+      if (state.methodNode.key.type === Syntax.Identifier) {
+        protoProp += '.' + state.methodNode.key.name;
+      } else if (state.methodNode.key.type === Syntax.Literal) {
+        protoProp += '[' + JSON.stringify(state.methodNode.key.value) + ']';
+      }
+      utils.append(protoProp + ".call(", state);
+    }
     utils.move(node.callee.range[1], state);
   } else if (node.callee.type === Syntax.MemberExpression) {
     utils.append(SUPER_PROTO_IDENT_PREFIX + superClassName, state);
@@ -11344,6 +11769,274 @@ exports.visitorList = [
 
 },{"../src/utils":20,"base62":7,"esprima-fb":6}],23:[function(_dereq_,module,exports){
 /**
+ * Copyright 2014 Facebook, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*global exports:true*/
+
+/**
+ * Implements ES6 destructuring assignment and pattern matchng.
+ *
+ * function init({port, ip, coords: [x, y]}) {
+ *   return (x && y) ? {id, port} : {ip};
+ * };
+ *
+ * function init($__0) {
+ *   var
+ *    port = $__0.port,
+ *    ip = $__0.ip,
+ *    $__1 = $__0.coords,
+ *    x = $__1[0],
+ *    y = $__1[1];
+ *   return (x && y) ? {id, port} : {ip};
+ * }
+ *
+ * var x, {ip, port} = init({ip, port});
+ *
+ * var x, $__0 = init({ip, port}), ip = $__0.ip, port = $__0.port;
+ *
+ */
+var Syntax = _dereq_('esprima-fb').Syntax;
+var utils = _dereq_('../src/utils');
+
+var restParamVisitors = _dereq_('./es6-rest-param-visitors');
+
+// -------------------------------------------------------
+// 1. Structured variable declarations.
+//
+// var [a, b] = [b, a];
+// var {x, y} = {y, x};
+// -------------------------------------------------------
+
+function visitStructuredVariable(traverse, node, path, state) {
+  // Allocate new temp for the pattern.
+  utils.append(getTmpVar(state.localScope.tempVarIndex) + '=', state);
+  // Skip the pattern and assign the init to the temp.
+  utils.catchupWhiteSpace(node.init.range[0], state);
+  traverse(node.init, path, state);
+  utils.catchup(node.init.range[1], state);
+  // Render the destructured data.
+  utils.append(',' + getDestructuredComponents(node.id, state), state);
+  state.localScope.tempVarIndex++;
+  return false;
+}
+
+visitStructuredVariable.test = function(node, path, state) {
+  return node.type === Syntax.VariableDeclarator &&
+    isStructuredPattern(node.id);
+};
+
+function isStructuredPattern(node) {
+  return node.type === Syntax.ObjectPattern ||
+    node.type === Syntax.ArrayPattern;
+}
+
+// Main function which does actual recursive destructuring
+// of nested complex structures.
+function getDestructuredComponents(node, state) {
+  var tmpIndex = state.localScope.tempVarIndex;
+  var components = [];
+  var patternItems = getPatternItems(node);
+
+  for (var idx = 0; idx < patternItems.length; idx++) {
+    var item = patternItems[idx];
+    if (!item) {
+      continue;
+    }
+
+    // Depending on pattern type (Array or Object), we get
+    // corresponding pattern item parts.
+    var accessor = getPatternItemAccessor(node, item, tmpIndex, idx);
+    var value = getPatternItemValue(node, item);
+
+    // TODO(dmitrys): implement default values: {x, y=5}
+    if (value.type === Syntax.Identifier) {
+      // Simple pattern item.
+      components.push(value.name + '=' + accessor);
+    } else if (value.type === Syntax.SpreadElement) {
+      // Spread/rest of an array.
+      // TODO(dmitrys): support spread in the middle of a pattern
+      // and also for function param patterns: [x, ...xs, y]
+      components.push(value.argument.name +
+        '=Array.prototype.slice.call(' +
+        getTmpVar(tmpIndex) + ',' + idx + ')'
+      );
+    } else {
+      // Complex sub-structure.
+      components.push(
+        getInitialValue(++state.localScope.tempVarIndex, accessor) + ',' +
+        getDestructuredComponents(value, state)
+      );
+    }
+  }
+
+  return components.join(',');
+}
+
+function getPatternItems(node) {
+  return node.properties || node.elements;
+}
+
+function getPatternItemAccessor(node, patternItem, tmpIndex, idx) {
+  var tmpName = getTmpVar(tmpIndex);
+  return node.type === Syntax.ObjectPattern
+    ? tmpName + '.' + patternItem.key.name
+    : tmpName + '[' + idx + ']';
+}
+
+function getPatternItemValue(node, patternItem) {
+  return node.type === Syntax.ObjectPattern
+    ? patternItem.value
+    : patternItem;
+}
+
+function getInitialValue(index, value) {
+  return getTmpVar(index) + '=' + value;
+}
+
+function getTmpVar(index) {
+  return '$__' + index;
+}
+
+// -------------------------------------------------------
+// 2. Assignment expression.
+//
+// [a, b] = [b, a];
+// ({x, y} = {y, x});
+// -------------------------------------------------------
+
+function visitStructuredAssignment(traverse, node, path, state) {
+  var exprNode = node.expression;
+  utils.append('var ' + getTmpVar(state.localScope.tempVarIndex) + '=', state);
+
+  utils.catchupWhiteSpace(exprNode.right.range[0], state);
+  traverse(exprNode.right, path, state);
+  utils.catchup(exprNode.right.range[1], state);
+
+  utils.append(
+    ',' + getDestructuredComponents(exprNode.left, state) + ';',
+    state
+  );
+
+  utils.catchupWhiteSpace(node.range[1], state);
+  state.localScope.tempVarIndex++;
+  return false;
+}
+
+visitStructuredAssignment.test = function(node, path, state) {
+  // We consider the expression statement rather than just assignment
+  // expression to cover case with object patters which should be
+  // wrapped in grouping operator: ({x, y} = {y, x});
+  return node.type === Syntax.ExpressionStatement &&
+    node.expression.type === Syntax.AssignmentExpression &&
+    isStructuredPattern(node.expression.left);
+};
+
+// -------------------------------------------------------
+// 3. Structured parameter.
+//
+// function foo({x, y}) { ... }
+// -------------------------------------------------------
+
+function visitStructuredParameter(traverse, node, path, state) {
+  utils.append(getTmpVar(getParamIndex(node, path)), state);
+  utils.catchupWhiteSpace(node.range[1], state);
+  return true;
+}
+
+function getParamIndex(paramNode, path) {
+  var funcNode = path[0];
+  var tmpIndex = 0;
+  for (var k = 0; k < funcNode.params.length; k++) {
+    var param = funcNode.params[k];
+    if (param === paramNode) {
+      break;
+    }
+    if (isStructuredPattern(param)) {
+      tmpIndex++;
+    }
+  }
+  return tmpIndex;
+}
+
+visitStructuredParameter.test = function(node, path, state) {
+  return isStructuredPattern(node) && isFunctionNode(path[0]);
+};
+
+function isFunctionNode(node) {
+  return (node.type == Syntax.FunctionDeclaration ||
+    node.type == Syntax.FunctionExpression ||
+    node.type == Syntax.MethodDefinition ||
+    node.type == Syntax.ArrowFunctionExpression);
+}
+
+// -------------------------------------------------------
+// 4. Function body for structured parameters.
+//
+// function foo({x, y}) { x; y; }
+// -------------------------------------------------------
+
+function visitFunctionBodyForStructuredParameter(traverse, node, path, state) {
+  var funcNode = path[0];
+
+  utils.catchup(funcNode.body.range[0] + 1, state);
+  renderDestructuredComponents(funcNode, state);
+
+  if (funcNode.rest) {
+    utils.append(
+      restParamVisitors.renderRestParamSetup(funcNode),
+      state
+    );
+  }
+
+  return true;
+}
+
+function renderDestructuredComponents(funcNode, state) {
+  var destructuredComponents = [];
+
+  for (var k = 0; k < funcNode.params.length; k++) {
+    var param = funcNode.params[k];
+    if (isStructuredPattern(param)) {
+      destructuredComponents.push(
+        getDestructuredComponents(param, state)
+      );
+      state.localScope.tempVarIndex++;
+    }
+  }
+
+  if (destructuredComponents.length) {
+    utils.append('var ' + destructuredComponents.join(',') + ';', state);
+  }
+}
+
+visitFunctionBodyForStructuredParameter.test = function(node, path, state) {
+  return node.type === Syntax.BlockStatement && isFunctionNode(path[0]);
+};
+
+exports.visitorList = [
+  visitStructuredVariable,
+  visitStructuredAssignment,
+  visitStructuredParameter,
+  visitFunctionBodyForStructuredParameter
+];
+
+exports.renderDestructuredComponents = renderDestructuredComponents;
+
+
+},{"../src/utils":20,"./es6-rest-param-visitors":26,"esprima-fb":6}],24:[function(_dereq_,module,exports){
+/**
  * Copyright 2013 Facebook, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11396,7 +12089,7 @@ exports.visitorList = [
   visitObjectConciseMethod
 ];
 
-},{"../src/utils":20,"esprima-fb":6}],24:[function(_dereq_,module,exports){
+},{"../src/utils":20,"esprima-fb":6}],25:[function(_dereq_,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -11442,7 +12135,8 @@ function visitObjectLiteralShortNotation(traverse, node, path, state) {
 visitObjectLiteralShortNotation.test = function(node, path, state) {
   return node.type === Syntax.Property &&
     node.kind === 'init' &&
-    node.shorthand === true;
+    node.shorthand === true &&
+    path[0].type !== Syntax.ObjectPattern;
 };
 
 exports.visitorList = [
@@ -11450,7 +12144,7 @@ exports.visitorList = [
 ];
 
 
-},{"../src/utils":20,"esprima-fb":6}],25:[function(_dereq_,module,exports){
+},{"../src/utils":20,"esprima-fb":6}],26:[function(_dereq_,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -11485,6 +12179,8 @@ exports.visitorList = [
 var Syntax = _dereq_('esprima-fb').Syntax;
 var utils = _dereq_('../src/utils');
 
+
+
 function _nodeIsFunctionWithRestParam(node) {
   return (node.type === Syntax.FunctionDeclaration
           || node.type === Syntax.FunctionExpression
@@ -11493,18 +12189,29 @@ function _nodeIsFunctionWithRestParam(node) {
 }
 
 function visitFunctionParamsWithRestParam(traverse, node, path, state) {
+  if (node.parametricType) {
+    utils.catchup(node.parametricType.range[0], state);
+    path.unshift(node);
+    traverse(node.parametricType, path, state);
+    path.shift();
+  }
+
   // Render params.
   if (node.params.length) {
-    utils.catchup(node.params[node.params.length - 1].range[0], state);
     path.unshift(node);
-    traverse(node.params[node.params.length - 1], path, state);
+    traverse(node.params, path, state);
     path.shift();
-    utils.catchup(node.params[node.params.length - 1].range[1], state);
   } else {
     // -3 is for ... of the rest.
     utils.catchup(node.rest.range[0] - 3, state);
   }
   utils.catchupWhiteSpace(node.rest.range[1], state);
+
+  path.unshift(node);
+  traverse(node.body, path, state);
+  path.shift();
+
+  return false;
 }
 
 visitFunctionParamsWithRestParam.test = function(node, path, state) {
@@ -11522,8 +12229,7 @@ function visitFunctionBodyWithRestParam(traverse, node, path, state) {
   utils.catchup(node.range[0] + 1, state);
   var parentNode = path[0];
   utils.append(renderRestParamSetup(parentNode), state);
-  traverse(node.body, path, state);
-  return false;
+  return true;
 }
 
 visitFunctionBodyWithRestParam.test = function(node, path, state) {
@@ -11537,7 +12243,7 @@ exports.visitorList = [
   visitFunctionBodyWithRestParam
 ];
 
-},{"../src/utils":20,"esprima-fb":6}],26:[function(_dereq_,module,exports){
+},{"../src/utils":20,"esprima-fb":6}],27:[function(_dereq_,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -11695,7 +12401,7 @@ exports.visitorList = [
   visitTaggedTemplateExpression
 ];
 
-},{"../src/utils":20,"esprima-fb":6}],27:[function(_dereq_,module,exports){
+},{"../src/utils":20,"esprima-fb":6}],28:[function(_dereq_,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -11715,14 +12421,15 @@ exports.visitorList = [
 /* jslint evil: true */
 
 'use strict';
-var runScripts;
-var loadScripts;
-var headEl;
 
 var buffer = _dereq_('buffer');
+var docblock = _dereq_('jstransform/src/docblock');
 var transform = _dereq_('jstransform').transform;
 var visitors = _dereq_('./fbtransform/visitors');
-var docblock = _dereq_('jstransform/src/docblock');
+
+var headEl;
+var dummyAnchor;
+var inlineScriptCount = 0;
 
 // The source-map library relies on Object.defineProperty, but IE8 doesn't
 // support it fully even with es5-sham. Indeed, es5-sham's defineProperty
@@ -11730,7 +12437,15 @@ var docblock = _dereq_('jstransform/src/docblock');
 // the source map in that case.
 var supportsAccessors = Object.prototype.hasOwnProperty('__defineGetter__');
 
+/**
+ * Run provided code through jstransform.
+ *
+ * @param {string} source Original source code
+ * @param {object?} options Options to pass to jstransform
+ * @return {object} object as returned from jstransform
+ */
 function transformReact(source, options) {
+  // TODO: just use react-tools
   var visitorList;
   if (options && options.harmony) {
     visitorList = visitors.getAllVisitors();
@@ -11743,23 +12458,31 @@ function transformReact(source, options) {
   });
 }
 
-exports.transform = transformReact;
+/**
+ * Eval provided source after transforming it.
+ *
+ * @param {string} source Original source code
+ * @param {object?} options Options to pass to jstransform
+ */
+function exec(source, options) {
+  return eval(transformReact(source, options).code);
+}
 
-exports.exec = function(code, options) {
-  return eval(transformReact(code, options).code);
-};
-
-var inlineScriptCount = 0;
-
-// This method returns a nicely formated line of code pointing the
-// exactly location of the error `e`.
-// The line is limited in size so big lines of code are also shown
-// in a readable way.
-// Example:
-//
-// ... x', overflow:'scroll'}} id={} onScroll={this.scroll} class=" ...
-//                                 ^
-var createSourceCodeErrorMessage = function(code, e) {
+/**
+ * This method returns a nicely formated line of code pointing to the exact
+ * location of the error `e`. The line is limited in size so big lines of code
+ * are also shown in a readable way.
+ *
+ * Example:
+ * ... x', overflow:'scroll'}} id={} onScroll={this.scroll} class=" ...
+ * ^
+ *
+ * @param {string} code The full string of code
+ * @param {Error} e The error being thrown
+ * @return {string} formatted message
+ * @internal
+ */
+function createSourceCodeErrorMessage(code, e) {
   var sourceLines = code.split('\n');
   var erroneousLine = sourceLines[e.lineNumber - 1];
 
@@ -11786,24 +12509,33 @@ var createSourceCodeErrorMessage = function(code, e) {
   var message = '\n\n' + erroneousLine + '\n';
   message += new Array(errorColumn - 1).join(' ') + '^';
   return message;
-};
+}
 
-var transformCode = function(code, source) {
+/**
+ * Actually transform the code.
+ *
+ * @param {string} code
+ * @param {string?} url
+ * @param {object?} options
+ * @return {string} The transformed code.
+ * @internal
+ */
+function transformCode(code, url, options) {
   var jsx = docblock.parseAsObject(docblock.extract(code)).jsx;
 
   if (jsx) {
     try {
-      var transformed = transformReact(code);
+      var transformed = transformReact(code, options);
     } catch(e) {
       e.message += '\n    at ';
-      if (source) {
+      if (url) {
         if ('fileName' in e) {
           // We set `fileName` if it's supported by this error object and
-          // a `source` was provided.
-          // The error will correctly point to `source` in Firefox.
-          e.fileName = source;
+          // a `url` was provided.
+          // The error will correctly point to `url` in Firefox.
+          e.fileName = url;
         }
-        e.message += source + ':' + e.lineNumber + ':' + e.column;
+        e.message += url + ':' + e.lineNumber + ':' + e.column;
       } else {
         e.message += location.href;
       }
@@ -11816,33 +12548,61 @@ var transformCode = function(code, source) {
     }
 
     var map = transformed.sourceMap.toJSON();
-    if (source == null) {
+    var source;
+    if (url == null) {
       source = "Inline JSX script";
       inlineScriptCount++;
       if (inlineScriptCount > 1) {
         source += ' (' + inlineScriptCount + ')';
       }
+    } else if (dummyAnchor) {
+      // Firefox has problems when the sourcemap source is a proper URL with a
+      // protocol and hostname, so use the pathname. We could use just the
+      // filename, but hopefully using the full path will prevent potential
+      // issues where the same filename exists in multiple directories.
+      dummyAnchor.href = url;
+      source = dummyAnchor.pathname.substr(1);
     }
     map.sources = [source];
     map.sourcesContent = [code];
 
     return (
       transformed.code +
-      '//# sourceMappingURL=data:application/json;base64,' +
+      '\n//# sourceMappingURL=data:application/json;base64,' +
       buffer.Buffer(JSON.stringify(map)).toString('base64')
     );
   } else {
+    // TODO: warn that we found a script tag missing the docblock?
+    //       or warn and proceed anyway?
+    //       or warn, add it ourselves, and proceed anyway?
     return code;
   }
-};
+}
 
-var run = exports.run = function(code, source) {
+
+/**
+ * Appends a script element at the end of the <head> with the content of code,
+ * after transforming it.
+ *
+ * @param {string} code The original source code
+ * @param {string?} url Where the code came from. null if inline
+ * @param {object?} options Options to pass to jstransform
+ * @internal
+ */
+function run(code, url, options) {
   var scriptEl = document.createElement('script');
-  scriptEl.text = transformCode(code, source);
+  scriptEl.text = transformCode(code, url, options);
   headEl.appendChild(scriptEl);
-};
+}
 
-var load = exports.load = function(url, callback) {
+/**
+ * Load script from the provided url and pass the content to the callback.
+ *
+ * @param {string} url The location of the script src
+ * @param {function} callback Function to call with the content of url
+ * @internal
+ */
+function load(url, callback) {
   var xhr;
   xhr = window.ActiveXObject ? new window.ActiveXObject('Microsoft.XMLHTTP')
                              : new XMLHttpRequest();
@@ -11863,60 +12623,97 @@ var load = exports.load = function(url, callback) {
     }
   };
   return xhr.send(null);
-};
+}
 
-loadScripts = function(scripts) {
+/**
+ * Loop over provided script tags and get the content, via innerHTML if an
+ * inline script, or by using XHR. Transforms are applied if needed. The scripts
+ * are executed in the order they are found on the page.
+ *
+ * @param {array} scripts The <script> elements to load and run.
+ * @internal
+ */
+function loadScripts(scripts) {
   var result = scripts.map(function() {
     return false;
   });
   var count = result.length;
 
-  var check = function() {
+  function check() {
     var script, i;
 
     for (i = 0; i < count; i++) {
       script = result[i];
 
       if (script && !script.executed) {
-        run(script.content, script.url);
+        run(script.content, script.url, script.options);
         script.executed = true;
       } else if (!script) {
         break;
       }
-    };
-  };
+    }
+  }
 
   scripts.forEach(function(script, i) {
+    var options;
+    if (script.type.indexOf('harmony=true') !== -1) {
+      options = {
+        harmony: true
+      };
+    }
+
     if (script.src) {
       load(script.src, function(content, url) {
-        result[i] = { executed: false, content: content, url: url };
+        result[i] = {
+          executed: false,
+          content: content,
+          url: url,
+          options: options
+        };
         check();
       });
     } else {
-      result[i] = { executed: false, content: script.innerHTML, url: null };
+      result[i] = {
+        executed: false,
+        content: script.innerHTML,
+        url: null,
+        options: options
+      };
       check();
     }
   });
-};
+}
 
-runScripts = function() {
+/**
+ * Find and run all script tags with type="text/jsx".
+ *
+ * @internal
+ */
+function runScripts() {
   var scripts = document.getElementsByTagName('script');
 
   // Array.prototype.slice cannot be used on NodeList on IE8
   var jsxScripts = [];
   for (var i = 0; i < scripts.length; i++) {
-    if (scripts.item(i).type === 'text/jsx') {
+    if (scripts.item(i).type.indexOf('text/jsx') !== -1) {
       jsxScripts.push(scripts.item(i));
     }
   }
 
-  console.warn("You are using the in-browser JSX transformer. Be sure to precompile your JSX for production - http://facebook.github.io/react/docs/tooling-integration.html#jsx");
+  console.warn(
+    'You are using the in-browser JSX transformer. Be sure to precompile ' +
+    'your JSX for production - ' +
+    'http://facebook.github.io/react/docs/tooling-integration.html#jsx'
+  );
 
   loadScripts(jsxScripts);
-};
+}
 
+// Listen for load event if we're in a browser and then kick off finding and
+// running of scripts.
 if (typeof window !== "undefined" && window !== null) {
   headEl = document.getElementsByTagName('head')[0];
+  dummyAnchor = document.createElement('a');
 
   if (window.addEventListener) {
     window.addEventListener('DOMContentLoaded', runScripts, false);
@@ -11925,7 +12722,12 @@ if (typeof window !== "undefined" && window !== null) {
   }
 }
 
-},{"./fbtransform/visitors":31,"buffer":1,"jstransform":19,"jstransform/src/docblock":18}],28:[function(_dereq_,module,exports){
+module.exports = {
+  transform: transformReact,
+  exec: exec
+};
+
+},{"./fbtransform/visitors":32,"buffer":1,"jstransform":19,"jstransform/src/docblock":18}],29:[function(_dereq_,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -11977,6 +12779,14 @@ var JSX_ATTRIBUTE_TRANSFORMS = {
   }
 };
 
+/**
+ * Removes all non-whitespace/parenthesis characters
+ */
+var reNonWhiteParen = /([^\s\(\)])/g;
+function stripNonWhiteParen(value) {
+  return value.replace(reNonWhiteParen, '');
+}
+
 function visitReactTag(traverse, object, path, state) {
   var jsxObjIdent = utils.getDocblock(state).jsx;
   var openingElement = object.openingElement;
@@ -11985,43 +12795,119 @@ function visitReactTag(traverse, object, path, state) {
 
   utils.catchup(openingElement.range[0], state, trimLeft);
 
-  var isFallbackTag = false;
-
-  if (nameObject.type === Syntax.XJSIdentifier) {
-    if (nameObject.namespace) {
-      throw new Error(
-         'Namespace tags are not supported. ReactJSX is not XML.');
-    }
-
-    isFallbackTag = FALLBACK_TAGS.hasOwnProperty(nameObject.name);
+  if (nameObject.type === Syntax.XJSNamespacedName && nameObject.namespace) {
+    throw new Error('Namespace tags are not supported. ReactJSX is not XML.');
   }
 
-  utils.append(isFallbackTag ? jsxObjIdent + '.' : '', state);
+  // Only identifiers can be fallback tags or need quoting. We don't need to
+  // handle quoting for other types.
+  var didAddTag = false;
 
-  utils.move(nameObject.range[0], state);
-  utils.catchup(nameObject.range[1], state);
+  // Only identifiers can be fallback tags. XJSMemberExpressions are not.
+  if (nameObject.type === Syntax.XJSIdentifier) {
+    var tagName = nameObject.name;
+    var quotedTagName = quoteAttrName(tagName);
+
+    if (FALLBACK_TAGS.hasOwnProperty(tagName)) {
+      // "Properly" handle invalid identifiers, like <font-face>, which needs to
+      // be enclosed in quotes.
+      var predicate =
+        tagName === quotedTagName ?
+          ('.' + tagName) :
+          ('[' + quotedTagName + ']');
+      utils.append(jsxObjIdent + predicate, state);
+      utils.move(nameObject.range[1], state);
+      didAddTag = true;
+    } else if (tagName !== quotedTagName) {
+      // If we're in the case where we need to quote and but don't recognize the
+      // tag, throw.
+      throw new Error(
+        'Tags must be valid JS identifiers or a recognized special case. `<' +
+        tagName + '>` is not one of them.'
+      );
+    }
+  }
+
+  // Use utils.catchup in this case so we can easily handle XJSMemberExpressions
+  // which look like Foo.Bar.Baz. This also handles unhyphenated XJSIdentifiers
+  // that aren't fallback tags.
+  if (!didAddTag) {
+    utils.move(nameObject.range[0], state);
+    utils.catchup(nameObject.range[1], state);
+  }
 
   utils.append('(', state);
 
   var hasAttributes = attributesObject.length;
 
+  var hasAtLeastOneSpreadProperty = attributesObject.some(function(attr) {
+    return attr.type === Syntax.XJSSpreadAttribute;
+  });
+
   // if we don't have any attributes, pass in null
-  if (hasAttributes) {
+  if (hasAtLeastOneSpreadProperty) {
+    utils.append('Object.assign({', state);
+  } else if (hasAttributes) {
     utils.append('{', state);
   } else {
     utils.append('null', state);
   }
 
+  // keep track of if the previous attribute was a spread attribute
+  var previousWasSpread = false;
+
   // write attributes
   attributesObject.forEach(function(attr, index) {
+    var isLast = index === attributesObject.length - 1;
+
+    if (attr.type === Syntax.XJSSpreadAttribute) {
+      // Plus 1 to skip `{`.
+      utils.move(attr.range[0] + 1, state);
+
+      // Close the previous object or initial object
+      if (!previousWasSpread) {
+        utils.append('}, ', state);
+      }
+
+      // Move to the expression start, ignoring everything except parenthesis
+      // and whitespace.
+      utils.catchup(attr.argument.range[0], state, stripNonWhiteParen);
+
+      traverse(attr.argument, path, state);
+
+      utils.catchup(attr.argument.range[1], state);
+
+      // Move to the end, ignoring parenthesis and the closing `}`
+      utils.catchup(attr.range[1] - 1, state, stripNonWhiteParen);
+
+      if (!isLast) {
+        utils.append(', ', state);
+      }
+
+      utils.move(attr.range[1], state);
+
+      previousWasSpread = true;
+
+      return;
+    }
+
+    // If the next attribute is a spread, we're effective last in this object
+    if (!isLast) {
+      isLast = attributesObject[index + 1].type === Syntax.XJSSpreadAttribute;
+    }
+
     if (attr.name.namespace) {
       throw new Error(
          'Namespace attributes are not supported. ReactJSX is not XML.');
     }
     var name = attr.name.name;
-    var isLast = index === attributesObject.length - 1;
 
     utils.catchup(attr.range[0], state, trimLeft);
+
+    if (previousWasSpread) {
+      utils.append('{', state);
+    }
+
     utils.append(quoteAttrName(name), state);
     utils.append(': ', state);
 
@@ -12049,6 +12935,9 @@ function visitReactTag(traverse, object, path, state) {
     }
 
     utils.catchup(attr.range[1], state, trimLeft);
+
+    previousWasSpread = false;
+
   });
 
   if (!openingElement.selfClosing) {
@@ -12056,8 +12945,12 @@ function visitReactTag(traverse, object, path, state) {
     utils.move(openingElement.range[1], state);
   }
 
-  if (hasAttributes) {
+  if (hasAttributes && !previousWasSpread) {
     utils.append('}', state);
+  }
+
+  if (hasAtLeastOneSpreadProperty) {
+    utils.append(')', state);
   }
 
   // filter out whitespace
@@ -12124,7 +13017,7 @@ exports.visitorList = [
   visitReactTag
 ];
 
-},{"./xjs":30,"esprima-fb":6,"jstransform/src/utils":20}],29:[function(_dereq_,module,exports){
+},{"./xjs":31,"esprima-fb":6,"jstransform/src/utils":20}],30:[function(_dereq_,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -12233,7 +13126,7 @@ exports.visitorList = [
   visitReactDisplayName
 ];
 
-},{"esprima-fb":6,"jstransform/src/utils":20}],30:[function(_dereq_,module,exports){
+},{"esprima-fb":6,"jstransform/src/utils":20}],31:[function(_dereq_,module,exports){
 /**
  * Copyright 2013-2014 Facebook, Inc.
  *
@@ -12488,10 +13381,11 @@ exports.renderXJSLiteral = renderXJSLiteral;
 exports.quoteAttrName = quoteAttrName;
 exports.trimLeft = trimLeft;
 
-},{"esprima-fb":6,"jstransform/src/utils":20}],31:[function(_dereq_,module,exports){
+},{"esprima-fb":6,"jstransform/src/utils":20}],32:[function(_dereq_,module,exports){
 /*global exports:true*/
 var es6ArrowFunctions = _dereq_('jstransform/visitors/es6-arrow-function-visitors');
 var es6Classes = _dereq_('jstransform/visitors/es6-class-visitors');
+var es6Destructuring = _dereq_('jstransform/visitors/es6-destructuring-visitors');
 var es6ObjectConciseMethod = _dereq_('jstransform/visitors/es6-object-concise-method-visitors');
 var es6ObjectShortNotation = _dereq_('jstransform/visitors/es6-object-short-notation-visitors');
 var es6RestParameters = _dereq_('jstransform/visitors/es6-rest-param-visitors');
@@ -12505,6 +13399,7 @@ var reactDisplayName = _dereq_('./transforms/reactDisplayName');
 var transformVisitors = {
   'es6-arrow-functions': es6ArrowFunctions.visitorList,
   'es6-classes': es6Classes.visitorList,
+  'es6-destructuring': es6Destructuring.visitorList,
   'es6-object-concise-method': es6ObjectConciseMethod.visitorList,
   'es6-object-short-notation': es6ObjectShortNotation.visitorList,
   'es6-rest-params': es6RestParameters.visitorList,
@@ -12522,6 +13417,7 @@ var transformRunOrder = [
   'es6-classes',
   'es6-rest-params',
   'es6-templates',
+  'es6-destructuring',
   'react'
 ];
 
@@ -12545,6 +13441,6 @@ function getAllVisitors(excludes) {
 exports.getAllVisitors = getAllVisitors;
 exports.transformVisitors = transformVisitors;
 
-},{"./transforms/react":28,"./transforms/reactDisplayName":29,"jstransform/visitors/es6-arrow-function-visitors":21,"jstransform/visitors/es6-class-visitors":22,"jstransform/visitors/es6-object-concise-method-visitors":23,"jstransform/visitors/es6-object-short-notation-visitors":24,"jstransform/visitors/es6-rest-param-visitors":25,"jstransform/visitors/es6-template-visitors":26}]},{},[27])
-(27)
+},{"./transforms/react":29,"./transforms/reactDisplayName":30,"jstransform/visitors/es6-arrow-function-visitors":21,"jstransform/visitors/es6-class-visitors":22,"jstransform/visitors/es6-destructuring-visitors":23,"jstransform/visitors/es6-object-concise-method-visitors":24,"jstransform/visitors/es6-object-short-notation-visitors":25,"jstransform/visitors/es6-rest-param-visitors":26,"jstransform/visitors/es6-template-visitors":27}]},{},[28])
+(28)
 });
