@@ -36,7 +36,7 @@ render from your view using Cassette:
 </head>
 <body>
 	...
-	<script src="http://fb.me/react-0.10.0.min.js"></script>
+	<script src="http://fb.me/react-0.11.1.min.js"></script>
 	@Bundles.RenderScripts()
 </body>
 ```

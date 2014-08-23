@@ -66,7 +66,7 @@ Replace the contents of the new view file with the following:
 </head>
 <body>
 	<div id="content"></div>
-	<script src="http://fb.me/react-0.10.0.js"></script>
+	<script src="http://fb.me/react-0.11.1.js"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 </body>
 </html>
@@ -239,7 +239,7 @@ Markdown is a simple way to format your text inline. For example, surrounding te
 First, add the third-party **Showdown** library to your application. This is a JavaScript library which takes Markdown text and converts it to raw HTML. We will add it via NuGet (search for "Showdown" and install it, similar to how you installed ReactJS.NET earlier) and reference the script tag in your view:
 
 ```html{2}
-<script src="http://fb.me/react-0.10.0.js"></script>
+<script src="http://fb.me/react-0.11.1.js"></script>
 <script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
 <script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 ```
@@ -860,7 +860,7 @@ Now that the bundle has been registered, we need to reference it from the view:
 </head>
 <body>
 	<div id="content"></div>
-	<script src="http://fb.me/react-0.10.0.js"></script>
+	<script src="http://fb.me/react-0.11.1.js"></script>
 	@Scripts.Render("~/bundles/main")
 	@Html.ReactInitJavaScript()
 </body>
@@ -948,7 +948,7 @@ In the view, we will accept the list of comments as the model, and use `Html.Rea
 		submitUrl = Url.Action("AddComment"),
 		pollInterval = 2000,
 	})
-	<script src="http://fb.me/react-0.10.0.js"></script>
+	<script src="http://fb.me/react-0.11.1.js"></script>
 	<script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 	@Html.ReactInitJavaScript()
