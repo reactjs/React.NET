@@ -63,7 +63,7 @@ ReactSiteConfiguration.Configuration
   .SetUseHarmony(true)
   .AddScript("~/Content/Sample.jsx");
 ```
-If you are using [MSBuild to precompile your JSX](/guide/msbuild.html), you also need to enable it in MSBuild via the `UseHarmony="true"` flag in your build script (`TransformJsx.proj` by default):
+If you are using [MSBuild to precompile your JSX](/guides/msbuild.html), you also need to enable it in MSBuild via the `UseHarmony="true"` flag in your build script (`TransformJsx.proj` by default):
 
 ```xml
 <TransformJsx SourceDir="$(MSBuildProjectDirectory)" UseHarmony="true" />
