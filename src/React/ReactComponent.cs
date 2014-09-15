@@ -7,6 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -17,6 +19,13 @@ namespace React
 	/// </summary>
 	public class ReactComponent : IReactComponent
 	{
+		/// <summary>
+		/// Regular expression used to validate JavaScript identifiers. Used to ensure component
+		/// names are valid.
+		/// Based off https://gist.github.com/Daniel15/3074365
+		/// </summary>
+		private static readonly Regex _identifierRegex = new Regex(@"^[a-zA-Z_$][0-9a-zA-Z_$]*(?:\[(?:"".+""|\'.+\'|\d+)\])*?$", RegexOptions.Compiled);
+
 		/// <summary>
 		/// Environment this component has been created in
 		/// </summary>
@@ -45,6 +54,7 @@ namespace React
 		/// <param name="containerId">The ID of the container DIV for this component</param>
 		public ReactComponent(IReactEnvironment environment, string componentName, string containerId)
 		{
+			EnsureComponentNameValid(componentName);
 			_environment = environment;
 			_componentName = componentName;
 			_containerId = containerId;
@@ -89,7 +99,12 @@ namespace React
 		/// </summary>
 		private void EnsureComponentExists()
 		{
-			if (!_environment.HasVariable(_componentName))
+			// This is safe as componentName was validated via EnsureComponentNameValid()
+			var componentExists = _environment.Execute<bool>(string.Format(
+				"typeof {0} !== 'undefined'",
+				_componentName
+			));
+			if (!componentExists)
 			{
 				throw new ReactInvalidComponentException(string.Format(
 					"Could not find a component named '{0}'. Did you forget to add it to " +
@@ -111,6 +126,22 @@ namespace React
 				_componentName,
 				encodedProps
 			);
+		}
+
+		/// <summary>
+		/// Validates that the specified component name is valid
+		/// </summary>
+		/// <param name="componentName"></param>
+		internal static void EnsureComponentNameValid(string componentName)
+		{
+			var isValid = componentName.Split('.').All(segment => _identifierRegex.IsMatch(segment));
+			if (!isValid)
+			{
+				throw new ReactInvalidComponentException(string.Format(
+					"Invalid component name '{0}'",
+					componentName
+				));
+			}
 		}
 	}
 }

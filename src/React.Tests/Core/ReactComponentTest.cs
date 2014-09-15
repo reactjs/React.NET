@@ -20,7 +20,7 @@ namespace React.Tests.Core
 		public void RenderHtmlShouldThrowExceptionIfComponentDoesNotExist()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.HasVariable("Foo")).Returns(false);
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
 			var component = new ReactComponent(environment.Object, "Foo", "container");
 
 			Assert.Throws<ReactInvalidComponentException>(() =>
@@ -33,7 +33,7 @@ namespace React.Tests.Core
 		public void RenderHtmlShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.HasVariable("Foo")).Returns(true);
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 
 			var component = new ReactComponent(environment.Object, "Foo", "container")
 			{
@@ -48,7 +48,7 @@ namespace React.Tests.Core
 		public void RenderHtmlShouldWrapComponentInDiv()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.HasVariable("Foo")).Returns(true);
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"React.renderComponentToString(Foo({""hello"":""World""}))"))
 				.Returns("[HTML]");
 
@@ -76,6 +76,26 @@ namespace React.Tests.Core
 				@"React.renderComponent(Foo({""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
+		}
+
+		[TestCase("Foo", true)]
+		[TestCase("Foo.Bar", true)]
+		[TestCase("Foo.Bar.Baz", true)]
+		[TestCase("alert()", false)]
+		[TestCase("Foo.alert()", false)]
+		[TestCase("lol what", false)]
+		public void TestEnsureComponentNameValid(string input, bool expected)
+		{
+			var isValid = true;
+			try
+			{
+				ReactComponent.EnsureComponentNameValid(input);
+			}
+			catch (ReactInvalidComponentException)
+			{
+				isValid =  false;
+			}
+			Assert.AreEqual(expected, isValid);
 		}
 	}
 }
