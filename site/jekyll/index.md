@@ -27,6 +27,7 @@ id: home
       <em>
         Latest news:
         <a href="{{ site.posts.first.url }}">{{ site.posts.first.title }}</a>
+        ({{ site.posts.first.date | date: "%B %e, %Y" }})
       </em>
     </p>
     <div id="examples">
