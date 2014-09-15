@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
+using React.Exceptions;
 
 namespace React
 {
@@ -169,7 +170,18 @@ namespace React
 			foreach (var file in _config.Scripts)
 			{
 				var contents = JsxTransformer.TransformJsxFile(file);
-				Execute(contents);
+				try
+				{
+					Execute(contents);
+				}
+				catch (JsRuntimeException ex)
+				{
+					throw new ReactScriptLoadException(string.Format(
+						"Error while loading \"{0}\": {1}",
+						file,
+						ex.Message
+					));
+				}
 			}
 			Engine.SetVariableValue(USER_SCRIPTS_LOADED_KEY, true);
 		}
@@ -180,7 +192,14 @@ namespace React
 		/// <param name="code">JavaScript to execute</param>
 		public void Execute(string code)
 		{
-			Engine.Execute(code);
+			try
+			{
+				Engine.Execute(code);
+			}
+			catch (JsRuntimeException ex)
+			{
+				throw WrapJavaScriptRuntimeException(ex);
+			}
 		}
 
 		/// <summary>
@@ -191,7 +210,33 @@ namespace React
 		/// <returns>Result of the JavaScript code</returns>
 		public T Execute<T>(string code)
 		{
-			return Engine.Evaluate<T>(code);
+			try
+			{
+				return Engine.Evaluate<T>(code);
+			}
+			catch (JsRuntimeException ex)
+			{
+				throw WrapJavaScriptRuntimeException(ex);
+			}
+		}
+
+		/// <summary>
+		/// Executes the provided JavaScript function, returning a result of the specified type.
+		/// </summary>
+		/// <typeparam name="T">Type to return</typeparam>
+		/// <param name="function">JavaScript function to execute</param>
+		/// <param name="args">Arguments to pass to function</param>
+		/// <returns>Result of the JavaScript code</returns>
+		public T Execute<T>(string function, params object[] args)
+		{
+			try
+			{
+				return Engine.CallFunction<T>(function, args);
+			}
+			catch (JsRuntimeException ex)
+			{
+				throw WrapJavaScriptRuntimeException(ex);
+			}
 		}
 
 		/// <summary>
@@ -201,7 +246,14 @@ namespace React
 		/// <returns><c>true</c> if the variable exists; <c>false</c> otherwise</returns>
 		public bool HasVariable(string name)
 		{
-			return Engine.HasVariable(name);
+			try
+			{
+				return Engine.HasVariable(name);
+			}
+			catch (JsRuntimeException ex)
+			{
+				throw WrapJavaScriptRuntimeException(ex);
+			}
 		}
 
 		/// <summary>
@@ -278,7 +330,7 @@ namespace React
 		{
 			try
 			{
-				return Engine.CallFunction<T>(function, args);
+				return Execute<T>(function, args);
 			}
 			catch (Exception)
 			{
@@ -292,7 +344,7 @@ namespace React
 					try
 					{
 						// New engine will be created here (as this is a new thread)
-						result = Engine.CallFunction<T>(function, args);
+						result = Execute<T>(function, args);
 					}
 					catch (Exception threadEx)
 					{
@@ -335,6 +387,30 @@ namespace React
 		public void Dispose()
 		{
 			_engineFactory.DisposeEngineForCurrentThread();
+		}
+
+		/// <summary>
+		/// Updates the Message of a <see cref="JsRuntimeException"/> to be more useful, containing
+		/// the line and column numbers.
+		/// </summary>
+		/// <param name="ex">Original exception</param>
+		/// <returns>New exception</returns>
+		private JsRuntimeException WrapJavaScriptRuntimeException(JsRuntimeException ex)
+		{
+			return new JsRuntimeException(string.Format(
+				"{0}\r\nLine: {1}\r\nColumn:{2}",
+				ex.Message,
+				ex.LineNumber,
+				ex.ColumnNumber
+			), ex.EngineName, ex.EngineVersion)
+			{
+				ErrorCode = ex.ErrorCode,
+				Category = ex.Category,
+				LineNumber = ex.LineNumber,
+				ColumnNumber = ex.ColumnNumber,
+				SourceFragment = ex.SourceFragment,
+				Source = ex.Source,
+			};
 		}
 	}
 }

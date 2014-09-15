@@ -20,5 +20,9 @@ if (!Object.freeze) {
 }
 
 function ReactNET_transform(input, harmony) {
-	return global.JSXTransformer.transform(input, { harmony: !!harmony }).code;
+	try {
+		return global.JSXTransformer.transform(input, { harmony: !!harmony }).code;
+	} catch (ex) {
+		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
+	}
 }

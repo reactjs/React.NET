@@ -42,6 +42,15 @@ namespace React
 		T Execute<T>(string code);
 
 		/// <summary>
+		/// Executes the provided JavaScript function, returning a result of the specified type.
+		/// </summary>
+		/// <typeparam name="T">Type to return</typeparam>
+		/// <param name="function">JavaScript function to execute</param>
+		/// <param name="args">Arguments to pass to function</param>
+		/// <returns>Result of the JavaScript code</returns>
+		T Execute<T>(string function, params object[] args);
+
+		/// <summary>
 		/// Attempts to execute the provided JavaScript code using the current engine. If an 
 		/// exception is thrown, retries the execution using a new thread (and hence a new engine)
 		/// with a larger maximum stack size.

@@ -9,6 +9,7 @@
 
 using System.Linq;
 using System.Text.RegularExpressions;
+using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -68,15 +69,27 @@ namespace React
 		public string RenderHtml()
 		{
 			EnsureComponentExists();
-			var html = _environment.Execute<string>(
-				string.Format("React.renderComponentToString({0})", GetComponentInitialiser())
-			);
-			// TODO: Allow changing of the wrapper tag element from a DIV to something else
-			return string.Format(
-				"<div id=\"{0}\">{1}</div>",
-				_containerId,
-				html
-			);
+			try
+			{
+				var html = _environment.Execute<string>(
+					string.Format("React.renderComponentToString({0})", GetComponentInitialiser())
+					);
+				// TODO: Allow changing of the wrapper tag element from a DIV to something else
+				return string.Format(
+					"<div id=\"{0}\">{1}</div>",
+					_containerId,
+					html
+					);
+			}
+			catch (JsRuntimeException ex)
+			{
+				throw new ReactServerRenderingException(string.Format(
+					"Error while rendering \"{0}\" to \"{2}\": {1}",
+					_componentName,
+					ex.Message,
+					_containerId
+				));
+			}
 		}
 
 		/// <summary>

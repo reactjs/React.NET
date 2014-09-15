@@ -98,7 +98,19 @@ namespace React
 					}
 
 					// 3. Not cached, perform the transformation
-					return TransformJsxWithHeader(contents, hash, useHarmony);
+					try
+					{
+						return TransformJsxWithHeader(contents, hash, useHarmony);
+					}
+					catch (JsxException ex)
+					{
+						// Add the filename to the error message
+						throw new JsxException(string.Format(
+							"In file \"{0}\": {1}",
+							filename,
+							ex.Message
+						));
+					}
 				}
 			);
 		}
