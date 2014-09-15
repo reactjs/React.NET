@@ -11,7 +11,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<PropertyGroup>
 		<Major>1</Major>
 		<Minor>1</Minor>
-		<Build>2</Build>
+		<Build>3</Build>
 		<Revision>0</Revision>
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
@@ -30,7 +30,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</ItemGroup>
 
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
-	<UsingTask 
+	<UsingTask
 		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v12.0\Web\Microsoft.Web.Publishing.Tasks.dll"
 		TaskName="TransformXml"
 	/>
@@ -88,7 +88,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Target Name="Package" DependsOnTargets="Build;GenerateNuSpecs">
 		<!-- Delete old packages -->
 		<RemoveDir Directories="$(PackageOutputDir)" />
-		
+
 		<!-- Create new packages -->
 		<MakeDir Directories="$(PackageOutputDir)" />
 		<Exec
