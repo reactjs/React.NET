@@ -141,12 +141,6 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public string TransformJsx(string input, bool? useHarmony = null)
 		{
-			// Just return directly if there's no JSX annotation
-			if (!input.Contains("@jsx"))
-			{
-				return input;
-			}
-
 			EnsureJsxTransformerSupported();
 			try
 			{

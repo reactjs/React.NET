@@ -31,7 +31,6 @@ Install-Package React.Web.Mvc4
 Create JSX files
 ```javascript
 // /Scripts/HelloWorld.jsx
-/** @jsx React.DOM */
 var HelloWorld = React.createClass({
     render: function () {
         return (

@@ -46,23 +46,14 @@ namespace React.Tests.Core
 		}
 
 		[Test]
-		public void ShouldNotTransformJsxIfNoAnnotationPresent()
+		public void ShouldTransformJsx()
 		{
 			const string input = "<div>Hello World</div>";
-
-			var output = _jsxTransformer.TransformJsx(input);
-			Assert.AreEqual(input, output);
-		}
-
-		[Test]
-		public void ShouldTransformJsxIfAnnotationPresent()
-		{
-			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
 			_jsxTransformer.TransformJsx(input);
 
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>",
+				"<div>Hello World</div>",
 				false
 			));
 		}
@@ -72,11 +63,11 @@ namespace React.Tests.Core
 		{
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>",
+				"<div>Hello World</div>",
 				false
 			)).Throws(new Exception("Something broke..."));
 
-			const string input = "/** @jsx React.DOM */ <div>Hello World</div>";
+			const string input = "<div>Hello World</div>";
 			Assert.Throws<JsxException>(() => _jsxTransformer.TransformJsx(input));
 		}
 
@@ -87,7 +78,7 @@ namespace React.Tests.Core
 
 			Assert.Throws<JsxUnsupportedEngineException>(() =>
 			{
-				_jsxTransformer.TransformJsx("/** @jsx React.DOM */ <div>Hello world</div>");
+				_jsxTransformer.TransformJsx("<div>Hello world</div>");
 			});
 		}
 
@@ -124,13 +115,13 @@ namespace React.Tests.Core
 			SetUpEmptyCache();
 			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(true);
 			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached invalid */");
-			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 
 			_jsxTransformer.TransformJsxFile("foo.jsx");
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>",
+				"<div>Hello World</div>",
 				false
 			));
 		}
@@ -140,12 +131,12 @@ namespace React.Tests.Core
 		{
 			SetUpEmptyCache();
 			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(false);
-			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 
 			_jsxTransformer.TransformJsxFile("foo.jsx");
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>",
+				"<div>Hello World</div>",
 				false
 			));
 		}
@@ -153,10 +144,10 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldSaveTransformationResult()
 		{
-			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("/** @jsx React.DOM */ <div>Hello World</div>");
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"/** @jsx React.DOM */ <div>Hello World</div>",
+				"<div>Hello World</div>",
 				false
 			)).Returns("React.DOM.div('Hello World')");
 

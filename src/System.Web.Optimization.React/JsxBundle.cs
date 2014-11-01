@@ -27,22 +27,6 @@ namespace System.Web.Optimization.React
 		}
 
 		/// <summary>
-		/// Applies the transformations.
-		/// </summary>
-		/// <returns>The bundle response.</returns>
-		public override BundleResponse ApplyTransforms(BundleContext context, string bundleContent, Collections.Generic.IEnumerable<BundleFile> bundleFiles)
-        	{
-			const string pragma = "/** @jsx React.DOM */";
-
-			if (!bundleContent.TrimStart().StartsWith(pragma))
-			{
-				bundleContent = pragma + bundleContent;
-			}
-
-			return base.ApplyTransforms(context, bundleContent, bundleFiles);
-        	}
-
-		/// <summary>
 		/// Gets the transformations that should be used by the bundle.
 		/// </summary>
 		/// <returns>The transformations</returns>
