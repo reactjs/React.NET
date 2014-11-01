@@ -90,7 +90,6 @@ React is all about modular, composable components. For our comment box example, 
 Let's build the `CommentBox` component, which is just a simple `<div>`. Add this code to `Tutorial.jsx`:
 
 ```javascript
-/** @jsx React.DOM */
 var CommentBox = React.createClass({
   render: function() {
     return (
@@ -100,7 +99,7 @@ var CommentBox = React.createClass({
     );
   }
 });
-React.renderComponent(
+React.render(
   <CommentBox />,
   document.getElementById('content')
 );
@@ -117,19 +116,17 @@ If you see this, congratulations! You've just built your first React component. 
 The first thing you'll notice is the XML-ish syntax in your JavaScript. We have a simple precompiler that translates the syntactic sugar to this plain JavaScript:
 
 ```javascript
-// tutorial1-raw.js
-var CommentBox = React.createClass({
+var CommentBox = React.createClass({displayName: 'CommentBox',
   render: function() {
     return (
-      React.DOM.div({
-        className: 'commentBox',
-        children: 'Hello, world! I am a CommentBox.'
-      })
+      React.createElement('div', {className: "commentBox"},
+        "Hello, world! I am a CommentBox."
+      )
     );
   }
 });
-React.renderComponent(
-  CommentBox({}),
+React.render(
+  React.createElement(CommentBox, null),
   document.getElementById('content')
 );
 ```
@@ -144,7 +141,7 @@ The `<div>` tags are not actual DOM nodes; they are instantiations of React `div
 
 You do not have to return basic HTML. You can return a tree of components that you (or someone else) built. This is what makes React **composable**: a key tenet of maintainable frontends.
 
-`React.renderComponent()` instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
+`React.render()` instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
 
 ## Composing components
 
@@ -188,7 +185,7 @@ var CommentBox = React.createClass({
 });
 ```
 
-Notice how we're mixing HTML tags and components we've built. HTML components are regular React components, just like the ones you define, with one difference. The JSX compiler will automatically rewrite HTML tags to "React.DOM.tagName" expressions and leave everything else alone. This is to prevent the pollution of the global namespace.
+Notice how we're mixing HTML tags and components we've built. HTML components are regular React components, just like the ones you define, with one difference. The JSX compiler will automatically rewrite HTML tags to `React.createElement(tagName)` expressions and leave everything else alone. This is to prevent the pollution of the global namespace.
 
 ### Component Properties
 
@@ -208,11 +205,11 @@ var CommentList = React.createClass({
 });
 ```
 
-Note that we have passed some data from the parent `CommentList` component to the child `Comment` component as both XML-like children and attributes. Data passed from parent to child is called **props**, short for properties.
+Note that we have passed some data from the parent `CommentList` component to the child `Comment` components. For example, we passed *Pete Hunt* (via an attribute) and *This is one comment* (via an XML-like child node) to the first `Comment`. Data passed from parent to children components is called **props**, short for properties.
 
 ### Using props
 
-Let's create the Comment component. It will read the data passed to it from the CommentList and render some markup:
+Let's create the Comment component. Using **props** we will be able to read the data passed to it from the `CommentList`, and render some markup:
 
 ```javascript
 var Comment = React.createClass({
@@ -231,7 +228,6 @@ var Comment = React.createClass({
 
 By surrounding a JavaScript expression in braces inside JSX (as either an attribute or child), you can drop text or React components into the tree. We access named attributes passed to the component as keys on `this.props` and any nested elements as `this.props.children`.
 
-
 ### Adding Markdown
 
 Markdown is a simple way to format your text inline. For example, surrounding text with asterisks will make it emphasized.
@@ -246,10 +242,10 @@ First, add the third-party **Showdown** library to your application. This is a J
 
 Next, let's convert the comment text to Markdown and output it:
 
-```javascript{1,9}
-var converter = new Showdown.converter();
+```javascript{3,9}
 var Comment = React.createClass({
   render: function() {
+    var converter = new Showdown.converter();
     return (
       <div className="comment">
         <h2 className="commentAuthor">
@@ -269,9 +265,9 @@ But there's a problem! Our rendered comments look like this in the browser: "`<p
 That's React protecting you from an XSS attack. There's a way to get around it but the framework warns you not to use it:
 
 ```javascript{4,10}
-var converter = new Showdown.converter();
 var Comment = React.createClass({
   render: function() {
+    var converter = new Showdown.converter();
     var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
       <div className="comment">
@@ -301,7 +297,7 @@ var data = [
 ];
 ```
 
-We need to get this data into `CommentList` in a modular way. Modify `CommentBox` and the `renderComponent()` call to pass this data into the `CommentList` via props:
+We need to get this data into `CommentList` in a modular way. Modify `CommentBox` and the `React.render()` call to pass this data into the `CommentList` via props:
 
 ```javascript{6,14}
 var CommentBox = React.createClass({
@@ -316,7 +312,7 @@ var CommentBox = React.createClass({
   }
 });
 
-React.renderComponent(
+React.render(
   <CommentBox data={data} />,
   document.getElementById('content')
 );
@@ -324,11 +320,15 @@ React.renderComponent(
 
 Now that the data is available in the `CommentList`, let's render the comments dynamically:
 
-```javascript{3-5,8}
+```javascript{3-8,12}
 var CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.data.map(function (comment) {
-      return <Comment author={comment.Author}>{comment.Text}</Comment>;
+      return (
+        <Comment author={comment.author}>
+          {comment.text}
+        </Comment>
+      );
     });
     return (
       <div className="commentList">
@@ -447,7 +447,7 @@ If you hit `/comments` in your browser, you should now see the data encoded as J
 Now that we have a data source, we can replace the hard-coded data with the dynamic data from the server. We will remove the data prop and replace it with a URL to fetch:
 
 ```javascript{2}
-React.renderComponent(
+React.render(
   <CommentBox url="/comments" />,
   document.getElementById('content')
 );
@@ -511,7 +511,7 @@ var CommentBox = React.createClass({
 });
 ```
 
-Here, `componentWillMount` is a method called automatically by React before a component is rendered. The key to dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
+Here, `componentDidMount` is a method called automatically by React when a component is rendered. The key to dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
 
 ```javascript{2,15-16,30}
 var CommentBox = React.createClass({
@@ -527,7 +527,7 @@ var CommentBox = React.createClass({
   getInitialState: function() {
     return {data: []};
   },
-  componentWillMount: function() {
+  componentDidMount: function() {
     this.loadCommentsFromServer();
     window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
@@ -542,7 +542,7 @@ var CommentBox = React.createClass({
   }
 });
 
-React.renderComponent(
+React.render(
   <CommentBox url="/comments" pollInterval={2000} />,
   document.getElementById('content')
 );
@@ -595,26 +595,23 @@ Let's make the form interactive. When the user submits the form, we should clear
 
 ```javascript{2-12,15-16,20}
 var CommentForm = React.createClass({
-  handleSubmit: function() {
+  handleSubmit: function(e) {
+    e.preventDefault();
     var author = this.refs.author.getDOMNode().value.trim();
     var text = this.refs.text.getDOMNode().value.trim();
     if (!text || !author) {
-      return false;
+      return;
     }
     // TODO: send request to the server
     this.refs.author.getDOMNode().value = '';
     this.refs.text.getDOMNode().value = '';
-    return false;
+    return;
   },
   render: function() {
     return (
       <form className="commentForm" onSubmit={this.handleSubmit}>
         <input type="text" placeholder="Your name" ref="author" />
-        <input
-          type="text"
-          placeholder="Say something..."
-          ref="text"
-        />
+        <input type="text" placeholder="Say something..." ref="text" />
         <input type="submit" value="Post" />
       </form>
     );
@@ -626,7 +623,7 @@ var CommentForm = React.createClass({
 
 React attaches event handlers to components using a camelCase naming convention. We attach an `onSubmit` handler to the form that clears the form fields when the form is submitted with valid input.
 
-We always return `false` from the event handler to prevent the browser's default action of submitting the form. (If you prefer, you can instead take the event as an argument and call `preventDefault()` on it.)
+Call `preventDefault()` on the event to prevent the browser's default action of submitting the form.
 
 ##### Refs
 
@@ -638,7 +635,7 @@ When a user submits a comment, we will need to refresh the list of comments to i
 
 We need to pass data from the child component to its parent. We do this by passing a `callback` in props from parent to child:
 
-```javascript{11-13,27}
+```javascript{11-13,26}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
@@ -655,7 +652,7 @@ var CommentBox = React.createClass({
   getInitialState: function() {
     return {data: []};
   },
-  componentWillMount: function() {
+  componentDidMount: function() {
     this.loadCommentsFromServer();
     window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
@@ -664,9 +661,7 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data} />
-        <CommentForm
-          onCommentSubmit={this.handleCommentSubmit}
-        />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
     );
   }
@@ -675,28 +670,25 @@ var CommentBox = React.createClass({
 
 Let's call the callback from the `CommentForm` when the user submits the form:
 
-```javascript{8}
+```javascript{9}
 var CommentForm = React.createClass({
-  handleSubmit: function() {
+  handleSubmit: function(e) {
+    e.preventDefault();
     var author = this.refs.author.getDOMNode().value.trim();
     var text = this.refs.text.getDOMNode().value.trim();
     if (!text || !author) {
-      return false;
+      return;
     }
     this.props.onCommentSubmit({author: author, text: text});
     this.refs.author.getDOMNode().value = '';
     this.refs.text.getDOMNode().value = '';
-    return false;
+    return;
   },
   render: function() {
     return (
       <form className="commentForm" onSubmit={this.handleSubmit}>
         <input type="text" placeholder="Your name" ref="author" />
-        <input
-          type="text"
-          placeholder="Say something..."
-          ref="text"
-        />
+        <input type="text" placeholder="Say something..." ref="text" />
         <input type="submit" value="Post" />
       </form>
     );
@@ -706,7 +698,7 @@ var CommentForm = React.createClass({
 
 Now that the callbacks are in place, all we have to do is submit to the server and refresh the list:
 
-```javascript{12-21,44}
+```javascript{12-21,42}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
@@ -732,7 +724,7 @@ var CommentBox = React.createClass({
   getInitialState: function() {
     return {data: []};
   },
-  componentWillMount: function() {
+  componentDidMount: function() {
     this.loadCommentsFromServer();
     window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
@@ -741,15 +733,13 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data} />
-        <CommentForm
-          onCommentSubmit={this.handleCommentSubmit}
-        />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
     );
   }
 });
 
-React.renderComponent(
+React.render(
   <CommentBox url="/comments" submitUrl="/comments/new" pollInterval={2000} />,
   document.getElementById('content')
 );
@@ -797,7 +787,7 @@ var CommentBox = React.createClass({
   getInitialState: function() {
     return {data: []};
   },
-  componentWillMount: function() {
+  componentDidMount: function() {
     this.loadCommentsFromServer();
     window.setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
@@ -806,9 +796,7 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data} />
-        <CommentForm
-          onCommentSubmit={this.handleCommentSubmit}
-        />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
     );
   }
@@ -880,9 +868,9 @@ If you go to this URL in your browser, you should notice that the code has been 
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using JavaScript. This enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to ensure the `setInterval` call for polling for new comments is only executed client-side, by moving it to the `componentDidMount` method. Finally, we will remove the `loadCommentsFromServer` call from `getInitialState`, since it is no longer required.
+We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `getInitialState`, since it is no longer required.
 
-```javascript{28,30-32}
+```javascript{28}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
@@ -920,16 +908,14 @@ var CommentBox = React.createClass({
       <div className="commentBox">
         <h1>Comments</h1>
         <CommentList data={this.state.data} />
-        <CommentForm
-          onCommentSubmit={this.handleCommentSubmit}
-        />
+        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
     );
   }
 });
 ```
 
-In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `React.renderComponent` call that currently exists in Tutorial.jsx. All the props from the current `React.renderComponent` call should be moved here, and the `React.renderComponent` call should be deleted.
+In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `React.render` call that currently exists in Tutorial.jsx. All the props from the current `React.render` call should be moved here, and the `React.render` call should be deleted.
 
 ```html{1,10-16,20}
 @model IEnumerable<ReactDemo.Models.CommentModel>

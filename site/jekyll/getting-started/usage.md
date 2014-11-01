@@ -3,12 +3,10 @@ layout: docs
 title: Basic Usage
 ---
 
-Once installed, create your React components as usual, ensuring you add the
-`/** @jsx React.DOM */` docblock.
+Once installed, create your React components as usual.
 
 ```javascript
 // /Scripts/HelloWorld.jsx
-/** @jsx React.DOM */
 var HelloWorld = React.createClass({
 	render: function () {
 		return (
