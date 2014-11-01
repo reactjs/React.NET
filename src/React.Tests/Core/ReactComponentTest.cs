@@ -41,7 +41,7 @@ namespace React.Tests.Core
 			};
 			component.RenderHtml();
 
-			environment.Verify(x => x.Execute<string>(@"React.renderComponentToString(Foo({""hello"":""World""}))"));
+			environment.Verify(x => x.Execute<string>(@"React.renderToString(Foo({""hello"":""World""}))"));
 		}
 
 		[Test]
@@ -49,7 +49,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"React.renderComponentToString(Foo({""hello"":""World""}))"))
+			environment.Setup(x => x.Execute<string>(@"React.renderToString(Foo({""hello"":""World""}))"))
 				.Returns("[HTML]");
 
 			var component = new ReactComponent(environment.Object, "Foo", "container")
@@ -73,7 +73,7 @@ namespace React.Tests.Core
 			var result = component.RenderJavaScript();
 
 			Assert.AreEqual(
-				@"React.renderComponent(Foo({""hello"":""World""}), document.getElementById(""container""))",
+				@"React.render(Foo({""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
 		}

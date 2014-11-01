@@ -72,7 +72,7 @@ namespace React
 			try
 			{
 				var html = _environment.Execute<string>(
-					string.Format("React.renderComponentToString({0})", GetComponentInitialiser())
+					string.Format("React.renderToString({0})", GetComponentInitialiser())
 					);
 				// TODO: Allow changing of the wrapper tag element from a DIV to something else
 				return string.Format(
@@ -101,7 +101,7 @@ namespace React
 		public string RenderJavaScript()
 		{
 			return string.Format(
-				"React.renderComponent({0}, document.getElementById({1}))",
+				"React.render({0}, document.getElementById({1}))",
 				GetComponentInitialiser(),
 				JsonConvert.SerializeObject(_containerId)
 			);
