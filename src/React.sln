@@ -51,6 +51,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F2875D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.JavaScriptEngine.VroomJs", "React.JavaScriptEngine.VroomJs\React.JavaScriptEngine.VroomJs.csproj", "{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.JavaScriptEngine.ClearScriptV8", "React.JavaScriptEngine.ClearScriptV8\React.JavaScriptEngine.ClearScriptV8.csproj", "{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +123,6 @@ Global
 		{6B05AF58-BA85-45A9-97AE-88B6B21317D7} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{AF531A37-B93F-4113-9C2C-4DB28064B926} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
+		{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 	EndGlobalSection
 EndGlobal

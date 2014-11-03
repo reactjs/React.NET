@@ -45,12 +45,12 @@ namespace React
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
-				Priority = 10
+				Priority = 20
 			}, "MsieChakra");
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
-				Priority = 20
+				Priority = 30
 			}, "MsieClassic");
 			container.Register(new JavaScriptEngineFactory.Registration
 			{

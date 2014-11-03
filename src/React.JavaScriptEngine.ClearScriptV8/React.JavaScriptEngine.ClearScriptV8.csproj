@@ -4,57 +4,50 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9}</ProjectGuid>
+    <ProjectGuid>{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>React.JavaScriptEngine.VroomJs</RootNamespace>
-    <AssemblyName>React.JavaScriptEngine.VroomJs</AssemblyName>
+    <RootNamespace>React.JavaScriptEngine.ClearScriptV8</RootNamespace>
+    <AssemblyName>React.JavaScriptEngine.ClearScriptV8</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\React.JavaScriptEngine.VroomJs\</OutputPath>
+    <OutputPath>..\..\bin\Debug\React.JavaScriptEngine.ClearScriptV8\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Debug\React.JavaScriptEngine.VroomJs\React.JavaScriptEngine.VroomJs.xml</DocumentationFile>
     <NoWarn>1607</NoWarn>
+    <DocumentationFile>..\..\bin\Debug\React.JavaScriptEngine.ClearScriptV8\React.JavaScriptEngine.ClearScriptV8.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release\React.JavaScriptEngine.VroomJs\</OutputPath>
+    <OutputPath>..\..\bin\Release\React.JavaScriptEngine.ClearScriptV8\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Release\React.JavaScriptEngine.VroomJs\React.JavaScriptEngine.VroomJs.xml</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\bin\Release\React.JavaScriptEngine.ClearScriptV8\React.JavaScriptEngine.ClearScriptV8.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JavaScriptEngineSwitcher.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ClearScript">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.1\lib\net40\ClearScript.dll</HintPath>
+    </Reference>
+    <Reference Include="JavaScriptEngineSwitcher.Core">
       <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.2.0\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="JavaScriptEngineSwitcher.V8">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.1\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="VroomJs">
-      <HintPath>..\..\lib\VroomJs.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -64,14 +57,13 @@
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
+    <Compile Include="ClearScriptV8Utils.cs" />
+    <Compile Include="ClearScriptV8InitialisationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VroomJsEngine.cs" />
-    <Compile Include="VroomJsInitialisationException.cs" />
-    <Compile Include="VroomJsUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="React.JavaScriptEngine.VroomJs.nutrans" />
+    <None Include="React.JavaScriptEngine.ClearScriptV8.nutrans" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React\React.csproj">
@@ -79,14 +71,7 @@
       <Name>React</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="readme.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
