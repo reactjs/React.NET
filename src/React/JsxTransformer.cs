@@ -147,9 +147,33 @@ namespace React
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
 					input,
-					useHarmony.HasValue ? useHarmony.Value : _config.UseHarmony
+					useHarmony ?? _config.UseHarmony
 				);
 				return output;
+			}
+			catch (Exception ex)
+			{
+				throw new JsxException(ex.Message, ex);
+			}
+		}
+
+		/// <summary>
+		/// Transforms JSX to regular JavaScript and also returns a source map to map the compiled
+		/// source to the original version. The result is not cached.
+		/// </summary>
+		/// <param name="input">JSX</param>
+		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
+		/// <returns>JavaScript and source map</returns>
+		public JavaScriptWithSourceMap TransformJsxWithSourceMap(string input, bool? useHarmony)
+		{
+			EnsureJsxTransformerSupported();
+			try
+			{
+				return _environment.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+					"ReactNET_transform_sourcemap",
+					input,
+					useHarmony ?? _config.UseHarmony
+				);
 			}
 			catch (Exception ex)
 			{

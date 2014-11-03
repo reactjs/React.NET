@@ -18,7 +18,7 @@ namespace React
 		/// Transforms a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
-		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
 		/// <returns>JavaScript</returns>
 		string TransformJsxFile(string filename, bool? useHarmony = null);
 
@@ -27,16 +27,25 @@ namespace React
 		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
-		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
 		/// <returns>JavaScript</returns>
 		string TransformJsx(string input, bool? useHarmony = null);
+		
+		/// <summary>
+		/// Transforms JSX to regular JavaScript and also returns a source map to map the compiled
+		/// source to the original version. The result is not cached.
+		/// </summary>
+		/// <param name="input">JSX</param>
+		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
+		/// <returns>JavaScript and source map</returns>
+		JavaScriptWithSourceMap TransformJsxWithSourceMap(string input, bool? useHarmony);
 
 		/// <summary>
 		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
 		/// alongside the original file.
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
-		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
 		/// <returns>File contents</returns>
 		string TransformAndSaveJsxFile(string filename, bool? useHarmony = null);
 
