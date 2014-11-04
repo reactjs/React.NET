@@ -35,16 +35,29 @@ namespace React.Web.Mvc
 		/// <param name="htmlHelper">HTML helper</param>
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to initialise the component with</param>
+		/// <param name="initialize">Whether to include a script tag to inilalize component. Optional, defaults to false.</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this HtmlHelper htmlHelper, 
 			string componentName, 
-			T props
+			T props,
+			bool initialize=false
 		)
 		{
 			var reactComponent = Environment.CreateComponent(componentName, props);
 			var result = reactComponent.RenderHtml();
-			return new HtmlString(result);
+			if (initialize)
+			{
+				var script = new TagBuilder("script")
+				{
+					InnerHtml = reactComponent.RenderJavaScript()
+				};
+				return new HtmlString(result + "\n" + script.ToString());
+			}
+			else
+			{
+				return new HtmlString(result);
+			}
 		}
 
 		/// <summary>
