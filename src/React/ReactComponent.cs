@@ -103,7 +103,7 @@ namespace React
 			return string.Format(
 				"React.render({0}, document.getElementById({1}))",
 				GetComponentInitialiser(),
-				JsonConvert.SerializeObject(_containerId)
+				JsonConvert.SerializeObject(_containerId, _environment.Configuration.JsonSerializerSettings)
 			);
 		}
 
@@ -133,7 +133,7 @@ namespace React
 		/// <returns>JavaScript for component initialisation</returns>
 		private string GetComponentInitialiser()
 		{
-			var encodedProps = JsonConvert.SerializeObject(Props);
+			var encodedProps = JsonConvert.SerializeObject(Props, _environment.Configuration.JsonSerializerSettings);
 			return string.Format(
 				"{0}({1})",
 				_componentName,

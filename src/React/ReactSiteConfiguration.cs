@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -31,6 +32,8 @@ namespace React
 		/// All the scripts that have been added to this configuration
 		/// </summary>
 		private readonly IList<string> _scriptFiles = new List<string>();
+
+		private JsonSerializerSettings _jsonSerializerSettings;
 
 		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
@@ -60,13 +63,35 @@ namespace React
 		/// </summary>
 		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
 		public bool UseHarmony { get; set; }
-
+		
 		/// <summary>
 		/// Specifies whether ES6 (harmony) syntax should be transformed
 		/// </summary>
 		public IReactSiteConfiguration SetUseHarmony(bool useHarmony)
 		{
 			UseHarmony = useHarmony;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets the configuration for json serializer.
+		/// </summary>
+		public JsonSerializerSettings JsonSerializerSettings
+		{
+			get { return _jsonSerializerSettings; }
+		}
+
+		/// <summary>
+		/// Sets the configuration for json serializer.
+		/// </summary>
+		/// <param name="settings">Settings.</param>
+		/// <remarks>
+		/// Thic confiquration is used when component initialization script
+		/// is being generated server-side.
+		/// </remarks>
+		public IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings)
+		{
+			_jsonSerializerSettings = settings;
 			return this;
 		}
 	}

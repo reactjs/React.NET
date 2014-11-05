@@ -412,5 +412,13 @@ namespace React
 				Source = ex.Source,
 			};
 		}
+
+		/// <summary>
+		/// Gets the site-wide configuration.
+		/// </summary>
+		public IReactSiteConfiguration Configuration
+		{
+			get { return _config; }
+		}
 	}
 }

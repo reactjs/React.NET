@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace React
@@ -42,5 +43,20 @@ namespace React
 		/// Specifies whether ES6 (harmony) syntax should be transformed
 		/// </summary>
 		IReactSiteConfiguration SetUseHarmony(bool useHarmony);
+
+		/// <summary>
+		/// Gets the configuration for json serializer.
+		/// </summary>
+		JsonSerializerSettings JsonSerializerSettings { get; }
+
+		/// <summary>
+		/// Sets the configuration for json serializer.
+		/// </summary>
+		/// <remarks>
+		/// Thic confiquration is used when component initialization script
+		/// is being generated server-side.
+		/// </remarks>
+		/// <param name="settings">The settings.</param>
+		IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings);
 	}
 }

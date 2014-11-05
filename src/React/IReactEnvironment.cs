@@ -107,5 +107,10 @@ namespace React
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
 		IJsxTransformer JsxTransformer { get; }
+
+		/// <summary>
+		/// Gets the global site configuration.
+		/// </summary>
+		IReactSiteConfiguration Configuration { get; }
 	}
 }
