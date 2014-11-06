@@ -28,6 +28,13 @@ namespace React.Web.Mvc
 			get { return AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
 		}
 
+		private static IReactComponent CreateComponentAndRender<T>(string componentName, T props, out string html)
+		{
+			var reactComponent = Environment.CreateComponent(componentName, props);
+			html = reactComponent.RenderHtml();
+			return reactComponent;
+		}
+
 		/// <summary>
 		/// Renders the specified React component
 		/// </summary>
@@ -35,29 +42,38 @@ namespace React.Web.Mvc
 		/// <param name="htmlHelper">HTML helper</param>
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to initialise the component with</param>
-		/// <param name="initialize">Whether to include a script tag to inilalize component. Optional, defaults to false.</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this HtmlHelper htmlHelper, 
 			string componentName, 
-			T props,
-			bool initialize=false
+			T props
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props);
-			var result = reactComponent.RenderHtml();
-			if (initialize)
+			string result;
+			CreateComponentAndRender(componentName, props, out result);
+			return new HtmlString(result);
+		}
+
+		/// <summary>
+		/// Renders the specified React component and inserts client-side initialization code
+		/// </summary>
+		/// <typeparam name="T">Type of the props</typeparam>
+		/// <param name="htmlHelper">HTML helper</param>
+		/// <param name="componentName">Name of the component</param>
+		/// <param name="props">Props to initialize the component with</param>
+		/// <returns>The component's HTML</returns>
+		public static IHtmlString ReactWithInit<T>(
+			this HtmlHelper htmlHelper,
+			string componentName,
+			T props)
+		{
+			string html;
+			var reactComponent = CreateComponentAndRender(componentName, props, out html);
+			var script = new TagBuilder("script")
 			{
-				var script = new TagBuilder("script")
-				{
-					InnerHtml = reactComponent.RenderJavaScript()
-				};
-				return new HtmlString(result + "\n" + script.ToString());
-			}
-			else
-			{
-				return new HtmlString(result);
-			}
+				InnerHtml = reactComponent.RenderJavaScript()
+			};
+			return new HtmlString(html + "\n" + script.ToString());
 		}
 
 		/// <summary>
