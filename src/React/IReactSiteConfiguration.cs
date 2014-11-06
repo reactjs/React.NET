@@ -45,9 +45,9 @@ namespace React
 		IReactSiteConfiguration SetUseHarmony(bool useHarmony);
 
 		/// <summary>
-		/// Gets the configuration for json serializer.
+		/// Gets or sets the configuration for JSON serializer.
 		/// </summary>
-		JsonSerializerSettings JsonSerializerSettings { get; }
+		JsonSerializerSettings JsonSerializerSettings { get; set; }
 
 		/// <summary>
 		/// Sets the configuration for json serializer.

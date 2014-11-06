@@ -21,7 +21,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
-			var component = new ReactComponent(environment.Object, "Foo", "container");
+			var component = new ReactComponent(environment.Object, null, "Foo", "container");
 
 			Assert.Throws<ReactInvalidComponentException>(() =>
 			{
@@ -34,8 +34,9 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			var config = new Mock<IReactSiteConfiguration>();
 
-			var component = new ReactComponent(environment.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -51,8 +52,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"React.renderToString(Foo({""hello"":""World""}))"))
 				.Returns("[HTML]");
+			var config = new Mock<IReactSiteConfiguration>();
 
-			var component = new ReactComponent(environment.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -65,8 +67,9 @@ namespace React.Tests.Core
 		public void RenderJavaScriptShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
+			var config = new Mock<IReactSiteConfiguration>();
 
-			var component = new ReactComponent(environment.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};

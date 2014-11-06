@@ -33,8 +33,6 @@ namespace React
 		/// </summary>
 		private readonly IList<string> _scriptFiles = new List<string>();
 
-		private JsonSerializerSettings _jsonSerializerSettings;
-
 		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
 		/// React components and their dependencies.
@@ -74,11 +72,12 @@ namespace React
 		}
 
 		/// <summary>
-		/// Gets the configuration for json serializer.
+		/// Gets or sets the configuration for JSON serializer.
 		/// </summary>
 		public JsonSerializerSettings JsonSerializerSettings
 		{
-			get { return _jsonSerializerSettings; }
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -91,7 +90,7 @@ namespace React
 		/// </remarks>
 		public IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings)
 		{
-			_jsonSerializerSettings = settings;
+			JsonSerializerSettings = settings;
 			return this;
 		}
 	}
