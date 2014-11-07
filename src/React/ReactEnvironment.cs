@@ -268,7 +268,7 @@ namespace React
 			EnsureUserScriptsLoaded();
 			_maxContainerId++;
 			var containerId = string.Format(CONTAINER_ELEMENT_NAME, _maxContainerId);
-			var component = new ReactComponent(this, componentName, containerId)
+			var component = new ReactComponent(this, _config, componentName, containerId)
 			{
 				Props = props
 			};
@@ -411,6 +411,14 @@ namespace React
 				SourceFragment = ex.SourceFragment,
 				Source = ex.Source,
 			};
+		}
+
+		/// <summary>
+		/// Gets the site-wide configuration.
+		/// </summary>
+		public IReactSiteConfiguration Configuration
+		{
+			get { return _config; }
 		}
 	}
 }

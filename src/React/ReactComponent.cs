@@ -33,6 +33,11 @@ namespace React
 		private readonly IReactEnvironment _environment;
 
 		/// <summary>
+		/// Global site configuration
+		/// </summary>
+		private readonly IReactSiteConfiguration _configuration;
+
+		/// <summary>
 		/// Name of the component
 		/// </summary>
 		private readonly string _componentName;
@@ -51,12 +56,14 @@ namespace React
 		/// Initializes a new instance of the <see cref="ReactComponent"/> class.
 		/// </summary>
 		/// <param name="environment">The environment.</param>
+		/// <param name="configuration">Site-wide configuration.</param>
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="containerId">The ID of the container DIV for this component</param>
-		public ReactComponent(IReactEnvironment environment, string componentName, string containerId)
+		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, string componentName, string containerId)
 		{
 			EnsureComponentNameValid(componentName);
 			_environment = environment;
+			_configuration = configuration;
 			_componentName = componentName;
 			_containerId = containerId;
 		}
@@ -103,7 +110,7 @@ namespace React
 			return string.Format(
 				"React.render({0}, document.getElementById({1}))",
 				GetComponentInitialiser(),
-				JsonConvert.SerializeObject(_containerId)
+				JsonConvert.SerializeObject(_containerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
 			);
 		}
 
@@ -133,7 +140,7 @@ namespace React
 		/// <returns>JavaScript for component initialisation</returns>
 		private string GetComponentInitialiser()
 		{
-			var encodedProps = JsonConvert.SerializeObject(Props);
+			var encodedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
 			return string.Format(
 				"{0}({1})",
 				_componentName,
