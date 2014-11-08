@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using React.Exceptions;
@@ -21,7 +20,7 @@ namespace React.Tests.Core
 		private Mock<IReactEnvironment> _environment;
 		private Mock<ICache> _cache;
 		private Mock<IFileSystem> _fileSystem;
-		private Mock<IFileCacheHash> _fileCacheHash; 
+		private Mock<IFileCacheHash> _fileCacheHash;
 		private JsxTransformer _jsxTransformer;
 
 		[SetUp]
@@ -85,13 +84,10 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldUseCacheProvider()
 		{
-			_cache.Setup(x => x.GetOrInsert(
-				/*key*/ "JSX_foo.jsx",
-				/*slidingExpiration*/ It.IsAny<TimeSpan>(),
-				/*getData*/ It.IsAny<Func<string>>(),
-				/*cacheDependencyKeys*/ It.IsAny<IEnumerable<string>>(),
-				/*cacheDependencyFiles*/ It.IsAny<IEnumerable<string>>()                
-			)).Returns("/* cached */");
+			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v2_foo.jsx", null)).Returns(new JavaScriptWithSourceMap
+			{
+				Code = "/* cached */"
+			});
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
 			Assert.AreEqual("/* cached */", result);
@@ -104,7 +100,7 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(true);
 			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached */");
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
-			
+
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
 			Assert.AreEqual("/* filesystem cached */", result);
 		}
@@ -117,13 +113,14 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached invalid */");
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-
-			_jsxTransformer.TransformJsxFile("foo.jsx");
-			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
-				"ReactNET_transform",
-				"<div>Hello World</div>",
+			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+				"ReactNET_transform_sourcemap",
+				It.IsAny<string>(),
 				false
-			));
+			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
+
+			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			Assert.AreEqual("React.DOM.div('Hello World')", result);
 		}
 
 		[Test]
@@ -132,24 +129,25 @@ namespace React.Tests.Core
 			SetUpEmptyCache();
 			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(false);
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
-
-			_jsxTransformer.TransformJsxFile("foo.jsx");
-			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
-				"ReactNET_transform",
-				"<div>Hello World</div>",
+			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+				"ReactNET_transform_sourcemap",
+				It.IsAny<string>(),
 				false
-			));
+			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
+
+			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			Assert.AreEqual("React.DOM.div('Hello World')", result);
 		}
 
 		[Test]
 		public void ShouldSaveTransformationResult()
 		{
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
-			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
-				"ReactNET_transform",
-				"<div>Hello World</div>",
+			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+				"ReactNET_transform_sourcemap",
+				It.IsAny<string>(),
 				false
-			)).Returns("React.DOM.div('Hello World')");
+			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			string result = null;
 			_fileSystem.Setup(x => x.WriteAsString("foo.generated.js", It.IsAny<string>())).Callback(
@@ -163,20 +161,7 @@ namespace React.Tests.Core
 
 		private void SetUpEmptyCache()
 		{
-			_cache.Setup(x => x.GetOrInsert(
-				/*key*/ "JSX_foo.jsx",
-				/*slidingExpiration*/ It.IsAny<TimeSpan>(),
-				/*getData*/ It.IsAny<Func<string>>(),
-				/*cacheDependencyKeys*/ It.IsAny<IEnumerable<string>>(),
-				/*cacheDependencyFiles*/ It.IsAny<IEnumerable<string>>()
-			))
-			.Returns((
-				string key, 
-				TimeSpan slidingExpiration, 
-				Func<string> getData, 
-				IEnumerable<string> cacheDependencyFiles, 
-				IEnumerable<string> cacheDependencyKeys
-			) => getData());
+			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v2_foo.jsx", null)).Returns((JavaScriptWithSourceMap)null);
 		}
 	}
 }

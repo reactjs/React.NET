@@ -8,7 +8,6 @@
  */
 
 using System.Web;
-using System.Web.Caching;
 
 namespace React.Web
 {
@@ -47,17 +46,74 @@ namespace React.Web
 		/// </summary>
 		public void Execute()
 		{
-			var relativePath = _request.Url.LocalPath;
-			var result = _environment.JsxTransformer.TransformJsxFile(relativePath);
+			if (_request.QueryString["map"] != null)
+			{
+				RenderSourceMap();
+			}
+			else
+			{
+				RenderJsxFile();
+			}
+		}
 
-			// Only cache on the server-side for now
-			_response.AddFileDependency(_fileSystem.MapPath(relativePath));
+		/// <summary>
+		/// Renders the JSX file converted to regular JavaScript.
+		/// </summary>
+		private void RenderJsxFile()
+		{
+			var relativePath = _request.Url.LocalPath;
+			var result = _environment.JsxTransformer.TransformJsxFileWithSourceMap(relativePath);
+			var sourceMapUri = GetSourceMapUri(relativePath, result.Hash);
+			ConfigureCaching();
+			_response.ContentType = "text/javascript";
+			// The sourcemap spec says to use SourceMap, but Firefox only accepts X-SourceMap
+			_response.AddHeader("SourceMap", sourceMapUri);
+			_response.AddHeader("X-SourceMap", sourceMapUri);
+
+			_response.Write(result.Code);
+		}
+
+		/// <summary>
+		/// Renders the source map for this JSX file.
+		/// </summary>
+		private void RenderSourceMap()
+		{
+			var relativePath = _request.Url.LocalPath;
+			var result = _environment.JsxTransformer.TransformJsxFileWithSourceMap(relativePath, forceGenerateSourceMap: true);
+			if (result.SourceMap == null)
+			{
+				_response.StatusCode = 500;
+				_response.StatusDescription = "Unable to generate source map";
+				return;
+			}
+			var sourceMap = result.SourceMap.ToJson();
+
+			ConfigureCaching();
+			_response.ContentType = "application/json";
+			//_response.Write(")]}\n"); // Recommended by the spec but Firefox doesn't support it
+			_response.Write(sourceMap);
+		}
+
+		/// <summary>
+		/// Send headers to cache the response. Only caches on the server-side for now
+		/// </summary>
+		private void ConfigureCaching()
+		{
+			_response.AddFileDependency(_fileSystem.MapPath(_request.Url.LocalPath));
 			_response.Cache.SetCacheability(HttpCacheability.Server);
 			_response.Cache.SetLastModifiedFromFileDependencies();
 			_response.Cache.SetETagFromFileDependencies();
+		}
 
-			_response.ContentType = "text/javascript";
-			_response.Write(result);
+		/// <summary>
+		/// Gets the URI to the source map of the specified file
+		/// </summary>
+		/// <param name="relativePath">Relative path to the JavaScript file</param>
+		/// <param name="hash">Hash of the file</param>
+		/// <returns>URI to the file</returns>
+		private static string GetSourceMapUri(string relativePath, string hash)
+		{
+			return string.Format("{0}?map={1}", relativePath, hash);
 		}
 	}
 }

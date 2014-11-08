@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace React
 {
@@ -57,5 +59,28 @@ namespace React
 		/// A string with the mapping data encoded in base 64 VLQ.
 		/// </summary>
 		public string Mappings { get; set; }
+
+		/// <summary>
+		/// Outputs this source map as JSON.
+		/// </summary>
+		/// <returns></returns>
+		public string ToJson()
+		{
+			return JsonConvert.SerializeObject(this, new JsonSerializerSettings
+			{
+				// Camelcase keys (eg. "SourcesContent" -> "sourcesContent")
+				ContractResolver = new CamelCasePropertyNamesContractResolver()
+			});
+		}
+
+		/// <summary>
+		/// Parse a source map from JSON
+		/// </summary>
+		/// <param name="json">JSON input</param>
+		/// <returns>Source map</returns>
+		public static SourceMap FromJson(string json)
+		{
+			return JsonConvert.DeserializeObject<SourceMap>(json);
+		}
 	}
 }

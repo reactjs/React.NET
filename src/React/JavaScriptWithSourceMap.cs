@@ -24,6 +24,11 @@ namespace React
 		public string Code { get; set; }
 
 		/// <summary>
+		/// The hash of the input file.
+		/// </summary>
+		public string Hash { get; set; }
+
+		/// <summary>
 		/// The source map for this code
 		/// </summary>
 		public SourceMap SourceMap { get; set; }

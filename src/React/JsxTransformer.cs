@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using React.Exceptions;
 
@@ -21,11 +22,19 @@ namespace React
 		/// <summary>
 		/// Cache key for JSX to JavaScript compilation
 		/// </summary>
-		private const string JSX_CACHE_KEY = "JSX_{0}";
+		private const string JSX_CACHE_KEY = "JSX_v2_{0}";
 		/// <summary>
 		/// Suffix to append to compiled files
 		/// </summary>
 		private const string COMPILED_FILE_SUFFIX = ".generated.js";
+		/// <summary>
+		/// Suffix to append to source map files
+		/// </summary>
+		private const string SOURE_MAP_FILE_SUFFIX = ".map";
+		/// <summary>
+		/// Number of lines in the header prepended to compiled JSX files.
+		/// </summary>
+		private const int LINES_IN_HEADER = 5;
 
 		/// <summary>
 		/// Environment this JSX Transformer has been created in
@@ -73,63 +82,157 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public string TransformJsxFile(string filename, bool? useHarmony = null)
 		{
-			var fullPath = _fileSystem.MapPath(filename);
+			return TransformJsxFileWithSourceMap(filename, false, useHarmony).Code;
+		}
 
-			// 1. Check in-memory cache
-			return _cache.GetOrInsert(
-				key: string.Format(JSX_CACHE_KEY, filename),
-				slidingExpiration: TimeSpan.FromMinutes(30),
-				cacheDependencyFiles: new[] { fullPath },
-				getData: () =>
+		/// <summary>
+		/// Transforms a JSX file to regular JavaScript and also returns a source map to map the
+		/// compiled source to the original version. Results of the JSX to JavaScript 
+		/// transformation are cached.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// <param name="forceGenerateSourceMap">
+		/// <c>true</c> to re-transform the file if a cached version with no source map is available
+		/// </param>
+		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
+		/// <returns>JavaScript and source map</returns>
+		public JavaScriptWithSourceMap TransformJsxFileWithSourceMap(string filename, bool forceGenerateSourceMap = false, bool? useHarmony = null)
+		{
+			var cacheKey = string.Format(JSX_CACHE_KEY, filename);
+
+			// 1. Check in-memory cache. We need to invalidate any in-memory cache if there's no 
+			// source map cached and forceGenerateSourceMap is true.
+			var cached = _cache.Get<JavaScriptWithSourceMap>(cacheKey);
+			var cacheIsValid = cached != null && (!forceGenerateSourceMap || cached.SourceMap != null);
+			if (cacheIsValid)
+			{
+				return cached;
+			}
+
+			// 2. Check on-disk cache
+			var contents = _fileSystem.ReadAsString(filename);
+			var hash = _fileCacheHash.CalculateHash(contents);
+			var output = LoadJsxFromFileCache(filename, hash, forceGenerateSourceMap);
+			if (output == null)
+			{
+				// 3. Not cached, perform the transformation
+				try
 				{
-					// 2. Check on-disk cache
-					var contents = _fileSystem.ReadAsString(filename);
-					var hash = _fileCacheHash.CalculateHash(contents);
+					output = TransformJsxWithHeader(filename, contents, hash, useHarmony);
+				}
+				catch (JsxException ex)
+				{
+					// Add the filename to the error message
+					throw new JsxException(string.Format(
+						"In file \"{0}\": {1}",
+						filename,
+						ex.Message
+					));
+				}
+			}
 
-					var cacheFilename = GetJsxOutputPath(filename);
-					if (_fileSystem.FileExists(cacheFilename))
-					{
-						var cacheContents = _fileSystem.ReadAsString(cacheFilename);
-						if (_fileCacheHash.ValidateHash(cacheContents, hash))
-						{
-							// Cache is valid :D
-							return cacheContents;
-						}
-					}
+			// Cache the result from above (either disk cache or live transformation) to memory
+			var fullPath = _fileSystem.MapPath(filename);
+			_cache.Set(
+				cacheKey,
+				output,
+				slidingExpiration: TimeSpan.FromMinutes(30),
+				cacheDependencyFiles: new[] { fullPath }
+			);
+			return output;
+		}
 
-					// 3. Not cached, perform the transformation
-					try
+		/// <summary>
+		/// Loads a transformed JSX file from the disk cache. If the cache is invalid or there is
+		/// no cached version, returns <c>null</c>.
+		/// </summary>
+		/// <param name="filename">Name of the file to load</param>
+		/// /// <param name="hash">Hash of the input file, to validate the cache</param>
+		/// <param name="forceGenerateSourceMap">
+		/// <c>true</c> to re-transform the file if a cached version with no source map is available
+		/// </param>
+		/// <returns></returns>
+		private JavaScriptWithSourceMap LoadJsxFromFileCache(string filename, string hash, bool forceGenerateSourceMap)
+		{
+			var cacheFilename = GetJsxOutputPath(filename);
+			if (!_fileSystem.FileExists(cacheFilename))
+			{
+				// Cache file doesn't exist on disk
+				return null;
+			}
+			var cacheContents = _fileSystem.ReadAsString(cacheFilename);
+			if (!_fileCacheHash.ValidateHash(cacheContents, hash))
+			{
+				// Hash of the cache is invalid (file changed since the time the cache was written).
+				return null;
+			}
+				
+			// Cache is valid :D
+			// See if we have a source map cached alongside the file
+			SourceMap sourceMap = null;
+			var sourceMapFilename = GetSourceMapOutputPath(filename);
+			if (_fileSystem.FileExists(sourceMapFilename))
+			{
+				try
+				{
+					var sourceMapString = _fileSystem.ReadAsString(sourceMapFilename);
+					if (!string.IsNullOrEmpty(sourceMapString))
 					{
-						return TransformJsxWithHeader(contents, hash, useHarmony);
-					}
-					catch (JsxException ex)
-					{
-						// Add the filename to the error message
-						throw new JsxException(string.Format(
-							"In file \"{0}\": {1}",
-							filename,
-							ex.Message
-						));
+						sourceMap = SourceMap.FromJson(sourceMapString);
 					}
 				}
-			);
+				catch (Exception e)
+				{
+					// Just ignore it
+					Trace.WriteLine("Error reading source map file: " + e.Message);
+				}
+			}
+			
+			// If forceGenerateSourceMap is true, we need to explicitly ignore this cached version
+			// if there's no source map
+			if (forceGenerateSourceMap && sourceMap == null)
+			{
+				return null;
+			}
+
+			return new JavaScriptWithSourceMap
+			{
+				Code = cacheContents,
+				SourceMap = sourceMap,
+				Hash = hash,
+			};
 		}
 
 		/// <summary>
 		/// Transforms JSX into regular JavaScript, and prepends a header used for caching 
 		/// purposes.
 		/// </summary>
+		/// <param name="filename">Name of the file being transformed</param>
 		/// <param name="contents">Contents of the input file</param>
 		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		private string TransformJsxWithHeader(string contents, string hash = null, bool? useHarmony = null)
+		private JavaScriptWithSourceMap TransformJsxWithHeader(string filename, string contents, string hash = null, bool? useHarmony = null)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
-			return GetFileHeader(hash) + TransformJsx(contents, useHarmony);
+			var header = GetFileHeader(hash);
+			//var result = TransformJsxWithSourceMap(header + contents, useHarmony);
+			var result = TransformJsxWithSourceMap(header + contents, useHarmony);
+			result.Hash = hash;
+			if (result.SourceMap != null)
+			{
+				// Insert original source into source map so the browser doesn't have to do a second
+				// request for it. The newlines in the beginning are a hack so the line numbers line
+				// up (as the original file doesn't have the header the transformed file includes).
+				result.SourceMap.Sources = new[] { Path.GetFileName(filename) + ".source" };
+				result.SourceMap.SourcesContent = new[] { new string('\n', LINES_IN_HEADER) + contents };
+				result.SourceMap.File = null;
+			}
+			
+			return result;
 		}
 
 		/// <summary>
@@ -213,6 +316,17 @@ namespace React
 		}
 
 		/// <summary>
+		/// Returns the path the specified JSX file's source map will be cached to if
+		/// <see cref="TransformAndSaveJsxFile"/> is called.
+		/// </summary>
+		/// <param name="path">Path of the JSX file</param>
+		/// <returns>Output path of the source map</returns>
+		public string GetSourceMapOutputPath(string path)
+		{
+			return GetJsxOutputPath(path) + SOURE_MAP_FILE_SUFFIX;
+		}
+
+		/// <summary>
 		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
 		/// alongside the original file.
 		/// </summary>
@@ -222,9 +336,11 @@ namespace React
 		public string TransformAndSaveJsxFile(string filename, bool? useHarmony = null)
 		{
 			var outputPath = GetJsxOutputPath(filename);
+			var sourceMapPath = GetSourceMapOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);
-			var result = TransformJsxWithHeader(contents, useHarmony: useHarmony);
-			_fileSystem.WriteAsString(outputPath, result);
+			var result = TransformJsxWithHeader(filename, contents, useHarmony: useHarmony);
+			_fileSystem.WriteAsString(outputPath, result.Code);
+			_fileSystem.WriteAsString(sourceMapPath, result.SourceMap == null ? string.Empty : result.SourceMap.ToJson());
 			return outputPath;
 		}
 
