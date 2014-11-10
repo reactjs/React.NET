@@ -5,10 +5,10 @@ ReactJS.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and
 [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
 
-[![Build status](http://img.shields.io/teamcity/codebetter/bt1242.svg)]((http://teamcity.codebetter.com/viewType.html?buildTypeId=bt1242&guest=1))&nbsp;
-![Code coverage](http://img.shields.io/teamcity/coverage/bt1242.svg)&nbsp;
-![NuGet downloads](http://img.shields.io/nuget/dt/React.Core.svg)&nbsp;
-![NuGet version](http://img.shields.io/nuget/v/React.Core.svg)
+[![Build status](http://img.shields.io/teamcity/codebetter/bt1242.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt1242&guest=1)&nbsp;
+[![Code coverage](http://img.shields.io/teamcity/coverage/bt1242.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=bt1242&guest=1)&nbsp;
+[![NuGet downloads](http://img.shields.io/nuget/dt/React.Core.svg)](https://www.nuget.org/packages/React.Core/)&nbsp;
+[![NuGet version](http://img.shields.io/nuget/v/React.Core.svg)](https://www.nuget.org/packages/React.Core/)
 
 Features
 ========
