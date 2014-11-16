@@ -26,3 +26,25 @@ function ReactNET_transform(input, harmony) {
 		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
 	}
 }
+
+function ReactNET_transform_sourcemap(input, harmony) {
+	try {
+		var result = global.JSXTransformer.transform(input, {
+			harmony: !!harmony,
+			sourceMap: true
+		});
+		if (!result.sourceMap) {
+			return JSON.stringify({
+				code: result.code,
+				sourceMap: null
+			});
+		}
+
+		return JSON.stringify({
+			code: result.code,
+			sourceMap: result.sourceMap.toJSON()
+		});
+	} catch (ex) {
+		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
+	}
+}

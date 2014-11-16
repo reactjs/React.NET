@@ -14,6 +14,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Core.Helpers;
+using Newtonsoft.Json;
 using React.Exceptions;
 
 namespace React
@@ -239,7 +241,26 @@ namespace React
 		{
 			try
 			{
-				return Engine.CallFunction<T>(function, args);
+				if (ValidationHelpers.IsSupportedType(typeof (T)))
+				{
+					// Type is supported directly (ie. a scalar type like string/int/bool)
+					// Just execute the function directly.
+					return Engine.CallFunction<T>(function, args);
+				}
+				// The type is not a scalar type. Assume the function will return its result as
+				// JSON.
+				var resultJson = Engine.CallFunction<string>(function, args);
+				try
+				{
+					return JsonConvert.DeserializeObject<T>(resultJson);
+				}
+				catch (JsonReaderException ex)
+				{
+					throw new ReactException(string.Format(
+						"{0} did not return valid JSON: {1}.\n\n{2}",
+						function, ex.Message, resultJson
+					));
+				}
 			}
 			catch (JsRuntimeException ex)
 			{

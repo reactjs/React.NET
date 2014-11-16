@@ -29,21 +29,21 @@ var CommentsBox = React.createClass({
 		var url = evt.target.href;
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
-		xhr.onload = function() {
+		xhr.onload = () => {
 			var data = JSON.parse(xhr.responseText);
 			this.setState({
 				comments: this.state.comments.concat(data.comments),
 				hasMore: data.hasMore,
 				loadingMore: false
 			});
-		}.bind(this);
+		};
 		xhr.send();
 		return false;
 	},
 	render() {
-		var commentNodes = this.state.comments.map(function (comment) {
-			return <Comment author={comment.Author}>{comment.Text}</Comment>;
-		});
+		var commentNodes = this.state.comments.map(comment =>
+			<Comment author={comment.Author}>{comment.Text}</Comment>
+		);
 
 		return (
 			<div className="comments">
