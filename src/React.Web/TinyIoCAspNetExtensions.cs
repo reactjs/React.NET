@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using System.Web;
 using React.TinyIoC;
+using React.Web.Exceptions;
 
 namespace React.Web.TinyIoC
 {
@@ -35,7 +36,8 @@ namespace React.Web.TinyIoC
 		/// <returns>Object instance or null</returns>
 		public object GetObject()
 		{
-			return HttpContext.Current.Items[_keyName];
+			var context = HttpContext.Current;
+			return context == null ? null : context.Items[_keyName];
 		}
 
 		/// <summary>
@@ -44,7 +46,15 @@ namespace React.Web.TinyIoC
 		/// <param name="value">Object to store</param>
 		public void SetObject(object value)
 		{
-			HttpContext.Current.Items[_keyName] = value;
+			var context = HttpContext.Current;
+			if (context == null)
+			{
+				throw new ReactAspNetException(
+					"Trying to store item in HttpContext.Current while not in an ASP.NET " +
+					"request!"
+				);
+			}
+			context.Items[_keyName] = value;
 		}
 
 		/// <summary>

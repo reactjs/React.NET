@@ -67,6 +67,7 @@
     <Compile Include="AspNetCache.cs" />
     <Compile Include="AspNetFileSystem.cs" />
     <Compile Include="AssemblyRegistration.cs" />
+    <Compile Include="Exceptions\ReactAspNetException.cs" />
     <Compile Include="IJsxHandler.cs" />
     <Compile Include="TinyIoCAspNetExtensions.cs" />
     <Compile Include="WebInitializer.cs" />
