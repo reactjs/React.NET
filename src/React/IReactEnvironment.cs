@@ -28,6 +28,11 @@ namespace React
 		string Version { get; }
 
 		/// <summary>
+		/// Gets the name and version of the JavaScript engine in use by ReactJS.NET
+		/// </summary>
+		string EngineVersion { get; }
+
+		/// <summary>
 		/// Executes the provided JavaScript code.
 		/// </summary>
 		/// <param name="code">JavaScript to execute</param>

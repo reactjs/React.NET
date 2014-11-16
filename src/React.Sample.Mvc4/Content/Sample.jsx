@@ -9,8 +9,7 @@
 
 var CommentsBox = React.createClass({
 	propTypes: {
-		initialComments: React.PropTypes.array.isRequired,
-		commentsPerPage: React.PropTypes.number.isRequired
+		initialComments: React.PropTypes.array.isRequired
 	},
 	getInitialState() {
 		return {

@@ -148,7 +148,7 @@ namespace React
 		{
 			var encodedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
 			return string.Format(
-				"{0}({1})",
+				"React.createElement({0}, {1})",
 				ComponentName,
 				encodedProps
 			);

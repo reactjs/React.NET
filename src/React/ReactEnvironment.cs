@@ -132,6 +132,14 @@ namespace React
 		}
 
 		/// <summary>
+		/// Gets the version of the JavaScript engine in use by ReactJS.NET
+		/// </summary>
+		public string EngineVersion
+		{
+			get { return Engine.Name + " " + Engine.Version; }
+		}
+
+		/// <summary>
 		/// Gets the version number of ReactJS.NET
 		/// </summary>
 		public string Version
