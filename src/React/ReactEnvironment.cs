@@ -29,55 +29,55 @@ namespace React
 		/// <summary>
 		/// Format string used for React component container IDs
 		/// </summary>
-		private const string CONTAINER_ELEMENT_NAME = "react{0}";
+		protected const string CONTAINER_ELEMENT_NAME = "react{0}";
 
 		/// <summary>
 		/// JavaScript variable set when user-provided scripts have been loaded
 		/// </summary>
-		private const string USER_SCRIPTS_LOADED_KEY = "_ReactNET_UserScripts_Loaded";
+		protected const string USER_SCRIPTS_LOADED_KEY = "_ReactNET_UserScripts_Loaded";
 		/// <summary>
 		/// Stack size to use for JSXTransformer if the default stack is insufficient
 		/// </summary>
-		private const int LARGE_STACK_SIZE = 2 * 1024 * 1024;
+		protected const int LARGE_STACK_SIZE = 2 * 1024 * 1024;
 
 		/// <summary>
 		/// Factory to create JavaScript engines
 		/// </summary>
-		private readonly IJavaScriptEngineFactory _engineFactory;
+		protected readonly IJavaScriptEngineFactory _engineFactory;
 		/// <summary>
 		/// Site-wide configuration
 		/// </summary>
-		private readonly IReactSiteConfiguration _config;
+		protected readonly IReactSiteConfiguration _config;
 		/// <summary>
 		/// Cache used for storing compiled JSX
 		/// </summary>
-		private readonly ICache _cache;
+		protected readonly ICache _cache;
 		/// <summary>
 		/// File system wrapper
 		/// </summary>
-		private readonly IFileSystem _fileSystem;
+		protected readonly IFileSystem _fileSystem;
 		/// <summary>
 		/// Hash algorithm for file-based cache
 		/// </summary>
-		private readonly IFileCacheHash _fileCacheHash;
+		protected readonly IFileCacheHash _fileCacheHash;
 
 		/// <summary>
 		/// JSX Transformer instance for this environment
 		/// </summary>
-		private readonly Lazy<IJsxTransformer> _jsxTransformer;
+		protected readonly Lazy<IJsxTransformer> _jsxTransformer;
 		/// <summary>
 		/// Version number of ReactJS.NET
 		/// </summary>
-		private readonly Lazy<string> _version = new Lazy<string>(GetVersion); 
+		protected readonly Lazy<string> _version = new Lazy<string>(GetVersion); 
 
 		/// <summary>
 		/// Number of components instantiated in this environment
 		/// </summary>
-		private int _maxContainerId = 0;
+		protected int _maxContainerId = 0;
 		/// <summary>
 		/// List of all components instantiated in this environment
 		/// </summary>
-		private readonly IList<IReactComponent> _components = new List<IReactComponent>();
+		protected readonly IList<IReactComponent> _components = new List<IReactComponent>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReactEnvironment"/> class.
@@ -109,7 +109,7 @@ namespace React
 		/// Gets the JavaScript engine for the current thread. If an engine has not yet been 
 		/// created, create it and execute the startup scripts.
 		/// </summary>
-		private IJsEngine Engine
+		protected virtual IJsEngine Engine
 		{
 			get
 			{
@@ -120,7 +120,7 @@ namespace React
 		/// <summary>
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
-		public IJsxTransformer JsxTransformer
+		public virtual IJsxTransformer JsxTransformer
 		{
 			get { return _jsxTransformer.Value; }
 		}
@@ -128,7 +128,7 @@ namespace React
 		/// <summary>
 		/// Determines if this JavaScript engine supports the JSX transformer.
 		/// </summary>
-		public bool EngineSupportsJsxTransformer
+		public virtual bool EngineSupportsJsxTransformer
 		{
 			get { return Engine.SupportsJsxTransformer(); }
 		}
@@ -136,7 +136,7 @@ namespace React
 		/// <summary>
 		/// Gets the version of the JavaScript engine in use by ReactJS.NET
 		/// </summary>
-		public string EngineVersion
+		public virtual string EngineVersion
 		{
 			get { return Engine.Name + " " + Engine.Version; }
 		}
@@ -144,7 +144,7 @@ namespace React
 		/// <summary>
 		/// Gets the version number of ReactJS.NET
 		/// </summary>
-		public string Version
+		public virtual string Version
 		{
 			get { return _version.Value; }
 		}
@@ -152,9 +152,9 @@ namespace React
 		/// <summary>
 		/// Loads standard React and JSXTransformer scripts into the engine.
 		/// </summary>
-		private void InitialiseEngine(IJsEngine engine)
+		protected virtual void InitialiseEngine(IJsEngine engine)
 		{
-			var thisAssembly = GetType().Assembly;
+			var thisAssembly = typeof(ReactEnvironment).Assembly;
 			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
 			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 			engine.Execute("var React = global.React");
@@ -169,7 +169,7 @@ namespace React
 		/// <summary>
 		/// Ensures any user-provided scripts have been loaded
 		/// </summary>
-		private void EnsureUserScriptsLoaded()
+		protected virtual void EnsureUserScriptsLoaded()
 		{
 			// Scripts already loaded into this environment, don't load them again
 			if (Engine.HasVariable(USER_SCRIPTS_LOADED_KEY) || _config == null)
@@ -200,7 +200,7 @@ namespace React
 		/// Executes the provided JavaScript code.
 		/// </summary>
 		/// <param name="code">JavaScript to execute</param>
-		public void Execute(string code)
+		public virtual void Execute(string code)
 		{
 			try
 			{
@@ -218,7 +218,7 @@ namespace React
 		/// <typeparam name="T">Type to return</typeparam>
 		/// <param name="code">Code to execute</param>
 		/// <returns>Result of the JavaScript code</returns>
-		public T Execute<T>(string code)
+		public virtual T Execute<T>(string code)
 		{
 			try
 			{
@@ -237,7 +237,7 @@ namespace React
 		/// <param name="function">JavaScript function to execute</param>
 		/// <param name="args">Arguments to pass to function</param>
 		/// <returns>Result of the JavaScript code</returns>
-		public T Execute<T>(string function, params object[] args)
+		public virtual T Execute<T>(string function, params object[] args)
 		{
 			try
 			{
@@ -273,7 +273,7 @@ namespace React
 		/// </summary>
 		/// <param name="name">Name of the variable</param>
 		/// <returns><c>true</c> if the variable exists; <c>false</c> otherwise</returns>
-		public bool HasVariable(string name)
+		public virtual bool HasVariable(string name)
 		{
 			try
 			{
@@ -292,7 +292,7 @@ namespace React
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to use</param>
 		/// <returns>The component</returns>
-		public IReactComponent CreateComponent<T>(string componentName, T props)
+		public virtual IReactComponent CreateComponent<T>(string componentName, T props)
 		{
 			EnsureUserScriptsLoaded();
 			_maxContainerId++;
@@ -310,7 +310,7 @@ namespace React
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript for all components</returns>
-		public string GetInitJavaScript()
+		public virtual string GetInitJavaScript()
 		{
 			var fullScript = new StringBuilder();
 			foreach (var component in _components)
@@ -355,7 +355,7 @@ namespace React
 		/// <param name="function">JavaScript function to execute</param>
 		/// <param name="args">Arguments to pass to function</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		public T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args)
+		public virtual T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args)
 		{
 			try
 			{
@@ -413,7 +413,7 @@ namespace React
 		/// <summary>
 		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
 		/// </summary>
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			_engineFactory.DisposeEngineForCurrentThread();
 		}
@@ -424,7 +424,7 @@ namespace React
 		/// </summary>
 		/// <param name="ex">Original exception</param>
 		/// <returns>New exception</returns>
-		private JsRuntimeException WrapJavaScriptRuntimeException(JsRuntimeException ex)
+		protected virtual JsRuntimeException WrapJavaScriptRuntimeException(JsRuntimeException ex)
 		{
 			return new JsRuntimeException(string.Format(
 				"{0}\r\nLine: {1}\r\nColumn:{2}",
@@ -445,7 +445,7 @@ namespace React
 		/// <summary>
 		/// Gets the site-wide configuration.
 		/// </summary>
-		public IReactSiteConfiguration Configuration
+		public virtual IReactSiteConfiguration Configuration
 		{
 			get { return _config; }
 		}

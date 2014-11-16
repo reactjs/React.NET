@@ -17,11 +17,11 @@ namespace React
 		/// <summary>
 		/// Function used to create new JavaScript engine instances.
 		/// </summary>
-		private readonly Func<IJsEngine> _factory; 
+		protected readonly Func<IJsEngine> _factory; 
 		/// <summary>
 		/// Contains all current JavaScript engine instances. One per thread, keyed on thread ID.
 		/// </summary>
-		private readonly ConcurrentDictionary<int, IJsEngine> _engines 
+		protected readonly ConcurrentDictionary<int, IJsEngine> _engines 
 			= new ConcurrentDictionary<int, IJsEngine>();
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace React
 		/// Should handle initialisation.
 		/// </param>
 		/// <returns>The JavaScript engine</returns>
-		public IJsEngine GetEngineForCurrentThread(Action<IJsEngine> onNewEngine = null)
+		public virtual IJsEngine GetEngineForCurrentThread(Action<IJsEngine> onNewEngine = null)
 		{
 			return _engines.GetOrAdd(Thread.CurrentThread.ManagedThreadId, id =>
 			{
@@ -56,7 +56,7 @@ namespace React
 		/// <summary>
 		/// Disposes the JavaScript engine for the current thread.
 		/// </summary>
-		public void DisposeEngineForCurrentThread()
+		public virtual void DisposeEngineForCurrentThread()
 		{
 			IJsEngine engine;
 			if (_engines.TryRemove(Thread.CurrentThread.ManagedThreadId, out engine))
@@ -112,7 +112,7 @@ namespace React
 		/// <summary>
 		/// Clean up all engines
 		/// </summary>
-		public void Dispose()
+		public virtual void Dispose()
 		{
 			foreach (var engine in _engines)
 			{

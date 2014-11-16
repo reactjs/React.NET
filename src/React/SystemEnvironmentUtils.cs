@@ -15,7 +15,7 @@ namespace React
 	/// <summary>
 	/// Utility functions for handling system environmental differences
 	/// </summary>
-	public class SystemEnvironmentUtils
+	public static class SystemEnvironmentUtils
 	{
 		[DllImport("libc")]
 		private static extern int uname(IntPtr buf);

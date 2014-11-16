@@ -21,7 +21,7 @@ namespace React
 		/// <summary>
 		/// Prefix used for hash line in transformed file. Used for caching.
 		/// </summary>
-		internal const string HASH_PREFIX = "// @hash v2-";
+		private const string HASH_PREFIX = "// @hash v2-";
 
 		/// <summary>
 		/// Althorithm for calculating file hashes
@@ -47,7 +47,7 @@ namespace React
 		/// <param name="cacheContents">Contents retrieved from cache</param>
 		/// <param name="hash">Hash of the input</param>
 		/// <returns><c>true</c> if the cache is still valid</returns>
-		public bool ValidateHash(string cacheContents, string hash)
+		public virtual bool ValidateHash(string cacheContents, string hash)
 		{
 			if (string.IsNullOrWhiteSpace(cacheContents))
 			{
@@ -75,7 +75,7 @@ namespace React
 		/// </summary>
 		/// <param name="hash">Hash to prepend prefix to</param>
 		/// <returns>Hash with prefix</returns>
-		public string AddPrefix(string hash)
+		public virtual string AddPrefix(string hash)
 		{
 			return HASH_PREFIX + hash;
 		}

@@ -22,40 +22,40 @@ namespace React
 		/// <summary>
 		/// Cache key for JSX to JavaScript compilation
 		/// </summary>
-		private const string JSX_CACHE_KEY = "JSX_v2_{0}";
+		protected const string JSX_CACHE_KEY = "JSX_v2_{0}";
 		/// <summary>
 		/// Suffix to append to compiled files
 		/// </summary>
-		private const string COMPILED_FILE_SUFFIX = ".generated.js";
+		protected const string COMPILED_FILE_SUFFIX = ".generated.js";
 		/// <summary>
 		/// Suffix to append to source map files
 		/// </summary>
-		private const string SOURE_MAP_FILE_SUFFIX = ".map";
+		protected const string SOURE_MAP_FILE_SUFFIX = ".map";
 		/// <summary>
 		/// Number of lines in the header prepended to compiled JSX files.
 		/// </summary>
-		private const int LINES_IN_HEADER = 5;
+		protected const int LINES_IN_HEADER = 5;
 
 		/// <summary>
 		/// Environment this JSX Transformer has been created in
 		/// </summary>
-		private readonly IReactEnvironment _environment;
+		protected readonly IReactEnvironment _environment;
 		/// <summary>
 		/// Cache used for storing compiled JSX
 		/// </summary>
-		private readonly ICache _cache;
+		protected readonly ICache _cache;
 		/// <summary>
 		/// File system wrapper
 		/// </summary>
-		private readonly IFileSystem _fileSystem;
+		protected readonly IFileSystem _fileSystem;
 		/// <summary>
 		/// Hash algorithm for file-based cache
 		/// </summary>
-		private readonly IFileCacheHash _fileCacheHash;
+		protected readonly IFileCacheHash _fileCacheHash;
 		/// <summary>
 		/// Site-wide configuration
 		/// </summary>
-		private readonly IReactSiteConfiguration _config;
+		protected readonly IReactSiteConfiguration _config;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JsxTransformer"/> class.
@@ -80,7 +80,7 @@ namespace React
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsxFile(string filename, bool? useHarmony = null)
+		public virtual string TransformJsxFile(string filename, bool? useHarmony = null)
 		{
 			return TransformJsxFileWithSourceMap(filename, false, useHarmony).Code;
 		}
@@ -96,7 +96,7 @@ namespace React
 		/// </param>
 		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
 		/// <returns>JavaScript and source map</returns>
-		public JavaScriptWithSourceMap TransformJsxFileWithSourceMap(string filename, bool forceGenerateSourceMap = false, bool? useHarmony = null)
+		public virtual JavaScriptWithSourceMap TransformJsxFileWithSourceMap(string filename, bool forceGenerateSourceMap = false, bool? useHarmony = null)
 		{
 			var cacheKey = string.Format(JSX_CACHE_KEY, filename);
 
@@ -152,7 +152,7 @@ namespace React
 		/// <c>true</c> to re-transform the file if a cached version with no source map is available
 		/// </param>
 		/// <returns></returns>
-		private JavaScriptWithSourceMap LoadJsxFromFileCache(string filename, string hash, bool forceGenerateSourceMap)
+		protected virtual JavaScriptWithSourceMap LoadJsxFromFileCache(string filename, string hash, bool forceGenerateSourceMap)
 		{
 			var cacheFilename = GetJsxOutputPath(filename);
 			if (!_fileSystem.FileExists(cacheFilename))
@@ -212,7 +212,7 @@ namespace React
 		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		private JavaScriptWithSourceMap TransformJsxWithHeader(string filename, string contents, string hash = null, bool? useHarmony = null)
+		protected virtual JavaScriptWithSourceMap TransformJsxWithHeader(string filename, string contents, string hash = null, bool? useHarmony = null)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
@@ -242,7 +242,7 @@ namespace React
 		/// <param name="input">JSX</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>JavaScript</returns>
-		public string TransformJsx(string input, bool? useHarmony = null)
+		public virtual string TransformJsx(string input, bool? useHarmony = null)
 		{
 			EnsureJsxTransformerSupported();
 			try
@@ -267,7 +267,7 @@ namespace React
 		/// <param name="input">JSX</param>
 		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
 		/// <returns>JavaScript and source map</returns>
-		public JavaScriptWithSourceMap TransformJsxWithSourceMap(string input, bool? useHarmony)
+		public virtual JavaScriptWithSourceMap TransformJsxWithSourceMap(string input, bool? useHarmony)
 		{
 			EnsureJsxTransformerSupported();
 			try
@@ -290,7 +290,7 @@ namespace React
 		/// </summary>
 		/// <param name="hash">Hash of the input</param>
 		/// <returns>Header for the cache</returns>
-		private string GetFileHeader(string hash)
+		protected virtual string GetFileHeader(string hash)
 		{
 			return string.Format(
 @"{0}
@@ -307,7 +307,7 @@ namespace React
 		/// </summary>
 		/// <param name="path">Path of the JSX file</param>
 		/// <returns>Output path of the compiled file</returns>
-		public string GetJsxOutputPath(string path)
+		public virtual string GetJsxOutputPath(string path)
 		{
 			return Path.Combine(
 				Path.GetDirectoryName(path),
@@ -321,7 +321,7 @@ namespace React
 		/// </summary>
 		/// <param name="path">Path of the JSX file</param>
 		/// <returns>Output path of the source map</returns>
-		public string GetSourceMapOutputPath(string path)
+		public virtual string GetSourceMapOutputPath(string path)
 		{
 			return GetJsxOutputPath(path) + SOURE_MAP_FILE_SUFFIX;
 		}
@@ -333,7 +333,7 @@ namespace React
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
 		/// <returns>File contents</returns>
-		public string TransformAndSaveJsxFile(string filename, bool? useHarmony = null)
+		public virtual string TransformAndSaveJsxFile(string filename, bool? useHarmony = null)
 		{
 			var outputPath = GetJsxOutputPath(filename);
 			var sourceMapPath = GetSourceMapOutputPath(filename);

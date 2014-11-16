@@ -30,12 +30,12 @@ namespace React
 		/// <summary>
 		/// Environment this component has been created in
 		/// </summary>
-		private readonly IReactEnvironment _environment;
+		protected readonly IReactEnvironment _environment;
 
 		/// <summary>
 		/// Global site configuration
 		/// </summary>
-		private readonly IReactSiteConfiguration _configuration;
+		protected readonly IReactSiteConfiguration _configuration;
 
 		/// <summary>
 		/// Gets or sets the name of the component
@@ -79,7 +79,7 @@ namespace React
 		/// return the rendered HTML.
 		/// </summary>
 		/// <returns>HTML</returns>
-		public string RenderHtml()
+		public virtual string RenderHtml()
 		{
 			EnsureComponentExists();
 			try
@@ -111,7 +111,7 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		public string RenderJavaScript()
+		public virtual string RenderJavaScript()
 		{
 			return string.Format(
 				"React.render({0}, document.getElementById({1}))",
@@ -123,7 +123,7 @@ namespace React
 		/// <summary>
 		/// Ensures that this component exists in global scope
 		/// </summary>
-		private void EnsureComponentExists()
+		protected virtual void EnsureComponentExists()
 		{
 			// This is safe as componentName was validated via EnsureComponentNameValid()
 			var componentExists = _environment.Execute<bool>(string.Format(
@@ -144,7 +144,7 @@ namespace React
 		/// Gets the JavaScript code to initialise the component
 		/// </summary>
 		/// <returns>JavaScript for component initialisation</returns>
-		private string GetComponentInitialiser()
+		protected virtual string GetComponentInitialiser()
 		{
 			var encodedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
 			return string.Format(
