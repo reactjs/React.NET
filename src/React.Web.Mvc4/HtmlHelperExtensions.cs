@@ -35,14 +35,20 @@ namespace React.Web.Mvc
 		/// <param name="htmlHelper">HTML helper</param>
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to initialise the component with</param>
+		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this HtmlHelper htmlHelper, 
 			string componentName, 
-			T props
+			T props,
+			string htmlTag = null
 		)
 		{
 			var reactComponent = Environment.CreateComponent(componentName, props);
+			if (!string.IsNullOrEmpty(htmlTag))
+			{
+				reactComponent.ContainerTag = htmlTag;
+			}
 			var result = reactComponent.RenderHtml();
 			return new HtmlString(result);
 		}

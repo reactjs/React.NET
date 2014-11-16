@@ -38,14 +38,19 @@ namespace React
 		private readonly IReactSiteConfiguration _configuration;
 
 		/// <summary>
-		/// Name of the component
+		/// Gets or sets the name of the component
 		/// </summary>
-		private readonly string _componentName;
+		public string ComponentName { get; set; }
 
 		/// <summary>
-		/// Unique ID for the DIV container of this component
+		/// Gets or sets the unique ID for the DIV container of this component
 		/// </summary>
-		private readonly string _containerId;
+		public string ContainerId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the HTML tag the component is wrapped in
+		/// </summary>
+		public string ContainerTag { get; set; }
 
 		/// <summary>
 		/// Gets or sets the props for this component
@@ -64,8 +69,9 @@ namespace React
 			EnsureComponentNameValid(componentName);
 			_environment = environment;
 			_configuration = configuration;
-			_componentName = componentName;
-			_containerId = containerId;
+			ComponentName = componentName;
+			ContainerId = containerId;
+			ContainerTag = "div";
 		}
 
 		/// <summary>
@@ -81,20 +87,20 @@ namespace React
 				var html = _environment.Execute<string>(
 					string.Format("React.renderToString({0})", GetComponentInitialiser())
 					);
-				// TODO: Allow changing of the wrapper tag element from a DIV to something else
 				return string.Format(
-					"<div id=\"{0}\">{1}</div>",
-					_containerId,
-					html
-					);
+					"<{2} id=\"{0}\">{1}</{2}>",
+					ContainerId,
+					html,
+					ContainerTag
+				);
 			}
 			catch (JsRuntimeException ex)
 			{
 				throw new ReactServerRenderingException(string.Format(
 					"Error while rendering \"{0}\" to \"{2}\": {1}",
-					_componentName,
+					ComponentName,
 					ex.Message,
-					_containerId
+					ContainerId
 				));
 			}
 		}
@@ -110,7 +116,7 @@ namespace React
 			return string.Format(
 				"React.render({0}, document.getElementById({1}))",
 				GetComponentInitialiser(),
-				JsonConvert.SerializeObject(_containerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
+				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
 			);
 		}
 
@@ -122,14 +128,14 @@ namespace React
 			// This is safe as componentName was validated via EnsureComponentNameValid()
 			var componentExists = _environment.Execute<bool>(string.Format(
 				"typeof {0} !== 'undefined'",
-				_componentName
+				ComponentName
 			));
 			if (!componentExists)
 			{
 				throw new ReactInvalidComponentException(string.Format(
 					"Could not find a component named '{0}'. Did you forget to add it to " +
 					"App_Start\\ReactConfig.cs?",
-					_componentName
+					ComponentName
 				));
 			}
 		}
@@ -143,7 +149,7 @@ namespace React
 			var encodedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
 			return string.Format(
 				"{0}({1})",
-				_componentName,
+				ComponentName,
 				encodedProps
 			);
 		}

@@ -20,6 +20,21 @@ namespace React
 		object Props { get; set; }
 
 		/// <summary>
+		/// Gets or sets the name of the component
+		/// </summary>
+		string ComponentName { get; set; }
+
+		/// <summary>
+		/// Gets or sets the unique ID for the container of this component
+		/// </summary>
+		string ContainerId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the HTML tag the component is wrapped in
+		/// </summary>
+		string ContainerTag { get; set; }
+
+		/// <summary>
 		/// Renders the HTML for this component. This will execute the component server-side and
 		/// return the rendered HTML.
 		/// </summary>
