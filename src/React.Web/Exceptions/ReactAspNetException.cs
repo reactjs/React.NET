@@ -13,6 +13,9 @@ using React.Exceptions;
 
 namespace React.Web.Exceptions
 {
+	/// <summary>
+	/// Thrown when an error occurs in ReactJS.NET's ASP.NET integration.
+	/// </summary>
 	[Serializable]
 	public class ReactAspNetException : ReactException
 	{
