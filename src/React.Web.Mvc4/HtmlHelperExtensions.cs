@@ -29,6 +29,15 @@ namespace React.Web.Mvc
 		}
 
 		/// <summary>
+		/// Gets the React client side only environment
+		/// </summary>
+		private static IReactClientEnvironment ClientEnvironment
+		{
+			// TODO: Figure out if this can be injected
+			get { return AssemblyRegistration.Container.Resolve<IReactClientEnvironment>(); }
+		}
+
+		/// <summary>
 		/// Renders the specified React component
 		/// </summary>
 		/// <typeparam name="T">Type of the props</typeparam>
@@ -36,15 +45,20 @@ namespace React.Web.Mvc
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
+		/// <param name="renderClientOnly">Render on client only</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
-			this HtmlHelper htmlHelper, 
-			string componentName, 
+			this HtmlHelper htmlHelper,
+			string componentName,
 			T props,
-			string htmlTag = null
+			string htmlTag = null,
+			bool renderClientOnly = false
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props);
+			var reactComponent = renderClientOnly
+				? ClientEnvironment.CreateComponent(componentName, props)
+				: Environment.CreateComponent(componentName, props);
+
 			if (!string.IsNullOrEmpty(htmlTag))
 			{
 				reactComponent.ContainerTag = htmlTag;
@@ -61,10 +75,13 @@ namespace React.Web.Mvc
 		public static IHtmlString ReactInitJavaScript(this HtmlHelper htmlHelper)
 		{
 			var script = Environment.GetInitJavaScript();
+			var clientScript = ClientEnvironment.GetInitJavaScript();
+
 			var tag = new TagBuilder("script")
 			{
-				InnerHtml = script
+				InnerHtml = script + System.Environment.NewLine + clientScript
 			};
+
 			return new HtmlString(tag.ToString());
 		}
 	}

@@ -85,7 +85,10 @@
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="Exceptions\ReactScriptLoadException.cs" />
     <Compile Include="Exceptions\ReactServerRenderingException.cs" />
+    <Compile Include="IReactClientEnvironment.cs" />
     <Compile Include="JavaScriptWithSourceMap.cs" />
+    <Compile Include="ReactClientComponent.cs" />
+    <Compile Include="ReactClientEnvironment.cs" />
     <Compile Include="SourceMap.cs" />
     <Compile Include="SystemEnvironmentUtils.cs" />
     <Compile Include="Exceptions\JsxUnsupportedEngineException.cs" />

@@ -40,6 +40,7 @@ namespace React
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsSingleton();
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
+			container.Register<IReactClientEnvironment, ReactClientEnvironment>().AsPerRequestSingleton();
 
 			// JavaScript engines
 			container.Register(new JavaScriptEngineFactory.Registration
