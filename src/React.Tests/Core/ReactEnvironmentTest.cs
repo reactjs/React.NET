@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
 using NUnit.Framework;
@@ -64,6 +66,32 @@ namespace React.Tests.Core
 			{
 				environment.ExecuteWithLargerStackIfRequired<int>("foobar");
 			});
+		}
+
+		[Test]
+		public void GeneratesContainerIdIfNotProvided()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+			mocks.Config.Setup(x => x.Scripts).Returns(new List<string>());
+
+			var component1 = environment.CreateComponent("ComponentName", new { });
+			var component2 = environment.CreateComponent("ComponentName", new { });
+			Assert.AreEqual("react1", component1.ContainerId);
+			Assert.AreEqual("react2", component2.ContainerId);
+		}
+
+		[Test]
+		public void UsesProvidedContainerId()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+			mocks.Config.Setup(x => x.Scripts).Returns(new List<string>());
+
+			var component1 = environment.CreateComponent("ComponentName", new { }, "foo");
+			var component2 = environment.CreateComponent("ComponentName", new { });
+			Assert.AreEqual("foo", component1.ContainerId);
+			Assert.AreEqual("react1", component2.ContainerId);
 		}
 
 		private class Mocks

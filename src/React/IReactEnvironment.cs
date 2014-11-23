@@ -81,8 +81,9 @@ namespace React
 		/// <typeparam name="T">Type of the props</typeparam>
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to use</param>
+		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <returns>The component</returns>
-		IReactComponent CreateComponent<T>(string componentName, T props);
+		IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will 

@@ -36,15 +36,17 @@ namespace React.Web.Mvc
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
+		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this HtmlHelper htmlHelper, 
 			string componentName, 
 			T props,
-			string htmlTag = null
+			string htmlTag = null,
+			string containerId = null
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props);
+			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
 			if (!string.IsNullOrEmpty(htmlTag))
 			{
 				reactComponent.ContainerTag = htmlTag;
