@@ -7,7 +7,6 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
 using Cassette.BundleProcessing;
 using Cassette.Scripts;
 using React;
@@ -35,19 +34,16 @@ namespace Cassette.React
 		}
 
 		/// <summary>
-		/// Processes the specified bundle. Adds a <see cref="JsxCompiler"/> for all .jsx files.
+		/// Processes the specified bundle. Adds a <see cref="JsxCompiler"/> for all files.
 		/// </summary>
 		/// <param name="bundle">The bundle.</param>
 		public void Process(ScriptBundle bundle)
 		{
 			foreach (var asset in bundle.Assets)
 			{
-				if (asset.Path.EndsWith(".jsx", StringComparison.InvariantCultureIgnoreCase))
-				{
-					asset.AddAssetTransformer(
-						new CompileAsset(new JsxCompiler(_environment), _settings.SourceDirectory)
-					);
-				}
+				asset.AddAssetTransformer(
+					new CompileAsset(new JsxCompiler(_environment), _settings.SourceDirectory)
+				);
 			}
 		}
 	}
