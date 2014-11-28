@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Core.Helpers;
+using JavaScriptEngineSwitcher.Msie;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -131,6 +132,14 @@ namespace React
 		public virtual bool EngineSupportsJsxTransformer
 		{
 			get { return Engine.SupportsJsxTransformer(); }
+		}
+
+		/// <summary>
+		/// Determines if this JavaScript engine supports the source map generation.
+		/// </summary>
+		public virtual bool EngineSupportsSourceMapGeneration
+		{
+			get { return !(Engine is MsieJsEngine); }
 		}
 
 		/// <summary>

@@ -66,9 +66,13 @@ namespace React.Web
 			var sourceMapUri = GetSourceMapUri(relativePath, result.Hash);
 			ConfigureCaching();
 			_response.ContentType = "text/javascript";
-			// The sourcemap spec says to use SourceMap, but Firefox only accepts X-SourceMap
-			_response.AddHeader("SourceMap", sourceMapUri);
-			_response.AddHeader("X-SourceMap", sourceMapUri);
+
+			if (this._environment.EngineSupportsSourceMapGeneration)
+			{
+				// The sourcemap spec says to use SourceMap, but Firefox only accepts X-SourceMap
+				_response.AddHeader("SourceMap", sourceMapUri);
+				_response.AddHeader("X-SourceMap", sourceMapUri);
+			}
 
 			_response.Write(result.Code);
 		}
