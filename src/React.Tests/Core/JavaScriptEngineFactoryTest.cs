@@ -19,6 +19,7 @@ namespace React.Tests.Core
 	{
 		private JavaScriptEngineFactory CreateFactory()
 		{
+			var config = new Mock<IReactSiteConfiguration>();
 			var registration = new JavaScriptEngineFactory.Registration
 			{
 				Factory = () =>
@@ -29,34 +30,7 @@ namespace React.Tests.Core
 				},
 				Priority = 1
 			};
-			return new JavaScriptEngineFactory(new[] { registration });
-		}
-
-		[Test]
-		public void ShouldCallOnNewEngineWhenCreatingNew()
-		{
-			var factory = CreateFactory();
-			var called = false;
-			factory.GetEngineForCurrentThread(engine =>
-			{
-				Assert.NotNull(engine);
-				called = true;
-			});
-			factory.DisposeEngineForCurrentThread();
-
-			Assert.True(called);
-		}
-
-		[Test]
-		public void ShouldNotCallOnNewEngineWhenUsingExisting()
-		{
-			var factory = CreateFactory();
-			var called = false;
-			factory.GetEngineForCurrentThread();
-			factory.GetEngineForCurrentThread(engine => { called = true; });
-			factory.DisposeEngineForCurrentThread();
-
-			Assert.False(called);
+			return new JavaScriptEngineFactory(new[] { registration }, config.Object);
 		}
 
 		[Test]

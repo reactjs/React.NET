@@ -74,11 +74,7 @@ namespace React
 		/// <summary>
 		/// Gets or sets the configuration for JSON serializer.
 		/// </summary>
-		public JsonSerializerSettings JsonSerializerSettings
-		{
-			get;
-			set;
-		}
+		public JsonSerializerSettings JsonSerializerSettings { get; set; }
 
 		/// <summary>
 		/// Sets the configuration for json serializer.
@@ -91,6 +87,19 @@ namespace React
 		public IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings)
 		{
 			JsonSerializerSettings = settings;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets whether JavaScript engines should be reused across requests.
+		/// </summary>
+		public bool ReuseJavaScriptEngines { get; set; }
+		/// <summary>
+		/// Sets whether JavaScript engines should be reused across requests.
+		/// </summary>
+		public IReactSiteConfiguration SetReuseJavaScriptEngines(bool value)
+		{
+			ReuseJavaScriptEngines = value;
 			return this;
 		}
 	}

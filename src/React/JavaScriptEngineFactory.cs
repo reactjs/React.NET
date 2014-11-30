@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
+using JSPool;
 using React.Exceptions;
 
 namespace React
@@ -15,6 +16,10 @@ namespace React
 	public class JavaScriptEngineFactory : IDisposable, IJavaScriptEngineFactory
 	{
 		/// <summary>
+		/// React configuration for the current site
+		/// </summary>
+		protected readonly IReactSiteConfiguration _config;
+		/// <summary>
 		/// Function used to create new JavaScript engine instances.
 		/// </summary>
 		protected readonly Func<IJsEngine> _factory; 
@@ -23,32 +28,56 @@ namespace React
 		/// </summary>
 		protected readonly ConcurrentDictionary<int, IJsEngine> _engines 
 			= new ConcurrentDictionary<int, IJsEngine>();
+		/// <summary>
+		/// Pool of JavaScript engines to use
+		/// </summary>
+		protected readonly IJsPool _pool;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
 		/// </summary>
-		public JavaScriptEngineFactory(IEnumerable<Registration> availableFactories)
+		public JavaScriptEngineFactory(IEnumerable<Registration> availableFactories, IReactSiteConfiguration config)
 		{
+			_config = config;
 			_factory = GetFactory(availableFactories);
+			if (_config.ReuseJavaScriptEngines)
+			{
+				_pool = new JsPool(new JsPoolConfig
+				{
+					EngineFactory = _factory,
+					Initializer = InitialiseEngine,
+				});	
+			}
 		}
 
 		/// <summary>
-		/// Gets the JavaScript engine for the current thread
+		/// Loads standard React and JSXTransformer scripts into the engine.
 		/// </summary>
-		/// <param name="onNewEngine">
-		/// Called if a brand new JavaScript engine is being created for this thread.
-		/// Should handle initialisation.
-		/// </param>
+		protected virtual void InitialiseEngine(IJsEngine engine)
+		{
+			var thisAssembly = typeof(ReactEnvironment).Assembly;
+			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
+			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
+			engine.Execute("var React = global.React");
+
+			// Only load JSX Transformer if engine supports it
+			if (engine.SupportsJsxTransformer())
+			{
+				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+			}
+		}
+
+		/// <summary>
+		/// Gets the JavaScript engine for the current thread. It is recommended to use 
+		/// <see cref="GetEngine"/> instead, which will pool/reuse engines.
+		/// </summary>
 		/// <returns>The JavaScript engine</returns>
-		public virtual IJsEngine GetEngineForCurrentThread(Action<IJsEngine> onNewEngine = null)
+		public virtual IJsEngine GetEngineForCurrentThread()
 		{
 			return _engines.GetOrAdd(Thread.CurrentThread.ManagedThreadId, id =>
 			{
 				var engine = _factory();
-				if (onNewEngine != null)
-				{
-					onNewEngine(engine);
-				}
+				InitialiseEngine(engine);
 				return engine;
 			});
 		}
@@ -66,6 +95,24 @@ namespace React
 					engine.Dispose();	
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets a JavaScript engine from the pool.
+		/// </summary>
+		/// <returns>The JavaScript engine</returns>
+		public virtual IJsEngine GetEngine()
+		{
+			return _pool.GetEngine();
+		}
+
+		/// <summary>
+		/// Returns an engine to the pool so it can be reused
+		/// </summary>
+		/// <param name="engine">Engine to return</param>
+		public virtual void ReturnEngineToPool(IJsEngine engine)
+		{
+			_pool.ReturnEngineToPool(engine);
 		}
 
 		/// <summary>

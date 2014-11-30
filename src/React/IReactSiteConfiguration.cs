@@ -45,6 +45,16 @@ namespace React
 		IReactSiteConfiguration SetUseHarmony(bool useHarmony);
 
 		/// <summary>
+		/// Gets or sets whether JavaScript engines should be reused across requests.
+		/// </summary>
+		/// 
+		bool ReuseJavaScriptEngines { get; set; }
+		/// <summary>
+		/// Sets whether JavaScript engines should be reused across requests.
+		/// </summary>
+		IReactSiteConfiguration SetReuseJavaScriptEngines(bool value);
+
+		/// <summary>
 		/// Gets or sets the configuration for JSON serializer.
 		/// </summary>
 		JsonSerializerSettings JsonSerializerSettings { get; set; }
@@ -53,7 +63,7 @@ namespace React
 		/// Sets the configuration for json serializer.
 		/// </summary>
 		/// <remarks>
-		/// Thic confiquration is used when component initialization script
+		/// This confiquration is used when component initialization script
 		/// is being generated server-side.
 		/// </remarks>
 		/// <param name="settings">The settings.</param>

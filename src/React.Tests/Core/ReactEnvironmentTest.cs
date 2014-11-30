@@ -42,7 +42,7 @@ namespace React.Tests.Core
 				
 			environment.ExecuteWithLargerStackIfRequired<int>("foo");
 			mocks.EngineFactory.Verify(
-				x => x.GetEngineForCurrentThread(It.IsAny<Action<IJsEngine>>()), 
+				x => x.GetEngineForCurrentThread(), 
 				Times.Exactly(2),
 				"Two engines should be created (initial thread and new thread)"
 			);
@@ -111,7 +111,7 @@ namespace React.Tests.Core
 				FileSystem = new Mock<IFileSystem>();
 				FileCacheHash = new Mock<IFileCacheHash>();
 
-				EngineFactory.Setup(x => x.GetEngineForCurrentThread(It.IsAny<Action<IJsEngine>>())).Returns(Engine.Object);
+				EngineFactory.Setup(x => x.GetEngineForCurrentThread()).Returns(Engine.Object);
 			}
 
 			public ReactEnvironment CreateReactEnvironment()

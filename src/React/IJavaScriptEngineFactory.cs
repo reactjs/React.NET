@@ -9,18 +9,28 @@ namespace React
 	public interface IJavaScriptEngineFactory
 	{
 		/// <summary>
-		/// Gets the JavaScript engine for the current thread
+		/// Gets the JavaScript engine for the current thread. It is recommended to use 
+		/// <see cref="GetEngine"/> instead, which will pool/reuse engines.
 		/// </summary>
-		/// <param name="onNewEngine">
-		/// Called if a brand new JavaScript engine is being created for this thread.
-		/// Should handle initialisation.
-		/// </param>
 		/// <returns>The JavaScript engine</returns>
-		IJsEngine GetEngineForCurrentThread(Action<IJsEngine> onNewEngine);
+		IJsEngine GetEngineForCurrentThread();
 
 		/// <summary>
-		/// Disposes the JavaScript engine for the current thread.
+		/// Disposes the JavaScript engine for the current thread. This should only be used
+		/// if the engine was acquired through <see cref="GetEngineForCurrentThread"/>.
 		/// </summary>
 		void DisposeEngineForCurrentThread();
+
+		/// <summary>
+		/// Gets a JavaScript engine from the pool.
+		/// </summary>
+		/// <returns>The JavaScript engine</returns>
+		IJsEngine GetEngine();
+
+		/// <summary>
+		/// Returns an engine to the pool so it can be reused
+		/// </summary>
+		/// <param name="engine">Engine to return</param>
+		void ReturnEngineToPool(IJsEngine engine);
 	}
 }

@@ -68,7 +68,12 @@ namespace React
 		/// <summary>
 		/// Version number of ReactJS.NET
 		/// </summary>
-		protected readonly Lazy<string> _version = new Lazy<string>(GetVersion); 
+		protected readonly Lazy<string> _version = new Lazy<string>(GetVersion);
+		/// <summary>
+		/// Contains an engine acquired from a pool of engines. Only used if 
+		/// <see cref="IReactSiteConfiguration.ReuseJavaScriptEngines"/> is enabled.
+		/// </summary>
+		protected readonly Lazy<IJsEngine> _engineFromPool;
 
 		/// <summary>
 		/// Number of components instantiated in this environment
@@ -103,17 +108,19 @@ namespace React
 			_jsxTransformer = new Lazy<IJsxTransformer>(() => 
 				new JsxTransformer(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
+			_engineFromPool = new Lazy<IJsEngine>(() => _engineFactory.GetEngine());
 		}
 
 		/// <summary>
-		/// Gets the JavaScript engine for the current thread. If an engine has not yet been 
-		/// created, create it and execute the startup scripts.
+		/// Gets the JavaScript engine to use for this environment.
 		/// </summary>
 		protected virtual IJsEngine Engine
 		{
 			get
 			{
-				return _engineFactory.GetEngineForCurrentThread(InitialiseEngine);
+				return _config.ReuseJavaScriptEngines
+					? _engineFromPool.Value
+					: _engineFactory.GetEngineForCurrentThread();
 			}
 		}
 
@@ -147,23 +154,6 @@ namespace React
 		public virtual string Version
 		{
 			get { return _version.Value; }
-		}
-
-		/// <summary>
-		/// Loads standard React and JSXTransformer scripts into the engine.
-		/// </summary>
-		protected virtual void InitialiseEngine(IJsEngine engine)
-		{
-			var thisAssembly = typeof(ReactEnvironment).Assembly;
-			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
-			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
-			engine.Execute("var React = global.React");
-
-			// Only load JSX Transformer if engine supports it
-			if (engine.SupportsJsxTransformer())
-			{
-				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
-			}
 		}
 
 		/// <summary>
@@ -362,6 +352,13 @@ namespace React
 		/// <returns>Result returned from JavaScript code</returns>
 		public virtual T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args)
 		{
+			// This hack is not required when pooling JavaScript engines, since pooled MSIE
+			// engines already execute on their own thread with a larger stack.
+			if (_config.ReuseJavaScriptEngines)
+			{
+				return Execute<T>(function, args);
+			}
+
 			try
 			{
 				return Execute<T>(function, args);
@@ -375,10 +372,11 @@ namespace React
 				Exception innerEx = null;
 				var thread = new Thread(() =>
 				{
+					// New engine will be created here (as this is a new thread)
+					var engine = _engineFactory.GetEngineForCurrentThread();
 					try
 					{
-						// New engine will be created here (as this is a new thread)
-						result = Execute<T>(function, args);
+						result = engine.CallFunction<T>(function, args);
 					}
 					catch (Exception threadEx)
 					{
@@ -421,6 +419,10 @@ namespace React
 		public virtual void Dispose()
 		{
 			_engineFactory.DisposeEngineForCurrentThread();
+			if (_engineFromPool.IsValueCreated)
+			{
+				_engineFactory.ReturnEngineToPool(_engineFromPool.Value);
+			}
 		}
 
 		/// <summary>
