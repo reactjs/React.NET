@@ -23,6 +23,11 @@ namespace React
 		bool EngineSupportsJsxTransformer { get; }
 
 		/// <summary>
+		/// Determines if this JavaScript engine supports the source map generation.
+		/// </summary>
+		bool EngineSupportsSourceMapGeneration { get; }
+
+		/// <summary>
 		/// Gets the version number of ReactJS.NET
 		/// </summary>
 		string Version { get; }
