@@ -219,7 +219,6 @@ namespace React
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
 			var header = GetFileHeader(hash);
-			//var result = TransformJsxWithSourceMap(header + contents, useHarmony);
 			var result = TransformJsxWithSourceMap(header + contents, useHarmony);
 			result.Hash = hash;
 			if (result.SourceMap != null)

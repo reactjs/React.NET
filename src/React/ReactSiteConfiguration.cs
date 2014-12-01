@@ -29,6 +29,15 @@ namespace React
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="ReactSiteConfiguration"/> class.
+		/// </summary>
+		public ReactSiteConfiguration()
+		{
+			UseHarmony = true;
+			ReuseJavaScriptEngines = true;
+		}
+
+		/// <summary>
 		/// All the scripts that have been added to this configuration
 		/// </summary>
 		private readonly IList<string> _scriptFiles = new List<string>();

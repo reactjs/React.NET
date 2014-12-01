@@ -53,7 +53,7 @@ namespace React.Tests.Core
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
 				"<div>Hello World</div>",
-				false
+				It.IsAny<bool>()
 			));
 		}
 
@@ -63,7 +63,7 @@ namespace React.Tests.Core
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
 				"<div>Hello World</div>",
-				false
+				It.IsAny<bool>()
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "<div>Hello World</div>";
@@ -116,7 +116,7 @@ namespace React.Tests.Core
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
 				It.IsAny<string>(),
-				false
+				It.IsAny<bool>()
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -132,7 +132,7 @@ namespace React.Tests.Core
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
 				It.IsAny<string>(),
-				false
+				It.IsAny<bool>()
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -146,7 +146,7 @@ namespace React.Tests.Core
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
 				It.IsAny<string>(),
-				false
+				It.IsAny<bool>()
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			string result = null;
