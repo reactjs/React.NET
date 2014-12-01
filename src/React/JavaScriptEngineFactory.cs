@@ -107,11 +107,21 @@ namespace React
 		/// </summary>
 		protected virtual IJsPool CreatePool()
 		{
-			return new JsPool(new JsPoolConfig
+			var poolConfig = new JsPoolConfig
 			{
 				EngineFactory = _factory,
 				Initializer = InitialiseEngine,
-			});
+			};
+			if (_config.MaxEngines != null)
+			{
+				poolConfig.MaxEngines = _config.MaxEngines.Value;
+			}
+			if (_config.StartEngines != null)
+			{
+				poolConfig.StartEngines = _config.StartEngines.Value;
+			}
+
+			return new JsPool(poolConfig);
 		}
 
 		/// <summary>

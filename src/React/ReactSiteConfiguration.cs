@@ -124,5 +124,35 @@ namespace React
 			StripTypes = stripTypes;
 			return this;
 		}
+
+		/// <summary>
+		/// Gets or sets the number of engines to initially start when a pool is created. 
+		/// Defaults to <c>10</c>.
+		/// </summary>
+		public int? StartEngines { get; set; }
+		/// <summary>
+		/// Sets the number of engines to initially start when a pool is created. 
+		/// Defaults to <c>10</c>.
+		/// </summary>
+		public IReactSiteConfiguration SetStartEngines(int? startEngines)
+		{
+			StartEngines = startEngines;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets the maximum number of engines that will be created in the pool. 
+		/// Defaults to <c>25</c>.
+		/// </summary>
+		public int? MaxEngines { get; set; }
+		/// <summary>
+		/// Sets the maximum number of engines that will be created in the pool. 
+		/// Defaults to <c>25</c>.
+		/// </summary>
+		public IReactSiteConfiguration SetMaxEngines(int? maxEngines)
+		{
+			MaxEngines = maxEngines;
+			return this;
+		}
 	}
 }

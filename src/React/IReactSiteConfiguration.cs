@@ -77,5 +77,27 @@ namespace React
 		/// Sets whether Flow types should be stripped out.
 		/// </summary>
 		IReactSiteConfiguration SetStripTypes(bool stripTypes);
+
+		/// <summary>
+		/// Gets or sets the number of engines to initially start when a pool is created. 
+		/// Defaults to <c>10</c>.
+		/// </summary>
+		int? StartEngines { get; set; }
+		/// <summary>
+		/// Sets the number of engines to initially start when a pool is created. 
+		/// Defaults to <c>10</c>.
+		/// </summary>
+		IReactSiteConfiguration SetStartEngines(int? startEngines);
+
+		/// <summary>
+		/// Gets or sets the maximum number of engines that will be created in the pool. 
+		/// Defaults to <c>25</c>.
+		/// </summary>
+		int? MaxEngines { get; set; }
+		/// <summary>
+		/// Sets the maximum number of engines that will be created in the pool. 
+		/// Defaults to <c>25</c>.
+		/// </summary>
+		IReactSiteConfiguration SetMaxEngines(int? maxEngines);
 	}
 }
