@@ -79,10 +79,14 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="stripTypes">
+		/// Whether Flow types should be stripped out. Defaults to the value set in the site
+		/// configuration.
+		/// </param>
 		/// <returns>JavaScript</returns>
-		public virtual string TransformJsxFile(string filename, bool? useHarmony = null)
+		public virtual string TransformJsxFile(string filename, bool? useHarmony = null, bool? stripTypes = null)
 		{
-			return TransformJsxFileWithSourceMap(filename, false, useHarmony).Code;
+			return TransformJsxFileWithSourceMap(filename, false, useHarmony, stripTypes).Code;
 		}
 
 		/// <summary>
@@ -95,8 +99,17 @@ namespace React
 		/// <c>true</c> to re-transform the file if a cached version with no source map is available
 		/// </param>
 		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
+		/// <param name="stripTypes">
+		/// Whether Flow types should be stripped out. Defaults to the value set in the site
+		/// configuration.
+		/// </param>
 		/// <returns>JavaScript and source map</returns>
-		public virtual JavaScriptWithSourceMap TransformJsxFileWithSourceMap(string filename, bool forceGenerateSourceMap = false, bool? useHarmony = null)
+		public virtual JavaScriptWithSourceMap TransformJsxFileWithSourceMap(
+			string filename,
+			bool forceGenerateSourceMap = false, 
+			bool? useHarmony = null,
+			bool? stripTypes = null
+		)
 		{
 			var cacheKey = string.Format(JSX_CACHE_KEY, filename);
 
@@ -118,7 +131,7 @@ namespace React
 				// 3. Not cached, perform the transformation
 				try
 				{
-					output = TransformJsxWithHeader(filename, contents, hash, useHarmony);
+					output = TransformJsxWithHeader(filename, contents, hash, useHarmony, stripTypes);
 				}
 				catch (JsxException ex)
 				{
@@ -211,15 +224,25 @@ namespace React
 		/// <param name="contents">Contents of the input file</param>
 		/// <param name="hash">Hash of the input. If null, it will be calculated</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="stripTypes">
+		/// Whether Flow types should be stripped out. Defaults to the value set in the site
+		/// configuration.
+		/// </param>
 		/// <returns>JavaScript</returns>
-		protected virtual JavaScriptWithSourceMap TransformJsxWithHeader(string filename, string contents, string hash = null, bool? useHarmony = null)
+		protected virtual JavaScriptWithSourceMap TransformJsxWithHeader(
+			string filename, 
+			string contents, 
+			string hash = null,
+			bool? useHarmony = null,
+			bool? stripTypes = null
+		)
 		{
 			if (string.IsNullOrEmpty(hash))
 			{
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
 			var header = GetFileHeader(hash);
-			var result = TransformJsxWithSourceMap(header + contents, useHarmony);
+			var result = TransformJsxWithSourceMap(header + contents, useHarmony, stripTypes);
 			result.Hash = hash;
 			if (result.SourceMap != null)
 			{
@@ -240,8 +263,12 @@ namespace React
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="stripTypes">
+		/// Whether Flow types should be stripped out. Defaults to the value set in the site
+		/// configuration.
+		/// </param>
 		/// <returns>JavaScript</returns>
-		public virtual string TransformJsx(string input, bool? useHarmony = null)
+		public virtual string TransformJsx(string input, bool? useHarmony = null, bool? stripTypes = null)
 		{
 			EnsureJsxTransformerSupported();
 			try
@@ -249,7 +276,8 @@ namespace React
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
 					input,
-					useHarmony ?? _config.UseHarmony
+					useHarmony ?? _config.UseHarmony,
+					stripTypes ?? _config.StripTypes
 				);
 				return output;
 			}
@@ -265,8 +293,16 @@ namespace React
 		/// </summary>
 		/// <param name="input">JSX</param>
 		/// <param name="useHarmony"><c>true</c> if support for ES6 syntax should be enabled</param>
+		/// <param name="stripTypes">
+		/// Whether Flow types should be stripped out. Defaults to the value set in the site
+		/// configuration.
+		/// </param>
 		/// <returns>JavaScript and source map</returns>
-		public virtual JavaScriptWithSourceMap TransformJsxWithSourceMap(string input, bool? useHarmony)
+		public virtual JavaScriptWithSourceMap TransformJsxWithSourceMap(
+			string input, 
+			bool? useHarmony = null,
+			bool? stripTypes = null
+		)
 		{
 			EnsureJsxTransformerSupported();
 			try
@@ -274,7 +310,8 @@ namespace React
 				return _environment.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 					"ReactNET_transform_sourcemap",
 					input,
-					useHarmony ?? _config.UseHarmony
+					useHarmony ?? _config.UseHarmony,
+					stripTypes ?? _config.StripTypes
 				);
 			}
 			catch (Exception ex)
@@ -331,13 +368,21 @@ namespace React
 		/// </summary>
 		/// <param name="filename">Name of the file to load</param>
 		/// <param name="useHarmony"><c>true</c> if support for es6 syntax should be rewritten.</param>
+		/// <param name="stripTypes">
+		/// Whether Flow types should be stripped out. Defaults to the value set in the site
+		/// configuration.
+		/// </param>
 		/// <returns>File contents</returns>
-		public virtual string TransformAndSaveJsxFile(string filename, bool? useHarmony = null)
+		public virtual string TransformAndSaveJsxFile(
+			string filename, 
+			bool? useHarmony = null, 
+			bool? stripTypes = null
+		)
 		{
 			var outputPath = GetJsxOutputPath(filename);
 			var sourceMapPath = GetSourceMapOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);
-			var result = TransformJsxWithHeader(filename, contents, useHarmony: useHarmony);
+			var result = TransformJsxWithHeader(filename, contents, null, useHarmony, stripTypes);
 			_fileSystem.WriteAsString(outputPath, result.Code);
 			_fileSystem.WriteAsString(sourceMapPath, result.SourceMap == null ? string.Empty : result.SourceMap.ToJson());
 			return outputPath;

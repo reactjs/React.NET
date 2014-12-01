@@ -68,5 +68,14 @@ namespace React
 		/// </remarks>
 		/// <param name="settings">The settings.</param>
 		IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings);
+
+		/// <summary>
+		/// Gets or sets whether Flow types should be stripped out.
+		/// </summary>
+		bool StripTypes { get; set; }
+		/// <summary>
+		/// Sets whether Flow types should be stripped out.
+		/// </summary>
+		IReactSiteConfiguration SetStripTypes(bool stripTypes);
 	}
 }

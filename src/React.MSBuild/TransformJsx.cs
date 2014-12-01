@@ -37,6 +37,11 @@ namespace React.MSBuild
 		public bool UseHarmony { get; set; }
 
 		/// <summary>
+		/// Gets or sets whether Flow types should be stripped.
+		/// </summary>
+		public bool StripTypes { get; set; }
+
+		/// <summary>
 		/// Executes the task.
 		/// </summary>
 		/// <returns><c>true</c> on success</returns>
@@ -45,6 +50,7 @@ namespace React.MSBuild
 			MSBuildHost.EnsureInitialized();
 			var config = React.AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>();
 			config.UseHarmony = UseHarmony;
+			config.StripTypes = StripTypes;
 
 			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 

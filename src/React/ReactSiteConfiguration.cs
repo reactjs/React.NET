@@ -111,5 +111,18 @@ namespace React
 			ReuseJavaScriptEngines = value;
 			return this;
 		}
+
+		/// <summary>
+		/// Gets or sets whether Flow types should be stripped.
+		/// </summary>
+		public bool StripTypes { get; set; }
+		/// <summary>
+		/// Sets whether Flow types should be stripped
+		/// </summary>
+		public IReactSiteConfiguration SetStripTypes(bool stripTypes)
+		{
+			StripTypes = stripTypes;
+			return this;
+		}
 	}
 }

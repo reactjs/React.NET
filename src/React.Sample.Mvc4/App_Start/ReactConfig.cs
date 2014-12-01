@@ -18,6 +18,7 @@ namespace React.Sample.Mvc4
 			ReactSiteConfiguration.Configuration
 				.SetUseHarmony(true)
 				.SetReuseJavaScriptEngines(true)
+				.SetStripTypes(true)
 				.AddScript("~/Content/Sample.jsx");
 		}
 	}

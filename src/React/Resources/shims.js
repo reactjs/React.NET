@@ -19,18 +19,22 @@ if (!Object.freeze) {
 	Object.freeze = function() { };
 }
 
-function ReactNET_transform(input, harmony) {
+function ReactNET_transform(input, harmony, stripTypes) {
 	try {
-		return global.JSXTransformer.transform(input, { harmony: !!harmony }).code;
+		return global.JSXTransformer.transform(input, {
+			harmony: !!harmony,
+			stripTypes: !!stripTypes
+		}).code;
 	} catch (ex) {
 		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
 	}
 }
 
-function ReactNET_transform_sourcemap(input, harmony) {
+function ReactNET_transform_sourcemap(input, harmony, stripTypes) {
 	try {
 		var result = global.JSXTransformer.transform(input, {
 			harmony: !!harmony,
+			stripTypes: !!stripTypes,
 			sourceMap: true
 		});
 		if (!result.sourceMap) {
