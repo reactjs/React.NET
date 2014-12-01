@@ -8,9 +8,13 @@ namespace $rootnamespace$
 	{
 		public static void Configure()
 		{
-			// If you want to use fancy new ES6 features, uncomment this line:
+			// ES6 features are enabled by default. Uncomment the below line to disable them.
 			// See http://reactjs.net/guides/es6.html for more information.
-			//ReactSiteConfiguration.Configuration.SetUseHarmony(true);
+			//ReactSiteConfiguration.Configuration.SetUseHarmony(false);
+
+			// Uncomment the below line if you are using Flow
+			// See http://reactjs.net/guides/flow.html for more information.
+			//ReactSiteConfiguration.Configuration.SetStripTypes(true);
 
 			// If you want to use server-side rendering of React components, 
 			// add all the necessary JavaScript files here. This includes 
