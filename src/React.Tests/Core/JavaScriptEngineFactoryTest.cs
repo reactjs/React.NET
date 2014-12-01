@@ -20,6 +20,7 @@ namespace React.Tests.Core
 		private JavaScriptEngineFactory CreateFactory()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
+			var fileSystem = new Mock<IFileSystem>();
 			var registration = new JavaScriptEngineFactory.Registration
 			{
 				Factory = () =>
@@ -30,7 +31,7 @@ namespace React.Tests.Core
 				},
 				Priority = 1
 			};
-			return new JavaScriptEngineFactory(new[] { registration }, config.Object);
+			return new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
 		}
 
 		[Test]

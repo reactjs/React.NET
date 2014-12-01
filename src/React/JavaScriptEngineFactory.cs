@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
@@ -20,6 +21,10 @@ namespace React
 		/// </summary>
 		protected readonly IReactSiteConfiguration _config;
 		/// <summary>
+		/// File system wrapper
+		/// </summary>
+		protected readonly IFileSystem _fileSystem;
+		/// <summary>
 		/// Function used to create new JavaScript engine instances.
 		/// </summary>
 		protected readonly Func<IJsEngine> _factory; 
@@ -31,23 +36,82 @@ namespace React
 		/// <summary>
 		/// Pool of JavaScript engines to use
 		/// </summary>
-		protected readonly IJsPool _pool;
+		protected IJsPool _pool;
+		/// <summary>
+		/// Used to recycle the JavaScript engine pool when relevant JavaScript files are modified.
+		/// </summary>
+		protected readonly FileSystemWatcher _watcher;
+		/// <summary>
+		/// Names of all the files that are loaded into the JavaScript engine. If any of these 
+		/// files are changed, the engines should be recycled
+		/// </summary>
+		protected readonly ISet<string> _watchedFiles;
+		/// <summary>
+		/// Timer for debouncing pool recycling
+		/// </summary>
+		protected readonly Timer _resetPoolTimer;
+		/// <summary>
+		/// Whether this class has been disposed.
+		/// </summary>
+		protected bool _disposed;
+
+		/// <summary>
+		/// Time period to debounce file system changed events, in milliseconds.
+		/// </summary>
+		protected const int DEBOUNCE_TIMEOUT = 25;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
 		/// </summary>
-		public JavaScriptEngineFactory(IEnumerable<Registration> availableFactories, IReactSiteConfiguration config)
+		public JavaScriptEngineFactory(
+			IEnumerable<Registration> availableFactories, 
+			IReactSiteConfiguration config,
+			IFileSystem fileSystem
+		)
 		{
 			_config = config;
+			_fileSystem = fileSystem;
 			_factory = GetFactory(availableFactories);
 			if (_config.ReuseJavaScriptEngines)
 			{
-				_pool = new JsPool(new JsPoolConfig
+				_pool = CreatePool();
+				_resetPoolTimer = new Timer(OnResetPoolTimer);
+				_watchedFiles = new HashSet<string>(_config.Scripts.Select(
+					fileName => _fileSystem.MapPath(fileName).ToLowerInvariant()
+				));
+				try
 				{
-					EngineFactory = _factory,
-					Initializer = InitialiseEngine,
-				});	
+					// Attempt to initialise a FileSystemWatcher so we can recycle the JavaScript
+					// engine pool when files are changed.
+					_watcher = new FileSystemWatcher
+					{
+						Path = _fileSystem.MapPath("~"),
+						IncludeSubdirectories = true,
+						EnableRaisingEvents = true,
+					};
+					_watcher.Changed += OnFileChanged;
+					_watcher.Created += OnFileChanged;
+					_watcher.Deleted += OnFileChanged;
+					_watcher.Renamed += OnFileChanged;
+				}
+				catch (Exception ex)
+				{
+					// Can't use FileSystemWatcher (eg. not running in Full Trust)
+					Trace.WriteLine("Unable to initialise FileSystemWatcher: " + ex.Message);
+				}
 			}
+		}
+
+		/// <summary>
+		/// Creates a new JavaScript engine pool.
+		/// </summary>
+		protected virtual IJsPool CreatePool()
+		{
+			return new JsPool(new JsPoolConfig
+			{
+				EngineFactory = _factory,
+				Initializer = InitialiseEngine,
+			});
 		}
 
 		/// <summary>
@@ -74,6 +138,7 @@ namespace React
 		/// <returns>The JavaScript engine</returns>
 		public virtual IJsEngine GetEngineForCurrentThread()
 		{
+			EnsureNotDisposed();
 			return _engines.GetOrAdd(Thread.CurrentThread.ManagedThreadId, id =>
 			{
 				var engine = _factory();
@@ -103,6 +168,7 @@ namespace React
 		/// <returns>The JavaScript engine</returns>
 		public virtual IJsEngine GetEngine()
 		{
+			EnsureNotDisposed();
 			return _pool.GetEngine();
 		}
 
@@ -112,7 +178,12 @@ namespace React
 		/// <param name="engine">Engine to return</param>
 		public virtual void ReturnEngineToPool(IJsEngine engine)
 		{
-			_pool.ReturnEngineToPool(engine);
+			// This could be called from ReactEnvironment.Dispose if that class is disposed after 
+			// this class. Let's just ignore this if it's disposed.
+			if (!_disposed)
+			{
+				_pool.ReturnEngineToPool(engine);	
+			}
 		}
 
 		/// <summary>
@@ -161,12 +232,59 @@ namespace React
 		/// </summary>
 		public virtual void Dispose()
 		{
+			_disposed = true;
 			foreach (var engine in _engines)
 			{
 				if (engine.Value != null)
 				{
 					engine.Value.Dispose();
 				}
+			}
+			if (_pool != null)
+			{
+				_pool.Dispose();
+				_pool = null;
+			}
+		}
+
+		/// <summary>
+		/// Handles events fired when any files are changed.
+		/// </summary>
+		/// <param name="sender">The sender</param>
+		/// <param name="args">The <see cref="FileSystemEventArgs"/> instance containing the event data</param>
+		protected virtual void OnFileChanged(object sender, FileSystemEventArgs args)
+		{
+			if (_watchedFiles.Contains(args.FullPath.ToLowerInvariant()))
+			{
+				// Use a timer so multiple changes only result in a single reset.
+				_resetPoolTimer.Change(DEBOUNCE_TIMEOUT, Timeout.Infinite);
+			}
+		}
+
+		/// <summary>
+		/// Called when any of the watched files have changed. Recycles the JavaScript engine pool
+		/// so the files are all reloaded.
+		/// </summary>
+		/// <param name="state">Unused</param>
+		protected virtual void OnResetPoolTimer(object state)
+		{
+			// Create the new pool before disposing the old pool so that _pool is never null.
+			var oldPool = _pool;
+			_pool = CreatePool();
+			if (oldPool != null)
+			{
+				oldPool.Dispose();
+			}
+		}
+
+		/// <summary>
+		/// Ensures that this object has not been disposed.
+		/// </summary>
+		public void EnsureNotDisposed()
+		{
+			if (_disposed)
+			{
+				throw new ObjectDisposedException(GetType().Name);
 			}
 		}
 
