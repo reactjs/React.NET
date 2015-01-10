@@ -2526,8 +2526,8 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         len = (prefix === 'u') ? 4 : 2;
         for (i = 0; i < len; ++i) {
-            if (index < length && isHexDigit(source[index])) {
-                ch = source[index++];
+            if (index < length && isHexDigit(source.charAt(index))) {
+                ch = source.charAt(index++);
                 code = code * 16 + '0123456789abcdef'.indexOf(ch.toLowerCase());
             } else {
                 return '';
@@ -2539,7 +2539,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     function scanUnicodeCodePointEscape() {
         var ch, code, cu1, cu2;
 
-        ch = source[index];
+        ch = source.charAt(index);
         code = 0;
 
         // At least, one hex digit is required.
@@ -2548,7 +2548,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
 
         while (index < length) {
-            ch = source[index++];
+            ch = source.charAt(index++);
             if (!isHexDigit(ch)) {
                 break;
             }
@@ -2672,7 +2672,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         var start = index,
             code = source.charCodeAt(index),
             code2,
-            ch1 = source[index],
+            ch1 = source.charAt(index),
             ch2,
             ch3,
             ch4;
@@ -2755,9 +2755,9 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         // Peek more characters.
 
-        ch2 = source[index + 1];
-        ch3 = source[index + 2];
-        ch4 = source[index + 3];
+        ch2 = source.charAt(index + 1);
+        ch3 = source.charAt(index + 2);
+        ch4 = source.charAt(index + 3);
 
         // 4-character punctuator: >>>=
 
@@ -2877,10 +2877,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         var number = '';
 
         while (index < length) {
-            if (!isHexDigit(source[index])) {
+            if (!isHexDigit(source.charAt(index))) {
                 break;
             }
-            number += source[index++];
+            number += source.charAt(index++);
         }
 
         if (number.length === 0) {
@@ -2905,7 +2905,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         if (isOctalDigit(prefix)) {
             octal = true;
-            number = '0' + source[index++];
+            number = '0' + source.charAt(index++);
         } else {
             octal = false;
             ++index;
@@ -2913,10 +2913,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         }
 
         while (index < length) {
-            if (!isOctalDigit(source[index])) {
+            if (!isOctalDigit(source.charAt(index))) {
                 break;
             }
-            number += source[index++];
+            number += source.charAt(index++);
         }
 
         if (!octal && number.length === 0) {
@@ -2941,15 +2941,15 @@ parseYieldExpression: true, parseAwaitExpression: true
     function scanNumericLiteral() {
         var number, start, ch, octal;
 
-        ch = source[index];
+        ch = source.charAt(index);
         assert(isDecimalDigit(ch.charCodeAt(0)) || (ch === '.'),
             'Numeric literal must start with a decimal digit or a decimal point');
 
         start = index;
         number = '';
         if (ch !== '.') {
-            number = source[index++];
-            ch = source[index];
+            number = source.charAt(index++);
+            ch = source.charAt(index);
 
             // Hex number starts with '0x'.
             // Octal number starts with '0'.
@@ -2965,11 +2965,11 @@ parseYieldExpression: true, parseAwaitExpression: true
                     number = '';
 
                     while (index < length) {
-                        ch = source[index];
+                        ch = source.charAt(index);
                         if (ch !== '0' && ch !== '1') {
                             break;
                         }
-                        number += source[index++];
+                        number += source.charAt(index++);
                     }
 
                     if (number.length === 0) {
@@ -3001,29 +3001,29 @@ parseYieldExpression: true, parseAwaitExpression: true
             }
 
             while (isDecimalDigit(source.charCodeAt(index))) {
-                number += source[index++];
+                number += source.charAt(index++);
             }
-            ch = source[index];
+            ch = source.charAt(index);
         }
 
         if (ch === '.') {
-            number += source[index++];
+            number += source.charAt(index++);
             while (isDecimalDigit(source.charCodeAt(index))) {
-                number += source[index++];
+                number += source.charAt(index++);
             }
-            ch = source[index];
+            ch = source.charAt(index);
         }
 
         if (ch === 'e' || ch === 'E') {
-            number += source[index++];
+            number += source.charAt(index++);
 
-            ch = source[index];
+            ch = source.charAt(index);
             if (ch === '+' || ch === '-') {
-                number += source[index++];
+                number += source.charAt(index++);
             }
             if (isDecimalDigit(source.charCodeAt(index))) {
                 while (isDecimalDigit(source.charCodeAt(index))) {
-                    number += source[index++];
+                    number += source.charAt(index++);
                 }
             } else {
                 throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
@@ -3048,7 +3048,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     function scanStringLiteral() {
         var str = '', quote, start, ch, code, unescaped, restore, octal = false;
 
-        quote = source[index];
+        quote = source.charAt(index);
         assert((quote === '\'' || quote === '"'),
             'String literal must starts with a quote');
 
@@ -3056,13 +3056,13 @@ parseYieldExpression: true, parseAwaitExpression: true
         ++index;
 
         while (index < length) {
-            ch = source[index++];
+            ch = source.charAt(index++);
 
             if (ch === quote) {
                 quote = '';
                 break;
             } else if (ch === '\\') {
-                ch = source[index++];
+                ch = source.charAt(index++);
                 if (!ch || !isLineTerminator(ch.charCodeAt(0))) {
                     switch (ch) {
                     case 'n':
@@ -3076,7 +3076,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                         break;
                     case 'u':
                     case 'x':
-                        if (source[index] === '{') {
+                        if (source.charAt(index) === '{') {
                             ++index;
                             str += scanUnicodeCodePointEscape();
                         } else {
@@ -3109,16 +3109,16 @@ parseYieldExpression: true, parseAwaitExpression: true
                                 octal = true;
                             }
 
-                            if (index < length && isOctalDigit(source[index])) {
+                            if (index < length && isOctalDigit(source.charAt(index))) {
                                 octal = true;
-                                code = code * 8 + '01234567'.indexOf(source[index++]);
+                                code = code * 8 + '01234567'.indexOf(source.charAt(index++));
 
                                 // 3 digits are only allowed when string starts
                                 // with 0, 1, 2, 3
                                 if ('0123'.indexOf(ch) >= 0 &&
                                         index < length &&
-                                        isOctalDigit(source[index])) {
-                                    code = code * 8 + '01234567'.indexOf(source[index++]);
+                                        isOctalDigit(source.charAt(index))) {
+                                    code = code * 8 + '01234567'.indexOf(source.charAt(index++));
                                 }
                             }
                             str += String.fromCharCode(code);
@@ -3129,7 +3129,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch ===  '\r' && source.charAt(index) === '\n') {
                         ++index;
                     }
                     lineStart = index;
@@ -3165,20 +3165,20 @@ parseYieldExpression: true, parseAwaitExpression: true
         ++index;
 
         while (index < length) {
-            ch = source[index++];
+            ch = source.charAt(index++);
             if (ch === '`') {
                 tail = true;
                 terminated = true;
                 break;
             } else if (ch === '$') {
-                if (source[index] === '{') {
+                if (source.charAt(index) === '{') {
                     ++index;
                     terminated = true;
                     break;
                 }
                 cooked += ch;
             } else if (ch === '\\') {
-                ch = source[index++];
+                ch = source.charAt(index++);
                 if (!isLineTerminator(ch.charCodeAt(0))) {
                     switch (ch) {
                     case 'n':
@@ -3192,7 +3192,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                         break;
                     case 'u':
                     case 'x':
-                        if (source[index] === '{') {
+                        if (source.charAt(index) === '{') {
                             ++index;
                             cooked += scanUnicodeCodePointEscape();
                         } else {
@@ -3225,16 +3225,16 @@ parseYieldExpression: true, parseAwaitExpression: true
                                 octal = true;
                             }
 
-                            if (index < length && isOctalDigit(source[index])) {
+                            if (index < length && isOctalDigit(source.charAt(index))) {
                                 octal = true;
-                                code = code * 8 + '01234567'.indexOf(source[index++]);
+                                code = code * 8 + '01234567'.indexOf(source.charAt(index++));
 
                                 // 3 digits are only allowed when string starts
                                 // with 0, 1, 2, 3
                                 if ('0123'.indexOf(ch) >= 0 &&
                                         index < length &&
-                                        isOctalDigit(source[index])) {
-                                    code = code * 8 + '01234567'.indexOf(source[index++]);
+                                        isOctalDigit(source.charAt(index))) {
+                                    code = code * 8 + '01234567'.indexOf(source.charAt(index++));
                                 }
                             }
                             cooked += String.fromCharCode(code);
@@ -3245,14 +3245,14 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 } else {
                     ++lineNumber;
-                    if (ch ===  '\r' && source[index] === '\n') {
+                    if (ch ===  '\r' && source.charAt(index) === '\n') {
                         ++index;
                     }
                     lineStart = index;
                 }
             } else if (isLineTerminator(ch.charCodeAt(0))) {
                 ++lineNumber;
-                if (ch ===  '\r' && source[index] === '\n') {
+                if (ch ===  '\r' && source.charAt(index) === '\n') {
                     ++index;
                 }
                 lineStart = index;
@@ -3288,7 +3288,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         startsWith = (option.head) ? '`' : '}';
 
-        if (source[index] !== startsWith) {
+        if (source.charAt(index) !== startsWith) {
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
@@ -3306,12 +3306,12 @@ parseYieldExpression: true, parseAwaitExpression: true
         skipComment();
 
         start = index;
-        ch = source[index];
+        ch = source.charAt(index);
         assert(ch === '/', 'Regular expression literal must start with a slash');
-        str = source[index++];
+        str = source.charAt(index++);
 
         while (index < length) {
-            ch = source[index++];
+            ch = source.charAt(index++);
             str += ch;
             if (classMarker) {
                 if (ch === ']') {
@@ -3319,7 +3319,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 }
             } else {
                 if (ch === '\\') {
-                    ch = source[index++];
+                    ch = source.charAt(index++);
                     // ECMA-262 7.8.5
                     if (isLineTerminator(ch.charCodeAt(0))) {
                         throwError({}, Messages.UnterminatedRegExp);
@@ -3345,14 +3345,14 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         flags = '';
         while (index < length) {
-            ch = source[index];
+            ch = source.charAt(index);
             if (!isIdentifierPart(ch.charCodeAt(0))) {
                 break;
             }
 
             ++index;
             if (ch === '\\' && index < length) {
-                ch = source[index];
+                ch = source.charAt(index);
                 if (ch === 'u') {
                     ++index;
                     restore = index;
@@ -3360,7 +3360,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                     if (ch) {
                         flags += ch;
                         for (str += '\\u'; restore < index; ++restore) {
-                            str += source[restore];
+                            str += source.charAt(restore);
                         }
                     } else {
                         index = restore;
@@ -8258,10 +8258,10 @@ parseYieldExpression: true, parseAwaitExpression: true
         lineComment = false;
 
         while (index < length) {
-            ch = source[index];
+            ch = source.charAt(index);
 
             if (lineComment) {
-                ch = source[index++];
+                ch = source.charAt(index++);
                 if (isLineTerminator(ch.charCodeAt(0))) {
                     loc.end = {
                         line: lineNumber,
@@ -8269,7 +8269,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                     };
                     lineComment = false;
                     addComment('Line', comment, start, index - 1, loc);
-                    if (ch === '\r' && source[index] === '\n') {
+                    if (ch === '\r' && source.charAt(index) === '\n') {
                         ++index;
                     }
                     ++lineNumber;
@@ -8292,8 +8292,8 @@ parseYieldExpression: true, parseAwaitExpression: true
                         ++index;
                         comment += '\r';
                     }
-                    if (ch !== '\r' || source[index] === '\n') {
-                        comment += source[index];
+                    if (ch !== '\r' || source.charAt(index) === '\n') {
+                        comment += source.charAt(index);
                         ++lineNumber;
                         ++index;
                         lineStart = index;
@@ -8302,13 +8302,13 @@ parseYieldExpression: true, parseAwaitExpression: true
                         }
                     }
                 } else {
-                    ch = source[index++];
+                    ch = source.charAt(index++);
                     if (index >= length) {
                         throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
                     }
                     comment += ch;
                     if (ch === '*') {
-                        ch = source[index];
+                        ch = source.charAt(index);
                         if (ch === '/') {
                             comment = comment.substr(0, comment.length - 1);
                             blockComment = false;
@@ -8323,7 +8323,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                     }
                 }
             } else if (ch === '/') {
-                ch = source[index + 1];
+                ch = source.charAt(index + 1);
                 if (ch === '/') {
                     loc = {
                         start: {
@@ -8362,7 +8362,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 ++index;
             } else if (isLineTerminator(ch.charCodeAt(0))) {
                 ++index;
-                if (ch ===  '\r' && source[index] === '\n') {
+                if (ch ===  '\r' && source.charAt(index) === '\n') {
                     ++index;
                 }
                 ++lineNumber;
@@ -8665,7 +8665,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             if (!isXJSIdentifierPart(ch)) {
                 break;
             }
-            value += source[index++];
+            value += source.charAt(index++);
         }
 
         return {
@@ -8679,11 +8679,11 @@ parseYieldExpression: true, parseAwaitExpression: true
 
     function scanXJSEntity() {
         var ch, str = '', start = index, count = 0, code;
-        ch = source[index];
+        ch = source.charAt(index);
         assert(ch === '&', 'Entity must start with an ampersand');
         index++;
         while (index < length && count++ < 10) {
-            ch = source[index++];
+            ch = source.charAt(index++);
             if (ch === ';') {
                 break;
             }
@@ -8718,7 +8718,7 @@ parseYieldExpression: true, parseAwaitExpression: true
         var ch, str = '', start;
         start = index;
         while (index < length) {
-            ch = source[index];
+            ch = source.charAt(index);
             if (stopChars.indexOf(ch) !== -1) {
                 break;
             }
@@ -8726,9 +8726,9 @@ parseYieldExpression: true, parseAwaitExpression: true
                 str += scanXJSEntity();
             } else {
                 index++;
-                if (ch === '\r' && source[index] === '\n') {
+                if (ch === '\r' && source.charAt(index) === '\n') {
                     str += ch;
-                    ch = source[index];
+                    ch = source.charAt(index);
                     index++;
                 }
                 if (isLineTerminator(ch.charCodeAt(0))) {
@@ -8750,7 +8750,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     function scanXJSStringLiteral() {
         var innerToken, quote, start;
 
-        quote = source[index];
+        quote = source.charAt(index);
         assert((quote === '\'' || quote === '"'),
             'String literal must starts with a quote');
 
@@ -8759,7 +8759,7 @@ parseYieldExpression: true, parseAwaitExpression: true
 
         innerToken = scanXJSText([quote]);
 
-        if (quote !== source[index]) {
+        if (quote !== source.charAt(index)) {
             throwError({}, Messages.UnexpectedToken, 'ILLEGAL');
         }
 
@@ -12466,8 +12466,8 @@ function indentBefore(start, state) {
   var end = start;
   start = start - 1;
 
-  while (start > 0 && state.g.source[start] != '\n') {
-    if (!state.g.source[start].match(/[ \t]/)) {
+  while (start > 0 && state.g.source.charAt(start) != '\n') {
+    if (!state.g.source.charAt(start).match(/[ \t]/)) {
       end = start;
     }
     start--;
@@ -12804,7 +12804,7 @@ function renderParams(traverse, node, path, state) {
 
 function isParensFreeSingleParam(node, state) {
   return node.params.length === 1 &&
-    state.g.source[state.g.position] !== '(';
+    state.g.source.charAt(state.g.position) !== '(';
 }
 
 function renderExpressionBody(traverse, node, path, state) {
