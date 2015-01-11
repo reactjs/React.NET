@@ -10,7 +10,6 @@
 using System;
 
 using Microsoft.Owin.Hosting;
-using Microsoft.Owin.StaticFiles.Infrastructure;
 
 namespace React.Sample.Owin
 {
