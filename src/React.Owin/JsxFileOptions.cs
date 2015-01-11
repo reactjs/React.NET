@@ -24,7 +24,7 @@ namespace React.Owin
         public IEnumerable<string> Extensions { get; set; }
 
         /// <summary>
-        /// Options for static file middle used to server JSX files.
+        /// Options for static file middleware used to server JSX files.
         /// </summary>
         public StaticFileOptions StaticFileOptions { get; set; }
     }
