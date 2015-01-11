@@ -9,5 +9,5 @@
   <circle id="svg_5" fill="#FF87D6" cx="299.529" cy="299.628" r="50.167"/>
   <path id="N" stroke-linecap="null" stroke-linejoin="null" fill="#FF87D6" d="m365,135.5v215h50v-100l35,100h50v-215h-50v100l-35,-100"/>
   <path id="E" stroke-linecap="null" stroke-linejoin="null" fill="#FF87D6" d="m520,135.5v215h110v-50h-60v-32.5h50v-50h-50v-32.5h60v-50"/>
-  <path id="T" stroke-linecap="null" stroke-linejoin="null" fill="#FF87D6" d="m640,135.5v50h40v172h60v-172h40v-50"/>
+  <path id="T" stroke-linecap="null" stroke-linejoin="null" fill="#FF87D6" d="m640,135.5v50h40v165h60v-165h40v-50"/>
 </svg>
