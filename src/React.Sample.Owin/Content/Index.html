@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>React OWIN Sample</title>
+    <script src="react-0.12.2.js"></script>
+    <script src="jquery-1.10.0.min.js"></script>
+    <link href="Todo.css" media="all" rel="stylesheet" type="text/css">
+</head>
+    <body>
+        <div id="container"></div>
+        <script type="text/javascript" src="Todo.jsx"></script>
+        <script type="text/javascript">
+            React.render(
+              React.createElement(TodoApp, null),
+              document.getElementById('container')
+            );
+        </script>
+    </body>
+</html>
