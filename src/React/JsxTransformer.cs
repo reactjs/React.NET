@@ -140,7 +140,7 @@ namespace React
 						"In file \"{0}\": {1}",
 						filename,
 						ex.Message
-					));
+					), ex);
 				}
 			}
 
