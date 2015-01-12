@@ -26,16 +26,6 @@ namespace React.Owin
         static JsxFileMiddleware()
         {
             Initializer.Initialize(_ => _);
-
-            // Register interface implementations required by React. By default it sets React to work with physical file system.
-            var container = AssemblyRegistration.Container;
-            IFileSystem tempFileSystem;
-            if (!container.TryResolve(out tempFileSystem))
-                AssemblyRegistration.Container.Register<IFileSystem, EntryAssemblyFileSystem>();
-
-            ICache tempCache;
-            if (!container.TryResolve(out tempCache))
-                AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
         }
 
         public JsxFileMiddleware(Func<IDictionary<string, object>, Task> next, JsxFileOptions options)
@@ -49,7 +39,7 @@ namespace React.Owin
             var fileOptions = options.StaticFileOptions ?? new StaticFileOptions();
 
             // Wrap the file system with JSX file system
-            var reactEnvironment = AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+            var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
             _internalStaticMiddleware = new StaticFileMiddleware(
                 next,
                 new StaticFileOptions()

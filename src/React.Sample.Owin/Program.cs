@@ -19,6 +19,7 @@ namespace React.Sample.Owin
         {
             using (WebApp.Start<Startup>("http://localhost:12345"))
             {
+                Console.WriteLine("Running on localhost:12345, press enter to quit");
                 Console.ReadLine();
             }
         }

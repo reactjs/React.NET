@@ -17,19 +17,11 @@ namespace React.Owin
     public static class JsxFileExtensions
     {
         /// <summary>
-        /// Enables serving static JSX file, compiled to JavaScript, for the current request path from the current directory.
-        /// </summary> 
-        public static IAppBuilder UseJsxFiles(this IAppBuilder builder)
-        {
-            return builder.UseJsxFiles(new JsxFileOptions());
-        }
-
-        /// <summary>
         /// Enables serving static JSX file, compiled to JavaScript with the given options.
         /// </summary>
-        public static IAppBuilder UseJsxFiles(this IAppBuilder builder, JsxFileOptions options)
+        public static IAppBuilder UseJsxFiles(this IAppBuilder builder, JsxFileOptions options = null)
         {
-            return builder.Use<JsxFileMiddleware>(options);
+            return builder.Use<JsxFileMiddleware>(options ?? new JsxFileOptions());
         }
     }
 }
