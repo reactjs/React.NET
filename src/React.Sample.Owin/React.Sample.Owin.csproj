@@ -90,11 +90,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\react-0.12.2.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Content\Sample.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
