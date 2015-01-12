@@ -12,17 +12,17 @@ using System.Reflection;
 
 namespace React.Owin
 {
-    /// <summary>
-    /// Implements React file system that maps "~" into entry assembly location.
-    /// </summary>
-    internal class EntryAssemblyFileSystem : FileSystemBase
-    {
-        public override string MapPath(string relativePath)
-        {
-            if (relativePath.StartsWith("~"))
-                return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), relativePath.Replace("~", string.Empty));
+	/// <summary>
+	/// Implements React file system that maps "~" into entry assembly location.
+	/// </summary>
+	internal class EntryAssemblyFileSystem : FileSystemBase
+	{
+		public override string MapPath(string relativePath)
+		{
+			if (relativePath.StartsWith("~"))
+				return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), relativePath.Replace("~", string.Empty));
 
-            return relativePath;
-        }
-    }
+			return relativePath;
+		}
+	}
 }

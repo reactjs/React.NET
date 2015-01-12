@@ -11,17 +11,17 @@ using Owin;
 
 namespace React.Owin
 {
-    /// <summary>
-    /// Extensions for JsxFileMiddleware.
-    /// </summary>
-    public static class JsxFileExtensions
-    {
-        /// <summary>
-        /// Enables serving static JSX file, compiled to JavaScript with the given options.
-        /// </summary>
-        public static IAppBuilder UseJsxFiles(this IAppBuilder builder, JsxFileOptions options = null)
-        {
-            return builder.Use<JsxFileMiddleware>(options ?? new JsxFileOptions());
-        }
-    }
+	/// <summary>
+	/// Extensions for JsxFileMiddleware.
+	/// </summary>
+	public static class JsxFileExtensions
+	{
+		/// <summary>
+		/// Enables serving static JSX file, compiled to JavaScript with the given options.
+		/// </summary>
+		public static IAppBuilder UseJsxFiles(this IAppBuilder builder, JsxFileOptions options = null)
+		{
+			return builder.Use<JsxFileMiddleware>(options ?? new JsxFileOptions());
+		}
+	}
 }

@@ -13,19 +13,19 @@ using Microsoft.Owin.StaticFiles;
 
 namespace React.Owin
 {
-    /// <summary>
-    /// Options for serving JSX files.
-    /// </summary>
-    public class JsxFileOptions
-    {
-        /// <summary>
-        /// Collection of extensions that will be treated as JSX files. Defaults to ".jsx" and ".js".
-        /// </summary>
-        public IEnumerable<string> Extensions { get; set; }
+	/// <summary>
+	/// Options for serving JSX files.
+	/// </summary>
+	public class JsxFileOptions
+	{
+		/// <summary>
+		/// Collection of extensions that will be treated as JSX files. Defaults to ".jsx" and ".js".
+		/// </summary>
+		public IEnumerable<string> Extensions { get; set; }
 
-        /// <summary>
-        /// Options for static file middleware used to server JSX files.
-        /// </summary>
-        public StaticFileOptions StaticFileOptions { get; set; }
-    }
+		/// <summary>
+		/// Options for static file middleware used to server JSX files.
+		/// </summary>
+		public StaticFileOptions StaticFileOptions { get; set; }
+	}
 }

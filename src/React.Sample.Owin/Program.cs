@@ -13,15 +13,15 @@ using Microsoft.Owin.Hosting;
 
 namespace React.Sample.Owin
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            using (WebApp.Start<Startup>("http://localhost:12345"))
-            {
-                Console.WriteLine("Running on localhost:12345, press enter to quit");
-                Console.ReadLine();
-            }
-        }
-    }
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			using (WebApp.Start<Startup>("http://localhost:12345"))
+			{
+				Console.WriteLine("Running on localhost:12345, press enter to quit");
+				Console.ReadLine();
+			}
+		}
+	}
 }

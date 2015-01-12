@@ -17,96 +17,96 @@ using Microsoft.Owin.FileSystems;
 
 namespace React.Owin
 {
-    /// <summary>
-    /// Owin file system that serves transformed JSX files.
-    /// </summary>
-    internal class JsxFileSystem : Microsoft.Owin.FileSystems.IFileSystem
-    {
-        private readonly IJsxTransformer _transformer;
-        private readonly Microsoft.Owin.FileSystems.IFileSystem _physicalFileSystem;
-        private readonly string[] _extensions;
+	/// <summary>
+	/// Owin file system that serves transformed JSX files.
+	/// </summary>
+	internal class JsxFileSystem : Microsoft.Owin.FileSystems.IFileSystem
+	{
+		private readonly IJsxTransformer _transformer;
+		private readonly Microsoft.Owin.FileSystems.IFileSystem _physicalFileSystem;
+		private readonly string[] _extensions;
 
-        public JsxFileSystem(IJsxTransformer transformer, string root, IEnumerable<string> extensions)
-            : this(transformer, new PhysicalFileSystem(root), extensions)
-        {            
-        }
+		public JsxFileSystem(IJsxTransformer transformer, string root, IEnumerable<string> extensions)
+			: this(transformer, new PhysicalFileSystem(root), extensions)
+		{            
+		}
 
-        public JsxFileSystem(IJsxTransformer transformer, Microsoft.Owin.FileSystems.IFileSystem fileSystem, IEnumerable<string> extensions)
-        {
-            _transformer = transformer;
-            _physicalFileSystem = fileSystem;
+		public JsxFileSystem(IJsxTransformer transformer, Microsoft.Owin.FileSystems.IFileSystem fileSystem, IEnumerable<string> extensions)
+		{
+			_transformer = transformer;
+			_physicalFileSystem = fileSystem;
 
-            // Make sure the extensions start with dot
-            _extensions = extensions.Select(extension => extension.StartsWith(".") ? extension : "." + extension).ToArray();
-        }
+			// Make sure the extensions start with dot
+			_extensions = extensions.Select(extension => extension.StartsWith(".") ? extension : "." + extension).ToArray();
+		}
 
-        public bool TryGetFileInfo(string subpath, out IFileInfo fileInfo)
-        {
-            IFileInfo internalFileInfo;
-            fileInfo = null;
+		public bool TryGetFileInfo(string subpath, out IFileInfo fileInfo)
+		{
+			IFileInfo internalFileInfo;
+			fileInfo = null;
 
-            if (!_physicalFileSystem.TryGetFileInfo(subpath, out internalFileInfo))
-                return false;
+			if (!_physicalFileSystem.TryGetFileInfo(subpath, out internalFileInfo))
+				return false;
 
-            if (internalFileInfo.IsDirectory || !_extensions.Any(internalFileInfo.Name.EndsWith))
-                return false;
+			if (internalFileInfo.IsDirectory || !_extensions.Any(internalFileInfo.Name.EndsWith))
+				return false;
 
-            fileInfo = new JsxFileInfo(_transformer, internalFileInfo);
-            return true;
-        }
+			fileInfo = new JsxFileInfo(_transformer, internalFileInfo);
+			return true;
+		}
 
-        public bool TryGetDirectoryContents(string subpath, out IEnumerable<IFileInfo> contents)
-        {
-            return _physicalFileSystem.TryGetDirectoryContents(subpath, out contents);
-        }
+		public bool TryGetDirectoryContents(string subpath, out IEnumerable<IFileInfo> contents)
+		{
+			return _physicalFileSystem.TryGetDirectoryContents(subpath, out contents);
+		}
 
-        private class JsxFileInfo : IFileInfo
-        {
-            private readonly IJsxTransformer _jsxTransformer;
-            private readonly IFileInfo _fileInfo;
-            private readonly Lazy<byte[]> _content;
+		private class JsxFileInfo : IFileInfo
+		{
+			private readonly IJsxTransformer _jsxTransformer;
+			private readonly IFileInfo _fileInfo;
+			private readonly Lazy<byte[]> _content;
 
-            public JsxFileInfo(IJsxTransformer jsxTransformer, IFileInfo fileInfo)
-            {
-                _jsxTransformer = jsxTransformer;
-                _fileInfo = fileInfo;
+			public JsxFileInfo(IJsxTransformer jsxTransformer, IFileInfo fileInfo)
+			{
+				_jsxTransformer = jsxTransformer;
+				_fileInfo = fileInfo;
 
-                _content = new Lazy<byte[]>(
-                    () =>
-                    {
-                        return Encoding.UTF8.GetBytes(_jsxTransformer.TransformJsxFile(fileInfo.PhysicalPath));
-                    });
-            }
+				_content = new Lazy<byte[]>(
+					() =>
+					{
+						return Encoding.UTF8.GetBytes(_jsxTransformer.TransformJsxFile(fileInfo.PhysicalPath));
+					});
+			}
 
-            public Stream CreateReadStream()
-            {
-                return new MemoryStream(_content.Value);
-            }
+			public Stream CreateReadStream()
+			{
+				return new MemoryStream(_content.Value);
+			}
 
-            public long Length
-            {
-                get { return _content.Value.Length; }
-            }
+			public long Length
+			{
+				get { return _content.Value.Length; }
+			}
 
-            public string PhysicalPath
-            {
-                get { return _fileInfo.PhysicalPath; }
-            }
+			public string PhysicalPath
+			{
+				get { return _fileInfo.PhysicalPath; }
+			}
 
-            public string Name
-            {
-                get { return _fileInfo.Name; }
-            }
+			public string Name
+			{
+				get { return _fileInfo.Name; }
+			}
 
-            public DateTime LastModified
-            {
-                get { return _fileInfo.LastModified; }
-            }
+			public DateTime LastModified
+			{
+				get { return _fileInfo.LastModified; }
+			}
 
-            public bool IsDirectory
-            {
-                get { return _fileInfo.IsDirectory; }
-            }
-        }
-    }
+			public bool IsDirectory
+			{
+				get { return _fileInfo.IsDirectory; }
+			}
+		}
+	}
 }

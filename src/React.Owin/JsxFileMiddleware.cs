@@ -16,56 +16,56 @@ using Microsoft.Owin.StaticFiles;
 
 namespace React.Owin
 {
-    /// <summary>
-    /// Enables serving static JSX files transformed to pure JavaScript. Wraps around StaticFileMiddleware.
-    /// </summary>
-    public class JsxFileMiddleware
-    {
-        private readonly StaticFileMiddleware _internalStaticMiddleware;
+	/// <summary>
+	/// Enables serving static JSX files transformed to pure JavaScript. Wraps around StaticFileMiddleware.
+	/// </summary>
+	public class JsxFileMiddleware
+	{
+		private readonly StaticFileMiddleware _internalStaticMiddleware;
 
-        static JsxFileMiddleware()
-        {
-            Initializer.Initialize(_ => _);
-        }
+		static JsxFileMiddleware()
+		{
+			Initializer.Initialize(_ => _);
+		}
 
-        /// <summary>
-        /// Creates a new instance of the JsxFileMiddleware.
-        /// </summary>
-        /// <param name="next">The next middleware in the pipeline.</param>
-        /// <param name="options">The configuration options.</param>
-        public JsxFileMiddleware(Func<IDictionary<string, object>, Task> next, JsxFileOptions options)
-        {
-            if (next == null)
-                throw new ArgumentNullException("next");
+		/// <summary>
+		/// Creates a new instance of the JsxFileMiddleware.
+		/// </summary>
+		/// <param name="next">The next middleware in the pipeline.</param>
+		/// <param name="options">The configuration options.</param>
+		public JsxFileMiddleware(Func<IDictionary<string, object>, Task> next, JsxFileOptions options)
+		{
+			if (next == null)
+				throw new ArgumentNullException("next");
 
-            // Default values
-            options = options ?? new JsxFileOptions();
-            var extensions = (options.Extensions == null || !options.Extensions.Any()) ? new[] { ".jsx", ".js" } : options.Extensions;
-            var fileOptions = options.StaticFileOptions ?? new StaticFileOptions();
+			// Default values
+			options = options ?? new JsxFileOptions();
+			var extensions = (options.Extensions == null || !options.Extensions.Any()) ? new[] { ".jsx", ".js" } : options.Extensions;
+			var fileOptions = options.StaticFileOptions ?? new StaticFileOptions();
 
-            // Wrap the file system with JSX file system
-            var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-            _internalStaticMiddleware = new StaticFileMiddleware(
-                next,
-                new StaticFileOptions()
-                {
-                    ContentTypeProvider = fileOptions.ContentTypeProvider,
-                    DefaultContentType = fileOptions.DefaultContentType,
-                    OnPrepareResponse = fileOptions.OnPrepareResponse,
-                    RequestPath = fileOptions.RequestPath,
-                    ServeUnknownFileTypes = fileOptions.ServeUnknownFileTypes,
-                    FileSystem = new JsxFileSystem(reactEnvironment.JsxTransformer, fileOptions.FileSystem, extensions)
-                });
-        }
+			// Wrap the file system with JSX file system
+			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+			_internalStaticMiddleware = new StaticFileMiddleware(
+				next,
+				new StaticFileOptions()
+				{
+					ContentTypeProvider = fileOptions.ContentTypeProvider,
+					DefaultContentType = fileOptions.DefaultContentType,
+					OnPrepareResponse = fileOptions.OnPrepareResponse,
+					RequestPath = fileOptions.RequestPath,
+					ServeUnknownFileTypes = fileOptions.ServeUnknownFileTypes,
+					FileSystem = new JsxFileSystem(reactEnvironment.JsxTransformer, fileOptions.FileSystem, extensions)
+				});
+		}
 
-        /// <summary>
-        /// Processes a request to determine if it matches a known JSX file, and if so, serves it compiled to JavaScript.
-        /// </summary>
-        /// <param name="environment">OWIN environment dictionary which stores state information about the request, response and relevant server state.</param>
-        /// <returns/>
-        public Task Invoke(IDictionary<string, object> environment)
-        {
-            return _internalStaticMiddleware.Invoke(environment);
-        }
-    }
+		/// <summary>
+		/// Processes a request to determine if it matches a known JSX file, and if so, serves it compiled to JavaScript.
+		/// </summary>
+		/// <param name="environment">OWIN environment dictionary which stores state information about the request, response and relevant server state.</param>
+		/// <returns/>
+		public Task Invoke(IDictionary<string, object> environment)
+		{
+			return _internalStaticMiddleware.Invoke(environment);
+		}
+	}
 }
