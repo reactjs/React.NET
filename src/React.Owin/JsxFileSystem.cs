@@ -24,20 +24,20 @@ namespace React.Owin
     {
         private readonly IJsxTransformer _transformer;
         private readonly Microsoft.Owin.FileSystems.IFileSystem _physicalFileSystem;
-        private readonly string[] _extenstions;
+        private readonly string[] _extensions;
 
-        public JsxFileSystem(IJsxTransformer transformer, string root, IEnumerable<string> extenstions)
-            : this(transformer, new PhysicalFileSystem(root), extenstions)
+        public JsxFileSystem(IJsxTransformer transformer, string root, IEnumerable<string> extensions)
+            : this(transformer, new PhysicalFileSystem(root), extensions)
         {            
         }
 
-        public JsxFileSystem(IJsxTransformer transformer, Microsoft.Owin.FileSystems.IFileSystem fileSystem, IEnumerable<string> extenstions)
+        public JsxFileSystem(IJsxTransformer transformer, Microsoft.Owin.FileSystems.IFileSystem fileSystem, IEnumerable<string> extensions)
         {
             _transformer = transformer;
             _physicalFileSystem = fileSystem;
 
             // Make sure the extensions start with dot
-            _extenstions = extenstions.Select(extenstion => extenstion.StartsWith(".") ? extenstion : "." + extenstion).ToArray();
+            _extensions = extensions.Select(extension => extension.StartsWith(".") ? extension : "." + extension).ToArray();
         }
 
         public bool TryGetFileInfo(string subpath, out IFileInfo fileInfo)
@@ -48,7 +48,7 @@ namespace React.Owin
             if (!_physicalFileSystem.TryGetFileInfo(subpath, out internalFileInfo))
                 return false;
 
-            if (internalFileInfo.IsDirectory || !_extenstions.Any(internalFileInfo.Name.EndsWith))
+            if (internalFileInfo.IsDirectory || !_extensions.Any(internalFileInfo.Name.EndsWith))
                 return false;
 
             fileInfo = new JsxFileInfo(_transformer, internalFileInfo);

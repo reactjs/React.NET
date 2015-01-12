@@ -28,6 +28,11 @@ namespace React.Owin
             Initializer.Initialize(_ => _);
         }
 
+        /// <summary>
+        /// Creates a new instance of the JsxFileMiddleware.
+        /// </summary>
+        /// <param name="next">The next middleware in the pipeline.</param>
+        /// <param name="options">The configuration options.</param>
         public JsxFileMiddleware(Func<IDictionary<string, object>, Task> next, JsxFileOptions options)
         {
             if (next == null)
@@ -35,7 +40,7 @@ namespace React.Owin
 
             // Default values
             options = options ?? new JsxFileOptions();
-            var extenstions = (options.Extensions == null || !options.Extensions.Any()) ? new[] { ".jsx" } : options.Extensions;
+            var extensions = (options.Extensions == null || !options.Extensions.Any()) ? new[] { ".jsx", ".js" } : options.Extensions;
             var fileOptions = options.StaticFileOptions ?? new StaticFileOptions();
 
             // Wrap the file system with JSX file system
@@ -49,10 +54,15 @@ namespace React.Owin
                     OnPrepareResponse = fileOptions.OnPrepareResponse,
                     RequestPath = fileOptions.RequestPath,
                     ServeUnknownFileTypes = fileOptions.ServeUnknownFileTypes,
-                    FileSystem = new JsxFileSystem(reactEnvironment.JsxTransformer, fileOptions.FileSystem, extenstions)
+                    FileSystem = new JsxFileSystem(reactEnvironment.JsxTransformer, fileOptions.FileSystem, extensions)
                 });
         }
 
+        /// <summary>
+        /// Processes a request to determine if it matches a known JSX file, and if so, serves it compiled to JavaScript.
+        /// </summary>
+        /// <param name="environment">OWIN environment dictionary which stores state information about the request, response and relevant server state.</param>
+        /// <returns/>
         public Task Invoke(IDictionary<string, object> environment)
         {
             return _internalStaticMiddleware.Invoke(environment);

@@ -19,7 +19,7 @@ namespace React.Owin
     public class JsxFileOptions
     {
         /// <summary>
-        /// Collection of extensions that will be treated as JSX files. Defaults to ".jsx".
+        /// Collection of extensions that will be treated as JSX files. Defaults to ".jsx" and ".js".
         /// </summary>
         public IEnumerable<string> Extensions { get; set; }
 
