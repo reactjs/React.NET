@@ -78,6 +78,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs">
@@ -90,6 +91,7 @@
     <Compile Include="Exceptions\ReactScriptLoadException.cs" />
     <Compile Include="Exceptions\ReactServerRenderingException.cs" />
     <Compile Include="JavaScriptWithSourceMap.cs" />
+    <Compile Include="MemoryFileCache.cs" />
     <Compile Include="SourceMap.cs" />
     <Compile Include="SystemEnvironmentUtils.cs" />
     <Compile Include="Exceptions\JsxUnsupportedEngineException.cs" />
