@@ -23,8 +23,8 @@ namespace React.Owin
 		/// <param name="container">Container to register components in</param>
 		public void Register(TinyIoCContainer container)
 		{
-            container.Register<IFileSystem, EntryAssemblyFileSystem>();
-            container.Register<ICache, MemoryFileCache>();
+			container.Register<IFileSystem, EntryAssemblyFileSystem>();
+			container.Register<ICache, MemoryFileCache>();
 		}
 	}
 }

@@ -20,17 +20,29 @@ namespace React.Owin
 	/// <summary>
 	/// Owin file system that serves transformed JSX files.
 	/// </summary>
-	internal class JsxFileSystem : Microsoft.Owin.FileSystems.IFileSystem
+	public class JsxFileSystem : Microsoft.Owin.FileSystems.IFileSystem
 	{
 		private readonly IJsxTransformer _transformer;
 		private readonly Microsoft.Owin.FileSystems.IFileSystem _physicalFileSystem;
 		private readonly string[] _extensions;
 
+		/// <summary>
+		/// Creates a new instance of the JsxFileSystem.
+		/// </summary>
+		/// <param name="transformer">JSX transformer used to compile JSX files</param>
+		/// <param name="root">The root directory</param>
+		/// <param name="extensions">Extensions of files that will be treated as JSX files</param>
 		public JsxFileSystem(IJsxTransformer transformer, string root, IEnumerable<string> extensions)
 			: this(transformer, new PhysicalFileSystem(root), extensions)
 		{            
 		}
 
+		/// <summary>
+		/// Creates a new instance of the JsxFileSystem.
+		/// </summary>
+		/// <param name="transformer">JSX transformer used to compile JSX files</param>
+		/// <param name="fileSystem">File system used to look up files</param>
+		/// <param name="extensions">Extensions of files that will be treated as JSX files</param>
 		public JsxFileSystem(IJsxTransformer transformer, Microsoft.Owin.FileSystems.IFileSystem fileSystem, IEnumerable<string> extensions)
 		{
 			_transformer = transformer;
@@ -40,6 +52,14 @@ namespace React.Owin
 			_extensions = extensions.Select(extension => extension.StartsWith(".") ? extension : "." + extension).ToArray();
 		}
 
+		/// <summary>
+		/// Locate a JSX file at the given path. 
+		/// </summary>
+		/// <param name="subpath">The path that identifies the file</param>
+		/// <param name="fileInfo">The discovered file if any</param>
+		/// <returns>
+		/// True if a JSX file was located at the given path
+		/// </returns>
 		public bool TryGetFileInfo(string subpath, out IFileInfo fileInfo)
 		{
 			IFileInfo internalFileInfo;
@@ -55,6 +75,14 @@ namespace React.Owin
 			return true;
 		}
 
+		/// <summary>
+		/// Enumerate a directory at the given path, if any
+		/// </summary>
+		/// <param name="subpath">The path that identifies the directory</param>
+		/// <param name="contents">The contents if any</param>
+		/// <returns>
+		/// True if a directory was located at the given path
+		/// </returns>
 		public bool TryGetDirectoryContents(string subpath, out IEnumerable<IFileInfo> contents)
 		{
 			return _physicalFileSystem.TryGetDirectoryContents(subpath, out contents);

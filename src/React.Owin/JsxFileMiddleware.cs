@@ -21,11 +21,14 @@ namespace React.Owin
 	/// </summary>
 	public class JsxFileMiddleware
 	{
-		private readonly StaticFileMiddleware _internalStaticMiddleware;
+		private readonly Func<IDictionary<string, object>, Task> _next;
+		private readonly StaticFileOptions _fileOptions;
+		private readonly IEnumerable<string> _extensions;
 
 		static JsxFileMiddleware()
 		{
-			Initializer.Initialize(_ => _);
+			// Assume that request will ask for the "per request" instances only once. 
+			Initializer.Initialize(options => options.AsMultiInstance());
 		}
 
 		/// <summary>
@@ -38,24 +41,12 @@ namespace React.Owin
 			if (next == null)
 				throw new ArgumentNullException("next");
 
+			_next = next;
+
 			// Default values
 			options = options ?? new JsxFileOptions();
-			var extensions = (options.Extensions == null || !options.Extensions.Any()) ? new[] { ".jsx", ".js" } : options.Extensions;
-			var fileOptions = options.StaticFileOptions ?? new StaticFileOptions();
-
-			// Wrap the file system with JSX file system
-			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-			_internalStaticMiddleware = new StaticFileMiddleware(
-				next,
-				new StaticFileOptions()
-				{
-					ContentTypeProvider = fileOptions.ContentTypeProvider,
-					DefaultContentType = fileOptions.DefaultContentType,
-					OnPrepareResponse = fileOptions.OnPrepareResponse,
-					RequestPath = fileOptions.RequestPath,
-					ServeUnknownFileTypes = fileOptions.ServeUnknownFileTypes,
-					FileSystem = new JsxFileSystem(reactEnvironment.JsxTransformer, fileOptions.FileSystem, extensions)
-				});
+			_extensions = (options.Extensions == null || !options.Extensions.Any()) ? new[] { ".jsx", ".js" } : options.Extensions;
+			_fileOptions = options.StaticFileOptions ?? new StaticFileOptions();
 		}
 
 		/// <summary>
@@ -63,9 +54,33 @@ namespace React.Owin
 		/// </summary>
 		/// <param name="environment">OWIN environment dictionary which stores state information about the request, response and relevant server state.</param>
 		/// <returns/>
-		public Task Invoke(IDictionary<string, object> environment)
+		public async Task Invoke(IDictionary<string, object> environment)
 		{
-			return _internalStaticMiddleware.Invoke(environment);
+			// Create all "per request" instances
+			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+
+			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.JsxTransformer);
+			await internalStaticMiddleware.Invoke(environment);
+
+			// Clean up all "per request" instances
+			var disposable = reactEnvironment as IDisposable;
+			if (disposable != null)
+				disposable.Dispose();
+		}
+
+		private StaticFileMiddleware CreateFileMiddleware(IJsxTransformer jsxTransformer)
+		{
+			return new StaticFileMiddleware(
+				_next,
+				new StaticFileOptions()
+				{
+					ContentTypeProvider = _fileOptions.ContentTypeProvider,
+					DefaultContentType = _fileOptions.DefaultContentType,
+					OnPrepareResponse = _fileOptions.OnPrepareResponse,
+					RequestPath = _fileOptions.RequestPath,
+					ServeUnknownFileTypes = _fileOptions.ServeUnknownFileTypes,
+					FileSystem = new JsxFileSystem(jsxTransformer, _fileOptions.FileSystem, _extensions)
+				});
 		}
 	}
 }
