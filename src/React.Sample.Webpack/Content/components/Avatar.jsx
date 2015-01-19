@@ -1,0 +1,32 @@
+﻿/**
+ *  Copyright (c) 2015, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+var React = require('react');
+
+var Avatar = React.createClass({
+	propTypes: {
+		author: React.PropTypes.object.isRequired	
+	},
+	render() {
+		return (
+			<img
+				src={this.getPhotoUrl(this.props.author)}
+				alt={'Photo of ' + this.props.author.Name}
+				width={50}
+				height={50}
+				className="commentPhoto"
+			/>
+		);
+	},
+	getPhotoUrl(author) {
+		return 'http://graph.facebook.com/' + author.Facebook + '/picture';
+	}
+});
+
+module.exports = Avatar;

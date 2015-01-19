@@ -1,0 +1,16 @@
+{
+  "name": "React.Sample.Webpack",
+  "version": "0.0.1",
+  "description": "Webpack + ASP.NET MVC 4 sample for ReactJS.NET",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD",
+  "devDependencies": {
+    "expose-loader": "^0.6.0",
+    "jsx-loader": "^0.12.2",
+    "webpack": "^1.5.1"
+  }
+}

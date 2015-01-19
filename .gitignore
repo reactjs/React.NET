@@ -5,7 +5,8 @@ src/**/*.nuspec
 !src/template.nuspec
 site/jekyll/_site
 src/React.Sample.Cassette/cassette-cache
-src/React.Sample.Mvc4/ClearScript.V8
+src/React.Sample.*/ClearScript.V8
+src/React.Sample.Webpack/build
 *.generated.js
 *.generated.js.map
 

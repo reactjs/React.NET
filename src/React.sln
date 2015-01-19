@@ -20,6 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests", "React.Tests\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F-49BD-4B79-8AD4-67962230E76B}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
 		..\build.proj = ..\build.proj
 		..\dev-build-push.bat = ..\dev-build-push.bat
 		..\dev-build.bat = ..\dev-build.bat
@@ -56,6 +57,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Owin", "React.Sample.Owin\React.Sample.Owin.csproj", "{84C5EB9D-FB4E-44C3-91C4-2F2393C58B39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Owin", "React.Owin\React.Owin.csproj", "{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Webpack", "React.Sample.Webpack\React.Sample.Webpack.csproj", "{E20376AD-80F7-4865-ACE3-1DE616991DF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,6 +122,10 @@ Global
 		{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,5 +145,6 @@ Global
 		{7FBE07B3-C7BA-48DA-8B53-0DB0BB82DA09} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{84C5EB9D-FB4E-44C3-91C4-2F2393C58B39} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 		{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
+		{E20376AD-80F7-4865-ACE3-1DE616991DF7} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 	EndGlobalSection
 EndGlobal
