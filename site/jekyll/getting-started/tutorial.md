@@ -320,7 +320,7 @@ React.render(
 
 Now that the data is available in the `CommentList`, let's render the comments dynamically:
 
-```javascript{3-8,12}
+```javascript{3-9,12}
 var CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.data.map(function (comment) {
