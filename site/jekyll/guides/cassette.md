@@ -47,13 +47,8 @@ project for an example.
 Precompilation
 ==============
 
-**New in ReactJS.NET 0.2.0**
-
 Cassette supports using an MSBuild task to minify and combine your assets before
-deployment. This makes the start time of your application a lot quicker, and is
-also required to use JSX files on Linux via Mono (as the JSX transformer does
-not currently support Mono).
-
-Refer to the Cassette
+deployment. This makes the start time of your application a lot quicker. Refer
+to the Cassette
 [compile-time bundle generation using MSBuild](http://getcassette.net/documentation/v2/msbuild)
 documentation for more information.

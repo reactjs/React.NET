@@ -70,6 +70,11 @@ var HelloWorld = React.createClass({
             Reference your JSX files and they will be included in your bundles
             along with your other JavaScript files.
           </p>
+          <p>
+            If you're a fan of Node.js-based libraries, you can use
+            [Webpack](/guides/webpack.html) or Browserify instead, and still
+            take advantage of ReactJS.NET's server-side rendering.
+          </p>
         </div>
         <div class="example-code">
 

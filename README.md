@@ -17,6 +17,7 @@ Features
    libraries:
    * [ASP.NET Bundling and Minification](http://reactjs.net/guides/weboptimizer.html)
    * [Cassette](http://reactjs.net/guides/cassette.html)
+   * [Webpack](http://reactjs.net/guides/webpack.html)
  * [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
    to make your initial render super-fast (experimental!)
  * [Runs on Linux](http://reactjs.net/guides/mono.html) via Mono and V8
