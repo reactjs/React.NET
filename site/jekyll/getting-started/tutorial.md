@@ -679,7 +679,7 @@ var CommentForm = React.createClass({
     if (!text || !author) {
       return;
     }
-    this.props.onCommentSubmit({author: author, text: text});
+    this.props.onCommentSubmit({Author: author, Text: text});
     this.refs.author.getDOMNode().value = '';
     this.refs.text.getDOMNode().value = '';
     return;
@@ -711,8 +711,8 @@ var CommentBox = React.createClass({
   },
   handleCommentSubmit: function(comment) {
     var data = new FormData();
-    data.append('Author', comment.author);
-    data.append('Text', comment.text);
+    data.append('Author', comment.Author);
+    data.append('Text', comment.Text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
