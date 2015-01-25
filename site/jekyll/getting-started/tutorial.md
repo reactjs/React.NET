@@ -964,8 +964,6 @@ namespace ReactDemo
 	{
 		public static void Configure()
 		{
-			ReactSiteConfiguration.Configuration = new ReactSiteConfiguration();
-
 			ReactSiteConfiguration.Configuration
 				.AddScript("~/Scripts/showdown.js")
 				.AddScript("~/Scripts/Tutorial.jsx");
