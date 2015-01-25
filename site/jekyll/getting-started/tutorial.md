@@ -593,7 +593,7 @@ var CommentForm = React.createClass({
 
 Let's make the form interactive. When the user submits the form, we should clear it, submit a request to the server, and refresh the list of comments. To start, let's listen for the form's submit event and clear it.
 
-```javascript{2-12,15-16,20}
+```javascript{2-13,16-18}
 var CommentForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
@@ -679,7 +679,7 @@ var CommentForm = React.createClass({
     if (!text || !author) {
       return;
     }
-    this.props.onCommentSubmit({author: author, text: text});
+    this.props.onCommentSubmit({Author: author, Text: text});
     this.refs.author.getDOMNode().value = '';
     this.refs.text.getDOMNode().value = '';
     return;
@@ -711,8 +711,8 @@ var CommentBox = React.createClass({
   },
   handleCommentSubmit: function(comment) {
     var data = new FormData();
-    data.append('Author', comment.author);
-    data.append('Text', comment.text);
+    data.append('Author', comment.Author);
+    data.append('Text', comment.Text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
@@ -868,7 +868,7 @@ If you go to this URL in your browser, you should notice that the code has been 
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using JavaScript. This enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `getInitialState`, since it is no longer required.
+We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required.
 
 ```javascript{28}
 var CommentBox = React.createClass({
@@ -964,8 +964,6 @@ namespace ReactDemo
 	{
 		public static void Configure()
 		{
-			ReactSiteConfiguration.Configuration = new ReactSiteConfiguration();
-
 			ReactSiteConfiguration.Configuration
 				.AddScript("~/Scripts/showdown.js")
 				.AddScript("~/Scripts/Tutorial.jsx");
