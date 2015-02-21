@@ -1,0 +1,13 @@
+{
+    "version": "1.3.1-*",
+    "dependencies": {
+        "Microsoft.Framework.DependencyInjection": "1.0.0.0-beta2",
+        "Microsoft.AspNet.Hosting": "1.0.0.0-beta2",
+        "Microsoft.AspNet.Mvc.Core": "6.0.0.0-beta2",
+        "React": ""
+    },
+
+    "frameworks": {
+        "aspnet50": {}
+    }
+}
