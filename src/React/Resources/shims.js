@@ -53,11 +53,24 @@ function ReactNET_transform(input, harmony, stripTypes) {
 
 function ReactNET_transform_sourcemap(input, harmony, stripTypes) {
 	try {
-		var result = global.JSXTransformer.transform(input, {
-			harmony: !!harmony,
-			stripTypes: !!stripTypes,
-			sourceMap: true
-		});
+		var result;
+		try {
+			// First try to compile and generate a source map
+			result = global.JSXTransformer.transform(input, {
+				harmony: !!harmony,
+				stripTypes: !!stripTypes,
+				sourceMap: true
+			});
+		} catch (ex) {
+			// It's possible an exception was thrown during the source map generation, and the
+			// transform might actually work without a source map.
+			result = global.JSXTransformer.transform(input, {
+				harmony: !!harmony,
+				stripTypes: !!stripTypes,
+				sourceMap: false
+			});
+		}
+
 		if (!result.sourceMap) {
 			return JSON.stringify({
 				code: result.code,
