@@ -313,6 +313,11 @@ namespace React
 				fullScript.Append(component.RenderJavaScript());
 				fullScript.AppendLine(";");
 			}
+			
+			// Also propagate any server-side console.log calls to corresponding client-side calls.
+			var consoleCalls = Execute<string>("console.getCalls()");
+			fullScript.Append(consoleCalls);
+
 			return fullScript.ToString();
 		}
 
