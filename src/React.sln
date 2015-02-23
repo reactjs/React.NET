@@ -1,22 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22512.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Mvc4", "React.Sample.Mvc4\React.Sample.Mvc4.csproj", "{22796879-968A-4C26-9B4B-4C44792B36DB}"
-	ProjectSection(ProjectDependencies) = postProject
-		{AF531A37-B93F-4113-9C2C-4DB28064B926} = {AF531A37-B93F-4113-9C2C-4DB28064B926}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F567B25C-E869-4C93-9C96-077761250F87}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{681C45FB-103C-48BC-B992-20C5B6B78F92}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React", "React\React.csproj", "{D0CC8A22-CEE6-485C-924B-1F94426FEA59}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests", "React.Tests\React.Tests.csproj", "{D7C645EB-7B85-45D5-AAA6-CAD3DE704381}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F-49BD-4B79-8AD4-67962230E76B}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,6 +22,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F
 		template.nuspec = template.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F2875D3A-0C8A-439B-B734-ECABA00AC629}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Mvc4", "React.Sample.Mvc4\React.Sample.Mvc4.csproj", "{22796879-968A-4C26-9B4B-4C44792B36DB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AF531A37-B93F-4113-9C2C-4DB28064B926} = {AF531A37-B93F-4113-9C2C-4DB28064B926}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React", "React\React.csproj", "{D0CC8A22-CEE6-485C-924B-1F94426FEA59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests", "React.Tests\React.Tests.csproj", "{D7C645EB-7B85-45D5-AAA6-CAD3DE704381}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Web", "React.Web\React.Web.csproj", "{134EDD16-8DC8-4983-A2E0-B38DAB1ECF1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Web.Mvc4", "React.Web.Mvc4\React.Web.Mvc4.csproj", "{662D52AC-1EE9-4372-BD74-379F9AC56451}"
@@ -44,11 +49,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Web.Mvc3", "React.Web.Mvc3\React.Web.Mvc3.csproj", "{6B05AF58-BA85-45A9-97AE-88B6B21317D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.MSBuild", "React.MSBuild\React.MSBuild.csproj", "{AF531A37-B93F-4113-9C2C-4DB28064B926}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F2875D3A-0C8A-439B-B734-ECABA00AC629}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.JavaScriptEngine.VroomJs", "React.JavaScriptEngine.VroomJs\React.JavaScriptEngine.VroomJs.csproj", "{B4A5902A-70E2-4FA4-817D-DCC78D31E9B9}"
 EndProject

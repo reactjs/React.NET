@@ -34,6 +34,12 @@
     <NoWarn>1607</NoWarn>
     <DocumentationFile>..\..\bin\Release\React.MSBuild\React.MSBuild.XML</DocumentationFile>
   </PropertyGroup>
+	<PropertyGroup>
+		<SignAssembly>true</SignAssembly>
+	</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />

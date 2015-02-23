@@ -1,3 +1,3 @@
 @echo off
-"%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" build.proj  /p:BuildType=Dev
+"%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe" build.proj /p:BuildType=Dev
 pause
