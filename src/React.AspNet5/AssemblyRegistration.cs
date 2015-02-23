@@ -24,8 +24,7 @@ namespace React.AspNet5
 		public void Register(TinyIoCContainer container)
 		{
 			container.Register<IFileSystem, AspNet5FileSystem>().AsSingleton();
-			// TODO: Caching for ASP.NET 5
-			container.Register<ICache, NullCache>().AsSingleton();
+			container.Register<ICache, MemoryFileCache>().AsSingleton();
 		}
 	}
 }

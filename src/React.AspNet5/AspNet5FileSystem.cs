@@ -18,7 +18,6 @@ namespace React.AspNet5
 	/// </summary>
 	public class AspNet5FileSystem : FileSystemBase
 	{
-		private const string PREFIX = "~/";
 		private readonly IApplicationEnvironment _appEnvironment;
 
 		/// <summary>
@@ -37,10 +36,7 @@ namespace React.AspNet5
 		/// <returns>Full path of the file</returns>
 		public override string MapPath(string relativePath)
 		{
-			if (relativePath.StartsWith(PREFIX))
-			{
-				relativePath = relativePath.Substring(PREFIX.Length);
-			}
+			relativePath = relativePath.TrimStart('~').TrimStart('/');
 			return Path.Combine(_appEnvironment.ApplicationBasePath, relativePath);
 		}
 	}

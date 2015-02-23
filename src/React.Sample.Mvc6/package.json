@@ -1,8 +1,0 @@
-﻿{
-    "version": "0.0.1",
-    "name": "React.Sample.Mvc6",
-    "devDependencies": {
-        "gulp": "^3.8.11",
-        "gulp-react": "^2.0.0"
-    }
-}

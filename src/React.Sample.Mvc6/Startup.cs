@@ -63,6 +63,18 @@ namespace React.Sample.Mvc6
 				app.UseErrorHandler("/Home/Error");
 			}
 
+			app.UseRequestServices();
+
+			// Initialise ReactJS.NET. Must be before static files.
+			app.UseReact(config =>
+			{
+				config
+					.SetUseHarmony(true)
+					.SetReuseJavaScriptEngines(true)
+					.SetStripTypes(true)
+					.AddScript("~/wwwroot/js/Sample.jsx");
+			});
+
 			// Add static files to the request pipeline.
 			app.UseStaticFiles();
 
@@ -80,16 +92,6 @@ namespace React.Sample.Mvc6
 					template: "{controller}/{action}/{id?}",
 					defaults: new { controller = "Home", action = "Index" }
 				);
-			});
-
-			// Initialise ReactJS.NET.
-			app.UseReact(config =>
-			{
-				config
-					.SetUseHarmony(true)
-					.SetReuseJavaScriptEngines(true)
-					.SetStripTypes(true)
-					.AddScript("~/wwwroot/js/Sample.jsx");
 			});
 		}
 	}

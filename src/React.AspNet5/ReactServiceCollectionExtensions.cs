@@ -33,8 +33,13 @@ namespace React.AspNet5
 		/// </summary>
 		/// <param name="app">ASP.NET application builder</param>
 		/// <param name="configure">ReactJS.NET configuration</param>
+		/// <param name="fileOptions">Options to use for serving JSX files</param>
 		/// <returns>The application builder (for chaining)</returns>
-		public static IApplicationBuilder UseReact(this IApplicationBuilder app, Action<IReactSiteConfiguration> configure)
+		public static IApplicationBuilder UseReact(
+			this IApplicationBuilder app, 
+			Action<IReactSiteConfiguration> configure,
+			JsxFileOptions fileOptions = null
+		)
 		{
 			// Register IApplicationEnvironment in our dependency injection container
 			// Ideally this would be in AddReact(IServiceCollection) but we can't 
@@ -43,6 +48,10 @@ namespace React.AspNet5
 
 			Initializer.Initialize(registerOptions => AsPerRequestSingleton(app.ApplicationServices, registerOptions));
 			configure(ReactSiteConfiguration.Configuration);
+
+			// Allow serving of .jsx files
+			app.UseMiddleware<JsxFileMiddleware>(fileOptions ?? new JsxFileOptions());
+
 			return app;
 		}
 
