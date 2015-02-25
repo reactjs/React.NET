@@ -1,6 +1,8 @@
 [ReactJS.NET](http://reactjs.net/)
 ===========
 
+[![Join the chat at https://gitter.im/reactjs/React.NET](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/reactjs/React.NET?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ReactJS.NET is a library that makes it easier to use Facebook's
 [React](http://facebook.github.io/react/) and
 [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
