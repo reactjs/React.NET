@@ -16,9 +16,10 @@ using System.Text;
 using Microsoft.Owin.FileSystems;
 using IOwinFileSystem = Microsoft.Owin.FileSystems.IFileSystem;
 #else
-using Microsoft.AspNet.FileSystems;
+using Microsoft.AspNet.FileProviders;
 using Microsoft.Framework.Expiration.Interfaces;
-using IOwinFileSystem = Microsoft.AspNet.FileSystems.IFileSystem;
+using IOwinFileSystem = Microsoft.AspNet.FileProviders.IFileProvider;
+using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
 #endif
 
 #if OWIN
@@ -126,6 +127,20 @@ namespace React.AspNet5
 		{
 			return _physicalFileSystem.GetDirectoryContents(subpath);
 		}
+
+		/// <summary>
+		/// Creates a change trigger with the specified filter.
+		/// </summary>
+		/// <param name="filter">
+		/// Filter string used to determine what files or folders to monitor. Example: **/*.cs, *.*, subFolder/**/*.cshtml.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IExpirationTrigger"/> that is triggered when a file matching <paramref name="filter"/> is added, modified or deleted.
+		/// </returns>
+		public IExpirationTrigger Watch(string filter)
+		{
+			return _physicalFileSystem.Watch(filter);
+		}
 #endif
 
 		private class JsxFileInfo : IFileInfo
@@ -164,17 +179,22 @@ namespace React.AspNet5
 				get { return _fileInfo.Name; }
 			}
 
-			public DateTime LastModified
-			{
-				get { return _fileInfo.LastModified; }
-			}
-
 			public bool IsDirectory
 			{
 				get { return _fileInfo.IsDirectory; }
 			}
 
-#if !OWIN
+#if OWIN
+			public DateTime LastModified
+			{
+				get { return _fileInfo.LastModified; }
+			}
+#else
+			public DateTimeOffset LastModified
+			{
+				get { return _fileInfo.LastModified; }
+			}
+
 			public void WriteContent(byte[] content)
 			{
 				_fileInfo.WriteContent(content);
@@ -183,11 +203,6 @@ namespace React.AspNet5
 			public void Delete()
 			{
 				_fileInfo.Delete();
-			}
-
-			public IExpirationTrigger CreateFileChangeTrigger()
-			{
-				return _fileInfo.CreateFileChangeTrigger();
 			}
 
 			public bool Exists

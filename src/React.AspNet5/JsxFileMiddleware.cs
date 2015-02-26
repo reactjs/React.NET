@@ -83,9 +83,9 @@ namespace React.AspNet5
 					OnPrepareResponse = _options.StaticFileOptions.OnPrepareResponse,
 					RequestPath = _options.StaticFileOptions.RequestPath,
 					ServeUnknownFileTypes = _options.StaticFileOptions.ServeUnknownFileTypes,
-					FileSystem = new JsxFileSystem(
+					FileProvider = new JsxFileSystem(
 						jsxTransformer, 
-						_options.StaticFileOptions.FileSystem ?? _hostingEnv.WebRootFileSystem,
+						_options.StaticFileOptions.FileProvider ?? _hostingEnv.WebRootFileProvider,
 						_options.Extensions
 					)
 				},

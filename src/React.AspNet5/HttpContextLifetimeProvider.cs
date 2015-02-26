@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
 using React.TinyIoC;
@@ -46,7 +47,7 @@ namespace React.AspNet5
 		/// Gets the <see cref="HttpContext" /> of the current request.
 		/// </summary>
 		private HttpContext HttpContext => 
-			_appServiceProvider.GetRequiredService<IContextAccessor<HttpContext>>().Value;
+			_appServiceProvider.GetRequiredService<IHttpContextAccessor>().Value;
 
 		/// <summary>
 		/// Gets the current per-request registrations for the current request.
