@@ -868,7 +868,7 @@ If you go to this URL in your browser, you should notice that the code has been 
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using JavaScript. This enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some motifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required.
+We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required.
 
 ```javascript{28}
 var CommentBox = React.createClass({
