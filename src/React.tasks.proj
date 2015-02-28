@@ -17,7 +17,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<UsingTask
 		TaskName="SetEnvironmentVariable"
 		TaskFactory="CodeTaskFactory"
-		AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		AssemblyFile="C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll">
 		<ParameterGroup>
 			<Name Required="true" />
 			<Value Required="true" />
@@ -34,7 +34,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<UsingTask
 		TaskName="UpdateAspNetProjectVersion"
 		TaskFactory="CodeTaskFactory"
-		AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		AssemblyFile="C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll">
 		<ParameterGroup>
 			<Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
 			<Version Required="true" />
