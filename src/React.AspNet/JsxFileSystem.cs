@@ -12,18 +12,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+#if OWIN
 using Microsoft.Owin.FileSystems;
+using IOwinFileSystem = Microsoft.Owin.FileSystems.IFileSystem;
+#else
+using Microsoft.AspNet.FileProviders;
+using Microsoft.Framework.Expiration.Interfaces;
+using IOwinFileSystem = Microsoft.AspNet.FileProviders.IFileProvider;
+using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
+#endif
 
+#if OWIN
 namespace React.Owin
+#else
+namespace React.AspNet
+#endif
 {
 	/// <summary>
-	/// Owin file system that serves transformed JSX files.
+	/// File system that serves transformed JSX files.
 	/// </summary>
-	public class JsxFileSystem : Microsoft.Owin.FileSystems.IFileSystem
+	public class JsxFileSystem : IOwinFileSystem
 	{
 		private readonly IJsxTransformer _transformer;
-		private readonly Microsoft.Owin.FileSystems.IFileSystem _physicalFileSystem;
+		private readonly IOwinFileSystem _physicalFileSystem;
 		private readonly string[] _extensions;
 
 		/// <summary>
@@ -43,15 +54,19 @@ namespace React.Owin
 		/// <param name="transformer">JSX transformer used to compile JSX files</param>
 		/// <param name="fileSystem">File system used to look up files</param>
 		/// <param name="extensions">Extensions of files that will be treated as JSX files</param>
-		public JsxFileSystem(IJsxTransformer transformer, Microsoft.Owin.FileSystems.IFileSystem fileSystem, IEnumerable<string> extensions)
+		public JsxFileSystem(IJsxTransformer transformer, IOwinFileSystem fileSystem, IEnumerable<string> extensions)
 		{
 			_transformer = transformer;
 			_physicalFileSystem = fileSystem;
 
-			// Make sure the extensions start with dot
-			_extensions = extensions.Select(extension => extension.StartsWith(".") ? extension : "." + extension).ToArray();
+			if (extensions != null)
+			{
+				// Make sure the extensions start with dot
+				_extensions = extensions.Select(extension => extension.StartsWith(".") ? extension : "." + extension).ToArray();
+			}
 		}
 
+#if OWIN
 		/// <summary>
 		/// Locate a JSX file at the given path. 
 		/// </summary>
@@ -68,7 +83,10 @@ namespace React.Owin
 			if (!_physicalFileSystem.TryGetFileInfo(subpath, out internalFileInfo))
 				return false;
 
-			if (internalFileInfo.IsDirectory || !_extensions.Any(internalFileInfo.Name.EndsWith))
+			if (_extensions != null && !_extensions.Any(internalFileInfo.Name.EndsWith))
+				return false;
+
+			if (internalFileInfo.IsDirectory)
 				return false;
 
 			fileInfo = new JsxFileInfo(_transformer, internalFileInfo);
@@ -87,6 +105,43 @@ namespace React.Owin
 		{
 			return _physicalFileSystem.TryGetDirectoryContents(subpath, out contents);
 		}
+#else
+
+		/// <summary>
+		/// Locate a JSX file at the given path. 
+		/// </summary>
+		/// <param name="subpath">The path that identifies the file</param>
+		/// <returns>The discovered file if any</returns>
+		public IFileInfo GetFileInfo(string subpath)
+		{
+			var internalFileInfo = _physicalFileSystem.GetFileInfo(subpath);
+			return new JsxFileInfo(_transformer, internalFileInfo);
+		}
+
+		/// <summary>
+		/// Enumerate a directory at the given path, if any
+		/// </summary>
+		/// <param name="subpath">The path that identifies the directory</param>
+		/// <returns>The contents if any</returns>
+		public IDirectoryContents GetDirectoryContents(string subpath)
+		{
+			return _physicalFileSystem.GetDirectoryContents(subpath);
+		}
+
+		/// <summary>
+		/// Creates a change trigger with the specified filter.
+		/// </summary>
+		/// <param name="filter">
+		/// Filter string used to determine what files or folders to monitor. Example: **/*.cs, *.*, subFolder/**/*.cshtml.
+		/// </param>
+		/// <returns>
+		/// An <see cref="IExpirationTrigger"/> that is triggered when a file matching <paramref name="filter"/> is added, modified or deleted.
+		/// </returns>
+		public IExpirationTrigger Watch(string filter)
+		{
+			return _physicalFileSystem.Watch(filter);
+		}
+#endif
 
 		private class JsxFileInfo : IFileInfo
 		{
@@ -100,10 +155,8 @@ namespace React.Owin
 				_fileInfo = fileInfo;
 
 				_content = new Lazy<byte[]>(
-					() =>
-					{
-						return Encoding.UTF8.GetBytes(_jsxTransformer.TransformJsxFile(fileInfo.PhysicalPath));
-					});
+					() => Encoding.UTF8.GetBytes(_jsxTransformer.TransformJsxFile(fileInfo.PhysicalPath))
+				);
 			}
 
 			public Stream CreateReadStream()
@@ -118,7 +171,7 @@ namespace React.Owin
 
 			public string PhysicalPath
 			{
-				get { return _fileInfo.PhysicalPath; }
+				get { return null; }
 			}
 
 			public string Name
@@ -126,15 +179,42 @@ namespace React.Owin
 				get { return _fileInfo.Name; }
 			}
 
-			public DateTime LastModified
-			{
-				get { return _fileInfo.LastModified; }
-			}
-
 			public bool IsDirectory
 			{
 				get { return _fileInfo.IsDirectory; }
 			}
+
+#if OWIN
+			public DateTime LastModified
+			{
+				get { return _fileInfo.LastModified; }
+			}
+#else
+			public DateTimeOffset LastModified
+			{
+				get { return _fileInfo.LastModified; }
+			}
+
+			public void WriteContent(byte[] content)
+			{
+				_fileInfo.WriteContent(content);
+			}
+
+			public void Delete()
+			{
+				_fileInfo.Delete();
+			}
+
+			public bool Exists
+			{
+				get { return _fileInfo.Exists; }
+			}
+
+			public bool IsReadOnly
+			{
+				get { return _fileInfo.IsReadOnly; }
+			}
+#endif
 		}
 	}
 }

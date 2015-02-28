@@ -1,0 +1,25 @@
+﻿@using React.AspNet
+@model React.Sample.Mvc6.ViewModels.IndexViewModel
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ReactJS.NET Sample</title>
+	<link rel="stylesheet" href="~/css/Sample.css" />
+</head>
+<body>
+<p>
+	This is an example of ReactJS.NET's server-side rendering. The initial state of this
+	comments box is rendered server-side, and additional data is loaded via AJAX and rendered
+	client-side.
+</p>
+
+	<!-- Render the component server-side, passing initial props -->
+	@Html.React("CommentsBox", new { initialComments = Model.Comments })
+
+	<!-- Load all required scripts (React + the site's scripts) -->
+	<script src="http://fb.me/react-0.12.2.js"></script>
+	<script src="~/js/Sample.jsx"></script>
+	<!-- Render the code to initialise the component -->
+	@Html.ReactInitJavaScript()
+</body>
+</html>

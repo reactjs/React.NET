@@ -8,10 +8,17 @@
  */
 
 using System.Collections.Generic;
-
+#if OWIN
 using Microsoft.Owin.StaticFiles;
+#else
+using Microsoft.AspNet.StaticFiles;
+#endif
 
+#if OWIN
 namespace React.Owin
+#else
+namespace React.AspNet
+#endif
 {
 	/// <summary>
 	/// Options for serving JSX files.
@@ -27,5 +34,14 @@ namespace React.Owin
 		/// Options for static file middleware used to server JSX files.
 		/// </summary>
 		public StaticFileOptions StaticFileOptions { get; set; }
+
+		/// <summary>
+		/// Creates a new instance of the <see cref="JsxFileOptions"/> class.
+		/// </summary>
+		public JsxFileOptions()
+		{
+			Extensions = new[] { ".jsx", ".js" };
+			StaticFileOptions = new StaticFileOptions();
+		}
 	}
 }

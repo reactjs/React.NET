@@ -10,13 +10,18 @@ of patent rights can be found in the PATENTS file in the same directory.
 <Project ToolsVersion="4.0" DefaultTargets="Build;Test;Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<Major>1</Major>
-		<Minor>3</Minor>
-		<Build>1</Build>
+		<Minor>4</Minor>
+		<Build>0</Build>
 		<Revision>0</Revision>
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
-		<SolutionFile>src\React.sln</SolutionFile>
 		<PackageOutputDir>output</PackageOutputDir>
+		
+		<!-- Only build ASP.NET 5 projects if on MSBuild 14+ (VS2015+) -->
+		<BuildAspNet5>false</BuildAspNet5>
+		<BuildAspNet5 Condition="$(VisualStudioVersion) == '14.0'">true</BuildAspNet5>
+		<SolutionFile>src\React.VS2015.sln</SolutionFile>
+		<SolutionFile Condition="$(BuildAspNet5) == 'false'">src\React.sln</SolutionFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageAssemblies Include="React" />
@@ -28,14 +33,12 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.JavaScriptEngine.VroomJs" />
 		<PackageAssemblies Include="React.JavaScriptEngine.ClearScriptV8" />
+		<PackageAssembliesAspNet5 Include="React.AspNet" />
+		<AspNet5ProjectJson Include="src/**/project.json" />
 	</ItemGroup>
 
-	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
-	<UsingTask
-		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll"
-		TaskName="TransformXml"
-	/>
-
+	<Import Project="src/React.tasks.proj" />
+	
 	<Target Name="RestorePackages">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
@@ -47,25 +50,62 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<GitVersion LocalPath="$(MSBuildProjectDirectory)">
 			<Output TaskParameter="CommitHash" PropertyName="Revision" />
 		</GitVersion>
-		<!--TODO: Only do this if a dev build -->
 		<Time Format="yyyyMMdd-HHmm">
 			<Output TaskParameter="FormattedTime" PropertyName="Date" />
 		</Time>
 		<!-- Prepend date to build version if a dev build-->
-		<PropertyGroup Condition="$(BuildType) != 'Release'">
-			<Build>$(Build)-dev-$(Date)</Build>
+		<PropertyGroup Condition="$(BuildType) == 'Release'">
+			<FullBuild>$(Build)</FullBuild>
 		</PropertyGroup>
+		<PropertyGroup Condition="$(BuildType) != 'Release'">
+			<FullBuild>$(Build)-dev-$(Date)</FullBuild>
+		</PropertyGroup>
+		<!-- Set version for .csproj projects -->
 		<AssemblyInfo
 			CodeLanguage="CS"
 			OutputFile="src\SharedAssemblyVersionInfo.cs"
 			AssemblyVersion="$(Major).$(Minor)"
-			AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)"
-			AssemblyInformationalVersion="$(Major).$(Minor).$(Build)"
-			/>
+			AssemblyFileVersion="$(Major).$(Minor).$(FullBuild).$(Revision)"
+			AssemblyInformationalVersion="$(Major).$(Minor).$(FullBuild)"
+		/>
+		<!-- 
+			Set version for ASP.NET 5 projects. In theory K_BUILD_VERSION should work but it doesn't seem 
+			to be functional yet :(. We work around this by physically writing the build number to the 
+			project.json files. For development builds we write the full version number (including 
+			build date) and reset it later so the dev build number isn't commited to the repo.
+		-->
+		<!--SetEnvironmentVariable
+			Condition="$(BuildAspNet5) == 'true'"
+			Name="K_BUILD_VERSION"
+			Value="$(Build)"
+		/-->
+		<UpdateAspNetProjectVersion
+			Files="@(AspNet5ProjectJson)"
+			Version="$(Major).$(Minor).$(FullBuild)"
+		/>
+	</Target>
+
+	<Target Name="Clean" BeforeTargets="Build">
+		<!-- 
+			ASP.NET 5 projects don't delete generated .nupkg files when cleaned or rebuilt, so we need to
+			do it here. See https://github.com/aspnet/XRE/issues/1301 
+		-->
+		<ItemGroup>
+			<OldAspNet5Packages Include="bin/%(PackageAssembliesAspNet5.Identity)/**/*.nupkg" />
+		</ItemGroup>
+		<Delete Files="@(OldAspNet5Packages)" />
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
 		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607" />
+	</Target>
+
+	<Target Name="ResetAspNetVersion" AfterTargets="Build">
+		<!-- Resets the version number in ASP.NET project.json files so we don't commit -dev- version numbers -->
+		<UpdateAspNetProjectVersion
+			Files="@(AspNet5ProjectJson)"
+			Version="$(Major).$(Minor).$(Build)-*"
+		/>
 	</Target>
 
 	<Target Name="Test" DependsOnTargets="Build">
@@ -96,6 +136,14 @@ of patent rights can be found in the PATENTS file in the same directory.
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release -OutputDirectory output"
 		/>
+	</Target>
+
+	<Target Name="CopyAspNetPackages" AfterTargets="Package" Condition="$(BuildAspNet5) == 'true'">
+		<!-- Copy over ASP.NET 5 packages -->
+		<ItemGroup>
+			<AspNet5Packages Include="bin/%(PackageAssembliesAspNet5.Identity)/Release/*.nupkg" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AspNet5Packages)" DestinationFolder="output" />
 	</Target>
 
 	<Target Name="Push">

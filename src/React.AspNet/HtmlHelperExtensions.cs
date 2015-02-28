@@ -7,25 +7,34 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+#if LEGACYASPNET
 using System.Web;
 using System.Web.Mvc;
+using IHtmlHelper = System.Web.Mvc.HtmlHelper;
+#else
+using Microsoft.AspNet.Mvc.Rendering;
+using IHtmlString = Microsoft.AspNet.Mvc.Rendering.HtmlString;
+#endif
 
+#if LEGACYASPNET
 namespace React.Web.Mvc
+#else
+namespace React.AspNet
+#endif
 {
-	using AssemblyRegistration = React.AssemblyRegistration;
-
 	/// <summary>
 	/// HTML Helpers for utilising React from an ASP.NET MVC application.
 	/// </summary>
 	public static class HtmlHelperExtensions
 	{
+
 		/// <summary>
 		/// Gets the React environment
 		/// </summary>
 		private static IReactEnvironment Environment
 		{
 			// TODO: Figure out if this can be injected
-			get { return AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
+			get { return global::React.AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
 		}
 
 		/// <summary>
@@ -39,8 +48,8 @@ namespace React.Web.Mvc
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
-			this HtmlHelper htmlHelper, 
-			string componentName, 
+			this IHtmlHelper htmlHelper,
+			string componentName,
 			T props,
 			string htmlTag = null,
 			string containerId = null
@@ -68,7 +77,7 @@ namespace React.Web.Mvc
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
-			this HtmlHelper htmlHelper,
+			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
 			string htmlTag = null,
@@ -93,7 +102,7 @@ namespace React.Web.Mvc
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript for all components</returns>
-		public static IHtmlString ReactInitJavaScript(this HtmlHelper htmlHelper)
+		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper)
 		{
 			var script = Environment.GetInitJavaScript();
 			var tag = new TagBuilder("script")

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Copyright (c) 2015, Facebook, Inc.
+All rights reserved.
+
+This source code is licensed under the BSD-style license found in the
+LICENSE file in the root directory of this source tree. An additional grant
+of patent rights can be found in the PATENTS file in the same directory.
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
+	<UsingTask
+		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll"
+		TaskName="TransformXml"
+	/>
+	
+	<UsingTask
+		TaskName="SetEnvironmentVariable"
+		TaskFactory="CodeTaskFactory"
+		AssemblyFile="C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<Name Required="true" />
+			<Value Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Code Type="Fragment" Language="cs"><![CDATA[
+				Log.LogError(Name + " = " + Value);
+        Environment.SetEnvironmentVariable(Name, Value);
+      ]]></Code>
+		</Task>
+	</UsingTask>
+	
+	<UsingTask
+		TaskName="UpdateAspNetProjectVersion"
+		TaskFactory="CodeTaskFactory"
+		AssemblyFile="C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+			<Version Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs"><![CDATA[
+				// This should be using a real JSON parser rather than regular expressions, but it will
+				// do for now.
+				var versionRegex = new Regex("\"version\": \"([^\"]+)\"");
+				
+				foreach (var file in Files) {
+					var path = file.GetMetadata("FullPath");
+					var contents = File.ReadAllText(path);
+					var newContents = versionRegex.Replace(
+						contents, 
+						string.Format("\"version\": \"{0}\"", Version)
+					);
+					File.WriteAllText(path, newContents);
+					Log.LogMessage("Updated version in {0}", path);
+				}
+      ]]></Code>
+		</Task>
+	</UsingTask>
+</Project>
