@@ -1,7 +1,7 @@
 {
     /* Click to learn more about project.json  http://go.microsoft.com/fwlink/?LinkID=517074 */
     "webroot": "wwwroot",
-    "version": "1.0.0-*",
+    "version": "1.4.0-*",
     "dependencies": {
         "Microsoft.AspNet.Mvc": "6.0.0.0-beta3",
         "Microsoft.AspNet.Diagnostics": "1.0.0.0-beta3",

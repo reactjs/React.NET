@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22512.0
+VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F567B25C-E869-4C93-9C96-077761250F87}"
 EndProject
@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F
 		..\build.proj = ..\build.proj
 		..\dev-build-push.bat = ..\dev-build-push.bat
 		..\dev-build.bat = ..\dev-build.bat
+		build\React.tasks.proj = build\React.tasks.proj
 		..\README.md = ..\README.md
 		..\release-build-push.bat = ..\release-build-push.bat
 		..\release-build.bat = ..\release-build.bat
