@@ -17,7 +17,7 @@ using Microsoft.AspNet.StaticFiles;
 #if OWIN
 namespace React.Owin
 #else
-namespace React.AspNet5
+namespace React.AspNet
 #endif
 {
 	/// <summary>

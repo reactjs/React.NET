@@ -16,7 +16,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.StaticFiles;
 using Microsoft.Framework.Logging;
 
-namespace React.AspNet5
+namespace React.AspNet
 {
 	/// <summary>
 	/// Enables serving static JSX files transformed to pure JavaScript. Wraps around StaticFileMiddleware.

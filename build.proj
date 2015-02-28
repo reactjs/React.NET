@@ -33,7 +33,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.JavaScriptEngine.VroomJs" />
 		<PackageAssemblies Include="React.JavaScriptEngine.ClearScriptV8" />
-		<PackageAssembliesAspNet5 Include="React.AspNet5" />
+		<PackageAssembliesAspNet5 Include="React.AspNet" />
 		<AspNet5ProjectJson Include="src/**/project.json" />
 	</ItemGroup>
 

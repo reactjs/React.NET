@@ -15,7 +15,7 @@ using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 using Microsoft.Framework.Logging.Console;
-using React.AspNet5;
+using React.AspNet;
 
 namespace React.Sample.Mvc6
 {

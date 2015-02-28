@@ -9,7 +9,7 @@
  
 using Microsoft.AspNet.Mvc.Rendering;
 
-namespace React.AspNet5
+namespace React.AspNet
 {
 	/// <summary>
 	/// HTML Helpers for utilising React from an ASP.NET MVC 6 (vNext) application.

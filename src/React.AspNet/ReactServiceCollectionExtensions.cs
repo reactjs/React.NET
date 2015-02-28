@@ -13,7 +13,7 @@ using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Runtime;
 using React.TinyIoC;
 
-namespace React.AspNet5
+namespace React.AspNet
 {
 	public static class ReactServiceCollectionExtensions
 	{

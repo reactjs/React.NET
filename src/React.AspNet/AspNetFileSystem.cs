@@ -10,21 +10,21 @@
 using System.IO;
 using Microsoft.Framework.Runtime;
 
-namespace React.AspNet5
+namespace React.AspNet
 {
 	/// <summary>
 	/// Handles file system functionality, such as reading files. Maps all paths from 
 	/// application-relative (~/...) to full paths using ASP.NET's MapPath method.
 	/// </summary>
-	public class AspNet5FileSystem : FileSystemBase
+	public class AspNetFileSystem : FileSystemBase
 	{
 		private readonly IApplicationEnvironment _appEnvironment;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AspNet5FileSystem"/> class.
+		/// Initializes a new instance of the <see cref="AspNetFileSystem"/> class.
 		/// </summary>
 		/// <param name="appEnvironment">The ASP.NET 5 application environment</param>
-		public AspNet5FileSystem(IApplicationEnvironment appEnvironment)
+		public AspNetFileSystem(IApplicationEnvironment appEnvironment)
 		{
 			_appEnvironment = appEnvironment;
 		}

@@ -9,7 +9,7 @@
 
 using React.TinyIoC;
 
-namespace React.AspNet5
+namespace React.AspNet
 {
 	/// <summary>
 	/// Handles registration of ReactJS.NET components that are only applicable
@@ -23,7 +23,7 @@ namespace React.AspNet5
 		/// <param name="container">Container to register components in</param>
 		public void Register(TinyIoCContainer container)
 		{
-			container.Register<IFileSystem, AspNet5FileSystem>().AsSingleton();
+			container.Register<IFileSystem, AspNetFileSystem>().AsSingleton();
 			container.Register<ICache, MemoryFileCache>().AsSingleton();
 		}
 	}

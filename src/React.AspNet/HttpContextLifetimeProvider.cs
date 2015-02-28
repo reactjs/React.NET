@@ -15,7 +15,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
 using React.TinyIoC;
 
-namespace React.AspNet5
+namespace React.AspNet
 {
 	/// <summary>
 	/// Handles registering per-request objects in the dependency injection container.

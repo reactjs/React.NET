@@ -25,7 +25,7 @@ using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
 #if OWIN
 namespace React.Owin
 #else
-namespace React.AspNet5
+namespace React.AspNet
 #endif
 {
 	/// <summary>

@@ -64,10 +64,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\React.AspNet5\JsxFileOptions.cs">
+    <Compile Include="..\React.AspNet\JsxFileOptions.cs">
       <Link>JsxFileOptions.cs</Link>
     </Compile>
-    <Compile Include="..\React.AspNet5\JsxFileSystem.cs">
+    <Compile Include="..\React.AspNet\JsxFileSystem.cs">
       <Link>JsxFileSystem.cs</Link>
     </Compile>
     <Compile Include="..\SharedAssemblyInfo.cs">

@@ -13,7 +13,7 @@
         "Microsoft.Framework.Logging": "1.0.0.0-beta3",
         "Microsoft.Framework.Logging.Console": "1.0.0.0-beta3",
         "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta1",
-        "React.AspNet5": ""
+        "React.AspNet": ""
     },
     "commands": {
         /* Change the port number when you are self hosting this application */
