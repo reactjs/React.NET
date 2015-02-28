@@ -1,27 +1,41 @@
 ﻿/*
- *  Copyright (c) 2015, Facebook, Inc.
+ *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
  *  LICENSE file in the root directory of this source tree. An additional grant 
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
- 
-using Microsoft.AspNet.Mvc.Rendering;
 
+#if LEGACYASPNET
+using System.Web;
+using System.Web.Mvc;
+using IHtmlHelper = System.Web.Mvc.HtmlHelper;
+#else
+using Microsoft.AspNet.Mvc.Rendering;
+using IHtmlString = Microsoft.AspNet.Mvc.Rendering.HtmlString;
+#endif
+
+#if LEGACYASPNET
+namespace React.Web.Mvc
+#else
 namespace React.AspNet
+#endif
 {
 	/// <summary>
-	/// HTML Helpers for utilising React from an ASP.NET MVC 6 (vNext) application.
+	/// HTML Helpers for utilising React from an ASP.NET MVC application.
 	/// </summary>
 	public static class HtmlHelperExtensions
-    {
-		// TODO: Figure out if this can be injected
+	{
+
 		/// <summary>
 		/// Gets the React environment
 		/// </summary>
-		private static IReactEnvironment Environment => 
-			global::React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+		private static IReactEnvironment Environment
+		{
+			// TODO: Figure out if this can be injected
+			get { return global::React.AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
+		}
 
 		/// <summary>
 		/// Renders the specified React component
@@ -33,7 +47,7 @@ namespace React.AspNet
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <returns>The component's HTML</returns>
-		public static HtmlString React<T>(
+		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
@@ -62,7 +76,7 @@ namespace React.AspNet
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <returns>The component's HTML</returns>
-		public static HtmlString ReactWithInit<T>(
+		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
@@ -88,7 +102,7 @@ namespace React.AspNet
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript for all components</returns>
-		public static HtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper)
+		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper)
 		{
 			var script = Environment.GetInitJavaScript();
 			var tag = new TagBuilder("script")
