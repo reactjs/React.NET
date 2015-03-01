@@ -101,9 +101,9 @@
       <Project>{134edd16-8dc8-4983-a2e0-b38dab1ecf1c}</Project>
       <Name>React.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\React\React.csproj">
+    <ProjectReference Include="..\React.Core\React.Core.csproj">
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
-      <Name>React</Name>
+      <Name>React.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

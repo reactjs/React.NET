@@ -35,9 +35,5 @@
         "**.kproj",
         "**.user",
         "**.vspscc"
-    ],
-    "scripts": {
-        "postrestore": [ "npm install" ],
-        "prepare": [ "gulp" ]
-    }
+    ]
 }

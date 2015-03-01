@@ -34,12 +34,12 @@
     <NoWarn>1607</NoWarn>
     <DocumentationFile>..\..\bin\Release\React.MSBuild\React.MSBuild.XML</DocumentationFile>
   </PropertyGroup>
-	<PropertyGroup>
-		<SignAssembly>true</SignAssembly>
-	</PropertyGroup>
-	<PropertyGroup>
-		<AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -60,9 +60,9 @@
     <Compile Include="TransformJsx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\React\React.csproj">
+    <ProjectReference Include="..\React.Core\React.Core.csproj">
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
-      <Name>React</Name>
+      <Name>React.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

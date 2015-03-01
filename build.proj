@@ -24,7 +24,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<SolutionFile Condition="$(BuildAspNet5) == 'false'">src\React.sln</SolutionFile>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageAssemblies Include="React" />
+		<PackageAssemblies Include="React.Core" />
 		<PackageAssemblies Include="React.Web" />
 		<PackageAssemblies Include="React.Web.Mvc4" />
 		<PackageAssemblies Include="React.Web.Mvc3" />

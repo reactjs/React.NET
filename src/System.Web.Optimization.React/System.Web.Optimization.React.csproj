@@ -36,12 +36,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
-	<PropertyGroup>
-		<SignAssembly>true</SignAssembly>
-	</PropertyGroup>
-	<PropertyGroup>
-		<AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
-	</PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
@@ -87,9 +87,9 @@
       <Project>{134edd16-8dc8-4983-a2e0-b38dab1ecf1c}</Project>
       <Name>React.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\React\React.csproj">
+    <ProjectReference Include="..\React.Core\React.Core.csproj">
       <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
-      <Name>React</Name>
+      <Name>React.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
