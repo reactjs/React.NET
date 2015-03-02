@@ -8,7 +8,7 @@
  */
 
 using System.IO;
-using Microsoft.Framework.Runtime;
+using Microsoft.AspNet.Hosting;
 
 namespace React.AspNet
 {
@@ -18,15 +18,15 @@ namespace React.AspNet
 	/// </summary>
 	public class AspNetFileSystem : FileSystemBase
 	{
-		private readonly IApplicationEnvironment _appEnvironment;
+		private readonly IHostingEnvironment _hostingEnv;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AspNetFileSystem"/> class.
 		/// </summary>
-		/// <param name="appEnvironment">The ASP.NET 5 application environment</param>
-		public AspNetFileSystem(IApplicationEnvironment appEnvironment)
+		/// <param name="hostingEnv">The ASP.NET 5 hosting environment</param>
+		public AspNetFileSystem(IHostingEnvironment hostingEnv)
 		{
-			_appEnvironment = appEnvironment;
+			_hostingEnv = hostingEnv;
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace React.AspNet
 		public override string MapPath(string relativePath)
 		{
 			relativePath = relativePath.TrimStart('~').TrimStart('/');
-			return Path.Combine(_appEnvironment.ApplicationBasePath, relativePath);
+			return Path.Combine(_hostingEnv.WebRoot, relativePath);
 		}
 	}
 }

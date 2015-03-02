@@ -69,7 +69,7 @@ namespace React.Sample.Mvc6
 					.SetUseHarmony(true)
 					.SetReuseJavaScriptEngines(true)
 					.SetStripTypes(true)
-					.AddScript("~/wwwroot/js/Sample.jsx");
+					.AddScript("~/js/Sample.jsx");
 			});
 
 			// Add static files to the request pipeline.
