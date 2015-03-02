@@ -1,0 +1,21 @@
+{
+  "version": "1.4.0-*",
+  "frameworks": {
+    "net40": {
+      "wrappedProject": "../../React.Core/React.Core.csproj",
+      "bin": {
+        "assembly": "../../React.Core/obj/{configuration}/React.dll",
+        "pdb": "../../React.Core/obj/{configuration}/React.pdb"
+      },
+      "dependencies": {
+        "JavaScriptEngineSwitcher.Core": "1.2.4",
+        "JavaScriptEngineSwitcher.V8": "1.2.4",
+        "JSPool": "0.2.0",
+        "Newtonsoft.Json": "5.0.4",
+        "VroomJs": "1.0.0-*",
+        "JavaScriptEngineSwitcher.Msie": "1.2.4",
+        "MsieJavaScriptEngine": "1.5.1"
+      }
+    }
+  }
+}

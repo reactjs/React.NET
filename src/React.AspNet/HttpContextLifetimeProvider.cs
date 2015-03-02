@@ -13,6 +13,7 @@ using System.Linq;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Http;
 using Microsoft.Framework.DependencyInjection;
+using React.Exceptions;
 using React.TinyIoC;
 
 namespace React.AspNet
@@ -52,8 +53,21 @@ namespace React.AspNet
 		/// <summary>
 		/// Gets the current per-request registrations for the current request.
 		/// </summary>
-		private PerRequestRegistrations Registrations => 
-			HttpContext.RequestServices.GetRequiredService<PerRequestRegistrations>();
+		private PerRequestRegistrations Registrations
+		{
+			get
+			{
+				var registrations = HttpContext.RequestServices.GetService<PerRequestRegistrations>();
+				if (registrations == null)
+				{
+					throw new ReactNotInitialisedException(
+						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
+						"called app.AddReact() and app.UseReact() in your Startup.cs file."
+					);
+				}
+				return registrations;
+			}
+		}
 
 		/// <summary>
 		/// Gets the value of this item in the dependency injection container.

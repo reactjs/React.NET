@@ -14,6 +14,7 @@
         "Microsoft.Framework.Logging.Console": "1.0.0.0-beta3",
         "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta1",
         "React.AspNet": "",
+        "React.Core": "",
         "JavaScriptEngineSwitcher.V8": "1.2.4.0",
         "JavaScriptEngineSwitcher.Msie": "1.2.4.0"
     },

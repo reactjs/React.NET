@@ -7,6 +7,9 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using React.Exceptions;
+using React.TinyIoC;
+
 #if LEGACYASPNET
 using System.Web;
 using System.Web.Mvc;
@@ -33,8 +36,25 @@ namespace React.AspNet
 		/// </summary>
 		private static IReactEnvironment Environment
 		{
-			// TODO: Figure out if this can be injected
-			get { return global::React.AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
+			get
+			{
+				try
+				{
+					return global::React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+				}
+				catch (TinyIoCResolutionException ex)
+				{
+					throw new ReactNotInitialisedException(
+#if LEGACYASPNET
+						"ReactJS.NET has not been initialised correctly.",
+#else
+						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
+						"called app.AddReact() and app.UseReact() in your Startup.cs file.",
+#endif
+						ex
+					);
+				}
+			}
 		}
 
 		/// <summary>
