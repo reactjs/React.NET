@@ -7,9 +7,9 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using JavaScriptEngineSwitcher.Jint;
 using JavaScriptEngineSwitcher.Msie;
 using JavaScriptEngineSwitcher.Msie.Configuration;
+using JavaScriptEngineSwitcher.V8;
 using React.TinyIoC;
 
 namespace React
@@ -40,23 +40,47 @@ namespace React
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsSingleton();
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
+			RegisterSupportedEngines(container);
+		}
 
-			// JavaScript engines
+		/// <summary>
+		/// Registers JavaScript engines that may be able to run in the current environment
+		/// </summary>
+		/// <param name="container"></param>
+		private void RegisterSupportedEngines(TinyIoCContainer container)
+		{
+			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
+			{
+				container.Register(new JavaScriptEngineFactory.Registration
+				{
+					Factory = () => new V8JsEngine(),
+					Priority = 10
+				}, "ClearScriptV8");
+			}
+			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
+			{
+				container.Register(new JavaScriptEngineFactory.Registration
+				{
+					Factory = () => new VroomJsEngine(),
+					Priority = 10
+				}, "VroomJs");
+			}
+
+			container.Register(new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraJsRt }),
+				Priority = 20
+			}, "MsieChakraRT");
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
-				Priority = 20
-			}, "MsieChakra");
+				Priority = 30
+			}, "MsieChakraActiveScript");
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
-				Priority = 30
+				Priority = 40
 			}, "MsieClassic");
-			container.Register(new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => new JintJsEngine(),
-				Priority = 100
-			}, "Jint");
 		}
 	}
 }

@@ -1,0 +1,10 @@
+{
+  "version": "1.4.0-*",
+  "frameworks": {
+    "net40": {
+      "bin": {
+        "assembly": "../../../lib/VroomJs.dll"
+      }
+    }
+  }
+}

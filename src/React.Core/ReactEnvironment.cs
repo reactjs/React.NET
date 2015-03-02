@@ -137,7 +137,7 @@ namespace React
 		/// </summary>
 		public virtual bool EngineSupportsJsxTransformer
 		{
-			get { return Engine.SupportsJsxTransformer(); }
+			get { return true; }
 		}
 
 		/// <summary>

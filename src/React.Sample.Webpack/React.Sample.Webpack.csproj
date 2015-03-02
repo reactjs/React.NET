@@ -47,17 +47,17 @@
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClearScript, Version=5.4.0.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
+    <Reference Include="ClearScript, Version=5.4.1.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.1\lib\net40\ClearScript.dll</HintPath>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.4\lib\net40\ClearScript.dll</HintPath>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+    <Reference Include="JavaScriptEngineSwitcher.Core, Version=1.2.4.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.2.0\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.2.4\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.V8, Version=1.2.1.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+    <Reference Include="JavaScriptEngineSwitcher.V8, Version=1.2.4.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.1\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.4\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -134,19 +134,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.1\content\ClearScript.V8\ClearScriptV8-32.dll">
+    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\ClearScriptV8-32.dll">
       <Link>ClearScript.V8\ClearScriptV8-32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.1\content\ClearScript.V8\ClearScriptV8-64.dll">
+    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\ClearScriptV8-64.dll">
       <Link>ClearScript.V8\ClearScriptV8-64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.1\content\ClearScript.V8\v8-ia32.dll">
+    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\v8-ia32.dll">
       <Link>ClearScript.V8\v8-ia32.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.1\content\ClearScript.V8\v8-x64.dll">
+    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\v8-x64.dll">
       <Link>ClearScript.V8\v8-x64.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -169,14 +169,6 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\React.JavaScriptEngine.ClearScriptV8\React.JavaScriptEngine.ClearScriptV8.csproj">
-      <Project>{7fbe07b3-c7ba-48da-8b53-0db0bb82da09}</Project>
-      <Name>React.JavaScriptEngine.ClearScriptV8</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\React.JavaScriptEngine.VroomJs\React.JavaScriptEngine.VroomJs.csproj">
-      <Project>{b4a5902a-70e2-4fa4-817d-dcc78d31e9b9}</Project>
-      <Name>React.JavaScriptEngine.VroomJs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\React.Web.Mvc4\React.Web.Mvc4.csproj">
       <Project>{662d52ac-1ee9-4372-bd74-379f9ac56451}</Project>
       <Name>React.Web.Mvc4</Name>

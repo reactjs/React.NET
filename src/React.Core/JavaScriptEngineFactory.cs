@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.V8;
 using JSPool;
 using React.Exceptions;
 
@@ -133,12 +134,7 @@ namespace React
 			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
 			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 			engine.Execute("var React = global.React");
-
-			// Only load JSX Transformer if engine supports it
-			if (engine.SupportsJsxTransformer())
-			{
-				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
-			}
+			engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
 		}
 
 		/// <summary>
@@ -234,7 +230,20 @@ namespace React
 			}
 
 			// Epic fail, none of the engines worked. Nothing we can do now.
-			throw new ReactException("No usable JavaScript engine found :(");
+			// Throw an error relevant to the engine they should be able to use.
+			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
+			{
+				JavaScriptEngineUtils.EnsureEngineFunctional<V8JsEngine, ClearScriptV8InitialisationException>(
+					ex => new ClearScriptV8InitialisationException(ex.Message)
+				);
+			}
+			else if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
+			{
+				JavaScriptEngineUtils.EnsureEngineFunctional<VroomJsEngine, VroomJsInitialisationException>(
+					ex => new VroomJsInitialisationException(ex.Message)
+				);
+			}
+			throw new ReactEngineNotFoundException();
 		}
 
 		/// <summary>

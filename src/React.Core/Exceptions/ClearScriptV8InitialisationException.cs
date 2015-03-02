@@ -9,12 +9,11 @@
 
 using System;
 using System.Runtime.Serialization;
-using React.Exceptions;
 
-namespace React.JavaScriptEngine.ClearScriptV8
+namespace React.Exceptions
 {
 	/// <summary>
-	/// Thrown when the JavaScript engine does not support JSX transformation
+	/// Thrown when the ClearScript V8 JavaScript engine fails to initialise
 	/// </summary>
 	[Serializable]
 	public class ClearScriptV8InitialisationException : ReactException
@@ -38,8 +37,10 @@ namespace React.JavaScriptEngine.ClearScriptV8
 		{
 			return
 				"Failed to initialise ClearScript V8. This is most likely caused by the native libraries " +
-				"(ClearScriptV8-64.dll and v8-x64.dll) missing from your app's Bin directory. Please " +
-				"ensure your app is referencing the JavaScriptEngineSwitcher.V8 NuGet package.\n\n" +
+				"(ClearScriptV8-64.dll and v8-x64.dll) missing from your app's Bin directory, or the " +
+				"Visual C++ runtime not being installed. Please ensure your app is referencing the " +
+				"JavaScriptEngineSwitcher.V8 NuGet package, and refer to the ReactJS.NET site for more" +
+				"debugging tips.\n\n" +
 				"More details: " + innerMessage;
 		}
 	}

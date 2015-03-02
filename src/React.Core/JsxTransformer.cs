@@ -270,7 +270,6 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual string TransformJsx(string input, bool? useHarmony = null, bool? stripTypes = null)
 		{
-			EnsureJsxTransformerSupported();
 			try
 			{
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
@@ -304,7 +303,6 @@ namespace React
 			bool? stripTypes = null
 		)
 		{
-			EnsureJsxTransformerSupported();
 			try
 			{
 				return _environment.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
@@ -386,18 +384,6 @@ namespace React
 			_fileSystem.WriteAsString(outputPath, result.Code);
 			_fileSystem.WriteAsString(sourceMapPath, result.SourceMap == null ? string.Empty : result.SourceMap.ToJson());
 			return outputPath;
-		}
-
-		/// <summary>
-		/// Ensures that the current JavaScript engine supports JSXTransformer. Throws an exception
-		/// if it doesn't.
-		/// </summary>
-		private void EnsureJsxTransformerSupported()
-		{
-			if (!_environment.EngineSupportsJsxTransformer)
-			{
-				throw new JsxUnsupportedEngineException();
-			}
 		}
 	}
 }

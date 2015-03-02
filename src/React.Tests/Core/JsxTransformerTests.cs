@@ -73,17 +73,6 @@ namespace React.Tests.Core
 		}
 
 		[Test]
-		public void ShouldThrowIfEngineNotSupported()
-		{
-			_environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(false);
-
-			Assert.Throws<JsxUnsupportedEngineException>(() =>
-			{
-				_jsxTransformer.TransformJsx("<div>Hello world</div>");
-			});
-		}
-
-		[Test]
 		public void ShouldUseCacheProvider()
 		{
 			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v2_foo.jsx", null)).Returns(new JavaScriptWithSourceMap

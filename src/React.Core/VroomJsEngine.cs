@@ -15,7 +15,7 @@ using VroomJs;
 using OriginalJsEngine = VroomJs.JsEngine;
 using OriginalJsException = VroomJs.JsException;
 
-namespace React.JavaScriptEngine.VroomJs
+namespace React
 {
 	/// <summary>
 	/// Basic implementation of a VroomJs JavaScript engine for JavaScriptEngineSwitcher.

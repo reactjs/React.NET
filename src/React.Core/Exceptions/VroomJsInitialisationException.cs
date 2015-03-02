@@ -9,12 +9,11 @@
 
 using System;
 using System.Runtime.Serialization;
-using React.Exceptions;
 
-namespace React.JavaScriptEngine.VroomJs
+namespace React.Exceptions
 {
 	/// <summary>
-	/// Thrown when the JavaScript engine does not support JSX transformation
+	/// Thrown when the VroomJs V8 JavaScript engine fails to initialise.
 	/// </summary>
 	[Serializable]
 	public class VroomJsInitialisationException : ReactException
@@ -40,7 +39,8 @@ namespace React.JavaScriptEngine.VroomJs
 				"Failed to initialise VroomJs. This is most likely caused by the native library " +
 				"(libVroomJsNative.so) being out of date or your system lacking a compatible version of " +
 				"V8. Please run Mono with the `MONO_LOG_LEVEL=debug` environment variable for " +
-				"more debugging information. \n\n " +
+				"more debugging information, and refer to the ReactJS.NET Mono documentation at " +
+				"http://reactjs.net/guides/mono.html for further debugging hints.\n\n " +
 				"More details: " + innerMessage;
 		}
 	}
