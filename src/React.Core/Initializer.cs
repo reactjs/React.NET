@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using RegisterOptions = React.TinyIoC.TinyIoCContainer.RegisterOptions;
@@ -19,6 +20,16 @@ namespace React
 	/// </summary>
 	public static class Initializer
 	{
+		/// <summary>
+		/// Assemblies that are ignored when finding <see cref="IAssemblyRegistration"/>
+		/// implementations to register dependencies.
+		/// </summary>
+		private readonly static ISet<string> _obsoleteAssemblies = new HashSet<string>
+		{
+			"React.JavaScriptEngine.VroomJs",
+			"React.JavaScriptEngine.ClearScriptV8",
+		};
+
 		/// <summary>
 		/// Intialise ReactJS.NET
 		/// </summary>
@@ -64,9 +75,10 @@ namespace React
 		{
 			var nameWithoutVersion = assembly.FullName.Split(',')[0];
 			return
-				nameWithoutVersion == "React" || 
+				(nameWithoutVersion == "React" || 
 				nameWithoutVersion.StartsWith("React.") ||
-				nameWithoutVersion.EndsWith(".React");
+				nameWithoutVersion.EndsWith(".React")) &&
+				!_obsoleteAssemblies.Contains(nameWithoutVersion);
 		}
 
 		/// <summary>
