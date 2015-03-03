@@ -57,7 +57,15 @@ namespace React.AspNet
 		{
 			get
 			{
-				var registrations = HttpContext.RequestServices.GetService<PerRequestRegistrations>();
+				var requestServices = HttpContext.RequestServices;
+				if (requestServices == null)
+				{
+					throw new ReactNotInitialisedException(
+						"ASP.NET request services have not been initialised correctly. Please " +
+						"ensure you are calling app.UseRequestServices() before app.UseReact()."
+					);
+				}
+				var registrations = requestServices.GetService<PerRequestRegistrations>();
 				if (registrations == null)
 				{
 					throw new ReactNotInitialisedException(
