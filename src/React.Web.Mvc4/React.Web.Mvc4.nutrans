@@ -13,7 +13,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<metadata>
 		<title xdt:Transform="Insert">ReactJS.NET (MVC 4 and 5)</title>
 		<summary xdt:Transform="Insert">ReactJS tools for ASP.NET MVC 4 and 5</summary>
-		<description xdt:Transform="Insert">ReactJS tools for ASP.NET MVC 4 and 5.
+		<description xdt:Transform="Insert">ReactJS tools for ASP.NET MVC 4 and 5. For ASP.NET 5 (vNext) and MVC 6, install React.AspNet instead!
 Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</description>
 	</metadata>
 	<files xdt:Transform="Insert">
