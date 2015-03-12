@@ -78,15 +78,20 @@ namespace React
 		/// Renders the HTML for this component. This will execute the component server-side and
 		/// return the rendered HTML.
 		/// </summary>
+		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml()
+		public virtual string RenderHtml(bool renderContainerOnly = false)
 		{
 			EnsureComponentExists();
 			try
-			{
-				var html = _environment.Execute<string>(
-					string.Format("React.renderToString({0})", GetComponentInitialiser())
+			{ 
+				var html = string.Empty; 
+				if (!renderContainerOnly) 
+				{ 
+					html = _environment.Execute<string>( 
+						string.Format("React.renderToString({0})", GetComponentInitialiser())
 					);
+				}
 				return string.Format(
 					"<{2} id=\"{0}\">{1}</{2}>",
 					ContainerId,
