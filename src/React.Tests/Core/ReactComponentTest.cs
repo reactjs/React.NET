@@ -76,7 +76,7 @@ namespace React.Tests.Core
 			{
 				Props = new { hello = "World" }
 			};
-			var result = component.RenderHtml(true); //renderContainerOnly = true
+			var result = component.RenderHtml(renderContainerOnly: true);
 
 			Assert.AreEqual(@"<div id=""container""></div>", result);
 			environment.Verify(x => x.Execute(It.IsAny<string>()), Times.Never);

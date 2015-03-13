@@ -66,7 +66,7 @@ namespace React.AspNet
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
-		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to false</param>
+                /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
@@ -97,7 +97,7 @@ namespace React.AspNet
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
-		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to false</param>
+                /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
