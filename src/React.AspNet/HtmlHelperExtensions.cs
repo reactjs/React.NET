@@ -66,13 +66,15 @@ namespace React.AspNet
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
+                /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
 			string htmlTag = null,
-			string containerId = null
+			string containerId = null, 
+			bool clientOnly = false
 		)
 		{
 			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
@@ -80,7 +82,7 @@ namespace React.AspNet
 			{
 				reactComponent.ContainerTag = htmlTag;
 			}
-			var result = reactComponent.RenderHtml();
+			var result = reactComponent.RenderHtml(clientOnly);
 			return new HtmlString(result);
 		}
 
@@ -95,13 +97,15 @@ namespace React.AspNet
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
+                /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
 			string htmlTag = null,
-			string containerId = null
+			string containerId = null, 
+			bool clientOnly = false
 		)
 		{
 			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
@@ -109,7 +113,7 @@ namespace React.AspNet
 			{
 				reactComponent.ContainerTag = htmlTag;
 			}
-			var html = reactComponent.RenderHtml();
+			var html = reactComponent.RenderHtml(clientOnly);
 			var script = new TagBuilder("script")
 			{
 				InnerHtml = reactComponent.RenderJavaScript()
