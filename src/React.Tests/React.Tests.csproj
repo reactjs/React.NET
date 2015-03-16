@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Core\FileCacheHashTests.cs" />
     <Compile Include="Core\JavaScriptEngineFactoryTest.cs" />
+    <Compile Include="Core\JavaScriptEngineUtilsTests.cs" />
     <Compile Include="Core\JsxTransformerTests.cs" />
     <Compile Include="Core\ReactComponentTest.cs" />
     <Compile Include="Mvc\HtmlHelperExtensionsTests.cs" />
