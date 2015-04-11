@@ -10,7 +10,7 @@
             "compilationOptions": {
                 "define": [ "RELEASE", "TRACE", "ASPNET5" ],
                 "optimize": true,
-                "warningsAsErrors": true,
+                "warningsAsErrors": true
             }
         }
     },
@@ -19,7 +19,8 @@
         "Microsoft.AspNet.Hosting": "1.0.0.0-beta3",
         "Microsoft.AspNet.Mvc.Core": "6.0.0.0-beta3",
         "Microsoft.AspNet.StaticFiles": "1.0.0.0-beta3",
-        "React.Core": ""
+        "React.Core": "",
+        "JavaScriptEngineSwitcher.Core": "1.2.4.0"
     },
     "frameworks": {
         "aspnet50": { }
