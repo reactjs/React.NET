@@ -234,7 +234,7 @@ namespace React
 			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
 			{
 				JavaScriptEngineUtils.EnsureEngineFunctional<V8JsEngine, ClearScriptV8InitialisationException>(
-					ex => new ClearScriptV8InitialisationException(ex.Message)
+					ex => new ClearScriptV8InitialisationException(ex)
 				);
 			}
 			else if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())

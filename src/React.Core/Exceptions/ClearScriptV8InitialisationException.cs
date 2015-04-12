@@ -21,8 +21,8 @@ namespace React.Exceptions
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClearScriptV8InitialisationException"/> class.
 		/// </summary>
-		public ClearScriptV8InitialisationException(string innerMessage) :
-			base(GetMessage(innerMessage)) { }
+		public ClearScriptV8InitialisationException(Exception innerException) :
+			base(GetMessage(innerException), innerException) { }
 
 		/// <summary>
 		/// Used by deserialization
@@ -33,7 +33,7 @@ namespace React.Exceptions
 		/// <summary>
 		/// Gets a message that describes the current exception.
 		/// </summary>
-		private static string GetMessage(string innerMessage)
+		private static string GetMessage(Exception innerException)
 		{
 			return
 				"Failed to initialise ClearScript V8. This is most likely caused by the native libraries " +
@@ -41,7 +41,7 @@ namespace React.Exceptions
 				"Visual C++ runtime not being installed. Please ensure your app is referencing the " +
 				"JavaScriptEngineSwitcher.V8 NuGet package, and refer to the ReactJS.NET site for more" +
 				"debugging tips.\n\n" +
-				"More details: " + innerMessage;
+				"More details: " + innerException.Message;
 		}
 	}
 }
