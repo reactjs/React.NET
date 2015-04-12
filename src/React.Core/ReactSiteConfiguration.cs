@@ -36,6 +36,7 @@ namespace React
 			UseHarmony = true;
 			ReuseJavaScriptEngines = true;
 			AllowMsieEngine = true;
+			LoadReact = true;
 		}
 
 		/// <summary>
@@ -201,6 +202,23 @@ namespace React
 		public IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine)
 		{
 			AllowMsieEngine = allowMsieEngine;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets whether the built-in version of React is loaded. If <c>false</c>, you must
+		/// provide your own version of React.
+		/// </summary>
+		public bool LoadReact { get; set; }
+
+		/// <summary>
+		/// Sets whether the built-in version of React is loaded. If <c>false</c>, you must 
+		/// provide your own version of React.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration SetLoadReact(bool loadReact)
+		{
+			LoadReact = loadReact;
 			return this;
 		}
 	}

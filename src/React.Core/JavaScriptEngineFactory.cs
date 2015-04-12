@@ -135,12 +135,29 @@ namespace React
 		{
 			var thisAssembly = typeof(ReactEnvironment).Assembly;
 			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
-			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
-			engine.Execute("var React = global.React");
-			engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+			if (_config.LoadReact)
+			{
+				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
+				engine.Execute("React = global.React");
+				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+			}
 
-			// Only scripts that don't need JSX transformation can run immediately here
-			// JSX files are loaded in ReactEnvironment.
+			LoadUserScripts(engine);
+			if (!_config.LoadReact)
+			{
+				// We expect to user to have loaded their own versino of React in the scripts that
+				// were loaded above, let's ensure that's the case. 
+				EnsureReactLoaded(engine);
+			}
+		}
+
+		/// <summary>
+		/// Loads any user-provided scripts. Only scripts that don't need JSX transformation can 
+		/// run immediately here. JSX files are loaded in ReactEnvironment.
+		/// </summary>
+		/// <param name="engine">Engine to load scripts into</param>
+		private void LoadUserScripts(IJsEngine engine)
+		{
 			foreach (var file in _config.ScriptsWithoutTransform)
 			{
 				try
@@ -158,6 +175,23 @@ namespace React
 						ex.ColumnNumber
 					));
 				}
+			}
+		}
+
+		/// <summary>
+		/// Ensures that React has been correctly loaded into the specified engine.
+		/// </summary>
+		/// <param name="engine">Engine to check</param>
+		private static void EnsureReactLoaded(IJsEngine engine)
+		{
+			var result = engine.CallFunction<bool>("ReactNET_initReact");
+			if (!result)
+			{
+				throw new ReactNotInitialisedException(
+					"React has not been loaded correctly. Please expose your version of React as a global " +
+					"variable named 'React', or enable the 'LoadReact' configuration option to " +
+					"use the built-in version of React."
+				);
 			}
 		}
 

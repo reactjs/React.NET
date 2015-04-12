@@ -130,5 +130,17 @@ namespace React
 		/// </summary>
 		/// <returns></returns>
 		IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine);
+
+		/// <summary>
+		/// Gets or sets whether the built-in version of React is loaded. If <c>false</c>, you must
+		/// provide your own version of React.
+		/// </summary>
+		bool LoadReact { get; set; }
+		/// <summary>
+		/// Sets whether the built-in version of React is loaded. If <c>false</c>, you must 
+		/// provide your own version of React.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration SetLoadReact(bool loadReact);
 	}
 }

@@ -8,6 +8,7 @@
  */
 
 var global = global || {};
+var React;
 
 // Basic console shim. Caches all calls to console methods.
 function MockConsole() {
@@ -38,6 +39,29 @@ var console = new MockConsole();
 
 if (!Object.freeze) {
 	Object.freeze = function() { };
+}
+
+/**
+ * Finds a user-supplied version of React and ensures it's exposed globally.
+ *
+ * @return {bool}
+ */
+function ReactNET_initReact() {
+	if (typeof React !== 'undefined') {
+		// React is already a global, woohoo
+		return true;
+	}
+	if (global.React) {
+		React = global.React;
+		return true;
+	}
+	if (typeof require === 'function') {
+		// CommonJS-like environment (eg. Browserify)
+		React = require('react');
+		return true;
+	}
+	// :'(
+	return false;
 }
 
 function ReactNET_transform(input, harmony, stripTypes) {
