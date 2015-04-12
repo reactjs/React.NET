@@ -12,6 +12,7 @@ using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
 using NUnit.Framework;
+using React.Exceptions;
 
 namespace React.Tests.Core
 {
@@ -109,6 +110,51 @@ namespace React.Tests.Core
 
 			jsEngine.Verify(x => x.Execute("CONTENTS_First.js"));
 			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js"));
+		}
+
+		[Test]
+		public void ShouldHandleLoadingExternalReactVersion()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+			jsEngine.Setup(x => x.CallFunction<bool>("ReactNET_initReact")).Returns(true);
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
+			config.Setup(x => x.LoadReact).Returns(false);
+			var fileSystem = new Mock<IFileSystem>();
+			var registration = new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => jsEngine.Object,
+				Priority = 1
+			};
+			var factory = new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.CallFunction<bool>("ReactNET_initReact"));
+		}
+
+		[Test]
+		public void ShouldThrowIfReactVersionNotLoaded()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+			jsEngine.Setup(x => x.CallFunction<bool>("ReactNET_initReact")).Returns(false);
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
+			config.Setup(x => x.LoadReact).Returns(false);
+			var fileSystem = new Mock<IFileSystem>();
+			var registration = new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => jsEngine.Object,
+				Priority = 1
+			};
+			var factory = new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+
+			Assert.Throws<ReactNotInitialisedException>(() =>
+			{
+				factory.GetEngineForCurrentThread();
+			});
 		}
 	}
 }
