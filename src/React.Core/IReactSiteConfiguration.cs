@@ -99,5 +99,15 @@ namespace React
 		/// Defaults to <c>25</c>.
 		/// </summary>
 		IReactSiteConfiguration SetMaxEngines(int? maxEngines);
+
+		/// <summary>
+		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
+		/// </summary>
+		bool AllowMsieEngine { get; set; }
+		/// <summary>
+		/// Sets whether the MSIE engine should be used if V8 is unavailable.
+		/// </summary>
+		/// <returns></returns>
+		IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine);
 	}
 }
