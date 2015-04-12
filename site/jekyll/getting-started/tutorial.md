@@ -402,13 +402,16 @@ namespace ReactDemo.Controllers
 Let's also add a new controller action to return the list of comments:
 
 ```csharp
+[OutputCache(Location = OutputCacheLocation.None)]
 public ActionResult Comments()
 {
 	return Json(_comments, JsonRequestBehavior.AllowGet);
 }
 ```
 
-And a corresponding route in `App_Start\RouteConfig.cs`:
+The OutputCache attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
+
+Finally we add a corresponding route in `App_Start\RouteConfig.cs`:
 
 ```csharp{12-16}
 using System.Web.Mvc;
