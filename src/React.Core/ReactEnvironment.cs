@@ -157,7 +157,8 @@ namespace React
 		}
 
 		/// <summary>
-		/// Ensures any user-provided scripts have been loaded
+		/// Ensures any user-provided scripts have been loaded. This only loads JSX files; files
+		/// that need no transformation are loaded in JavaScriptEngineFactory.
 		/// </summary>
 		protected virtual void EnsureUserScriptsLoaded()
 		{

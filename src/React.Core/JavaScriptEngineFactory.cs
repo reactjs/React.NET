@@ -78,7 +78,9 @@ namespace React
 			{
 				_pool = CreatePool();
 				_resetPoolTimer = new Timer(OnResetPoolTimer);
-				_watchedFiles = new HashSet<string>(_config.Scripts.Select(
+
+				var allFiles = _config.Scripts.Concat(_config.ScriptsWithoutTransform);
+				_watchedFiles = new HashSet<string>(allFiles.Select(
 					fileName => _fileSystem.MapPath(fileName).ToLowerInvariant()
 				));
 				try
@@ -136,6 +138,27 @@ namespace React
 			engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 			engine.Execute("var React = global.React");
 			engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+
+			// Only scripts that don't need JSX transformation can run immediately here
+			// JSX files are loaded in ReactEnvironment.
+			foreach (var file in _config.ScriptsWithoutTransform)
+			{
+				try
+				{
+					var contents = _fileSystem.ReadAsString(file);
+					engine.Execute(contents);
+				}
+				catch (JsRuntimeException ex)
+				{
+					throw new ReactScriptLoadException(string.Format(
+						"Error while loading \"{0}\": {1}\r\nLine: {2}\r\nColumn: {3}",
+						file,
+						ex.Message,
+						ex.LineNumber,
+						ex.ColumnNumber
+					));
+				}
+			}
 		}
 
 		/// <summary>

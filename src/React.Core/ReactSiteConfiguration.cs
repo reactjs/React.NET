@@ -39,13 +39,21 @@ namespace React
 		}
 
 		/// <summary>
-		/// All the scripts that have been added to this configuration
+		/// All the scripts that have been added to this configuration and require JSX 
+		/// transformation to be run.
 		/// </summary>
 		private readonly IList<string> _scriptFiles = new List<string>();
+		/// <summary>
+		/// All the scripts that have been added to this configuration and do not require JSX
+		/// transformation to be run.
+		/// </summary>
+		private readonly IList<string> _scriptFilesWithoutTransform = new List<string>();
 
 		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
-		/// React components and their dependencies.
+		/// React components and their dependencies. If the script does not have any JSX in it
+		/// (for example, it's built using Webpack or Gulp), use 
+		/// <see cref="AddScriptWithoutTransform"/> instead.
 		/// </summary>
 		/// <param name="filename">
 		/// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
@@ -59,11 +67,36 @@ namespace React
 		}
 
 		/// <summary>
-		/// Gets a list of all the scripts that have been added to this configuration.
+		/// Adds a script to the list of scripts that are executed. This is the same as
+		/// <see cref="AddScript"/> except it does not run JSX transformation on the script and thus is
+		/// more efficient.
+		/// </summary>
+		/// <param name="filename">
+		/// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
+		/// <c>~/Scripts/Awesome.js</c>)
+		/// </param>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration AddScriptWithoutTransform(string filename)
+		{
+			_scriptFilesWithoutTransform.Add(filename);
+			return this;
+		}
+
+		/// <summary>
+		/// Gets a list of all the scripts that have been added to this configuration and require JSX
+		/// transformation to be run.
 		/// </summary>
 		public IList<string> Scripts
 		{
 			get { return new ReadOnlyCollection<string>(_scriptFiles); }
+		}
+
+		/// <summary>
+		/// Gets a list of all the scripts that have been added to this configuration.
+		/// </summary>
+		public IList<string> ScriptsWithoutTransform
+		{
+			get { return new ReadOnlyCollection<string>(_scriptFilesWithoutTransform); }
 		}
 
 		/// <summary>

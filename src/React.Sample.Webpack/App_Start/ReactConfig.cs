@@ -16,7 +16,7 @@ namespace React.Sample.Webpack
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
-				.AddScript("~/build/server.bundle.js");
+				.AddScriptWithoutTransform("~/build/server.bundle.js");
 		}
 	}
 }
