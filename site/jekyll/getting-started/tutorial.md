@@ -409,9 +409,9 @@ public ActionResult Comments()
 }
 ```
 
-The `OutputCache` attribute is used here to prevent IE from caching the ajax request. IE tries to optimize things by assuming that identical requests will return identical responses. Subsequent calls to the Comments action will simply return the cached response from the first call, the result being that the comment list is never updated in IE as new comments are added. When designing a real world API, cache times of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
+The OutputCache attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
 
-Finally we add a corresponding route in `App_Start\RouteConfig.cs` to simplify the request URL a bit:
+Finally we add a corresponding route in `App_Start\RouteConfig.cs`:
 
 ```csharp{12-16}
 using System.Web.Mvc;
