@@ -112,7 +112,7 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
 })
 
 <!-- Initialise the component in JavaScript too -->
-<script src="http://fb.me/react-0.12.2.min.js"></script>
+<script src="http://fb.me/react-0.13.1.min.js"></script>
 @Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```

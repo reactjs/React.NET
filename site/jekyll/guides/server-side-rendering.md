@@ -47,7 +47,7 @@ code.
 ```html
 <!-- Load all your scripts normally before calling ReactInitJavaScript -->
 <!-- Assumes minification/combination is configured as per previous section -->
-<script src="http://fb.me/react-0.12.2.min.js"></script>
+<script src="http://fb.me/react-0.13.1.min.js"></script>
 @Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```
@@ -62,7 +62,7 @@ code.
 	</div>
 </div>
 
-<script src="http://fb.me/react-0.12.2.min.js"></script>
+<script src="http://fb.me/react-0.13.1.min.js"></script>
 <script src="/Scripts/HelloWorld.js"></script>
 <script>React.render(HelloWorld({"name":"Daniel"}), document.getElementById("react1"));</script>
 ```

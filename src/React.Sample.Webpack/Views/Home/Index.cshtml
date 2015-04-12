@@ -16,7 +16,7 @@
 	@Html.React("Components.CommentsBox", new { initialComments = Model.Comments })
 		
 	<!-- Load all required scripts (React + the site's scripts) -->
-	<script src="http://fb.me/react-0.12.2.js"></script>
+	<script src="http://fb.me/react-0.13.1.js"></script>
 	<script src="@Url.Content("~/build/client.bundle.js")"></script>
 	<!-- Render the code to initialise the component -->
 	@Html.ReactInitJavaScript()

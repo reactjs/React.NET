@@ -80,7 +80,7 @@ function ReactNET_transform_sourcemap(input, harmony, stripTypes) {
 
 		return JSON.stringify({
 			code: result.code,
-			sourceMap: result.sourceMap.toJSON()
+			sourceMap: result.sourceMap
 		});
 	} catch (ex) {
 		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");

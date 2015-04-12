@@ -10,7 +10,7 @@
   "license": "BSD",
   "devDependencies": {
     "expose-loader": "^0.6.0",
-    "jsx-loader": "^0.12.2",
+    "jsx-loader": "^0.13.1",
     "webpack": "^1.5.1"
   }
 }
