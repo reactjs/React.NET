@@ -96,6 +96,8 @@
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Core\FileCacheHashTests.cs" />
+    <Compile Include="Core\FileSystemBaseTests.cs" />
+    <Compile Include="Core\FileSystemExtensionsTest.cs" />
     <Compile Include="Core\JavaScriptEngineFactoryTest.cs" />
     <Compile Include="Core\JavaScriptEngineUtilsTests.cs" />
     <Compile Include="Core\JsxTransformerTests.cs" />

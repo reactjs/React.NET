@@ -46,13 +46,13 @@ namespace React
 		/// Gets a list of all the scripts that have been added to this configuration and require JSX
 		/// transformation to be run.
 		/// </summary>
-		IList<string> Scripts { get; }
+		IEnumerable<string> Scripts { get; }
 
 		/// <summary>
 		/// Gets a list of all the scripts that have been added to this configuration and do not 
 		/// require JSX transformation to be run.
 		/// </summary>
-		IList<string> ScriptsWithoutTransform { get; } 
+		IEnumerable<string> ScriptsWithoutTransform { get; } 
 
 		/// <summary>
 		/// A value indicating if es6 syntax should be rewritten.

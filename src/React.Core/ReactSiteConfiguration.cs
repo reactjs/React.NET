@@ -10,6 +10,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace React
 {
@@ -84,20 +85,42 @@ namespace React
 		}
 
 		/// <summary>
+		/// Gets all the file paths that match the specified pattern. If the pattern is a plain
+		/// path, just returns that path verbatim.
+		/// </summary>
+		/// <param name="glob">
+		/// Patterns to search for (eg. <c>~/Scripts/*.js</c> or <c>~/Scripts/Awesome.js</c>
+		/// </param>
+		/// <returns>File paths that match this pattern</returns>
+		private IEnumerable<string> Glob(string glob)
+		{
+			if (!glob.IsGlobPattern())
+			{
+				return new[] {glob};
+			}
+			// Directly touching the IoC container is not ideal, but we only want to pull the FileSystem
+			// dependency if it's absolutely necessary.
+			var fileSystem = AssemblyRegistration.Container.Resolve<IFileSystem>();
+			return fileSystem.Glob(glob);
+		}
+
+		/// <summary>
 		/// Gets a list of all the scripts that have been added to this configuration and require JSX
 		/// transformation to be run.
 		/// </summary>
-		public IList<string> Scripts
+		public IEnumerable<string> Scripts
 		{
-			get { return new ReadOnlyCollection<string>(_scriptFiles); }
+			// TODO: It's a bit strange to do the globbing here, ideally this class should just be a simple
+			// bag of settings with no logic.
+			get { return _scriptFiles.SelectMany(Glob); }
 		}
 
 		/// <summary>
 		/// Gets a list of all the scripts that have been added to this configuration.
 		/// </summary>
-		public IList<string> ScriptsWithoutTransform
+		public IEnumerable<string> ScriptsWithoutTransform
 		{
-			get { return new ReadOnlyCollection<string>(_scriptFilesWithoutTransform); }
+			get { return _scriptFilesWithoutTransform.SelectMany(Glob); }
 		}
 
 		/// <summary>

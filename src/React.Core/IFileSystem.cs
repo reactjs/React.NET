@@ -7,6 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.Collections.Generic;
+
 namespace React
 {
 	/// <summary>
@@ -20,6 +22,13 @@ namespace React
 		/// <param name="relativePath">App-relative path of the file</param>
 		/// <returns>Full path of the file</returns>
 		string MapPath(string relativePath);
+
+		/// <summary>
+		/// Converts a path from a full filesystem path to anan application relative path (~/...)
+		/// </summary>
+		/// <param name="absolutePath">Full path of the file</param>
+		/// <returns>App-relative path of the file</returns>
+		string ToRelativePath(string absolutePath);
 
 		/// <summary>
 		/// Reads the contents of a file as a string.
@@ -41,5 +50,12 @@ namespace React
 		/// <param name="relativePath">App-relative path of the file</param>
 		/// <returns><c>true</c> if the file exists</returns>
 		bool FileExists(string relativePath);
+
+		/// <summary>
+		/// Gets all the files that match the specified pattern
+		/// </summary>
+		/// <param name="glob">Pattern to search for (eg. "~/Scripts/*.js")</param>
+		/// <returns>File names that match the pattern</returns>
+		IEnumerable<string> Glob(string glob);
 	}
 }

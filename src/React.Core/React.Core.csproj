@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="Exceptions\ReactNotInitialisedException.cs" />
+    <Compile Include="FileSystemExtensions.cs" />
     <Compile Include="JavaScriptEngineUtils.cs" />
     <Compile Include="VroomJsEngine.cs" />
     <Compile Include="Exceptions\ClearScriptV8InitialisationException.cs" />
