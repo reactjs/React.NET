@@ -31,6 +31,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="System.Web.Optimization.React" />
 		<PackageAssemblies Include="Cassette.React" />
 		<PackageAssemblies Include="React.MSBuild" />
+		<PackageAssemblies Include="React.Owin" />
 		<PackageAssembliesAspNet5 Include="React.AspNet" />
 		<AspNet5ProjectJson Include="src/**/project.json" />
 	</ItemGroup>
