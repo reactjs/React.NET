@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
@@ -40,27 +39,9 @@ namespace React
 		/// </summary>
 		protected IJsPool _pool;
 		/// <summary>
-		/// Used to recycle the JavaScript engine pool when relevant JavaScript files are modified.
-		/// </summary>
-		protected readonly FileSystemWatcher _watcher;
-		/// <summary>
-		/// Names of all the files that are loaded into the JavaScript engine. If any of these 
-		/// files are changed, the engines should be recycled
-		/// </summary>
-		protected readonly ISet<string> _watchedFiles;
-		/// <summary>
-		/// Timer for debouncing pool recycling
-		/// </summary>
-		protected readonly Timer _resetPoolTimer;
-		/// <summary>
 		/// Whether this class has been disposed.
 		/// </summary>
 		protected bool _disposed;
-
-		/// <summary>
-		/// Time period to debounce file system changed events, in milliseconds.
-		/// </summary>
-		protected const int DEBOUNCE_TIMEOUT = 25;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
@@ -77,32 +58,6 @@ namespace React
 			if (_config.ReuseJavaScriptEngines)
 			{
 				_pool = CreatePool();
-				_resetPoolTimer = new Timer(OnResetPoolTimer);
-
-				var allFiles = _config.Scripts.Concat(_config.ScriptsWithoutTransform);
-				_watchedFiles = new HashSet<string>(allFiles.Select(
-					fileName => _fileSystem.MapPath(fileName).ToLowerInvariant()
-				));
-				try
-				{
-					// Attempt to initialise a FileSystemWatcher so we can recycle the JavaScript
-					// engine pool when files are changed.
-					_watcher = new FileSystemWatcher
-					{
-						Path = _fileSystem.MapPath("~"),
-						IncludeSubdirectories = true,
-						EnableRaisingEvents = true,
-					};
-					_watcher.Changed += OnFileChanged;
-					_watcher.Created += OnFileChanged;
-					_watcher.Deleted += OnFileChanged;
-					_watcher.Renamed += OnFileChanged;
-				}
-				catch (Exception ex)
-				{
-					// Can't use FileSystemWatcher (eg. not running in Full Trust)
-					Trace.WriteLine("Unable to initialise FileSystemWatcher: " + ex.Message);
-				}
 			}
 		}
 
@@ -111,10 +66,16 @@ namespace React
 		/// </summary>
 		protected virtual IJsPool CreatePool()
 		{
+			var allFiles = _config.Scripts
+				.Concat(_config.ScriptsWithoutTransform)
+				.Select(_fileSystem.MapPath);
+
 			var poolConfig = new JsPoolConfig
 			{
 				EngineFactory = _factory,
 				Initializer = InitialiseEngine,
+				WatchPath = _fileSystem.MapPath("~/"),
+				WatchFiles = allFiles
 			};
 			if (_config.MaxEngines != null)
 			{
@@ -334,36 +295,6 @@ namespace React
 			{
 				_pool.Dispose();
 				_pool = null;
-			}
-		}
-
-		/// <summary>
-		/// Handles events fired when any files are changed.
-		/// </summary>
-		/// <param name="sender">The sender</param>
-		/// <param name="args">The <see cref="FileSystemEventArgs"/> instance containing the event data</param>
-		protected virtual void OnFileChanged(object sender, FileSystemEventArgs args)
-		{
-			if (_watchedFiles.Contains(args.FullPath.ToLowerInvariant()))
-			{
-				// Use a timer so multiple changes only result in a single reset.
-				_resetPoolTimer.Change(DEBOUNCE_TIMEOUT, Timeout.Infinite);
-			}
-		}
-
-		/// <summary>
-		/// Called when any of the watched files have changed. Recycles the JavaScript engine pool
-		/// so the files are all reloaded.
-		/// </summary>
-		/// <param name="state">Unused</param>
-		protected virtual void OnResetPoolTimer(object state)
-		{
-			// Create the new pool before disposing the old pool so that _pool is never null.
-			var oldPool = _pool;
-			_pool = CreatePool();
-			if (oldPool != null)
-			{
-				oldPool.Dispose();
 			}
 		}
 

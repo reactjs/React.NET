@@ -10,7 +10,7 @@
       "dependencies": {
         "JavaScriptEngineSwitcher.Core": "1.2.4",
         "JavaScriptEngineSwitcher.V8": "1.2.4",
-        "JSPool": "0.2.0",
+        "JSPool": "0.3.0",
         "Newtonsoft.Json": "5.0.4",
         "VroomJs": "1.0.0-*",
         "JavaScriptEngineSwitcher.Msie": "1.2.4",
