@@ -68,7 +68,8 @@ function ReactNET_transform(input, harmony, stripTypes) {
 	try {
 		return global.JSXTransformer.transform(input, {
 			harmony: !!harmony,
-			stripTypes: !!stripTypes
+			stripTypes: !!stripTypes,
+			target: 'es3'
 		}).code;
 	} catch (ex) {
 		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
@@ -83,6 +84,7 @@ function ReactNET_transform_sourcemap(input, harmony, stripTypes) {
 			result = global.JSXTransformer.transform(input, {
 				harmony: !!harmony,
 				stripTypes: !!stripTypes,
+				target: 'es3',
 				sourceMap: true
 			});
 		} catch (ex) {
@@ -91,6 +93,7 @@ function ReactNET_transform_sourcemap(input, harmony, stripTypes) {
 			result = global.JSXTransformer.transform(input, {
 				harmony: !!harmony,
 				stripTypes: !!stripTypes,
+				target: 'es3',
 				sourceMap: false
 			});
 		}
