@@ -9,7 +9,6 @@
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace React
@@ -38,6 +37,10 @@ namespace React
 			ReuseJavaScriptEngines = true;
 			AllowMsieEngine = true;
 			LoadReact = true;
+			JsonSerializerSettings = new JsonSerializerSettings
+			{
+				StringEscapeHandling = StringEscapeHandling.EscapeHtml
+			};
 		}
 
 		/// <summary>
