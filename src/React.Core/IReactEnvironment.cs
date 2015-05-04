@@ -92,6 +92,13 @@ namespace React
 		/// <returns>JavaScript for all components</returns>
 		string GetInitJavaScript();
 
+        /// <summary>
+        /// Renders a Javascript block that initializes all components that have been registered
+        /// to the global react initialization object for delayed initialization.
+        /// </summary>
+        /// <returns>Javascript code to execute initialization</returns>
+        string GetInitDeferredJavaScript();
+
 		/// <summary>
 		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>

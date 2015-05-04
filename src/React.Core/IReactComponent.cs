@@ -49,5 +49,13 @@ namespace React
 		/// </summary>
 		/// <returns>JavaScript</returns>
 		string RenderJavaScript();
+
+        /// <summary>
+        /// Renders the JavaScript required to allow deferred initialization of the component.
+        /// React is not invoked on this call, but through a separate function that invokes
+        /// all objects that use the deferred render.
+        /// </summary>
+        /// <returns></returns>
+        string RenderDeferredJavaScript();
 	}
 }

@@ -303,6 +303,27 @@ namespace React
 			return fullScript.ToString();
 		}
 
+        /// <summary>
+        /// Renders a Javascript block that initializes all components that have been registered
+        /// to the global window object for delayed initialization.
+        /// </summary>
+        /// <returns>Javascript code to execute initialization</returns>
+        public virtual string GetInitDeferredJavaScript()
+        {
+            var sb = new StringBuilder();
+            sb.Append("(function initReactComponents() {");
+            sb.Append("var i, component;");
+            sb.Append("if (!window.reactComponents || !window.reactComponents.length) { return }");
+            sb.Append("for (i = 0; i < window.reactComponents.length; ++i) {");
+            sb.Append("component = window.reactComponents[i];");
+            sb.Append("React.render(React.createElement(window[component.name], component.data), document.getElementById(component.container));");
+            sb.Append("}");
+            sb.Append("delete window.reactComponents;");
+            sb.Append("})();");
+
+            return sb.ToString();
+        }
+
 		/// <summary>
 		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
 		/// </summary>
