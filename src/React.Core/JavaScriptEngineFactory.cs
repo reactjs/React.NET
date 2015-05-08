@@ -96,14 +96,17 @@ namespace React
 		{
 			var thisAssembly = typeof(ReactEnvironment).Assembly;
 			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
-			if (_config.LoadReact)
-			{
-				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
-				engine.Execute("React = global.React");
-				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
-			}
+		    if (_config.LoadReact)
+		    {
+		        engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
+		        engine.Execute("React = global.React");
+		        if (_config.Scripts.Count() > 0)
+		        {
+		            engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+		        }
+		    }
 
-			LoadUserScripts(engine);
+		    LoadUserScripts(engine);
 			if (!_config.LoadReact)
 			{
 				// We expect to user to have loaded their own versino of React in the scripts that

@@ -49,10 +49,11 @@ namespace React.MSBuild
 		{
 			MSBuildHost.EnsureInitialized();
 			var config = React.AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>();
-			config
-				.SetReuseJavaScriptEngines(false)
-				.SetUseHarmony(UseHarmony)
-				.SetStripTypes(StripTypes);
+		    config
+		        .SetReuseJavaScriptEngines(false)
+		        .SetUseHarmony(UseHarmony)
+		        .SetStripTypes(StripTypes)
+		        .AddScript(string.Empty);
 
 			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 
