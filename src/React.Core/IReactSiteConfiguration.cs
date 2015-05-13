@@ -9,6 +9,7 @@
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace React
 {
@@ -142,5 +143,18 @@ namespace React
 		/// </summary>
 		/// <returns>The configuration, for chaining</returns>
 		IReactSiteConfiguration SetLoadReact(bool loadReact);
+
+		/// <summary>
+		/// Gets or sets whether or not the JSX transforms should be loaded into the JavaScript engine. This setting is only
+		/// applicable when <see cref="LoadReact"></see> is true.
+		/// </summary>
+		bool LoadJsxTransform { get; set; }
+
+		/// <summary>
+		/// Sets whether the JSX Transforms should be loaded into the Javscript engine. This setting is only
+		/// applicable when <see cref="LoadReact"></see> is true.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration SetLoadJsxTransform(bool loadJsxTransform);
 	}
 }
