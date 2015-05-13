@@ -52,8 +52,7 @@ namespace React.MSBuild
 			config
 				.SetReuseJavaScriptEngines(false)
 				.SetUseHarmony(UseHarmony)
-				.SetStripTypes(StripTypes)
-				.AddScript(string.Empty);
+				.SetStripTypes(StripTypes);
 
 			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 
