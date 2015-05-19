@@ -79,18 +79,20 @@ namespace React
 		/// return the rendered HTML.
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
+        /// <param name="renderReactAttributes">Indicates if the React data-attributes should be rendered during server side rendering</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false)
+        public virtual string RenderHtml(bool renderContainerOnly = false, bool renderReactAttributes = true)
 		{
 			EnsureComponentExists();
 			try
 			{ 
 				var html = string.Empty; 
 				if (!renderContainerOnly) 
-				{ 
-					html = _environment.Execute<string>( 
-						string.Format("React.renderToString({0})", GetComponentInitialiser())
-					);
+				{
+                    var reactRenderCommand = renderReactAttributes
+                        ? string.Format("React.renderToString({0})", GetComponentInitialiser())
+                        : string.Format("React.renderToStaticMarkup({0})", GetComponentInitialiser());
+                    html = _environment.Execute<string>(reactRenderCommand);
 				}
 				return string.Format(
 					"<{2} id=\"{0}\">{1}</{2}>",

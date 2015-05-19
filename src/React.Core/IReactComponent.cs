@@ -39,8 +39,9 @@ namespace React
 		/// return the rendered HTML.
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
+        /// <param name="renderReactAttributes">Indicates if the React data-attributes should be rendered during server side rendering</param>
 		/// <returns>HTML</returns>
-		string RenderHtml(bool renderContainerOnly = false);
+        string RenderHtml(bool renderContainerOnly = false, bool renderReactAttributes = true);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise this component client-side. This will 
