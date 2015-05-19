@@ -33,7 +33,7 @@ namespace React.Tests.Mvc
 		public void ReactWithInitShouldReturnHtmlAndScript()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(false)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(false, true)).Returns("HTML");
 			component.Setup(x => x.RenderJavaScript()).Returns("JS");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
@@ -59,7 +59,7 @@ namespace React.Tests.Mvc
 		public void ReactWithClientOnlyTrueShouldCallRenderHtmlWithTrue()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(true)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(true, false)).Returns("HTML");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
@@ -72,9 +72,10 @@ namespace React.Tests.Mvc
 				componentName: "ComponentName", 
 				props: new { }, 
 				htmlTag: "span",
-				clientOnly: true
+				clientOnly: true,
+                renderReactAttributes: false
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true)), Times.Once);
+		    component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false)), Times.Once);
 		}
 	}
 }
