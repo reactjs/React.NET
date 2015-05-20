@@ -85,7 +85,7 @@ If thre is no need to have a React application client side and you just want to 
 })
 ```
 
-And the Html markup will look like which is a lot cleaner. In this case there is no need to laod the React script or call the `Html.ReactInitJavaScript()` method.
+And the Html markup will look like the one following which is a lot cleaner. In this case there is no need to laod the React script or call the `Html.ReactInitJavaScript()` method.
 
 ```html
 <div id="react1">
