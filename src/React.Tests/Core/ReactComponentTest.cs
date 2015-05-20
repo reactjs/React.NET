@@ -64,7 +64,7 @@ namespace React.Tests.Core
 		}
 
 		[Test]
-		public void RenderHtmlShouldNotRenderComponentHTML()
+		public void RenderHtmlShouldNotRenderComponentHtml()
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
@@ -81,6 +81,22 @@ namespace React.Tests.Core
 			Assert.AreEqual(@"<div id=""container""></div>", result);
 			environment.Verify(x => x.Execute(It.IsAny<string>()), Times.Never);
 		}
+
+        [Test]
+        public void RenderHtmlShouldNotRenderReactAttributes() 
+        {
+            var environment = new Mock<IReactEnvironment>();
+            environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+            var config = new Mock<IReactSiteConfiguration>();
+
+            var component = new ReactComponent(environment.Object, config.Object, "Foo", "container") 
+            {
+                Props = new { hello = "World" }
+            };
+            component.RenderHtml(renderReactAttributes: false);
+
+            environment.Verify(x => x.Execute<string>(@"React.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
+        }
 
 		[Test]
 		public void RenderHtmlShouldWrapComponentInCustomElement()
