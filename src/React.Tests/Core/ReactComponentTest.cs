@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -82,21 +82,21 @@ namespace React.Tests.Core
 			environment.Verify(x => x.Execute(It.IsAny<string>()), Times.Never);
 		}
 
-        [Test]
-        public void RenderHtmlShouldNotRenderReactAttributes() 
-        {
-            var environment = new Mock<IReactEnvironment>();
-            environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-            var config = new Mock<IReactSiteConfiguration>();
+		[Test]
+		public void RenderHtmlShouldNotRenderClientSideAttributes()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			var config = new Mock<IReactSiteConfiguration>();
 
-            var component = new ReactComponent(environment.Object, config.Object, "Foo", "container") 
-            {
-                Props = new { hello = "World" }
-            };
-            component.RenderHtml(renderReactAttributes: false);
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" }
+			};
+			component.RenderHtml(renderServerOnly: true);
 
-            environment.Verify(x => x.Execute<string>(@"React.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
-        }
+			environment.Verify(x => x.Execute<string>(@"React.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
+		}
 
 		[Test]
 		public void RenderHtmlShouldWrapComponentInCustomElement()

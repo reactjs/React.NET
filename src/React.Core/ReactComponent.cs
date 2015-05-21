@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -79,20 +79,20 @@ namespace React
 		/// return the rendered HTML.
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
-        /// <param name="renderReactAttributes">Indicates if the React data-attributes should be rendered during server side rendering</param>
+		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <returns>HTML</returns>
-        public virtual string RenderHtml(bool renderContainerOnly = false, bool renderReactAttributes = true)
+		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false)
 		{
 			EnsureComponentExists();
 			try
-			{ 
-				var html = string.Empty; 
-				if (!renderContainerOnly) 
+			{
+				var html = string.Empty;
+				if (!renderContainerOnly)
 				{
-                    var reactRenderCommand = renderReactAttributes
-                        ? string.Format("React.renderToString({0})", GetComponentInitialiser())
-                        : string.Format("React.renderToStaticMarkup({0})", GetComponentInitialiser());
-                    html = _environment.Execute<string>(reactRenderCommand);
+					var reactRenderCommand = renderServerOnly
+						? string.Format("React.renderToStaticMarkup({0})", GetComponentInitialiser())
+						: string.Format("React.renderToString({0})", GetComponentInitialiser());
+					html = _environment.Execute<string>(reactRenderCommand);
 				}
 				return string.Format(
 					"<{2} id=\"{0}\">{1}</{2}>",
@@ -113,8 +113,8 @@ namespace React
 		}
 
 		/// <summary>
-		/// Renders the JavaScript required to initialise this component client-side. This will 
-		/// initialise the React component, which includes attach event handlers to the 
+		/// Renders the JavaScript required to initialise this component client-side. This will
+		/// initialise the React component, which includes attach event handlers to the
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
