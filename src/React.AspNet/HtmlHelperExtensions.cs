@@ -63,10 +63,10 @@ namespace React.AspNet
 		/// <typeparam name="T">Type of the props</typeparam>
 		/// <param name="htmlHelper">HTML helper</param>
 		/// <param name="componentName">Name of the component</param>
-		/// <param name="props">Props to initialize the component with</param>
+		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
-        /// <param name="clientOnly">Skip rendering server-side and only output client-side initialization code. Defaults to <c>false</c></param>
+	    /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
         /// <param name="renderReactAttributes">Indicates if the React data-attributes should be rendered during server side rendering</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
@@ -89,17 +89,17 @@ namespace React.AspNet
 		}
 
 		/// <summary>
-		/// Renders the specified React component, along with its client-side initialization code.
+		/// Renders the specified React component, along with its client-side initialisation code.
 		/// Normally you would use the <see cref="React{T}"/> method, but <see cref="ReactWithInit{T}"/>
 		/// is useful when rendering self-contained partial views.
 		/// </summary>
 		/// <typeparam name="T">Type of the props</typeparam>
 		/// <param name="htmlHelper">HTML helper</param>
 		/// <param name="componentName">Name of the component</param>
-		/// <param name="props">Props to initialize the component with</param>
+		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
-        /// <param name="clientOnly">Skip rendering server-side and only output client-side initialization code. Defaults to <c>false</c></param>
+        /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
