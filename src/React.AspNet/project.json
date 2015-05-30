@@ -15,15 +15,15 @@
         }
     },
     "dependencies": {
-        "Microsoft.Framework.DependencyInjection": "1.0.0.0-beta3",
-        "Microsoft.AspNet.Hosting": "1.0.0.0-beta3",
-        "Microsoft.AspNet.Mvc.Core": "6.0.0.0-beta3",
-        "Microsoft.AspNet.StaticFiles": "1.0.0.0-beta3",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta4",
+        "Microsoft.AspNet.Hosting": "1.0.0-beta4",
+        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta4",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
         "React.Core": "",
         "JavaScriptEngineSwitcher.Core": "1.2.4.0"
     },
     "frameworks": {
-        "aspnet50": { }
+        DNX451: { }
     },
 
     // NuGet info

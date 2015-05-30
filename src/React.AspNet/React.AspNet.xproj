@@ -4,7 +4,6 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-  <Import Project="$(VSToolsPath)\AspNet\Microsoft.Web.AspNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>a7acdb56-5e43-40a6-92c9-2c52228e6074</ProjectGuid>
     <RootNamespace>React.AspNet</RootNamespace>
@@ -20,10 +19,11 @@
   <ItemGroup>
     <ProjectReference Include="..\React.Core\React.Core.csproj" />
   </ItemGroup>
-  <Import Project="$(VSToolsPath)\AspNet\Microsoft.Web.AspNet.targets" Condition="'$(VSToolsPath)' != ''" />
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties project_1json__JSONSchema="http://www.asp.net/media/4878834/project.json" />
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" />
+  <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.targets" />
 </Project>

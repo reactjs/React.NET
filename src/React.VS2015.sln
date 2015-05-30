@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F567B25C-E869-4C93-9C96-077761250F87}"
 EndProject
@@ -57,9 +57,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Owin", "React.Owin\Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Webpack", "React.Sample.Webpack\React.Sample.Webpack.csproj", "{E20376AD-80F7-4865-ACE3-1DE616991DF7}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.AspNet", "React.AspNet\React.AspNet.kproj", "{A7ACDB56-5E43-40A6-92C9-2C52228E6074}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.AspNet", "React.AspNet\React.AspNet.xproj", "{A7ACDB56-5E43-40A6-92C9-2C52228E6074}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Sample.Mvc6", "React.Sample.Mvc6\React.Sample.Mvc6.kproj", "{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Sample.Mvc6", "React.Sample.Mvc6\React.Sample.Mvc6.xproj", "{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

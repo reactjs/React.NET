@@ -3,16 +3,16 @@
     "webroot": "wwwroot",
     "version": "1.5.2-*",
     "dependencies": {
-        "Microsoft.AspNet.Mvc": "6.0.0.0-beta3",
-        "Microsoft.AspNet.Diagnostics": "1.0.0.0-beta3",
-        "Microsoft.AspNet.Server.IIS": "1.0.0.0-beta3",
-        "Microsoft.AspNet.Server.WebListener": "1.0.0.0-beta3",
-        "Microsoft.AspNet.StaticFiles": "1.0.0.0-beta3",
-        "Microsoft.Framework.ConfigurationModel.Json": "1.0.0.0-beta3",
-        "Microsoft.Framework.CodeGenerators.Mvc": "1.0.0.0-beta3",
-        "Microsoft.Framework.Logging": "1.0.0.0-beta3",
-        "Microsoft.Framework.Logging.Console": "1.0.0.0-beta3",
-        "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta1",
+        "Microsoft.AspNet.Mvc": "6.0.0-beta4",
+        "Microsoft.AspNet.Diagnostics": "1.0.0-beta4",
+        "Microsoft.AspNet.Server.IIS": "1.0.0-beta4",
+        "Microsoft.AspNet.Server.WebListener": "1.0.0-beta4",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-beta4",
+        "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-beta4",
+        "Microsoft.Framework.CodeGenerators.Mvc": "1.0.0-beta4",
+        "Microsoft.Framework.Logging": "1.0.0-beta4",
+        "Microsoft.Framework.Logging.Console": "1.0.0-beta4",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta4",
         "React.AspNet": "",
         "React.Core": "",
         "JavaScriptEngineSwitcher.V8": "1.2.4.0",
@@ -24,7 +24,7 @@
         "gen": "Microsoft.Framework.CodeGeneration"
     },
     "frameworks": {
-        "aspnet50": {}
+        "DNX451": { }
         //"aspnetcore50": { }
     },
     "exclude": [

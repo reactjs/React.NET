@@ -48,7 +48,7 @@ namespace React.AspNet
 		/// Gets the <see cref="HttpContext" /> of the current request.
 		/// </summary>
 		private HttpContext HttpContext => 
-			_appServiceProvider.GetRequiredService<IHttpContextAccessor>().Value;
+			_appServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
 
 		/// <summary>
 		/// Gets the current per-request registrations for the current request.

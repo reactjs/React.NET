@@ -37,7 +37,7 @@ namespace React.AspNet
 		public override string MapPath(string relativePath)
 		{
 			relativePath = relativePath.TrimStart('~').TrimStart('/');
-			return Path.Combine(_hostingEnv.WebRoot, relativePath);
+			return Path.Combine(_hostingEnv.WebRootPath, relativePath);
 		}
 	}
 }

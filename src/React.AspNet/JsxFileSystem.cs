@@ -197,12 +197,12 @@ namespace React.AspNet
 
 			public void WriteContent(byte[] content)
 			{
-				_fileInfo.WriteContent(content);
+                File.WriteAllBytes(_fileInfo.PhysicalPath, content);
 			}
 
 			public void Delete()
 			{
-				_fileInfo.Delete();
+                File.Delete(_fileInfo.PhysicalPath);
 			}
 
 			public bool Exists
@@ -212,7 +212,7 @@ namespace React.AspNet
 
 			public bool IsReadOnly
 			{
-				get { return _fileInfo.IsReadOnly; }
+				get { return File.GetAttributes(_fileInfo.PhysicalPath).HasFlag(FileAttributes.ReadOnly); }
 			}
 #endif
 		}

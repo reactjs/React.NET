@@ -59,9 +59,7 @@ namespace React.Sample.Mvc6
 				// send the request to the following path or controller action.
 				app.UseErrorHandler("/Home/Error");
 			}
-
-			app.UseRequestServices();
-
+            
 			// Initialise ReactJS.NET. Must be before static files.
 			app.UseReact(config =>
 			{
