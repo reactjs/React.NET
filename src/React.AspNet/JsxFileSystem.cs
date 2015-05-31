@@ -195,24 +195,9 @@ namespace React.AspNet
 				get { return _fileInfo.LastModified; }
 			}
 
-			public void WriteContent(byte[] content)
-			{
-                File.WriteAllBytes(_fileInfo.PhysicalPath, content);
-			}
-
-			public void Delete()
-			{
-                File.Delete(_fileInfo.PhysicalPath);
-			}
-
 			public bool Exists
 			{
 				get { return _fileInfo.Exists; }
-			}
-
-			public bool IsReadOnly
-			{
-				get { return File.GetAttributes(_fileInfo.PhysicalPath).HasFlag(FileAttributes.ReadOnly); }
 			}
 #endif
 		}

@@ -37,7 +37,6 @@ app.UseStaticFiles();
 Add:
 
 ```csharp
-app.UseRequestServices();
 app.UseReact(config =>
 {
   // ES6 features are enabled by default. Uncomment the below line to disable them.
