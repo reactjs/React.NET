@@ -6,7 +6,7 @@ title: Getting Started on ASP.NET 5
 
 Getting started with ReactJS.NET on ASP.NET 5 and MVC 6 requires a few more steps compared to previous versions of ASP.NET and MVC. A more fully featured tutorial will be released once the stable release of ASP.NET 5 is out.
 
-Note that ASP.NET 5 is still in beta, and so there may still be some sharp edges. ReactJS.NET requires at least Visual Studio 2015 CTP6 and ASP.NET 5 Beta 3. Additionally, ReactJS.NET does not support the Core CLR at this point in time, so you will need to ensure your project is not referencing it. Remove the `"aspnetcore50": { }` line from your `project.json` file.
+Note that ASP.NET 5 is still in beta, and so there may still be some sharp edges. ReactJS.NET requires at least Visual Studio 2015 RC and ASP.NET 5 Beta 4. Additionally, ReactJS.NET does not support the Core CLR at this point in time, so you will need to ensure your project is not referencing it. Remove the `"aspnetcore50": { }` line from your `project.json` file.
 
 Once this has been removed, install the `React.AspNet` package through NuGet. After the package is installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator). At the top of the file, add:
 ```
