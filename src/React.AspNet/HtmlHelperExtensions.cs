@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -66,15 +66,17 @@ namespace React.AspNet
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
-                /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
+		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
+		/// <param name="serverOnly">Skip rendering React specific data-attributes during server side rendering. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
 			string htmlTag = null,
-			string containerId = null, 
-			bool clientOnly = false
+			string containerId = null,
+			bool clientOnly = false,
+			bool serverOnly = false
 		)
 		{
 			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
@@ -82,7 +84,7 @@ namespace React.AspNet
 			{
 				reactComponent.ContainerTag = htmlTag;
 			}
-			var result = reactComponent.RenderHtml(clientOnly);
+			var result = reactComponent.RenderHtml(clientOnly, serverOnly);
 			return new HtmlString(result);
 		}
 
@@ -97,15 +99,15 @@ namespace React.AspNet
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
-                /// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
+		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
 			string componentName,
 			T props,
 			string htmlTag = null,
-			string containerId = null, 
-			bool clientOnly = false
+			string containerId = null,
+            bool clientOnly = false
 		)
 		{
 			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
@@ -122,7 +124,7 @@ namespace React.AspNet
 		}
 
 		/// <summary>
-		/// Renders the JavaScript required to initialise all components client-side. This will 
+		/// Renders the JavaScript required to initialise all components client-side. This will
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript for all components</returns>

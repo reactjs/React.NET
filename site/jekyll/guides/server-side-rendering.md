@@ -72,3 +72,26 @@ meaning your initial render will be super fast.
 
 For a more in-depth example, take a look at the included sample application
 (**React.Samples.Mvc4**).
+
+5 - Server-side only rendering
+
+If there is no need to have a React application client side and you just want to use the server side rendering but without the React specific data attributes call `Html.React` and pass serverOnly parameter as true.
+
+```csharp
+@Html.React("HelloWorld", new
+{
+	name = "Daniel"
+}
+serverOnly:true)
+```
+
+And the Html mark up will look like the one following which is a lot cleaner. In this case there is no need to load the React script or call the `Html.ReactInitJavaScript()` method.
+
+```html
+<div id="react1">
+	<div>
+		<span>Hello </span>
+		<span>Daniel</span>
+	</div>
+</div>
+```
