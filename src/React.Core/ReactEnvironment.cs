@@ -290,15 +290,16 @@ namespace React
 		public virtual string GetInitJavaScript()
 		{
 			var fullScript = new StringBuilder();
+			
+			// Propagate any server-side console.log calls to corresponding client-side calls.
+			var consoleCalls = Execute<string>("console.getCalls()");
+			fullScript.Append(consoleCalls);
+			
 			foreach (var component in _components)
 			{
 				fullScript.Append(component.RenderJavaScript());
 				fullScript.AppendLine(";");
 			}
-			
-			// Also propagate any server-side console.log calls to corresponding client-side calls.
-			var consoleCalls = Execute<string>("console.getCalls()");
-			fullScript.Append(consoleCalls);
 
 			return fullScript.ToString();
 		}
