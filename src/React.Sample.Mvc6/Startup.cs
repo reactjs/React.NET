@@ -11,21 +11,23 @@ using System;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Hosting;
-using Microsoft.Framework.ConfigurationModel;
+using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
-using Microsoft.Framework.Logging.Console;
 using React.AspNet;
+using Microsoft.Framework.Runtime;
 
 namespace React.Sample.Mvc6
 {
-	public class Startup
+    public class Startup
 	{
-		public Startup(IHostingEnvironment env)
+		public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
 		{
-			// Setup configuration sources.
-			Configuration = new Configuration()
-				.AddEnvironmentVariables();
+            // Setup configuration sources.
+            var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath)
+                                .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; set; }
