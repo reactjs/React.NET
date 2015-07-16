@@ -143,7 +143,7 @@ namespace React.AspNet
 		}
 #endif
 
-        private class JsxFileInfo : IFileInfo
+        	private class JsxFileInfo : IFileInfo
 		{
 			private readonly IJsxTransformer _jsxTransformer;
 			private readonly IFileInfo _fileInfo;
