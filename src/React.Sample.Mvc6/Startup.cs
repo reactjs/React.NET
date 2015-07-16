@@ -19,7 +19,7 @@ using Microsoft.Framework.Runtime;
 
 namespace React.Sample.Mvc6
 {
-    public class Startup
+    	public class Startup
 	{
 		public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
 		{
