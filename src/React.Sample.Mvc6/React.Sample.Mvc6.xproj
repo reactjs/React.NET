@@ -16,7 +16,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties bower_1json__JSONSchema="http://json.schemastore.org/bower" project_1json__JSONSchema="http://www.asp.net/media/4878834/project.json" package_1json__JSONSchema="http://json.schemastore.org/package" />
+      <UserProperties bower_1json__JSONSchema="http://json.schemastore.org/bower" package_1json__JSONSchema="http://json.schemastore.org/package" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" />

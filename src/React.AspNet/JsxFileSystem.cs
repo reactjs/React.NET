@@ -17,7 +17,7 @@ using Microsoft.Owin.FileSystems;
 using IOwinFileSystem = Microsoft.Owin.FileSystems.IFileSystem;
 #else
 using Microsoft.AspNet.FileProviders;
-using Microsoft.Framework.Expiration.Interfaces;
+using Microsoft.Framework.Caching;
 using IOwinFileSystem = Microsoft.AspNet.FileProviders.IFileProvider;
 using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
 #endif
@@ -137,13 +137,13 @@ namespace React.AspNet
 		/// <returns>
 		/// An <see cref="IExpirationTrigger"/> that is triggered when a file matching <paramref name="filter"/> is added, modified or deleted.
 		/// </returns>
-		public IExpirationTrigger Watch(string filter)
+		IExpirationTrigger IOwinFileSystem.Watch(string filter)
 		{
 			return _physicalFileSystem.Watch(filter);
 		}
 #endif
 
-		private class JsxFileInfo : IFileInfo
+        	private class JsxFileInfo : IFileInfo
 		{
 			private readonly IJsxTransformer _jsxTransformer;
 			private readonly IFileInfo _fileInfo;
