@@ -53,7 +53,7 @@ namespace React.Sample.Mvc6
 			if (string.Equals(env.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase))
 			{
 				//app.UseBrowserLink();
-				app.UseErrorPage(ErrorPageOptions.ShowAll);
+				app.UseErrorPage();
 			}
 			else
 			{

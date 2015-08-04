@@ -15,10 +15,11 @@
         }
     },
     "dependencies": {
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta5",
-        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta5",
-        "Microsoft.AspNet.StaticFiles": "1.0.0-beta5",
-        "Microsoft.AspNet.FileProviders.Physical": "1.0.0-beta5",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta6",
+        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta6",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-beta6",
+        "Microsoft.AspNet.FileProviders.Physical": "1.0.0-beta6",
+        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta6",
         "React.Core": "",
         "JavaScriptEngineSwitcher.Core": "1.2.4.0"
     },
