@@ -50,10 +50,10 @@ namespace React.Sample.Mvc6
 			loggerfactory.AddConsole();
 
 			// Add the following to the request pipeline only in development environment.
-			if (string.Equals(env.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase))
+			if (env.IsDevelopment())
 			{
 				//app.UseBrowserLink();
-				app.UseErrorPage(ErrorPageOptions.ShowAll);
+				app.UseErrorPage();
 			}
 			else
 			{
