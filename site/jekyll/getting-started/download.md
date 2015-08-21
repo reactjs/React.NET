@@ -47,7 +47,7 @@ Building Manually
 To build your own copy of ReactJS.NET (for example, if implementing a new
 feature or fixing a bug):
 
-1. Compile ReactJS.NET by running `build.bat`
+1. Compile ReactJS.NET by running `dev-build.bat`
 2. Reference React.dll and React.Mvc4.dll (if using MVC 4) in your Web
    Application project
 
