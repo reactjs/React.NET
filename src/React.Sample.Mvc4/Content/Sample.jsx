@@ -101,6 +101,6 @@ var Avatar = React.createClass({
 		);
 	},
 	getPhotoUrl(author) {
-		return 'http://graph.facebook.com/' + author.Facebook + '/picture';
+		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
 	}
 });

@@ -21,7 +21,7 @@ namespace React.Sample.Mvc6.Models
 	public class AuthorModel
 	{
 		public string Name { get; set; }
-		public string Facebook { get; set; }
+		public string GithubUsername { get; set; }
 	}
 	public class CommentModel
 	{
@@ -54,11 +54,11 @@ namespace React.Sample.Mvc6.Controllers
 			// For clarity, we'll just use a hard-coded list.
 			_authors = new Dictionary<string, AuthorModel>
 			{
-				{"daniel", new AuthorModel { Name = "Daniel Lo Nigro", Facebook = "daaniel" }},
-				{"vjeux", new AuthorModel { Name = "Christopher Chedeau", Facebook = "vjeux" }},
-				{"cpojer", new AuthorModel { Name = "Christoph Pojer", Facebook = "cpojer" }},
-				{"jordwalke", new AuthorModel { Name = "Jordan Walke", Facebook = "jordwalke" }},
-				{"zpao", new AuthorModel { Name = "Paul O'Shannessy", Facebook = "zpao" }},
+				{"daniel", new AuthorModel { Name = "Daniel Lo Nigro", GithubUsername = "Daniel15" }},
+				{"vjeux", new AuthorModel { Name = "Christopher Chedeau", GithubUsername = "vjeux" }},
+				{"cpojer", new AuthorModel { Name = "Christoph Pojer", GithubUsername = "cpojer" }},
+				{"jordwalke", new AuthorModel { Name = "Jordan Walke", GithubUsername = "jordwalke" }},
+				{"zpao", new AuthorModel { Name = "Paul O'Shannessy", GithubUsername = "zpao" }},
 			};
 			_comments = new List<CommentModel>
 			{
