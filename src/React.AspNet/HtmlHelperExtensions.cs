@@ -16,7 +16,7 @@ using System.Web.Mvc;
 using IHtmlHelper = System.Web.Mvc.HtmlHelper;
 #else
 using Microsoft.AspNet.Mvc.Rendering;
-using IHtmlString = Microsoft.AspNet.Mvc.Rendering.HtmlString;
+using IHtmlString = Microsoft.AspNet.Html.Abstractions.IHtmlContent;
 #endif
 
 #if LEGACYASPNET
@@ -118,7 +118,11 @@ namespace React.AspNet
 			var html = reactComponent.RenderHtml(clientOnly);
 			var script = new TagBuilder("script")
 			{
+#if LEGACYASPNET
 				InnerHtml = reactComponent.RenderJavaScript()
+#else
+				InnerHtml = new HtmlString(reactComponent.RenderJavaScript())
+#endif
 			};
 			return new HtmlString(html + System.Environment.NewLine + script.ToString());
 		}
@@ -131,11 +135,19 @@ namespace React.AspNet
 		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper)
 		{
 			var script = Environment.GetInitJavaScript();
+#if LEGACYASPNET
 			var tag = new TagBuilder("script")
 			{
 				InnerHtml = script
 			};
 			return new HtmlString(tag.ToString());
+#else
+			var tag = new TagBuilder("script")
+			{
+				InnerHtml = new HtmlString(script)
+			};
+			return tag;
+#endif
 		}
 	}
 }

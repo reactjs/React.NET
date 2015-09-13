@@ -7,15 +7,13 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Hosting;
+using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 using React.AspNet;
-using Microsoft.Framework.Runtime;
 
 namespace React.Sample.Mvc6
 {

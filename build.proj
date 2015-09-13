@@ -33,7 +33,8 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.Owin" />
 		<PackageAssembliesAspNet5 Include="React.AspNet" />
-		<AspNet5ProjectJson Include="src/**/project.json" />
+		<AspNet5ProjectJson Include="src/React.AspNet/project.json" />
+		<AspNet5ProjectJson Include="src/React.Sample.Mvc6/project.json" />
 	</ItemGroup>
 
 	<Import Project="src/React.tasks.proj" />

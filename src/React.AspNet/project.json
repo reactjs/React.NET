@@ -15,11 +15,11 @@
         }
     },
     "dependencies": {
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta6",
-        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta6",
-        "Microsoft.AspNet.StaticFiles": "1.0.0-beta6",
-        "Microsoft.AspNet.FileProviders.Physical": "1.0.0-beta6",
-        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta6",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta7",
+        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta7",
+        "Microsoft.AspNet.StaticFiles": "1.0.0-beta7",
+        "Microsoft.AspNet.FileProviders.Physical": "1.0.0-beta7",
+        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta7",
         "React.Core": "",
         "JavaScriptEngineSwitcher.Core": "1.2.4.0"
     },
@@ -28,6 +28,11 @@
     },
 
     "authors": [ "Daniel Lo Nigro" ],
+    "owners": [ "Daniel Lo Nigro" ],
+    "licenseUrl": "https://github.com/reactjs/React.NET#licence",
+    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "copyright": "Copyright 2014-2015 Facebook, Inc",
+    "title": "ReactJS.NET (MVC 6)",
     "description": "ReactJS tools for ASP.NET 5, including ASP.NET MVC 6. Please refer to project site (http://reactjs.net/) for full installation instructions, usage examples and sample code",
     "tags": [ "asp.net", "mvc", "asp", "javascript", "js", "react", "facebook", "reactjs", "vnext" ],
     "projectUrl": "http://reactjs.net/"

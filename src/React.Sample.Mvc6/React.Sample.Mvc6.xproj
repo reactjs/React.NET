@@ -13,10 +13,11 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
     <DevelopmentServerPort>3044</DevelopmentServerPort>
+    <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties bower_1json__JSONSchema="http://json.schemastore.org/bower" package_1json__JSONSchema="http://json.schemastore.org/package" />
+      <UserProperties />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(VSToolsPath)\DNX\Microsoft.DNX.Props" />
