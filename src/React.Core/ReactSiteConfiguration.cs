@@ -37,6 +37,7 @@ namespace React
 			ReuseJavaScriptEngines = true;
 			AllowMsieEngine = true;
 			LoadReact = true;
+			LoadJsxTransform = true;
 			JsonSerializerSettings = new JsonSerializerSettings
 			{
 				StringEscapeHandling = StringEscapeHandling.EscapeHtml
@@ -245,6 +246,23 @@ namespace React
 		public IReactSiteConfiguration SetLoadReact(bool loadReact)
 		{
 			LoadReact = loadReact;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets whether or not the JSX transforms should be loaded into the JavaScript engine. This setting is only
+		/// applicable when <see cref="LoadReact"></see> is true.
+		/// </summary>
+		public bool LoadJsxTransform { get; set; }
+
+		/// <summary>
+		/// Sets whether the JSX Transforms should be loaded into the Javscript engine. This setting is only
+		/// applicable when <see cref="LoadReact"></see> is true.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration SetLoadJsxTransform(bool loadJsxTransform)
+		{
+			LoadJsxTransform = loadJsxTransform;
 			return this;
 		}
 	}

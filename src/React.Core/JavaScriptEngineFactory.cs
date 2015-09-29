@@ -100,7 +100,10 @@ namespace React
 			{
 				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 				engine.Execute("React = global.React");
-				engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+				if (_config.LoadJsxTransform)
+				{
+					engine.ExecuteResource("React.Resources.JSXTransformer.js", thisAssembly);
+				}
 			}
 
 			LoadUserScripts(engine);
