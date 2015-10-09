@@ -36,6 +36,7 @@ namespace React.Sample.Mvc4.ViewModels
 	{
 		public IEnumerable<CommentModel> Comments { get; set; }
 		public int CommentsPerPage { get; set; }
+        public int Page { get; set; }
 	}
 }
 
@@ -77,7 +78,8 @@ namespace React.Sample.Mvc4.Controllers
             return View(new IndexViewModel
             {
 	            Comments = _comments.Take(COMMENTS_PER_PAGE),
-				CommentsPerPage = COMMENTS_PER_PAGE
+				CommentsPerPage = COMMENTS_PER_PAGE,
+                Page = 1
             });
         }
 
@@ -86,10 +88,25 @@ namespace React.Sample.Mvc4.Controllers
 		    var comments = _comments.Skip((page - 1) * COMMENTS_PER_PAGE).Take(COMMENTS_PER_PAGE);
 			var hasMore = page * COMMENTS_PER_PAGE < _comments.Count;
 
-		    return Json(new {
-				comments = comments,
-				hasMore = hasMore
-			}, JsonRequestBehavior.AllowGet);
+	        if (ControllerContext.HttpContext.Request.ContentType == "application-json")
+	        {
+	            return Json(new
+	            {
+	                comments = comments,
+	                hasMore = hasMore
+	            }, JsonRequestBehavior.AllowGet);
+	        }
+	        else
+	        {
+	            return View("Index", new IndexViewModel
+	            {
+	                Comments = _comments.Take(COMMENTS_PER_PAGE * page), 
+                    CommentsPerPage = COMMENTS_PER_PAGE,
+                    Page = page
+	            });
+
+	        }
+	        
 	    }
     }
 }
