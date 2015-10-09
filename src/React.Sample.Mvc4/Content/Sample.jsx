@@ -9,12 +9,13 @@
 
 var CommentsBox = React.createClass({
 	propTypes: {
-		initialComments: React.PropTypes.array.isRequired
+		initialComments: React.PropTypes.array.isRequired,
+		page: React.PropTypes.number
 	},
 	getInitialState() {
 		return {
 			comments: this.props.initialComments,
-			page: 1,
+			page: this.props.page,
 			hasMore: true,
 			loadingMore: false
 		};
@@ -29,6 +30,7 @@ var CommentsBox = React.createClass({
 		var url = evt.target.href;
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
+		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.onload = () => {
 			var data = JSON.parse(xhr.responseText);
 			this.setState({
@@ -60,7 +62,7 @@ var CommentsBox = React.createClass({
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
 			return (
-				<a href={'comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked}>
+				<a href={'/comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked}>
 					Load More
 				</a>
 			);
