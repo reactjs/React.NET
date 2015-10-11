@@ -12,10 +12,10 @@ using React;
 namespace System.Web.Optimization.React
 {
 	/// <summary>
-	/// Transforms JSX into regular JavaScript. Should be included before any minification 
+	/// Transforms JavaScript via Babel. Should be included before any minification 
 	/// transformations.
 	/// </summary>
-	public class JsxTransform : IBundleTransform
+	public class BabelTransform : IBundleTransform
 	{
 		/// <summary>
 		/// Transforms the content in the <see cref="T:System.Web.Optimization.BundleResponse" /> object.
@@ -25,7 +25,7 @@ namespace System.Web.Optimization.React
 		public void Process(BundleContext context, BundleResponse response)
 		{
 			var environment = AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-			response.Content = environment.JsxTransformer.TransformJsx(response.Content);
+			response.Content = environment.Babel.Transform(response.Content);
 		}
 	}
 }

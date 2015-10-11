@@ -101,7 +101,7 @@
     <Compile Include="Core\FileSystemExtensionsTest.cs" />
     <Compile Include="Core\JavaScriptEngineFactoryTest.cs" />
     <Compile Include="Core\JavaScriptEngineUtilsTests.cs" />
-    <Compile Include="Core\JsxTransformerTests.cs" />
+    <Compile Include="Core\BabelTransformerTests.cs" />
     <Compile Include="Core\ReactComponentTest.cs" />
     <Compile Include="Mvc\HtmlHelperExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

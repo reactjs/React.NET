@@ -44,7 +44,7 @@ namespace React.Sample.Owin
 				});
 
 			var contentFileSystem = new PhysicalFileSystem("Content");
-			app.UseJsxFiles(new JsxFileOptions() { StaticFileOptions = new StaticFileOptions() { FileSystem = contentFileSystem }});
+			app.UseBabel(new BabelFileOptions() { StaticFileOptions = new StaticFileOptions() { FileSystem = contentFileSystem }});
 			app.UseFileServer(new FileServerOptions() { FileSystem = contentFileSystem });
 
 			app.Use<CommentsMiddleware>();

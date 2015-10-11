@@ -64,7 +64,7 @@ namespace React
 		/// <summary>
 		/// JSX Transformer instance for this environment
 		/// </summary>
-		protected readonly Lazy<IJsxTransformer> _jsxTransformer;
+		protected readonly Lazy<IBabel> _babelTransformer;
 		/// <summary>
 		/// Version number of ReactJS.NET
 		/// </summary>
@@ -105,8 +105,8 @@ namespace React
 			_cache = cache;
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
-			_jsxTransformer = new Lazy<IJsxTransformer>(() => 
-				new JsxTransformer(this, _cache, _fileSystem, _fileCacheHash, _config)
+			_babelTransformer = new Lazy<IBabel>(() => 
+				new Babel(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
 			_engineFromPool = new Lazy<IJsEngine>(() => _engineFactory.GetEngine());
 		}
@@ -125,19 +125,11 @@ namespace React
 		}
 
 		/// <summary>
-		/// Gets the JSX Transformer for this environment.
+		/// Gets the Babel transformer for this environment.
 		/// </summary>
-		public virtual IJsxTransformer JsxTransformer
+		public virtual IBabel Babel
 		{
-			get { return _jsxTransformer.Value; }
-		}
-
-		/// <summary>
-		/// Determines if this JavaScript engine supports the JSX transformer.
-		/// </summary>
-		public virtual bool EngineSupportsJsxTransformer
-		{
-			get { return true; }
+			get { return _babelTransformer.Value; }
 		}
 
 		/// <summary>
@@ -170,7 +162,7 @@ namespace React
 
 			foreach (var file in _config.Scripts)
 			{
-				var contents = JsxTransformer.TransformJsxFile(file);
+				var contents = Babel.TransformFile(file);
 				try
 				{
 					Execute(contents);

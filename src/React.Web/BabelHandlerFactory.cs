@@ -12,9 +12,9 @@ using System.Web;
 namespace React.Web
 {
 	/// <summary>
-	/// Handles creation and execution of <see cref="IJsxHandler"/> instances.
+	/// Handles creation and execution of <see cref="IBabelHandler"/> instances.
 	/// </summary>
-	public class JsxHandlerFactory : IHttpHandler
+	public class BabelHandlerFactory : IHttpHandler
 	{
 		/// <summary>
 		/// Processes this request
@@ -22,7 +22,7 @@ namespace React.Web
 		/// <param name="context">The request context</param>
 		public void ProcessRequest(HttpContext context)
 		{
-			var handler = React.AssemblyRegistration.Container.Resolve<IJsxHandler>();
+			var handler = React.AssemblyRegistration.Container.Resolve<IBabelHandler>();
 			handler.Execute();
 		}
 

@@ -14,27 +14,27 @@ using React;
 namespace Cassette.React
 {
 	/// <summary>
-	/// Handles processing of script bundles in Cassette. Adds a <see cref="JsxCompiler" />
-	/// for all .jsx files.
+	/// Handles processing of script bundles in Cassette. Adds a <see cref="BabelCompiler" />
+	/// for all .js and .jsx files.
 	/// </summary>
-	public class JsxBundleProcessor : IBundleProcessor<ScriptBundle>
+	public class BabelBundleProcessor : IBundleProcessor<ScriptBundle>
 	{
 		private readonly CassetteSettings _settings;
 		private readonly IReactEnvironment _environment;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JsxBundleProcessor"/> class.
+		/// Initializes a new instance of the <see cref="BabelBundleProcessor"/> class.
 		/// </summary>
 		/// <param name="settings">Cassette settings.</param>
 		/// <param name="environment">The ReactJS.NET environment</param>
-		public JsxBundleProcessor(CassetteSettings settings, IReactEnvironment environment)
+		public BabelBundleProcessor(CassetteSettings settings, IReactEnvironment environment)
 		{
 			_settings = settings;
 			_environment = environment;
 		}
 
 		/// <summary>
-		/// Processes the specified bundle. Adds a <see cref="JsxCompiler"/> for all files.
+		/// Processes the specified bundle. Adds a <see cref="BabelCompiler"/> for all files.
 		/// </summary>
 		/// <param name="bundle">The bundle.</param>
 		public void Process(ScriptBundle bundle)
@@ -42,7 +42,7 @@ namespace Cassette.React
 			foreach (var asset in bundle.Assets)
 			{
 				asset.AddAssetTransformer(
-					new CompileAsset(new JsxCompiler(_environment), _settings.SourceDirectory)
+					new CompileAsset(new BabelCompiler(_environment), _settings.SourceDirectory)
 				);
 			}
 		}

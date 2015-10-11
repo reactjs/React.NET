@@ -18,11 +18,6 @@ namespace React
 	public interface IReactEnvironment
 	{
 		/// <summary>
-		/// Determines if this JavaScript engine supports the JSX transformer.
-		/// </summary>
-		bool EngineSupportsJsxTransformer { get; }
-
-		/// <summary>
 		/// Gets the version number of ReactJS.NET
 		/// </summary>
 		string Version { get; }
@@ -95,6 +90,6 @@ namespace React
 		/// <summary>
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
-		IJsxTransformer JsxTransformer { get; }
+		IBabel Babel { get; }
 	}
 }

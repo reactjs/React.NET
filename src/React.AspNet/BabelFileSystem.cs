@@ -29,32 +29,32 @@ namespace React.AspNet
 #endif
 {
 	/// <summary>
-	/// File system that serves transformed JSX files.
+	/// File system that serves transformed JavaScript files.
 	/// </summary>
-	public class JsxFileSystem : IOwinFileSystem
+	public class BabelFileSystem : IOwinFileSystem
 	{
-		private readonly IJsxTransformer _transformer;
+		private readonly IBabel _transformer;
 		private readonly IOwinFileSystem _physicalFileSystem;
 		private readonly string[] _extensions;
 
 		/// <summary>
-		/// Creates a new instance of the JsxFileSystem.
+		/// Creates a new instance of the BabelFileSystem.
 		/// </summary>
-		/// <param name="transformer">JSX transformer used to compile JSX files</param>
+		/// <param name="transformer">Babel transformer used to compile files</param>
 		/// <param name="root">The root directory</param>
-		/// <param name="extensions">Extensions of files that will be treated as JSX files</param>
-		public JsxFileSystem(IJsxTransformer transformer, string root, IEnumerable<string> extensions)
+		/// <param name="extensions">Extensions of files that will be treated as JavaScript files</param>
+		public BabelFileSystem(IBabel transformer, string root, IEnumerable<string> extensions)
 			: this(transformer, new PhysicalFileSystem(root), extensions)
 		{            
 		}
 
 		/// <summary>
-		/// Creates a new instance of the JsxFileSystem.
+		/// Creates a new instance of the BabelFileSystem.
 		/// </summary>
-		/// <param name="transformer">JSX transformer used to compile JSX files</param>
+		/// <param name="transformer">Babel transformer used to compile files</param>
 		/// <param name="fileSystem">File system used to look up files</param>
-		/// <param name="extensions">Extensions of files that will be treated as JSX files</param>
-		public JsxFileSystem(IJsxTransformer transformer, IOwinFileSystem fileSystem, IEnumerable<string> extensions)
+		/// <param name="extensions">Extensions of files that will be treated as JavaScript files</param>
+		public BabelFileSystem(IBabel transformer, IOwinFileSystem fileSystem, IEnumerable<string> extensions)
 		{
 			_transformer = transformer;
 			_physicalFileSystem = fileSystem;
@@ -68,12 +68,12 @@ namespace React.AspNet
 
 #if OWIN
 		/// <summary>
-		/// Locate a JSX file at the given path. 
+		/// Locate a JavaScript file at the given path. 
 		/// </summary>
 		/// <param name="subpath">The path that identifies the file</param>
 		/// <param name="fileInfo">The discovered file if any</param>
 		/// <returns>
-		/// True if a JSX file was located at the given path
+		/// True if a JavaScript file was located at the given path
 		/// </returns>
 		public bool TryGetFileInfo(string subpath, out IFileInfo fileInfo)
 		{
@@ -89,7 +89,7 @@ namespace React.AspNet
 			if (internalFileInfo.IsDirectory)
 				return false;
 
-			fileInfo = new JsxFileInfo(_transformer, internalFileInfo);
+			fileInfo = new BabelFileInfo(_transformer, internalFileInfo);
 			return true;
 		}
 
@@ -108,14 +108,14 @@ namespace React.AspNet
 #else
 
 		/// <summary>
-		/// Locate a JSX file at the given path. 
+		/// Locate a file at the given path. 
 		/// </summary>
 		/// <param name="subpath">The path that identifies the file</param>
 		/// <returns>The discovered file if any</returns>
 		public IFileInfo GetFileInfo(string subpath)
 		{
 			var internalFileInfo = _physicalFileSystem.GetFileInfo(subpath);
-			return new JsxFileInfo(_transformer, internalFileInfo);
+			return new BabelFileInfo(_transformer, internalFileInfo);
 		}
 
 		/// <summary>
@@ -143,19 +143,19 @@ namespace React.AspNet
 		}
 #endif
 
-        	private class JsxFileInfo : IFileInfo
+        	private class BabelFileInfo : IFileInfo
 		{
-			private readonly IJsxTransformer _jsxTransformer;
+			private readonly IBabel _babel;
 			private readonly IFileInfo _fileInfo;
 			private readonly Lazy<byte[]> _content;
 
-			public JsxFileInfo(IJsxTransformer jsxTransformer, IFileInfo fileInfo)
+			public BabelFileInfo(IBabel babel, IFileInfo fileInfo)
 			{
-				_jsxTransformer = jsxTransformer;
+				_babel = babel;
 				_fileInfo = fileInfo;
 
 				_content = new Lazy<byte[]>(
-					() => Encoding.UTF8.GetBytes(_jsxTransformer.TransformJsxFile(fileInfo.PhysicalPath))
+					() => Encoding.UTF8.GetBytes(_babel.TransformFile(fileInfo.PhysicalPath))
 				);
 			}
 

@@ -73,11 +73,11 @@
     <Compile Include="AspNetFileSystem.cs" />
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="Exceptions\ReactAspNetException.cs" />
-    <Compile Include="IJsxHandler.cs" />
+    <Compile Include="IBabelHandler.cs" />
     <Compile Include="TinyIoCAspNetExtensions.cs" />
     <Compile Include="WebInitializer.cs" />
-    <Compile Include="JsxHandler.cs" />
-    <Compile Include="JsxHandlerFactory.cs" />
+    <Compile Include="BabelHandler.cs" />
+    <Compile Include="BabelHandlerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

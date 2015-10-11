@@ -31,7 +31,7 @@ function Get-MSBuildProject {
 $project = Get-Project
 $buildProject = Get-MSBuildProject
 
-$existingImports = $buildProject.Xml.Targets | where {$_.Name -eq "TransformJsx"}
+$existingImports = $buildProject.Xml.Targets | where {$_.Name -eq "TransformBabel"}
 foreach ($import in $existingImports) {
 	$buildProject.Xml.RemoveChild($import)
 }

@@ -37,7 +37,7 @@ namespace React.Web
 
 			// Unique per request
 			container.Register<IFileSystem, AspNetFileSystem>().AsPerRequestSingleton();
-			container.Register<IJsxHandler, JsxHandler>().AsPerRequestSingleton();
+			container.Register<IBabelHandler, BabelHandler>().AsPerRequestSingleton();
 
 			// Mono for Mac OS does not properly handle caching
 			// TODO: Remove this once https://bugzilla.xamarin.com/show_bug.cgi?id=19071 is fixed

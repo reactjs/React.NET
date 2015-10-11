@@ -15,19 +15,18 @@ using React.Exceptions;
 namespace React.Tests.Core
 {
 	[TestFixture]
-	public class JsxTransformerTests
+	public class BabelTransformerTests
 	{
 		private Mock<IReactEnvironment> _environment;
 		private Mock<ICache> _cache;
 		private Mock<IFileSystem> _fileSystem;
 		private Mock<IFileCacheHash> _fileCacheHash;
-		private JsxTransformer _jsxTransformer;
+		private Babel _babel;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_environment = new Mock<IReactEnvironment>();
-			_environment.Setup(x => x.EngineSupportsJsxTransformer).Returns(true);
 
 			_cache = new Mock<ICache>();
 			_fileSystem = new Mock<IFileSystem>();
@@ -35,7 +34,7 @@ namespace React.Tests.Core
 
 			_fileCacheHash = new Mock<IFileCacheHash>();
 
-			_jsxTransformer = new JsxTransformer(
+			_babel = new Babel(
 				_environment.Object,
 				_cache.Object,
 				_fileSystem.Object,
@@ -48,7 +47,7 @@ namespace React.Tests.Core
 		public void ShouldTransformJsx()
 		{
 			const string input = "<div>Hello World</div>";
-			_jsxTransformer.TransformJsx(input);
+			_babel.Transform(input);
 
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
@@ -69,7 +68,7 @@ namespace React.Tests.Core
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "<div>Hello World</div>";
-			Assert.Throws<JsxException>(() => _jsxTransformer.TransformJsx(input));
+			Assert.Throws<BabelException>(() => _babel.Transform(input));
 		}
 
 		[Test]
@@ -80,7 +79,7 @@ namespace React.Tests.Core
 				Code = "/* cached */"
 			});
 
-			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			var result = _babel.TransformFile("foo.jsx");
 			Assert.AreEqual("/* cached */", result);
 		}
 
@@ -92,7 +91,7 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached */");
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
-			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			var result = _babel.TransformFile("foo.jsx");
 			Assert.AreEqual("/* filesystem cached */", result);
 		}
 
@@ -111,7 +110,7 @@ namespace React.Tests.Core
 				"foo.jsx" // File name
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
-			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			var result = _babel.TransformFile("foo.jsx");
 			Assert.AreEqual("React.DOM.div('Hello World')", result);
 		}
 
@@ -128,7 +127,7 @@ namespace React.Tests.Core
 				"foo.jsx" // File name
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
-			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
+			var result = _babel.TransformFile("foo.jsx");
 			Assert.AreEqual("React.DOM.div('Hello World')", result);
 		}
 
@@ -148,7 +147,7 @@ namespace React.Tests.Core
 				(string filename, string contents) => result = contents
 			);
 
-			var resultFilename = _jsxTransformer.TransformAndSaveJsxFile("foo.jsx");
+			var resultFilename = _babel.TransformAndSaveFile("foo.jsx");
 			Assert.AreEqual("foo.generated.js", resultFilename);
 			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
 		}

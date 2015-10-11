@@ -2,7 +2,7 @@
 bundles containing your JSX files:
 
 // In BundleConfig.cs
-bundles.Add(new JsxBundle("~/bundles/main").Include(
+bundles.Add(new BabelBundle("~/bundles/main").Include(
     // Add your JSX files here
     "~/Content/HelloWorld.react.jsx",
     "~/Content/AnythingElse.react.jsx",

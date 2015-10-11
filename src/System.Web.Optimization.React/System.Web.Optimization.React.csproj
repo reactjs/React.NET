@@ -75,8 +75,8 @@
     <Compile Include="..\SharedAssemblyVersionInfo.cs">
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="JsxBundle.cs" />
-    <Compile Include="JsxTransform.cs" />
+    <Compile Include="BabelBundle.cs" />
+    <Compile Include="BabelTransform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

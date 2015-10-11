@@ -10,18 +10,18 @@
 namespace System.Web.Optimization.React
 {
 	/// <summary>
-	/// Represents a bundle that compiles JSX to JavaScript before minifying.
+	/// Represents a bundle that compiles JavaScript via Babel before minifying.
 	/// </summary>
-	public class JsxBundle : Bundle
+	public class BabelBundle : Bundle
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JsxBundle"/> class.
+		/// Initializes a new instance of the <see cref="BabelBundle"/> class.
 		/// </summary>
 		/// <param name="virtualPath">
 		/// The virtual path used to reference the <see cref="T:System.Web.Optimization.Bundle" />
 		/// from within a view or Web page.
 		/// </param>
-		public JsxBundle(string virtualPath) : base(virtualPath, GetTransforms())
+		public BabelBundle(string virtualPath) : base(virtualPath, GetTransforms())
 		{
 			base.ConcatenationToken = ";" + Environment.NewLine;
 		}
@@ -32,7 +32,7 @@ namespace System.Web.Optimization.React
 		/// <returns>The transformations</returns>
 		private static IBundleTransform[] GetTransforms()
 		{
-			return new IBundleTransform[] { new JsxTransform(), new JsMinify() };
+			return new IBundleTransform[] { new BabelTransform(), new JsMinify() };
 		}
 	}
 }

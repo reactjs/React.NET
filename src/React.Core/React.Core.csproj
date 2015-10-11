@@ -114,14 +114,14 @@
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IFileCacheHash.cs" />
     <Compile Include="IJavaScriptEngineFactory.cs" />
-    <Compile Include="IJsxTransformer.cs" />
+    <Compile Include="IBabel.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="IReactComponent.cs" />
     <Compile Include="IReactEnvironment.cs" />
     <Compile Include="IReactSiteConfiguration.cs" />
-    <Compile Include="Exceptions\JsxException.cs" />
+    <Compile Include="Exceptions\BabelException.cs" />
     <Compile Include="JavaScriptEngineFactory.cs" />
-    <Compile Include="JsxTransformer.cs" />
+    <Compile Include="Babel.cs" />
     <Compile Include="NullCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReactComponent.cs" />

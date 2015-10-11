@@ -27,12 +27,12 @@ namespace React.AspNet
 		/// </summary>
 		/// <param name="app">ASP.NET application builder</param>
 		/// <param name="configure">ReactJS.NET configuration</param>
-		/// <param name="fileOptions">Options to use for serving JSX files</param>
+		/// <param name="fileOptions">Options to use for serving files</param>
 		/// <returns>The application builder (for chaining)</returns>
 		public static IApplicationBuilder UseReact(
 			this IApplicationBuilder app,
 			Action<IReactSiteConfiguration> configure,
-			JsxFileOptions fileOptions = null
+			BabelFileOptions fileOptions = null
 		)
 		{
 			EnsureServicesRegistered(app);
@@ -47,7 +47,7 @@ namespace React.AspNet
 			configure(ReactSiteConfiguration.Configuration);
 
 			// Allow serving of .jsx files
-			app.UseMiddleware<JsxFileMiddleware>(fileOptions ?? new JsxFileOptions());
+			app.UseMiddleware<BabelFileMiddleware>(fileOptions ?? new BabelFileOptions());
 
 			return app;
 		}

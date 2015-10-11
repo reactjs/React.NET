@@ -12,9 +12,9 @@ using System.Web;
 namespace React.Web
 {
 	/// <summary>
-	/// ASP.NET handler that transforms JSX into JavaScript.
+	/// ASP.NET handler that transforms JavaScript via Babel
 	/// </summary>
-	public class JsxHandler : IJsxHandler
+	public class BabelHandler : IBabelHandler
 	{
 		private readonly IReactEnvironment _environment;
 		private readonly IFileSystem _fileSystem;
@@ -22,13 +22,13 @@ namespace React.Web
 		private readonly HttpResponseBase _response;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JsxHandler"/> class.
+		/// Initializes a new instance of the <see cref="BabelHandler"/> class.
 		/// </summary>
 		/// <param name="environment">The environment.</param>
 		/// <param name="fileSystem">File system</param>
 		/// <param name="request">HTTP request</param>
 		/// <param name="response">HTTP response</param>
-		public JsxHandler(
+		public BabelHandler(
 			IReactEnvironment environment, 
 			IFileSystem fileSystem, 
 			HttpRequestBase request,
@@ -52,17 +52,17 @@ namespace React.Web
 			}
 			else
 			{
-				RenderJsxFile();
+				RenderFile();
 			}
 		}
 
 		/// <summary>
-		/// Renders the JSX file converted to regular JavaScript.
+		/// Renders the result of the tranformation via Babel.
 		/// </summary>
-		private void RenderJsxFile()
+		private void RenderFile()
 		{
 			var relativePath = _request.Url.LocalPath;
-			var result = _environment.JsxTransformer.TransformJsxFileWithSourceMap(relativePath);
+			var result = _environment.Babel.TransformFileWithSourceMap(relativePath);
 			var sourceMapUri = GetSourceMapUri(relativePath, result.Hash);
 			ConfigureCaching();
 			_response.ContentType = "text/javascript";
@@ -74,12 +74,12 @@ namespace React.Web
 		}
 
 		/// <summary>
-		/// Renders the source map for this JSX file.
+		/// Renders the source map for this file.
 		/// </summary>
 		private void RenderSourceMap()
 		{
 			var relativePath = _request.Url.LocalPath;
-			var result = _environment.JsxTransformer.TransformJsxFileWithSourceMap(relativePath, forceGenerateSourceMap: true);
+			var result = _environment.Babel.TransformFileWithSourceMap(relativePath, forceGenerateSourceMap: true);
 			if (result.SourceMap == null)
 			{
 				_response.StatusCode = 500;

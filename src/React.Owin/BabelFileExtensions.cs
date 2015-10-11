@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,16 +7,21 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-namespace React.Web
+using Owin;
+
+namespace React.Owin
 {
 	/// <summary>
-	/// ASP.NET handler that transforms JSX into JavaScript.
+	/// Extensions for BabelFileMiddleware.
 	/// </summary>
-	public interface IJsxHandler
+	public static class BabelFileExtensions
 	{
 		/// <summary>
-		/// Executes the handler. Outputs JavaScript to the response.
+		/// Enables serving JavaScript files compiled via Babel.
 		/// </summary>
-		void Execute();
+		public static IAppBuilder UseBabel(this IAppBuilder builder, BabelFileOptions options = null)
+		{
+			return builder.Use<BabelFileMiddleware>(options ?? new BabelFileOptions());
+		}
 	}
 }

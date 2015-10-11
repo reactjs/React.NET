@@ -17,7 +17,7 @@ namespace React.Sample.Mvc4
 		// For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new JsxBundle("~/bundles/main").Include(
+			bundles.Add(new BabelBundle("~/bundles/main").Include(
 				// Add your JSX files here
 				"~/Content/Sample.jsx"	
 			));

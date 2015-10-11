@@ -90,7 +90,7 @@ namespace React
 		}
 
 		/// <summary>
-		/// Loads standard React and JSXTransformer scripts into the engine.
+		/// Loads standard React and Babel scripts into the engine.
 		/// </summary>
 		protected virtual void InitialiseEngine(IJsEngine engine)
 		{

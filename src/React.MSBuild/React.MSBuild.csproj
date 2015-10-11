@@ -57,7 +57,7 @@
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="MSBuildHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TransformJsx.cs" />
+    <Compile Include="TransformBabel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\React.Core\React.Core.csproj">

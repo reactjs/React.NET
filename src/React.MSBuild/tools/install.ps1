@@ -30,8 +30,8 @@ function Get-MSBuildProject {
 
 $project = Get-Project
 $buildProject = Get-MSBuildProject
-$target = $buildProject.Xml.AddTarget("TransformJsx")
+$target = $buildProject.Xml.AddTarget("TransformBabel")
 $target.AfterTargets = "Build"
 $task = $target.AddTask("Exec")
-$task.SetParameter("Command", '"$(msbuildtoolspath)\msbuild.exe" $(ProjectDirectory)TransformJsx.proj /p:OutputPath=$(OutputPath) /nr:false')
+$task.SetParameter("Command", '"$(msbuildtoolspath)\msbuild.exe" $(ProjectDirectory)TransformBabel.proj /p:OutputPath=$(OutputPath) /nr:false')
 $project.Save()

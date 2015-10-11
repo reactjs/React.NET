@@ -13,28 +13,28 @@ using System.Runtime.Serialization;
 namespace React.Exceptions
 {
 	/// <summary>
-	/// Thrown when an error occurs with parsing JSX.
+	/// Thrown when an error occurs when transforming a JavaScript file via Babel.
 	/// </summary>
 	[Serializable]
-	public class JsxException : ReactException
+	public class BabelException : ReactException
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JsxException"/> class.
+		/// Initializes a new instance of the <see cref="BabelException"/> class.
 		/// </summary>
 		/// <param name="message">The message that describes the error.</param>
-		public JsxException(string message) : base(message) { }
+		public BabelException(string message) : base(message) { }
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JsxException"/> class.
+		/// Initializes a new instance of the <see cref="BabelException"/> class.
 		/// </summary>
 		/// <param name="message">The error message that explains the reason for the exception.</param>
 		/// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-		public JsxException(string message, Exception innerException)
+		public BabelException(string message, Exception innerException)
 			: base(message, innerException) { }
 
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
-		protected JsxException(SerializationInfo info, StreamingContext context) 
+		protected BabelException(SerializationInfo info, StreamingContext context) 
 			: base(info, context) { }
 	}
 }

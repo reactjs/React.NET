@@ -12,7 +12,7 @@ using System;
 namespace React
 {
 	/// <summary>
-	/// Represents the result of a JSX to JavaScript transformation along with its
+	/// Represents the result of a Babel transformation along with its
 	/// corresponding source map.
 	/// </summary>
 	[Serializable]

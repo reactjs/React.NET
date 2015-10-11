@@ -69,11 +69,11 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\React.AspNet\JsxFileOptions.cs">
-      <Link>JsxFileOptions.cs</Link>
+    <Compile Include="..\React.AspNet\BabelFileOptions.cs">
+      <Link>BabelFileOptions.cs</Link>
     </Compile>
-    <Compile Include="..\React.AspNet\JsxFileSystem.cs">
-      <Link>JsxFileSystem.cs</Link>
+    <Compile Include="..\React.AspNet\BabelFileSystem.cs">
+      <Link>BabelFileSystem.cs</Link>
     </Compile>
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
@@ -83,8 +83,8 @@
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="EntryAssemblyFileSystem.cs" />
-    <Compile Include="JsxFileMiddleware.cs" />
-    <Compile Include="JsxFileExtensions.cs" />
+    <Compile Include="BabelFileMiddleware.cs" />
+    <Compile Include="BabelFileExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

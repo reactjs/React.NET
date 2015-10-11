@@ -1,4 +1,4 @@
-/*
+﻿/*
  *  Copyright (c) 2014-2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,21 +7,16 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using Owin;
-
-namespace React.Owin
+namespace React.Web
 {
 	/// <summary>
-	/// Extensions for JsxFileMiddleware.
+	/// ASP.NET handler that transforms JavaScript via Babel
 	/// </summary>
-	public static class JsxFileExtensions
+	public interface IBabelHandler
 	{
 		/// <summary>
-		/// Enables serving static JSX file, compiled to JavaScript with the given options.
+		/// Executes the handler. Outputs JavaScript to the response.
 		/// </summary>
-		public static IAppBuilder UseJsxFiles(this IAppBuilder builder, JsxFileOptions options = null)
-		{
-			return builder.Use<JsxFileMiddleware>(options ?? new JsxFileOptions());
-		}
+		void Execute();
 	}
 }

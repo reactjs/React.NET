@@ -19,23 +19,23 @@ using Microsoft.Framework.Logging;
 namespace React.AspNet
 {
 	/// <summary>
-	/// Enables serving static JSX files transformed to pure JavaScript. Wraps around StaticFileMiddleware.
+	/// Enables serving static JavaScript files compiled via Babel. Wraps around StaticFileMiddleware.
 	/// </summary>
-	public class JsxFileMiddleware
+	public class BabelFileMiddleware
 	{
 		private readonly RequestDelegate _next;
 		private readonly IHostingEnvironment _hostingEnv;
 		private readonly ILoggerFactory _loggerFactory;
-		private readonly JsxFileOptions _options;
+		private readonly BabelFileOptions _options;
 
 		/// <summary>
-		/// Creates a new instance of the JsxFileMiddleware.
+		/// Creates a new instance of the BabelFileMiddleware.
 		/// </summary>
 		/// <param name="next">The next middleware in the pipeline.</param>
 		/// <param name="options">The configuration options.</param>
 		/// <param name="hostingEnv">The hosting environment.</param>
 		/// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance used to create loggers.</param>
-		public JsxFileMiddleware(RequestDelegate next, JsxFileOptions options, IHostingEnvironment hostingEnv, ILoggerFactory loggerFactory)
+		public BabelFileMiddleware(RequestDelegate next, BabelFileOptions options, IHostingEnvironment hostingEnv, ILoggerFactory loggerFactory)
 		{
 			if (next == null)
 				throw new ArgumentNullException("next");
@@ -45,33 +45,34 @@ namespace React.AspNet
 			_loggerFactory = loggerFactory;
 
 			// Default values
-			_options = options ?? new JsxFileOptions();
+			_options = options ?? new BabelFileOptions();
 		}
 
 		/// <summary>
-		/// Processes a request to determine if it matches a known JSX file, and if so, serves it compiled to JavaScript.
+		/// Processes a request to determine if it matches a known JavaScript file, and if so, transforms
+		/// it via Babel and serves it
 		/// </summary>
 		/// <param name="context">ASP.NET HTTP context</param>
 		public async Task Invoke(HttpContext context)
 		{
 			if (!context.Request.Path.HasValue || !_options.Extensions.Any(context.Request.Path.Value.EndsWith))
 			{
-				// Not a request for a JSX file, so just pass through to the next middleware
+				// Not a request for a JavaScript file, so just pass through to the next middleware
 				await _next(context);
 				return;
 			}
 
 			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.JsxTransformer);
+			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.Babel);
 			await internalStaticMiddleware.Invoke(context);
 		}
 
 		/// <summary>
-		/// Creates the internal <see cref="StaticFileMiddleware"/> used to serve JSX files.
+		/// Creates the internal <see cref="StaticFileMiddleware"/> used to serve files.
 		/// </summary>
-		/// <param name="jsxTransformer"></param>
+		/// <param name="babel"></param>
 		/// <returns></returns>
-		private StaticFileMiddleware CreateFileMiddleware(IJsxTransformer jsxTransformer)
+		private StaticFileMiddleware CreateFileMiddleware(IBabel babel)
 		{
 			return new StaticFileMiddleware(
 				_next,
@@ -83,8 +84,8 @@ namespace React.AspNet
 					OnPrepareResponse = _options.StaticFileOptions.OnPrepareResponse,
 					RequestPath = _options.StaticFileOptions.RequestPath,
 					ServeUnknownFileTypes = _options.StaticFileOptions.ServeUnknownFileTypes,
-					FileProvider = new JsxFileSystem(
-						jsxTransformer, 
+					FileProvider = new BabelFileSystem(
+						babel, 
 						_options.StaticFileOptions.FileProvider ?? _hostingEnv.WebRootFileProvider,
 						_options.Extensions
 					)

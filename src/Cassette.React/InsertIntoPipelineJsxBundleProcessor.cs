@@ -13,7 +13,7 @@ using Cassette.Scripts;
 namespace Cassette.React
 {
 	/// <summary>
-	/// Inserts the <see cref="JsxBundleProcessor" /> into the script bundle pipeline
+	/// Inserts the <see cref="BabelBundleProcessor" /> into the script bundle pipeline
 	/// </summary>
 	public class InsertIntoPipelineJsxBundleProcessor : IBundlePipelineModifier<ScriptBundle>
 	{
@@ -25,7 +25,7 @@ namespace Cassette.React
 		public IBundlePipeline<ScriptBundle> Modify(IBundlePipeline<ScriptBundle> pipeline)
 		{
 			var index = pipeline.IndexOf<ParseJavaScriptReferences>();
-			pipeline.Insert<JsxBundleProcessor>(index + 1);
+			pipeline.Insert<BabelBundleProcessor>(index + 1);
 			return pipeline;
 		}
 	}

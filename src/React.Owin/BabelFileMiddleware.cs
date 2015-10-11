@@ -16,25 +16,25 @@ using Microsoft.Owin.StaticFiles;
 namespace React.Owin
 {
 	/// <summary>
-	/// Enables serving static JSX files transformed to pure JavaScript. Wraps around StaticFileMiddleware.
+	/// Enables serving static JavaScript files compiled via Babel. Wraps around StaticFileMiddleware.
 	/// </summary>
-	public class JsxFileMiddleware
+	public class BabelFileMiddleware
 	{
 		private readonly Func<IDictionary<string, object>, Task> _next;
-		private readonly JsxFileOptions _options;
+		private readonly BabelFileOptions _options;
 
-		static JsxFileMiddleware()
+		static BabelFileMiddleware()
 		{
 			// Assume that request will ask for the "per request" instances only once. 
 			Initializer.Initialize(options => options.AsMultiInstance());
 		}
 
 		/// <summary>
-		/// Creates a new instance of the JsxFileMiddleware.
+		/// Creates a new instance of the BabelFileMiddleware.
 		/// </summary>
 		/// <param name="next">The next middleware in the pipeline.</param>
 		/// <param name="options">The configuration options.</param>
-		public JsxFileMiddleware(Func<IDictionary<string, object>, Task> next, JsxFileOptions options)
+		public BabelFileMiddleware(Func<IDictionary<string, object>, Task> next, BabelFileOptions options)
 		{
 			if (next == null)
 				throw new ArgumentNullException("next");
@@ -42,7 +42,7 @@ namespace React.Owin
 			_next = next;
 
 			// Default values
-			_options = options ?? new JsxFileOptions();
+			_options = options ?? new BabelFileOptions();
 		}
 
 		/// <summary>
@@ -55,7 +55,7 @@ namespace React.Owin
 			// Create all "per request" instances
 			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 
-			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.JsxTransformer);
+			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.Babel);
 			await internalStaticMiddleware.Invoke(environment);
 
 			// Clean up all "per request" instances
@@ -65,11 +65,11 @@ namespace React.Owin
 		}
 
 		/// <summary>
-		/// Creates the internal <see cref="StaticFileMiddleware"/> used to serve JSX files.
+		/// Creates the internal <see cref="StaticFileMiddleware"/> used to serve files.
 		/// </summary>
-		/// <param name="jsxTransformer"></param>
+		/// <param name="babel"></param>
 		/// <returns></returns>
-		private StaticFileMiddleware CreateFileMiddleware(IJsxTransformer jsxTransformer)
+		private StaticFileMiddleware CreateFileMiddleware(IBabel babel)
 		{
 			return new StaticFileMiddleware(
 				_next,
@@ -80,8 +80,8 @@ namespace React.Owin
 					OnPrepareResponse = _options.StaticFileOptions.OnPrepareResponse,
 					RequestPath = _options.StaticFileOptions.RequestPath,
 					ServeUnknownFileTypes = _options.StaticFileOptions.ServeUnknownFileTypes,
-					FileSystem = new JsxFileSystem(
-						jsxTransformer, 
+					FileSystem = new BabelFileSystem(
+						babel, 
 						_options.StaticFileOptions.FileSystem, 
 						_options.Extensions
 					)

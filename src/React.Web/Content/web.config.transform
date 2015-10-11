@@ -10,8 +10,8 @@
 
 	<system.webServer>
 		<handlers>
-			<remove name="ReactJsx" />
-			<add name="ReactJsx" verb="GET" path="*.jsx" type="React.Web.JsxHandlerFactory, React.Web" preCondition="integratedMode" />
+			<remove name="Babel" />
+			<add name="Babel" verb="GET" path="*.jsx" type="React.Web.BabelHandlerFactory, React.Web" preCondition="integratedMode" />
 		</handlers>
 	</system.webServer>
 </configuration>

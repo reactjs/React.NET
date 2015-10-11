@@ -14,30 +14,30 @@ using React;
 namespace Cassette.React
 {
 	/// <summary>
-	/// Handles compilation of JSX in Cassette
+	/// Handles compilation of JavaScript files via Babel in Cassette
 	/// </summary>
-	public class JsxCompiler : ICompiler
+	public class BabelCompiler : ICompiler
 	{
 		private readonly IReactEnvironment _environment;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JsxCompiler"/> class.
+		/// Initializes a new instance of the <see cref="BabelCompiler"/> class.
 		/// </summary>
 		/// <param name="environment">The ReactJS.NET environment</param>
-		public JsxCompiler(IReactEnvironment environment)
+		public BabelCompiler(IReactEnvironment environment)
 		{
 			_environment = environment;
 		}
 
 		/// <summary>
-		/// Compiles the specified JSX file into JavaScript
+		/// Compiles the specified JavaScript file via Babel
 		/// </summary>
 		/// <param name="source">The source.</param>
 		/// <param name="context">The context.</param>
 		/// <returns>JavaScript</returns>
 		public CompileResult Compile(string source, CompileContext context)
 		{
-			var output = _environment.JsxTransformer.TransformJsx(
+			var output = _environment.Babel.Transform(
 				source, 
 				Path.GetFileName(context.SourceFilePath)
 			);

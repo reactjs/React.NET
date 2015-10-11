@@ -15,9 +15,9 @@ using Microsoft.Build.Utilities;
 namespace React.MSBuild
 {
 	/// <summary>
-	/// MSBuild task that handles transforming JSX to JavaScript
+	/// MSBuild task that handles transforming JavaScript via Babel
 	/// </summary>
-	public class TransformJsx : Task
+	public class TransformBabel : Task
 	{
 		/// <summary>
 		/// The ReactJS.NET environment
@@ -25,7 +25,7 @@ namespace React.MSBuild
 		private IReactEnvironment _environment;
 
 		/// <summary>
-		/// Directory to process JSX files in. All subdirectories will be searched.
+		/// Directory to process JavaScript files in. All subdirectories will be searched.
 		/// </summary>
 		[Required]
 		public string SourceDir { get; set; }
@@ -43,10 +43,10 @@ namespace React.MSBuild
 
 			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 
-			Log.LogMessage("Starting TransformJsx");
+			Log.LogMessage("Starting Babel transform");
 			var stopwatch = Stopwatch.StartNew();
 			var result = ExecuteInternal();
-			Log.LogMessage("TransformJsx completed in {0}", stopwatch.Elapsed);
+			Log.LogMessage("Babel transform completed in {0}", stopwatch.Elapsed);
 			return result;
 		}
 
@@ -61,7 +61,7 @@ namespace React.MSBuild
 			{
 				var relativePath = path.Substring(SourceDir.Length + 1);
 				Log.LogMessage(" -> Processing {0}", relativePath);
-				_environment.JsxTransformer.TransformAndSaveJsxFile(path);
+				_environment.Babel.TransformAndSaveFile(path);
 			}
 
 			return true;

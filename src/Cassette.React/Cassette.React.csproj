@@ -61,8 +61,8 @@
     <Compile Include="AssemblyRegistration.cs" />
     <Compile Include="CassetteMSBuildStartup.cs" />
     <Compile Include="InsertIntoPipelineJsxBundleProcessor.cs" />
-    <Compile Include="JsxBundleProcessor.cs" />
-    <Compile Include="JsxCompiler.cs" />
+    <Compile Include="BabelBundleProcessor.cs" />
+    <Compile Include="BabelCompiler.cs" />
     <Compile Include="JsxFileSearchModifier.cs" />
     <Compile Include="MSBuildUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
