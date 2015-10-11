@@ -1,5 +1,5 @@
 {
-    "version": "1.5.5-*",
+    "version": "1.5.6-*",
     "configurations": {
         "Debug": {
             "compilationOptions": {
@@ -15,13 +15,17 @@
         }
     },
     "dependencies": {
+        "JsPool": "0.3.0",
         "Microsoft.Framework.DependencyInjection": "1.0.0-beta7",
         "Microsoft.AspNet.Mvc.Core": "6.0.0-beta7",
         "Microsoft.AspNet.StaticFiles": "1.0.0-beta7",
         "Microsoft.AspNet.FileProviders.Physical": "1.0.0-beta7",
         "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta7",
+        "MsieJavaScriptEngine": "1.5.1",
         "React.Core": "",
-        "JavaScriptEngineSwitcher.Core": "1.2.4.0"
+        "JavaScriptEngineSwitcher.Core": "1.2.4.0",
+        "JavaScriptEngineSwitcher.Msie": "1.2.4",
+        "JavaScriptEngineSwitcher.V8": "1.2.4"
     },
     "frameworks": {
         "dnx451": { }
