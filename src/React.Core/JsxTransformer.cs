@@ -253,6 +253,7 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual string TransformJsx(string input, string filename = "unknown")
 		{
+			EnsureBabelLoaded();
 			try
 			{
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
@@ -281,6 +282,7 @@ namespace React
 			string filename = "unknown"
 		)
 		{
+			EnsureBabelLoaded();
 			try
 			{
 				return _environment.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
@@ -355,6 +357,17 @@ namespace React
 			_fileSystem.WriteAsString(outputPath, result.Code);
 			_fileSystem.WriteAsString(sourceMapPath, result.SourceMap == null ? string.Empty : result.SourceMap.ToJson());
 			return outputPath;
+		}
+
+		/// <summary>
+		/// Ensures that Babel has been loaded into the JavaScript engine.
+		/// </summary>
+		private void EnsureBabelLoaded()
+		{
+			if (!_config.LoadBabel)
+			{
+				throw new BabelNotLoadedException();
+			}
 		}
 	}
 }

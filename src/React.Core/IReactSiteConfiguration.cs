@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -122,6 +123,19 @@ namespace React
 		/// </summary>
 		/// <returns>The configuration, for chaining</returns>
 		IReactSiteConfiguration SetLoadReact(bool loadReact);
+
+		/// <summary>
+		/// Gets or sets whether Babel is loading. Disabling the loading of Babel can improve startup
+		/// performance, but all your JSX files must be transformed beforehand (eg. through Babel,
+		/// Webpack or Browserify).
+		/// </summary>
+		bool LoadBabel { get; set; }
+		/// <summary>
+		/// Sets whether Babel is loading. Disabling the loading of Babel can improve startup
+		/// performance, but all your JSX files must be transformed beforehand (eg. through Babel,
+		/// Webpack or Browserify).
+		/// </summary>
+		IReactSiteConfiguration SetLoadBabel(bool loadBabel);
 
 		/// <summary>
 		/// Gets or sets the Babel configuration to use.

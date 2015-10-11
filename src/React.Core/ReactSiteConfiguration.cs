@@ -36,6 +36,7 @@ namespace React
 			BabelConfig = new BabelConfig();
 			ReuseJavaScriptEngines = true;
 			AllowMsieEngine = true;
+			LoadBabel = true;
 			LoadReact = true;
 			JsonSerializerSettings = new JsonSerializerSettings
 			{
@@ -217,6 +218,24 @@ namespace React
 		public IReactSiteConfiguration SetLoadReact(bool loadReact)
 		{
 			LoadReact = loadReact;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets whether Babel is loading. Disabling the loading of Babel can improve startup
+		/// performance, but all your JSX files must be transformed beforehand (eg. through Babel,
+		/// Webpack or Browserify).
+		/// </summary>
+		public bool LoadBabel { get; set; }
+
+		/// <summary>
+		/// Sets whether Babel is loading. Disabling the loading of Babel can improve startup
+		/// performance, but all your JSX files must be transformed beforehand (eg. through Babel,
+		/// Webpack or Browserify).
+		/// </summary>
+		public IReactSiteConfiguration SetLoadBabel(bool loadBabel)
+		{
+			LoadBabel = loadBabel;
 			return this;
 		}
 

@@ -100,7 +100,9 @@ namespace React
 			{
 				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 				engine.Execute("React = global.React");
-				// TODO: Make this configurable, so we don't load Babel if it's not needed.
+			}
+			if (_config.LoadBabel)
+			{
 				engine.ExecuteResource("React.node_modules.babel_core.browser.js", thisAssembly);
 			}
 
