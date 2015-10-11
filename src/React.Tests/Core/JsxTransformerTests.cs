@@ -71,7 +71,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldUseCacheProvider()
 		{
-			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v2_foo.jsx", null)).Returns(new JavaScriptWithSourceMap
+			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v3_foo.jsx", null)).Returns(new JavaScriptWithSourceMap
 			{
 				Code = "/* cached */"
 			});

@@ -55,7 +55,7 @@ namespace React.Tests.Core
 		public void ValidateHashShouldReturnTrueWhenHashMatches()
 		{
 			var hash = new FileCacheHash();
-			Assert.IsTrue(hash.ValidateHash("// @hash v2-" + SAMPLE_HASH + "\nHello World", SAMPLE_HASH));
+			Assert.IsTrue(hash.ValidateHash("// @hash v3-" + SAMPLE_HASH + "\nHello World", SAMPLE_HASH));
 		}
 	}
 }
