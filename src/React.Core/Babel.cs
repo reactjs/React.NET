@@ -222,23 +222,15 @@ namespace React
 			string hash = null
 		)
 		{
+			var result = TransformWithSourceMap(contents, filename);
 			if (string.IsNullOrEmpty(hash))
 			{
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
+			// Prepend header to generated code
 			var header = GetFileHeader(hash);
-			var result = TransformWithSourceMap(header + contents, filename);
+			result.Code = header + result.Code;
 			result.Hash = hash;
-			if (result.SourceMap != null)
-			{
-				// Insert original source into source map so the browser doesn't have to do a second
-				// request for it. The newlines in the beginning are a hack so the line numbers line
-				// up (as the original file doesn't have the header the transformed file includes).
-				result.SourceMap.Sources = new[] { Path.GetFileName(filename) + ".source" };
-				result.SourceMap.SourcesContent = new[] { new string('\n', LINES_IN_HEADER) + contents };
-				result.SourceMap.File = null;
-			}
-			
 			return result;
 		}
 
