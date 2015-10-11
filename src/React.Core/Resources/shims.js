@@ -23,6 +23,11 @@ MockConsole.prototype = {
 		for (var i = 1; i < arguments.length; i++) {
 			serializedArgs.push(JSON.stringify(arguments[i]));
 		}
+		// Ignore "React.renderToString is deprecated" until there's a nice way to build a standalone
+		// version of ReactDOMServer.
+		if (arguments[1].indexOf('React.renderToString is deprecated') > -1) {
+			return;
+		}
 		this._calls.push({
 			method: methodName,
 			args: serializedArgs

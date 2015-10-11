@@ -39,7 +39,7 @@ var CommentsBox = React.createClass({
 			});
 		}.bind(this);
 		xhr.send();
-		return false;
+		evt.preventDefault();
 	},
 	render: function() {
 		var commentNodes = this.state.comments.map(function (comment) {

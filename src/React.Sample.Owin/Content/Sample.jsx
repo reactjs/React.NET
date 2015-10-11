@@ -38,7 +38,7 @@ CommentsBox = React.createClass({
 			});
 		};
 		xhr.send();
-		return false;
+		evt.preventDefault();
     },
     componentDidMount: function() {
         this.loadMoreClicked({ target: { href: "/comments/page-1" } });

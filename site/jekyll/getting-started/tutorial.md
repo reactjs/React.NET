@@ -66,7 +66,8 @@ Replace the contents of the new view file with the following:
 </head>
 <body>
 	<div id="content"></div>
-	<script src="http://fb.me/react-0.13.1.js"></script>
+	<script src="https://fb.me/react-0.14.0.min.js"></script>
+	<script src="https://fb.me/react-dom-0.14.0.min.js"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 </body>
 </html>
@@ -234,8 +235,9 @@ Markdown is a simple way to format your text inline. For example, surrounding te
 
 First, add the third-party **Showdown** library to your application. This is a JavaScript library which takes Markdown text and converts it to raw HTML. We will add it via NuGet (search for "Showdown" and install it, similar to how you installed ReactJS.NET earlier) and reference the script tag in your view:
 
-```html{2}
-<script src="http://fb.me/react-0.13.1.js"></script>
+```html{3}
+<script src="https://fb.me/react-0.14.0.min.js"></script>
+<script src="https://fb.me/react-dom-0.14.0.min.js"></script>
 <script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
 <script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 ```
@@ -840,7 +842,7 @@ namespace ReactDemo
 
 Now that the bundle has been registered, we need to reference it from the view:
 
-```html{12}
+```html{13}
 @model IEnumerable<ReactDemo.Models.CommentModel>
 @{
     Layout = null;
@@ -851,7 +853,8 @@ Now that the bundle has been registered, we need to reference it from the view:
 </head>
 <body>
 	<div id="content"></div>
-	<script src="http://fb.me/react-0.13.1.js"></script>
+	<script src="https://fb.me/react-0.14.0.min.js"></script>
+	<script src="https://fb.me/react-dom-0.14.0.min.js"></script>
 	@Scripts.Render("~/bundles/main")
 	@Html.ReactInitJavaScript()
 </body>
@@ -920,7 +923,7 @@ var CommentBox = React.createClass({
 
 In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `React.render` call that currently exists in Tutorial.jsx. All the props from the current `React.render` call should be moved here, and the `React.render` call should be deleted.
 
-```html{1,10-16,20}
+```html{1,10-16,21}
 @model IEnumerable<ReactDemo.Models.CommentModel>
 @{
     Layout = null;
@@ -937,7 +940,8 @@ In the view, we will accept the list of comments as the model, and use `Html.Rea
 		submitUrl = Url.Action("AddComment"),
 		pollInterval = 2000,
 	})
-	<script src="http://fb.me/react-0.13.1.js"></script>
+	<script src="https://fb.me/react-0.14.0.min.js"></script>
+	<script src="https://fb.me/react-dom-0.14.0.min.js"></script>
 	<script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 	@Html.ReactInitJavaScript()
