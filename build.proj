@@ -16,6 +16,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
 		<PackageOutputDir>output</PackageOutputDir>
+		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
 		
 		<!-- Only build ASP.NET 5 projects if on MSBuild 14+ (VS2015+) -->
 		<BuildAspNet5>false</BuildAspNet5>
@@ -39,10 +40,15 @@ of patent rights can be found in the PATENTS file in the same directory.
 
 	<Import Project="src/React.tasks.proj" />
 	
-	<Target Name="RestorePackages">
+	<Target Name="RestorePackages" DependsOnTargets="Clean">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
+		/>
+		<!-- NuGet packages for ASP.NET 5 projects -->
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dnu restore --quiet --parallel"
 		/>
 	</Target>
 
@@ -90,14 +96,11 @@ of patent rights can be found in the PATENTS file in the same directory.
 			ASP.NET 5 projects don't delete generated .nupkg files when cleaned or rebuilt, so we need to
 			do it here. See https://github.com/aspnet/XRE/issues/1301 
 		-->
-		<ItemGroup>
-			<OldAspNet5Packages Include="bin/%(PackageAssembliesAspNet5.Identity)/**/*.nupkg" />
-		</ItemGroup>
-		<Delete Files="@(OldAspNet5Packages)" />
+		<DeleteTree Directories="src/artifacts" />
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
-		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607" />
+		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035" />
 	</Target>
 
 	<Target Name="ResetAspNetVersion" AfterTargets="Build">
@@ -143,7 +146,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<ItemGroup>
 			<AspNet5Packages Include="bin/%(PackageAssembliesAspNet5.Identity)/Release/*.nupkg" />
 		</ItemGroup>
-		<Copy SourceFiles="@(AspNet5Packages)" DestinationFolder="output" />
+		<Copy SourceFiles="@(AspNet5Packages)" DestinationFolder="$(PackageOutputDir)" />
 	</Target>
 
 	<Target Name="Push">
