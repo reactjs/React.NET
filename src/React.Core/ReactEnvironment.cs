@@ -305,29 +305,6 @@ namespace React
 		}
 
 		/// <summary>
-		/// Loads a JSX file. Results of the JSX to JavaScript transformation are cached.
-		/// </summary>
-		/// <param name="filename">Name of the file to load</param>
-		/// <returns>File contents</returns>
-		[Obsolete("Use JsxTransformer.TransformJsxFile")]
-		public string LoadJsxFile(string filename)
-		{
-			return JsxTransformer.TransformJsxFile(filename);
-		}
-
-		/// <summary>
-		/// Transforms JSX into regular JavaScript. The result is not cached. Use 
-		/// <see cref="LoadJsxFile"/> if loading from a file since this will cache the result.
-		/// </summary>
-		/// <param name="input">JSX</param>
-		/// <returns>JavaScript</returns>
-		[Obsolete("Use JsxTransformer.TransformJsx")]
-		public string TransformJsx(string input)
-		{
-			return JsxTransformer.TransformJsx(input);
-		}
-
-		/// <summary>
 		/// Attempts to execute the provided JavaScript code using the current engine. If an 
 		/// exception is thrown, retries the execution using a new thread (and hence a new engine)
 		/// with a larger maximum stack size.

@@ -52,9 +52,7 @@ namespace React.Tests.Core
 
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"<div>Hello World</div>",
-				It.IsAny<bool?>(),
-				It.IsAny<bool?>()
+				"<div>Hello World</div>"
 			));
 		}
 
@@ -63,9 +61,7 @@ namespace React.Tests.Core
 		{
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"<div>Hello World</div>",
-				It.IsAny<bool?>(),
-				It.IsAny<bool?>()
+				"<div>Hello World</div>"
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "<div>Hello World</div>";
@@ -106,9 +102,7 @@ namespace React.Tests.Core
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
-				It.IsAny<string>(),
-				It.IsAny<bool?>(),
-				It.IsAny<bool?>()
+				It.IsAny<string>()
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -123,9 +117,7 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
-				It.IsAny<string>(),
-				It.IsAny<bool?>(),
-				It.IsAny<bool?>()
+				It.IsAny<string>()
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -138,9 +130,7 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
-				It.IsAny<string>(),
-				It.IsAny<bool?>(),
-				It.IsAny<bool?>()
+				It.IsAny<string>()
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			string result = null;

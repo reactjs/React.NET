@@ -21,7 +21,7 @@ namespace React
 		/// <summary>
 		/// Prefix used for hash line in transformed file. Used for caching.
 		/// </summary>
-		private const string HASH_PREFIX = "// @hash v2-";
+		private const string HASH_PREFIX = "// @hash v3-";
 
 		/// <summary>
 		/// Althorithm for calculating file hashes

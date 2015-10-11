@@ -31,17 +31,6 @@ namespace React.MSBuild
 		public string SourceDir { get; set; }
 
 		/// <summary>
-		/// A value indicating if es6 syntax should be rewritten.
-		/// </summary>
-		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
-		public bool UseHarmony { get; set; }
-
-		/// <summary>
-		/// Gets or sets whether Flow types should be stripped.
-		/// </summary>
-		public bool StripTypes { get; set; }
-
-		/// <summary>
 		/// Executes the task.
 		/// </summary>
 		/// <returns><c>true</c> on success</returns>
@@ -50,9 +39,7 @@ namespace React.MSBuild
 			MSBuildHost.EnsureInitialized();
 			var config = React.AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>();
 			config
-				.SetReuseJavaScriptEngines(false)
-				.SetUseHarmony(UseHarmony)
-				.SetStripTypes(StripTypes);
+				.SetReuseJavaScriptEngines(false);
 
 			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
 

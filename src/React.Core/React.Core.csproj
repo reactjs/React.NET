@@ -129,9 +129,6 @@
     <Compile Include="TinyIoC\TinyIoC.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\JSXTransformer.js" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <Compile Include="SimpleFileSystem.cs" />
     <None Include="React.Core.nutrans" />
@@ -142,7 +139,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\shims.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="node_modules\babel-core\browser.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

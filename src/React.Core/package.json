@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "name": "React.Core",
+  "private": true,
+  "devDependencies": {
+    "babel-core": "^5.8.25"
+  }
+}

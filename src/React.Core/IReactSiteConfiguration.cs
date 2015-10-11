@@ -55,17 +55,6 @@ namespace React
 		IEnumerable<string> ScriptsWithoutTransform { get; } 
 
 		/// <summary>
-		/// A value indicating if es6 syntax should be rewritten.
-		/// </summary>
-		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
-		bool UseHarmony { get; set; }
-
-		/// <summary>
-		/// Specifies whether ES6 (harmony) syntax should be transformed
-		/// </summary>
-		IReactSiteConfiguration SetUseHarmony(bool useHarmony);
-
-		/// <summary>
 		/// Gets or sets whether JavaScript engines should be reused across requests.
 		/// </summary>
 		/// 
@@ -89,15 +78,6 @@ namespace React
 		/// </remarks>
 		/// <param name="settings">The settings.</param>
 		IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings);
-
-		/// <summary>
-		/// Gets or sets whether Flow types should be stripped out.
-		/// </summary>
-		bool StripTypes { get; set; }
-		/// <summary>
-		/// Sets whether Flow types should be stripped out.
-		/// </summary>
-		IReactSiteConfiguration SetStripTypes(bool stripTypes);
 
 		/// <summary>
 		/// Gets or sets the number of engines to initially start when a pool is created. 

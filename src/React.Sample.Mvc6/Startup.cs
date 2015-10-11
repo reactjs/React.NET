@@ -64,9 +64,7 @@ namespace React.Sample.Mvc6
 			app.UseReact(config =>
 			{
 				config
-					.SetUseHarmony(true)
 					.SetReuseJavaScriptEngines(true)
-					.SetStripTypes(true)
 					.AddScript("~/js/Sample.jsx");
 			});
 

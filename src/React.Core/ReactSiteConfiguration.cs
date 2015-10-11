@@ -33,7 +33,6 @@ namespace React
 		/// </summary>
 		public ReactSiteConfiguration()
 		{
-			UseHarmony = true;
 			ReuseJavaScriptEngines = true;
 			AllowMsieEngine = true;
 			LoadReact = true;
@@ -127,21 +126,6 @@ namespace React
 		}
 
 		/// <summary>
-		/// A value indicating if es6 syntax should be rewritten.
-		/// </summary>
-		/// <returns><c>true</c> if support for es6 syntax should be rewritten.</returns>
-		public bool UseHarmony { get; set; }
-		
-		/// <summary>
-		/// Specifies whether ES6 (harmony) syntax should be transformed
-		/// </summary>
-		public IReactSiteConfiguration SetUseHarmony(bool useHarmony)
-		{
-			UseHarmony = useHarmony;
-			return this;
-		}
-
-		/// <summary>
 		/// Gets or sets the configuration for JSON serializer.
 		/// </summary>
 		public JsonSerializerSettings JsonSerializerSettings { get; set; }
@@ -170,19 +154,6 @@ namespace React
 		public IReactSiteConfiguration SetReuseJavaScriptEngines(bool value)
 		{
 			ReuseJavaScriptEngines = value;
-			return this;
-		}
-
-		/// <summary>
-		/// Gets or sets whether Flow types should be stripped.
-		/// </summary>
-		public bool StripTypes { get; set; }
-		/// <summary>
-		/// Sets whether Flow types should be stripped
-		/// </summary>
-		public IReactSiteConfiguration SetStripTypes(bool stripTypes)
-		{
-			StripTypes = stripTypes;
 			return this;
 		}
 

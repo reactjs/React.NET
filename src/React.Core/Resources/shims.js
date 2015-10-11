@@ -64,52 +64,24 @@ function ReactNET_initReact() {
 	return false;
 }
 
-function ReactNET_transform(input, harmony, stripTypes) {
+function ReactNET_transform(input) {
 	try {
-		return global.JSXTransformer.transform(input, {
-			harmony: !!harmony,
-			stripTypes: !!stripTypes,
-			target: 'es3'
-		}).code;
+		return global.babel.transform(input).code;
 	} catch (ex) {
-		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
+		// Parsing stack is extremely long and not very useful, so just rethrow the message.
+		throw new Error(ex.message);
 	}
 }
 
-function ReactNET_transform_sourcemap(input, harmony, stripTypes) {
+function ReactNET_transform_sourcemap(input) {
 	try {
-		var result;
-		try {
-			// First try to compile and generate a source map
-			result = global.JSXTransformer.transform(input, {
-				harmony: !!harmony,
-				stripTypes: !!stripTypes,
-				target: 'es3',
-				sourceMap: true
-			});
-		} catch (ex) {
-			// It's possible an exception was thrown during the source map generation, and the
-			// transform might actually work without a source map.
-			result = global.JSXTransformer.transform(input, {
-				harmony: !!harmony,
-				stripTypes: !!stripTypes,
-				target: 'es3',
-				sourceMap: false
-			});
-		}
-
-		if (!result.sourceMap) {
-			return JSON.stringify({
-				code: result.code,
-				sourceMap: null
-			});
-		}
-
+		var result = global.babel.transform(input);
 		return JSON.stringify({
 			code: result.code,
-			sourceMap: result.sourceMap
+			sourceMap: result.map
 		});
 	} catch (ex) {
-		throw new Error(ex.message + " (at line " + ex.lineNumber + " column " + ex.column + ")");
+		// Parsing stack is extremely long and not very useful, so just rethrow the message.
+		throw new Error(ex.message);
 	}
 }
