@@ -95,6 +95,7 @@
     <Compile Include="..\SharedAssemblyVersionInfo.cs">
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Core\BabelConfigTests.cs" />
     <Compile Include="Core\FileCacheHashTests.cs" />
     <Compile Include="Core\FileSystemBaseTests.cs" />
     <Compile Include="Core\FileSystemExtensionsTest.cs" />

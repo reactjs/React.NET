@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.IO;
 using System.Linq;
 using React;
 
@@ -36,7 +37,10 @@ namespace Cassette.React
 		/// <returns>JavaScript</returns>
 		public CompileResult Compile(string source, CompileContext context)
 		{
-			var output = _environment.JsxTransformer.TransformJsx(source);
+			var output = _environment.JsxTransformer.TransformJsx(
+				source, 
+				Path.GetFileName(context.SourceFilePath)
+			);
 			return new CompileResult(output, Enumerable.Empty<string>());
 		}
 	}

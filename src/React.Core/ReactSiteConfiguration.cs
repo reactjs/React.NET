@@ -33,6 +33,7 @@ namespace React
 		/// </summary>
 		public ReactSiteConfiguration()
 		{
+			BabelConfig = new BabelConfig();
 			ReuseJavaScriptEngines = true;
 			AllowMsieEngine = true;
 			LoadReact = true;
@@ -216,6 +217,21 @@ namespace React
 		public IReactSiteConfiguration SetLoadReact(bool loadReact)
 		{
 			LoadReact = loadReact;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets the Babel configuration to use.
+		/// </summary>
+		public BabelConfig BabelConfig { get; set; }
+
+		/// <summary>
+		/// Sets the Babel configuration to use.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration SetBabelConfig(BabelConfig value)
+		{
+			BabelConfig = value;
 			return this;
 		}
 	}

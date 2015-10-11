@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using React.Exceptions;
@@ -56,6 +57,10 @@ namespace React
 		/// Site-wide configuration
 		/// </summary>
 		protected readonly IReactSiteConfiguration _config;
+		/// <summary>
+		/// The serialized Babel configuration
+		/// </summary>
+		protected readonly string _babelConfig; 
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JsxTransformer"/> class.
@@ -72,6 +77,7 @@ namespace React
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
 			_config = siteConfig;
+			_babelConfig = siteConfig.BabelConfig.Serialize();
 		}
 
 		/// <summary>
@@ -223,7 +229,7 @@ namespace React
 				hash = _fileCacheHash.CalculateHash(contents);
 			}
 			var header = GetFileHeader(hash);
-			var result = TransformJsxWithSourceMap(header + contents);
+			var result = TransformJsxWithSourceMap(header + contents, filename);
 			result.Hash = hash;
 			if (result.SourceMap != null)
 			{
@@ -243,14 +249,17 @@ namespace React
 		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
+		/// <param name="filename">Name of the file being transformed</param>
 		/// <returns>JavaScript</returns>
-		public virtual string TransformJsx(string input)
+		public virtual string TransformJsx(string input, string filename = "unknown")
 		{
 			try
 			{
 				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
 					"ReactNET_transform",
-					input
+					input,
+					_babelConfig,
+					filename
 				);
 				return output;
 			}
@@ -265,16 +274,20 @@ namespace React
 		/// source to the original version. The result is not cached.
 		/// </summary>
 		/// <param name="input">JSX</param>
+		/// <param name="filename">Name of the file being transformed</param>
 		/// <returns>JavaScript and source map</returns>
 		public virtual JavaScriptWithSourceMap TransformJsxWithSourceMap(
-			string input
+			string input,
+			string filename = "unknown"
 		)
 		{
 			try
 			{
 				return _environment.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 					"ReactNET_transform_sourcemap",
-					input
+					input,
+					_babelConfig,
+					filename
 				);
 			}
 			catch (Exception ex)

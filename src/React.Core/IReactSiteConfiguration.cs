@@ -122,5 +122,15 @@ namespace React
 		/// </summary>
 		/// <returns>The configuration, for chaining</returns>
 		IReactSiteConfiguration SetLoadReact(bool loadReact);
+
+		/// <summary>
+		/// Gets or sets the Babel configuration to use.
+		/// </summary>
+		BabelConfig BabelConfig { get; set; }
+		/// <summary>
+		/// Sets the Babel configuration to use.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration SetBabelConfig(BabelConfig value);
 	}
 }

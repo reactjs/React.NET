@@ -89,6 +89,7 @@
       <Link>Properties\SharedAssemblyVersionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyRegistration.cs" />
+    <Compile Include="BabelConfig.cs" />
     <Compile Include="Exceptions\ReactNotInitialisedException.cs" />
     <Compile Include="FileSystemExtensions.cs" />
     <Compile Include="JavaScriptEngineUtils.cs" />

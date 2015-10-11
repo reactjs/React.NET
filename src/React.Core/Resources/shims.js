@@ -64,18 +64,23 @@ function ReactNET_initReact() {
 	return false;
 }
 
-function ReactNET_transform(input) {
+function ReactNET_transform(input, babelConfig, filename) {
+	babelConfig = JSON.parse(babelConfig);
+	babelConfig.filename = filename;
 	try {
-		return global.babel.transform(input).code;
+		return global.babel.transform(input, babelConfig).code;
 	} catch (ex) {
 		// Parsing stack is extremely long and not very useful, so just rethrow the message.
 		throw new Error(ex.message);
 	}
 }
 
-function ReactNET_transform_sourcemap(input) {
+function ReactNET_transform_sourcemap(input, babelConfig, filename) {
+	babelConfig = JSON.parse(babelConfig);
+	babelConfig.filename = filename;
+	babelConfig.sourceMap = true;
 	try {
-		var result = global.babel.transform(input);
+		var result = global.babel.transform(input, babelConfig);
 		return JSON.stringify({
 			code: result.code,
 			sourceMap: result.map

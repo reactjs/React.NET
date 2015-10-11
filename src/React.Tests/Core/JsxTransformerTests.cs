@@ -52,7 +52,9 @@ namespace React.Tests.Core
 
 			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"<div>Hello World</div>"
+				"<div>Hello World</div>",
+				It.IsAny<string>(),
+				"unknown" // file name
 			));
 		}
 
@@ -61,7 +63,9 @@ namespace React.Tests.Core
 		{
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
 				"ReactNET_transform",
-				"<div>Hello World</div>"
+				"<div>Hello World</div>",
+				It.IsAny<string>(),
+				"unknown" // file name
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "<div>Hello World</div>";
@@ -102,7 +106,9 @@ namespace React.Tests.Core
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
-				It.IsAny<string>()
+				It.IsAny<string>(),
+				It.IsAny<string>(), // Babel config
+				"foo.jsx" // File name
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -117,7 +123,9 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
-				It.IsAny<string>()
+				It.IsAny<string>(),
+				It.IsAny<string>(), // Babel config
+				"foo.jsx" // File name
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _jsxTransformer.TransformJsxFile("foo.jsx");
@@ -130,7 +138,9 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
-				It.IsAny<string>()
+				It.IsAny<string>(),
+				It.IsAny<string>(), // Babel config
+				"foo.jsx" // File name
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			string result = null;
@@ -145,7 +155,7 @@ namespace React.Tests.Core
 
 		private void SetUpEmptyCache()
 		{
-			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v2_foo.jsx", null)).Returns((JavaScriptWithSourceMap)null);
+			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v3_foo.jsx", null)).Returns((JavaScriptWithSourceMap)null);
 		}
 	}
 }

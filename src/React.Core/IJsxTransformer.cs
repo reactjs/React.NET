@@ -41,16 +41,18 @@ namespace React
 		/// <see cref="TransformJsxFile"/> if loading from a file since this will cache the result.
 		/// </summary>
 		/// <param name="input">JSX</param>
+		/// <param name="filename">Name of the file being transformed</param>
 		/// <returns>JavaScript</returns>
-		string TransformJsx(string input);
-		
+		string TransformJsx(string input, string filename = "unknown");
+
 		/// <summary>
 		/// Transforms JSX to regular JavaScript and also returns a source map to map the compiled
 		/// source to the original version. The result is not cached.
 		/// </summary>
 		/// <param name="input">JSX</param>
+		/// <param name="filename">Name of the file being transformed</param>
 		/// <returns>JavaScript and source map</returns>
-		JavaScriptWithSourceMap TransformJsxWithSourceMap(string input);
+		JavaScriptWithSourceMap TransformJsxWithSourceMap(string input, string filename = "unknown");
 
 		/// <summary>
 		/// Transforms a JSX file to JavaScript, and saves the result into a ".generated.js" file 
