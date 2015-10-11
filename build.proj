@@ -47,6 +47,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		/>
 		<!-- NuGet packages for ASP.NET 5 projects -->
 		<Exec
+			Condition="$(BuildAspNet5) == 'true'"
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="dnu restore --quiet --parallel"
 		/>
