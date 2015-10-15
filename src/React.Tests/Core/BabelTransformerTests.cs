@@ -111,7 +111,7 @@ namespace React.Tests.Core
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _babel.TransformFile("foo.jsx");
-			Assert.AreEqual("React.DOM.div('Hello World')", result);
+			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 
 		[Test]
@@ -128,7 +128,7 @@ namespace React.Tests.Core
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _babel.TransformFile("foo.jsx");
-			Assert.AreEqual("React.DOM.div('Hello World')", result);
+			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 
 		[Test]
