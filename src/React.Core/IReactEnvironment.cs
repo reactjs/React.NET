@@ -51,8 +51,11 @@ namespace React
 		T Execute<T>(string function, params object[] args);
 
 		/// <summary>
-		/// Attempts to execute the provided JavaScript code using the current engine. If an 
-		/// exception is thrown, retries the execution using a new thread (and hence a new engine)
+		/// Attempts to execute the provided JavaScript code using a non-pooled JavaScript engine (ie.
+		/// creates a new JS engine per-thread). This is because Babel uses a LOT of memory, so we 
+		/// should completely dispose any engines that have loaded Babel in order to conserve memory.
+		/// 
+		/// If an exception is thrown, retries the execution using a new thread (and hence a new engine)
 		/// with a larger maximum stack size.
 		/// This is required because JSXTransformer uses a huge stack which ends up being larger 
 		/// than what ASP.NET allows by default (256 KB).
@@ -61,7 +64,7 @@ namespace React
 		/// <param name="function">JavaScript function to execute</param>
 		/// <param name="args">Arguments to pass to function</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args);
+		T ExecuteWithBabel<T>(string function, params object[] args);
 
 		/// <summary>
 		/// Determines if the specified variable exists in the JavaScript engine
@@ -91,10 +94,5 @@ namespace React
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
 		IBabel Babel { get; }
-
-		/// <summary>
-		/// Ensures that Babel has been loaded into the JavaScript engine.
-		/// </summary>
-		void EnsureBabelLoaded();
 	}
 }

@@ -297,8 +297,11 @@ namespace React
 		}
 
 		/// <summary>
-		/// Attempts to execute the provided JavaScript code using the current engine. If an 
-		/// exception is thrown, retries the execution using a new thread (and hence a new engine)
+		/// Attempts to execute the provided JavaScript code using a non-pooled JavaScript engine (ie.
+		/// creates a new JS engine per-thread). This is because Babel uses a LOT of memory, so we 
+		/// should completely dispose any engines that have loaded Babel in order to conserve memory.
+		/// 
+		/// If an exception is thrown, retries the execution using a new thread (and hence a new engine)
 		/// with a larger maximum stack size.
 		/// This is required because JSXTransformer uses a huge stack which ends up being larger 
 		/// than what ASP.NET allows by default (256 KB).
@@ -307,18 +310,14 @@ namespace React
 		/// <param name="function">JavaScript function to execute</param>
 		/// <param name="args">Arguments to pass to function</param>
 		/// <returns>Result returned from JavaScript code</returns>
-		public virtual T ExecuteWithLargerStackIfRequired<T>(string function, params object[] args)
+		public virtual T ExecuteWithBabel<T>(string function, params object[] args)
 		{
-			// This hack is not required when pooling JavaScript engines, since pooled MSIE
-			// engines already execute on their own thread with a larger stack.
-			if (_config.ReuseJavaScriptEngines)
-			{
-				return Execute<T>(function, args);
-			}
+			var engine = _engineFactory.GetEngineForCurrentThread();
+			EnsureBabelLoaded(engine);
 
 			try
 			{
-				return Execute<T>(function, args);
+				return engine.CallFunctionReturningJson<T>(function, args);
 			}
 			catch (Exception)
 			{
@@ -330,10 +329,11 @@ namespace React
 				var thread = new Thread(() =>
 				{
 					// New engine will be created here (as this is a new thread)
-					var engine = _engineFactory.GetEngineForCurrentThread();
+					var threadEngine = _engineFactory.GetEngineForCurrentThread();
+					EnsureBabelLoaded(threadEngine);
 					try
 					{
-						result = engine.CallFunctionReturningJson<T>(function, args);
+						result = threadEngine.CallFunctionReturningJson<T>(function, args);
 					}
 					catch (Exception threadEx)
 					{
@@ -417,7 +417,7 @@ namespace React
 		/// <summary>
 		/// Ensures that Babel has been loaded into the JavaScript engine.
 		/// </summary>
-		public void EnsureBabelLoaded()
+		private void EnsureBabelLoaded(IJsEngine engine)
 		{
 			// If Babel is disabled in the config, don't even try loading it
 			if (!_config.LoadBabel)
@@ -425,10 +425,10 @@ namespace React
 				throw new BabelNotLoadedException();
 			}
 
-			var babelLoaded = Engine.Evaluate<bool>("typeof global.Babel !== 'undefined'");
+			var babelLoaded = engine.Evaluate<bool>("typeof global.Babel !== 'undefined'");
 			if (!babelLoaded)
 			{
-				Engine.ExecuteResource("React.node_modules.babel_core.browser.js", typeof(ReactEnvironment).Assembly);
+				engine.ExecuteResource("React.node_modules.babel_core.browser.js", typeof(ReactEnvironment).Assembly);
 			}
 		}
 	}

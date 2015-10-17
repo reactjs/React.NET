@@ -49,7 +49,7 @@ namespace React.Tests.Core
 			const string input = "<div>Hello World</div>";
 			_babel.Transform(input);
 
-			_environment.Verify(x => x.ExecuteWithLargerStackIfRequired<string>(
+			_environment.Verify(x => x.ExecuteWithBabel<string>(
 				"ReactNET_transform",
 				"<div>Hello World</div>",
 				It.IsAny<string>(),
@@ -60,7 +60,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldWrapExceptionsInJsxExeption()
 		{
-			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<string>(
+			_environment.Setup(x => x.ExecuteWithBabel<string>(
 				"ReactNET_transform",
 				"<div>Hello World</div>",
 				It.IsAny<string>(),
@@ -103,7 +103,7 @@ namespace React.Tests.Core
 			_fileSystem.Setup(x => x.ReadAsString("foo.generated.js")).Returns("/* filesystem cached invalid */");
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+			_environment.Setup(x => x.ExecuteWithBabel<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
 				It.IsAny<string>(),
 				It.IsAny<string>(), // Babel config
@@ -120,7 +120,7 @@ namespace React.Tests.Core
 			SetUpEmptyCache();
 			_fileSystem.Setup(x => x.FileExists("foo.generated.js")).Returns(false);
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
-			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+			_environment.Setup(x => x.ExecuteWithBabel<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
 				It.IsAny<string>(),
 				It.IsAny<string>(), // Babel config
@@ -135,7 +135,7 @@ namespace React.Tests.Core
 		public void ShouldSaveTransformationResult()
 		{
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
-			_environment.Setup(x => x.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+			_environment.Setup(x => x.ExecuteWithBabel<JavaScriptWithSourceMap>(
 				"ReactNET_transform_sourcemap",
 				It.IsAny<string>(),
 				It.IsAny<string>(), // Babel config

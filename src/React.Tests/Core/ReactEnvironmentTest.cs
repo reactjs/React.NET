@@ -13,6 +13,7 @@ using System.Linq;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
 using NUnit.Framework;
+using React.Exceptions;
 
 namespace React.Tests.Core
 {
@@ -20,17 +21,17 @@ namespace React.Tests.Core
 	public class ReactEnvironmentTest
 	{
 		[Test]
-		public void ExecuteWithLargerStackIfRequiredWithNoNewThread()
+		public void ExecuteWithBabelWithNoNewThread()
 		{
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 
-			environment.ExecuteWithLargerStackIfRequired<int>("foo");
+			environment.ExecuteWithBabel<int>("foo");
 			mocks.Engine.Verify(x => x.CallFunction<int>("foo"), Times.Exactly(1));
 		}
 
 		[Test]
-		public void ExecuteWithLargerStackIfRequiredWithNewThread()
+		public void ExecuteWithBabelWithNewThread()
 		{
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
@@ -40,7 +41,7 @@ namespace React.Tests.Core
 				.Callback(() => mocks.Engine.Setup(x => x.CallFunction<int>("foo")))
 				.Throws(new Exception("Out of stack space"));
 				
-			environment.ExecuteWithLargerStackIfRequired<int>("foo");
+			environment.ExecuteWithBabel<int>("foo");
 			mocks.EngineFactory.Verify(
 				x => x.GetEngineForCurrentThread(), 
 				Times.Exactly(2),
@@ -54,7 +55,7 @@ namespace React.Tests.Core
 		}
 
 		[Test]
-		public void ExecuteWithLargerStackIfRequiredShouldBubbleExceptions()
+		public void ExecuteWithBabelShouldBubbleExceptions()
 		{
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
@@ -64,7 +65,20 @@ namespace React.Tests.Core
 
 			Assert.Throws<Exception>(() =>
 			{
-				environment.ExecuteWithLargerStackIfRequired<int>("foobar");
+				environment.ExecuteWithBabel<int>("foobar");
+			});
+		}
+
+		[Test]
+		public void ExecuteWithBabelShouldThrowIfBabelDisabled()
+		{
+			var mocks = new Mocks();
+			mocks.Config.Setup(x => x.LoadBabel).Returns(false);
+			var environment = mocks.CreateReactEnvironment();
+
+			Assert.Throws<BabelNotLoadedException>(() =>
+			{
+				environment.ExecuteWithBabel<string>("foobar");
 			});
 		}
 
@@ -112,6 +126,7 @@ namespace React.Tests.Core
 				FileCacheHash = new Mock<IFileCacheHash>();
 
 				EngineFactory.Setup(x => x.GetEngineForCurrentThread()).Returns(Engine.Object);
+				Config.Setup(x => x.LoadBabel).Returns(true);
 			}
 
 			public ReactEnvironment CreateReactEnvironment()

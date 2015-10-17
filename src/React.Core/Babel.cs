@@ -243,10 +243,9 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual string Transform(string input, string filename = "unknown")
 		{
-			_environment.EnsureBabelLoaded();
 			try
 			{
-				var output = _environment.ExecuteWithLargerStackIfRequired<string>(
+				var output = _environment.ExecuteWithBabel<string>(
 					"ReactNET_transform",
 					input,
 					_babelConfig,
@@ -272,10 +271,9 @@ namespace React
 			string filename = "unknown"
 		)
 		{
-			_environment.EnsureBabelLoaded();
 			try
 			{
-				return _environment.ExecuteWithLargerStackIfRequired<JavaScriptWithSourceMap>(
+				return _environment.ExecuteWithBabel<JavaScriptWithSourceMap>(
 					"ReactNET_transform_sourcemap",
 					input,
 					_babelConfig,
