@@ -17,7 +17,7 @@ using Microsoft.Owin.FileSystems;
 using IOwinFileSystem = Microsoft.Owin.FileSystems.IFileSystem;
 #else
 using Microsoft.AspNet.FileProviders;
-using Microsoft.Framework.Caching;
+using Microsoft.Framework.Primitives;
 using IOwinFileSystem = Microsoft.AspNet.FileProviders.IFileProvider;
 using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
 #endif
@@ -129,21 +129,23 @@ namespace React.AspNet
 		}
 
 		/// <summary>
-		/// Creates a change trigger with the specified filter.
+		/// Creates a <see cref="T:Microsoft.Framework.Primitives.IChangeToken"/> for the 
+		/// specified <paramref name="filter"/>.
 		/// </summary>
 		/// <param name="filter">
-		/// Filter string used to determine what files or folders to monitor. Example: **/*.cs, *.*, subFolder/**/*.cshtml.
-		/// </param>
+		/// Filter string used to determine what files or folders to monitor. 
+		/// Example: **/*.cs, *.*, subFolder/**/*.cshtml.</param>
 		/// <returns>
-		/// An <see cref="IExpirationTrigger"/> that is triggered when a file matching <paramref name="filter"/> is added, modified or deleted.
+		/// An <see cref="T:Microsoft.Framework.Primitives.IChangeToken"/> that is notified
+		/// when a file matching <paramref name="filter"/> is added, modified or deleted.
 		/// </returns>
-		IExpirationTrigger IOwinFileSystem.Watch(string filter)
+		public IChangeToken Watch(string filter)
 		{
 			return _physicalFileSystem.Watch(filter);
 		}
 #endif
 
-        	private class BabelFileInfo : IFileInfo
+		private class BabelFileInfo : IFileInfo
 		{
 			private readonly IBabel _babel;
 			private readonly IFileInfo _fileInfo;

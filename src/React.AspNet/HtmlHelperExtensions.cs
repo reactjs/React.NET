@@ -116,14 +116,16 @@ namespace React.AspNet
 				reactComponent.ContainerTag = htmlTag;
 			}
 			var html = reactComponent.RenderHtml(clientOnly);
+
+#if LEGACYASPNET
 			var script = new TagBuilder("script")
 			{
-#if LEGACYASPNET
 				InnerHtml = reactComponent.RenderJavaScript()
-#else
-				InnerHtml = new HtmlString(reactComponent.RenderJavaScript())
-#endif
 			};
+#else
+			var script = new TagBuilder("script");
+			script.InnerHtml.AppendEncoded(reactComponent.RenderJavaScript());
+#endif
 			return new HtmlString(html + System.Environment.NewLine + script.ToString());
 		}
 
@@ -142,10 +144,8 @@ namespace React.AspNet
 			};
 			return new HtmlString(tag.ToString());
 #else
-			var tag = new TagBuilder("script")
-			{
-				InnerHtml = new HtmlString(script)
-			};
+			var tag = new TagBuilder("script");
+			tag.InnerHtml.AppendEncoded(script);
 			return tag;
 #endif
 		}

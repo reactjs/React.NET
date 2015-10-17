@@ -22,8 +22,7 @@ namespace React.Sample.Mvc6
 		public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
 		{
             // Setup configuration sources.
-            var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath)
-                                .AddEnvironmentVariables();
+            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
 
             Configuration = builder.Build();
 		}
@@ -44,6 +43,9 @@ namespace React.Sample.Mvc6
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory)
 		{
 			// Configure the HTTP request pipeline.
+			// Add the platform handler to the request pipeline.
+			app.UseIISPlatformHandler();
+
 			// Add the console logger.
 			loggerfactory.AddConsole();
 
@@ -51,13 +53,13 @@ namespace React.Sample.Mvc6
 			if (env.IsDevelopment())
 			{
 				//app.UseBrowserLink();
-				app.UseErrorPage();
+				app.UseDeveloperExceptionPage();
 			}
 			else
 			{
 				// Add Error handling middleware which catches all application specific errors and
 				// send the request to the following path or controller action.
-				app.UseErrorHandler("/Home/Error");
+				app.UseExceptionHandler("/Home/Error");
 			}
             
 			// Initialise ReactJS.NET. Must be before static files.
