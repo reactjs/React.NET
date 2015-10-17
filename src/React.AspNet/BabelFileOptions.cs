@@ -40,7 +40,7 @@ namespace React.AspNet
 		/// </summary>
 		public BabelFileOptions()
 		{
-			Extensions = new[] { ".jsx", ".js" };
+			Extensions = new[] { ".jsx" };
 			StaticFileOptions = new StaticFileOptions();
 		}
 	}
