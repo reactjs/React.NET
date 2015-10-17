@@ -15,6 +15,9 @@
     <DevelopmentServerPort>3044</DevelopmentServerPort>
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\React.Core\React.Core.csproj" />
+  </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties />
