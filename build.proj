@@ -36,6 +36,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssembliesAspNet5 Include="React.AspNet" />
 		<AspNet5ProjectJson Include="src/React.AspNet/project.json" />
 		<AspNet5ProjectJson Include="src/React.Sample.Mvc6/project.json" />
+		<AspNet5ProjectJson Include="src/wrap/**/project.json" />
 	</ItemGroup>
 
 	<Import Project="src/React.tasks.proj" />
@@ -103,6 +104,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 			do it here. See https://github.com/aspnet/XRE/issues/1301 
 		-->
 		<DeleteTree Directories="src/artifacts" />
+		<DeleteTree Directories="bin/%(PackageAssembliesAspNet5.Identity)/Release" />
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
