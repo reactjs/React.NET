@@ -12,9 +12,9 @@ of patent rights can be found in the PATENTS file in the same directory.
 	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
 		<id xdt:Transform="Replace">React.MSBuild</id>
-		<title xdt:Transform="Insert">ReactJS.NET - JSX for MSBuild</title>
-		<description xdt:Transform="Insert">Allows you to compile JSX to JavaScript via an MSBuild task</description>
-		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs msbuild</tags>
+		<title xdt:Transform="Insert">ReactJS.NET - Babel for MSBuild</title>
+		<description xdt:Transform="Insert">An MSBuild task to transpile JavaScript via Babel</description>
+		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs msbuild babel</tags>
 	</metadata>
 	<files xdt:Transform="Insert">
 		<file src="Content\TransformJsx.proj" target="Content\" />

@@ -18,6 +18,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<iconUrl>http://facebook.github.io/react/img/logo_og.png</iconUrl>
 		<copyright>Copyright 2014 Facebook, Inc</copyright>
-		<tags>asp.net mvc asp jquery javascript js react facebook reactjs</tags>
+		<tags>asp.net mvc asp jquery javascript js react facebook reactjs babel</tags>
 	</metadata>
 </package>

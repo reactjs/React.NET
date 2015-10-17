@@ -37,7 +37,7 @@
     "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
     "copyright": "Copyright 2014-2015 Facebook, Inc",
     "title": "ReactJS.NET (MVC 6)",
-    "description": "ReactJS tools for ASP.NET 5, including ASP.NET MVC 6. Please refer to project site (http://reactjs.net/) for full installation instructions, usage examples and sample code",
+    "description": "ReactJS and Babel tools for ASP.NET 5, including ASP.NET MVC 6. Please refer to project site (http://reactjs.net/) for full installation instructions, usage examples and sample code",
     "tags": [ "asp.net", "mvc", "asp", "javascript", "js", "react", "facebook", "reactjs", "vnext" ],
     "projectUrl": "http://reactjs.net/"
 }

@@ -12,8 +12,8 @@ of patent rights can be found in the PATENTS file in the same directory.
 	xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
 		<id xdt:Transform="Replace">React.Owin</id>
-		<title xdt:Transform="Insert">ReactJS.NET - JSX for OWIN</title>
-		<description xdt:Transform="Insert">Allows you to compile JSX to JavaScript via OWIN middleware</description>
-		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs owin</tags>
+		<title xdt:Transform="Insert">ReactJS.NET - Babel for OWIN</title>
+		<description xdt:Transform="Insert">OWIN middleware for transpiling JavaScript via Babel</description>
+		<tags xdt:Transform="Replace">asp.net mvc asp jquery javascript js react facebook reactjs owin babel</tags>
 	</metadata>
 </package>
