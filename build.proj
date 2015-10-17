@@ -49,7 +49,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Exec
 			Condition="$(BuildAspNet5) == 'true'"
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dnu restore --quiet --parallel"
+			Command="dnu restore --quiet --parallel src\React.AspNet src\React.Sample.Mvc6"
 		/>
 		<!-- npm packages -->
 		<Exec
