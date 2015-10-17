@@ -91,5 +91,10 @@ namespace React
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
 		IBabel Babel { get; }
+
+		/// <summary>
+		/// Ensures that Babel has been loaded into the JavaScript engine.
+		/// </summary>
+		void EnsureBabelLoaded();
 	}
 }

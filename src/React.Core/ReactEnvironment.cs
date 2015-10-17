@@ -413,5 +413,23 @@ namespace React
 		{
 			get { return _config; }
 		}
+
+		/// <summary>
+		/// Ensures that Babel has been loaded into the JavaScript engine.
+		/// </summary>
+		public void EnsureBabelLoaded()
+		{
+			// If Babel is disabled in the config, don't even try loading it
+			if (!_config.LoadBabel)
+			{
+				throw new BabelNotLoadedException();
+			}
+
+			var babelLoaded = Engine.Evaluate<bool>("typeof global.Babel !== 'undefined'");
+			if (!babelLoaded)
+			{
+				Engine.ExecuteResource("React.node_modules.babel_core.browser.js", typeof(ReactEnvironment).Assembly);
+			}
+		}
 	}
 }

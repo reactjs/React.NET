@@ -101,10 +101,6 @@ namespace React
 				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 				engine.Execute("React = global.React");
 			}
-			if (_config.LoadBabel)
-			{
-				engine.ExecuteResource("React.node_modules.babel_core.browser.js", thisAssembly);
-			}
 
 			LoadUserScripts(engine);
 			if (!_config.LoadReact)
