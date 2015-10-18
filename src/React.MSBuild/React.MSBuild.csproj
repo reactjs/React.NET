@@ -66,7 +66,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\TransformJsx.proj" />
+    <None Include="Content\TransformBabel.proj" />
     <None Include="tools\install.ps1" />
     <None Include="React.MSBuild.nutrans" />
     <None Include="tools\uninstall.ps1" />

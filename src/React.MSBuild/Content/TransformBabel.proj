@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="TransformBabel">
+	<!-- ReactJS.NET - Transpile JavaScript via Babel -->
+	<UsingTask AssemblyFile="$(OutputPath)\React.MSBuild.dll" TaskName="TransformBabel" />
+	<Target Name="TransformBabel">
+		<TransformBabel SourceDir="$(MSBuildProjectDirectory)" />
+	</Target>
+</Project>
