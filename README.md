@@ -62,3 +62,6 @@ you can open `React.sln` in Visual Studio and compile directly from Visual
 Studio. Please refer to the [documentation page on 
 contributing](http://reactjs.net/dev/contributing.html) for more information on
 contributing to ReactJS.NET.
+
+Note that the build requires you to have Git installed. If you do not want to 
+install Git, you may remove the `GitVersion` task from `build.proj`.
