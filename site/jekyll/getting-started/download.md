@@ -51,7 +51,7 @@ feature or fixing a bug):
 2. Reference React.dll and React.Mvc4.dll (if using MVC 4) in your Web
    Application project
 
-Your first build always needs to be done using the build script (build.bat) as
+Your first build always needs to be done using the build script (`dev-build.bat`) as
 this generates a few files required by the build (such as
 `SharedAssemblyVersionInfo.cs`). Once this build is completed, you can open
 `React.sln` in Visual Studio and compile directly from Visual Studio.

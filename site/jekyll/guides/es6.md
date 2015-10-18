@@ -1,9 +1,9 @@
 ---
 layout: docs
-title: ES6 Features
+title: ES6 Features (Babel)
 ---
 
-React can optionally use some ECMAScript 6 features thanks to the bundled version of [JSTransform](https://github.com/facebook/jstransform). ECMAScript 6 (or "ES6" for short) is the next version of ECMAScript/JavaScript and contains several useful features:
+ReactJS.NET supports the use of ECMAScript 6 features, thanks to [Babel](http://babeljs.io/). These features include:
 
 * **[Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/arrow_functions)** &mdash; A syntax for inline lambda functions similar to C#. These are very useful when combined with the `map` and `filter` methods of arrays:
 
@@ -52,19 +52,4 @@ foo.add(2, 3); // 5
 ```
 
 * **[Short object notation](http://ariya.ofilabs.com/2013/02/es6-and-object-literal-property-value-shorthand.html)**
-* And more! See the [JSTransform source code](https://github.com/facebook/jstransform/tree/master/visitors), you never know what goodies you'll find.
-
-How to use
-----------
-To use the ES6 transforms, you'll need to enable them. For ASP.NET MVC sites, this is done in your `ReactConfig.cs` by calling `.SetUseHarmony(true)`:
-
-```csharp{2}
-ReactSiteConfiguration.Configuration
-  .SetUseHarmony(true)
-  .AddScript("~/Content/Sample.jsx");
-```
-If you are using [MSBuild to precompile your JSX](/guides/msbuild.html), you also need to enable it in MSBuild via the `UseHarmony="true"` flag in your build script (`TransformJsx.proj` by default):
-
-```xml
-<TransformJsx SourceDir="$(MSBuildProjectDirectory)" UseHarmony="true" />
-```
+* And more! See the [Babel website](http://babeljs.io/docs/learn-es2015/) for a full list of supported features.

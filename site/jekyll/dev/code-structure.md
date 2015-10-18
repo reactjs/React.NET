@@ -8,8 +8,8 @@ are just a regular user of ReactJS.NET, you don't have to read it.
 
 Assemblies
 ----------
-ReactJS.NET is split into several different dependencies (React, React.Web,
-etc.). Ideally, the main "React" assembly should have as few dependencies as
+ReactJS.NET is split into several different dependencies (React.Core, React.Web,
+etc.). Ideally, the main "React.Core" assembly should have as few dependencies as
 possible. Dependencies with third-party libraries should be kept in separate
 assemblies unless they're required by core ReactJS.NET functionality (such as
 JavaScript engines)

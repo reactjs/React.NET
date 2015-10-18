@@ -24,7 +24,7 @@ bundles.Add<ScriptBundle>("main.js",
 This will add all three files into a `main.js` bundle that you can reference and
 render from your view using Cassette:
 
-```html{2-3,13}
+```html{2-3,14}
 @{
 	Bundles.Reference("main.css");
 	Bundles.Reference("main.js");

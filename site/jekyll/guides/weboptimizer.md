@@ -5,13 +5,13 @@ title: ASP.NET Bundling and Minification
 
 ReactJS.NET supports the use of Microsoft's
 [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
-library to compile JSX into JavaScript and minify it along with all your other
-JavaScript. Simply create a `JsxBundle` containing any number of JSX or regular
+library to transform JavaScript via Babel, and minify it along with all your other
+JavaScript. Simply create a `BabelBundle` containing any number of JSX or regular
 JavaScript files:
 
 ```csharp
 // In BundleConfig.cs
-bundles.Add(new JsxBundle("~/bundles/main").Include(
+bundles.Add(new BabelBundle("~/bundles/main").Include(
 	// Add your JSX files here
 	"~/Content/HelloWorld.react.jsx",
 	"~/Content/AnythingElse.react.jsx",
@@ -20,17 +20,17 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
 ));
 ```
 
-`JsxBundle` will compile your JSX to JavaScript and then minify it. For more
+`BabelBundle` will compile your JSX to JavaScript and then minify it. For more
 control (eg. if you want to run other transforms as well), you can use
-`JsxTransform` directly:
+`BabelTransform` directly:
 
 ```csharp
 // In BundleConfig.cs
 bundles.Add(new Bundle("~/bundles/main", new IBundleTransform[]
 {
-	// This works the same as JsxBundle (transform then minify) but you could
+	// This works the same as BabelBundle (transform then minify) but you could
 	//add your own transforms as well.
-	new JsxTransform(),
+	new BabelTransform(),
 	new JsMinify(),
 }).Include(
 	"~/Content/HelloWorld.react.jsx"

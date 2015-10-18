@@ -83,8 +83,7 @@ If there is no need to have a React application client side and you just want to
 @Html.React("HelloWorld", new
 {
 	name = "Daniel"
-}
-serverOnly:true)
+}, serverOnly: true)
 ```
 
 And the Html mark up will look like the one following which is a lot cleaner. In this case there is no need to load the React script or call the `Html.ReactInitJavaScript()` method.
