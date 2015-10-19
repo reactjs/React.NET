@@ -66,7 +66,7 @@ code.
 <script src="https://fb.me/react-0.14.0.min.js"></script>
 <script src="https://fb.me/react-dom-0.14.0.min.js"></script>
 <script src="/Scripts/HelloWorld.js"></script>
-<script>React.render(HelloWorld({"name":"Daniel"}), document.getElementById("react1"));</script>
+<script>ReactDOM.render(HelloWorld({"name":"Daniel"}), document.getElementById("react1"));</script>
 ```
 
 The server-rendered HTML will automatically be reused by React client-side,
