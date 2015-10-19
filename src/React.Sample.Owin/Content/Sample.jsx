@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-CommentsBox = React.createClass({
+var CommentsBox = React.createClass({
 	propTypes: {
 		initialComments: React.PropTypes.array.isRequired
 	},
