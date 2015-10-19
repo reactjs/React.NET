@@ -100,7 +100,7 @@ var CommentBox = React.createClass({
     );
   }
 });
-React.render(
+ReactDOM.render(
   <CommentBox />,
   document.getElementById('content')
 );
@@ -126,7 +126,7 @@ var CommentBox = React.createClass({displayName: 'CommentBox',
     );
   }
 });
-React.render(
+ReactDOM.render(
   React.createElement(CommentBox, null),
   document.getElementById('content')
 );
@@ -142,7 +142,7 @@ The `<div>` tags are not actual DOM nodes; they are instantiations of React `div
 
 You do not have to return basic HTML. You can return a tree of components that you (or someone else) built. This is what makes React **composable**: a key tenet of maintainable frontends.
 
-`React.render()` instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
+`ReactDOM.render()` instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
 
 ## Composing components
 
@@ -299,7 +299,7 @@ var data = [
 ];
 ```
 
-We need to get this data into `CommentList` in a modular way. Modify `CommentBox` and the `React.render()` call to pass this data into the `CommentList` via props:
+We need to get this data into `CommentList` in a modular way. Modify `CommentBox` and the `ReactDOM.render()` call to pass this data into the `CommentList` via props:
 
 ```javascript{6,14}
 var CommentBox = React.createClass({
@@ -314,7 +314,7 @@ var CommentBox = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <CommentBox data={data} />,
   document.getElementById('content')
 );
@@ -452,7 +452,7 @@ If you hit `/comments` in your browser, you should now see the data encoded as J
 Now that we have a data source, we can replace the hard-coded data with the dynamic data from the server. We will remove the data prop and replace it with a URL to fetch:
 
 ```javascript{2}
-React.render(
+ReactDOM.render(
   <CommentBox url="/comments" />,
   document.getElementById('content')
 );
@@ -547,7 +547,7 @@ var CommentBox = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <CommentBox url="/comments" pollInterval={2000} />,
   document.getElementById('content')
 );
@@ -744,7 +744,7 @@ var CommentBox = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <CommentBox url="/comments" submitUrl="/comments/new" pollInterval={2000} />,
   document.getElementById('content')
 );
@@ -921,7 +921,7 @@ var CommentBox = React.createClass({
 });
 ```
 
-In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `React.render` call that currently exists in Tutorial.jsx. All the props from the current `React.render` call should be moved here, and the `React.render` call should be deleted.
+In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `ReactDOM.render` call that currently exists in Tutorial.jsx. All the props from the current `ReactDOM.render` call should be moved here, and the `ReactDOM.render` call should be deleted.
 
 ```html{1,10-16,21}
 @model IEnumerable<ReactDemo.Models.CommentModel>

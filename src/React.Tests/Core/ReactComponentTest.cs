@@ -130,7 +130,7 @@ namespace React.Tests.Core
 			var result = component.RenderJavaScript();
 
 			Assert.AreEqual(
-				@"React.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
+				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
 		}
