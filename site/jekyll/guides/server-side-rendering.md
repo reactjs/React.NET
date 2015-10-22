@@ -18,8 +18,21 @@ namespace MyApp
 	{
 		public static void Configure()
 		{
+			// For basic server-side rendering of React components
+			// add all necessary JavaScript files here. This includes
+			// all dependencies.
+			ReactSiteConfiguration.Configuration
+				.AddScript("~/Scripts/First.jsx")
+				.AddScript("~/Scripts/DependencyOfSecondComponent.jsx")
+				.AddScript("~/Scripts/SecondComponent.jsx");
+			
+			// This setup assumes the use of a build tool (Babel,
+			// Webpack, Gulp, Browserify, etc). Performance is improved
+			// when you disable ReactJS.NET's version of Babel and load
+			// pre-transpiled scripts. Example:
 			ReactSiteConfiguration.Configuration = new ReactSiteConfiguration()
-				.AddScript("~/Scripts/HelloWorld.jsx");
+				.SetLoadBabel(false)
+				.AddScriptWithoutTransform("~/Scripts/HelloWorld.jsx");
 		}
 	}
 }
