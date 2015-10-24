@@ -14,7 +14,7 @@
 	</p>
 	
 	<!-- Render the component server-side, passing initial props -->
-	@Html.React("CommentsBox", new { initialComments = Model.Comments })
+	@Html.React("CommentsBox", new { initialComments = Model.Comments, page = Model.Page })
 		
 	<!-- Load all required scripts (React + the site's scripts) -->
 	<script src="https://fb.me/react-0.14.0.min.js"></script>
