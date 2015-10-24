@@ -17,6 +17,11 @@ namespace React
 		public bool AllLoose { get; set; }
 
 		/// <summary>
+		/// Gets or sets the transformers to blacklist
+		/// </summary>
+		public IEnumerable<string> Blacklist { get; set; } 
+
+		/// <summary>
 		/// Gets or sets whether Babel should use a reference to babelHelpers instead of placing
 		/// helpers at the top of your code. Meant to be used in conjunction with external 
 		/// helpers (http://babeljs.io/docs/advanced/external-helpers/)
@@ -46,6 +51,10 @@ namespace React
 		/// </summary>
 		public BabelConfig()
 		{
+			// By default, we blacklist the "strict" transform, as it messes with the top-level "this".
+			// This is required since we're not actually using JavaScript modules directly in ReactJS.NET yet.
+			// See https://babeljs.io/docs/faq/#why-is-this-being-remapped-to-undefined-
+			Blacklist = new[] {"strict"};
 			Stage = 2;
 		}
 
@@ -57,6 +66,7 @@ namespace React
 		{
 			var config = new Dictionary<string, object>
 			{
+				{"blacklist", Blacklist},
 				{"externalHelpers", ExternalHelpers},
 				{"optional", Optional},
 				{"stage", Stage},

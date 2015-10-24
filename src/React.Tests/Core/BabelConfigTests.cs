@@ -22,7 +22,7 @@ namespace React.Tests.Core
 				AllLoose = true,
 			};
 			var result = config.Serialize();
-			Assert.AreEqual(@"{""externalHelpers"":false,""optional"":null,""stage"":2,""loose"":""all""}", result);
+			Assert.AreEqual(@"{""blacklist"":[""strict""],""externalHelpers"":false,""optional"":null,""stage"":2,""loose"":""all""}", result);
 		}
 
 		[Test]
@@ -33,7 +33,7 @@ namespace React.Tests.Core
 				Loose = new[] { "foo" },
 			};
 			var result = config.Serialize();
-			Assert.AreEqual(@"{""externalHelpers"":false,""optional"":null,""stage"":2,""loose"":[""foo""]}", result);
+			Assert.AreEqual(@"{""blacklist"":[""strict""],""externalHelpers"":false,""optional"":null,""stage"":2,""loose"":[""foo""]}", result);
 		}
 	}
 }
