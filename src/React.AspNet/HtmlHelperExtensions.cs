@@ -129,6 +129,38 @@ namespace React.AspNet
 			return new HtmlString(html + System.Environment.NewLine + script.ToString());
 		}
 
+        /// <summary>
+        /// Renders the specified React component, along with a script block used for
+        /// deferred initialization by <see cref="ReactInitDeferredJavaScript"/>
+        /// </summary>
+        /// <param name="htmlHelper">HTML helper</param>
+        /// <param name="componentName">Name of the component</param>
+        /// <param name="props">Props to initialise the component with</param>
+        /// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
+        /// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
+        /// <typeparam name="T">Type of the props</typeparam>
+        /// <returns></returns>
+        public static IHtmlString ReactWithDeferredInit<T>(
+            this HtmlHelper htmlHelper,
+            string componentName,
+            T props,
+            string htmlTag = null,
+            string containerId = null
+        )
+        {
+            var reactComponent = Environment.CreateComponent(componentName, props, containerId);
+            if (!string.IsNullOrEmpty(htmlTag))
+            {
+                reactComponent.ContainerTag = htmlTag;
+            }
+            var html = reactComponent.RenderHtml();
+            var script = new TagBuilder("script")
+            {
+                InnerHtml = reactComponent.RenderDeferredJavaScript()
+            };
+            return new HtmlString(html + System.Environment.NewLine + script.ToString());
+        }
+        
 		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will
 		/// attach event handlers to the server-rendered HTML.
@@ -149,5 +181,20 @@ namespace React.AspNet
 			return tag;
 #endif
 		}
+
+        /// <summary>
+        /// Renders a Javascript block that initializes all components that have been registered
+        /// to the global react initialization object for delayed initialization.
+        /// </summary>
+        /// <returns>Javascript code block to execute initialization</returns>
+        public static IHtmlString ReactInitDeferredJavaScript(this HtmlHelper htmlHelper)
+        {
+            var script = Environment.GetInitDeferredJavaScript();
+            var tag = new TagBuilder("script")
+            {
+                InnerHtml = script
+            };
+            return new HtmlString(tag.ToString());
+        }
 	}
 }

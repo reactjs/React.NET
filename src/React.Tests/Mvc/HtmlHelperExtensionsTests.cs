@@ -99,5 +99,46 @@ namespace React.Tests.Mvc
 			);
 			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
 		}
+
+        [Test]
+        public void ReactInitDeferredJavaScriptShouldReturnHtmlAndInitObject()
+        {
+            var component = new Mock<IReactComponent>();
+            component.Setup(x => x.RenderHtml(false)).Returns("HTML");
+            component.Setup(x => x.RenderDeferredJavaScript()).Returns("JS");
+            var environment = ConfigureMockEnvironment();
+            environment.Setup(x => x.CreateComponent(
+                "ComponentName",
+                new { },
+                null
+            )).Returns(component.Object);
+
+            var result = HtmlHelperExtensions.ReactWithDeferredInit(
+                htmlHelper: null,
+                componentName: "ComponentName",
+                props: new { },
+                htmlTag: "span"
+            );
+            Assert.AreEqual(
+                "HTML" + System.Environment.NewLine + "<script>JS</script>",
+                result.ToString()
+            );
+        }
+
+        [Test]
+        public void ReactInitDeferredJavaScriptReturnsScriptBlockForInit()
+        {
+            var component = new Mock<IReactComponent>();
+            var environment = ConfigureMockEnvironment();
+            environment.Setup(x => x.GetInitDeferredJavaScript()).Returns("JS");
+
+            var result = HtmlHelperExtensions.ReactInitDeferredJavaScript(
+                htmlHelper: null
+            );
+            Assert.AreEqual(
+                "<script>JS</script>",
+                result.ToString()
+            );
+        }
 	}
 }

@@ -123,9 +123,26 @@ namespace React
 			return string.Format(
 				"ReactDOM.render({0}, document.getElementById({1}))",
 				GetComponentInitialiser(),
-				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
+                GetContainerIdJson()
 			);
 		}
+
+        /// <summary>
+        /// Renders the JavaScript required to allow deferred initialization of the component.
+        /// React is not invoked on this call, but through a separate function that invokes
+        /// all objects that use the deferred render.
+        /// </summary>
+        /// <returns>JavaScript</returns>
+        public virtual string RenderDeferredJavaScript()
+        {
+            return string.Format(
+                @"window.reactComponents = window.reactComponents || [];
+                window.reactComponents.push({{ name: {0}, data: {1}, container: {2} }});",
+                GetComponentNameJson(),
+                GetPropsJson(),
+                GetContainerIdJson()
+            );
+        }
 
 		/// <summary>
 		/// Ensures that this component exists in global scope
@@ -153,11 +170,10 @@ namespace React
 		/// <returns>JavaScript for component initialisation</returns>
 		protected virtual string GetComponentInitialiser()
 		{
-			var encodedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
 			return string.Format(
 				"React.createElement({0}, {1})",
 				ComponentName,
-				encodedProps
+				GetPropsJson()
 			);
 		}
 
@@ -176,5 +192,20 @@ namespace React
 				));
 			}
 		}
+
+        private string GetPropsJson()
+        {
+            return JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings);// SerializeObject accepts null settings
+        }
+
+        private string GetContainerIdJson()
+        {
+            return JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings);// SerializeObject accepts null settings
+        }
+
+        private string GetComponentNameJson()
+        {
+            return JsonConvert.SerializeObject(ComponentName, _configuration.JsonSerializerSettings);
+        }
 	}
 }

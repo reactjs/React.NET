@@ -154,5 +154,21 @@ namespace React.Tests.Core
 			}
 			Assert.AreEqual(expected, isValid);
 		}
+
+        [Test]
+        public void RenderDeferredJavaScriptShouldAddComponentToGlobalInitObject()
+        {
+            var environment = new Mock<IReactEnvironment>();
+            var config = new Mock<IReactSiteConfiguration>();
+
+            var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+            {
+                Props = new { hello = "World" }
+            };
+            var result = component.RenderDeferredJavaScript();
+            var expected = @"window.reactComponents.push({ name: ""Foo"", data: {""hello"":""World""}, container: ""container"" });";
+
+            Assert.IsTrue(result.EndsWith(expected));
+        }
 	}
 }
