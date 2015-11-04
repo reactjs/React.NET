@@ -24,9 +24,9 @@ namespace React
 		private const string HASH_PREFIX = "// @hash v3-";
 
 		/// <summary>
-		/// Althorithm for calculating file hashes
+		/// Algorithm for calculating file hashes
 		/// </summary>
-		private readonly HashAlgorithm _hash = MD5.Create();
+		private readonly HashAlgorithm _hash = SHA1.Create("System.Security.Cryptography.SHA1Cng");
 
 		/// <summary>
 		/// Calculates a hash for the specified input
