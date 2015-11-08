@@ -14,7 +14,7 @@ namespace React.Tests.Core
 	[TestFixture]
 	public class FileCacheHashTests
 	{
-		private const string SAMPLE_HASH = "B10A8DB164E0754105B7A99BE72E3FE5";
+		private const string SAMPLE_HASH = "0A4D55A8D778E5022FAB701977C5D840BBC486D0";
 
 		[Test]
 		public void TestCalculateHash()
