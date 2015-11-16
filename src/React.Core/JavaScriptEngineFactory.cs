@@ -42,6 +42,10 @@ namespace React
 		/// Whether this class has been disposed.
 		/// </summary>
 		protected bool _disposed;
+		/// <summary>
+		/// The exception that was thrown during the most recent recycle of the pool.
+		/// </summary>
+		protected Exception _scriptLoadException;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
@@ -86,7 +90,11 @@ namespace React
 				poolConfig.StartEngines = _config.StartEngines.Value;
 			}
 
-			return new JsPool(poolConfig);
+			var pool = new JsPool(poolConfig);
+			// Reset the recycle exception on recycle. If there *are* errors loading the scripts
+			// during recycle, the errors will be caught in the initializer.
+			pool.Recycled += (sender, args) => _scriptLoadException = null;
+			return pool;
 		}
 
 		/// <summary>
@@ -105,7 +113,7 @@ namespace React
 			LoadUserScripts(engine);
 			if (!_config.LoadReact)
 			{
-				// We expect to user to have loaded their own versino of React in the scripts that
+				// We expect to user to have loaded their own version of React in the scripts that
 				// were loaded above, let's ensure that's the case. 
 				EnsureReactLoaded(engine);
 			}
@@ -127,7 +135,11 @@ namespace React
 				}
 				catch (JsRuntimeException ex)
 				{
-					throw new ReactScriptLoadException(string.Format(
+					// We can't simply rethrow the exception here, as it's possible this is running
+					// on a background thread (ie. as a response to a file changing). If we did
+					// throw the exception here, it would terminate the entire process. Instead,
+					// save the exception, and then just rethrow it later when getting the engine.
+					_scriptLoadException = new ReactScriptLoadException(string.Format(
 						"Error while loading \"{0}\": {1}\r\nLine: {2}\r\nColumn: {3}",
 						file,
 						ex.Message,
@@ -162,11 +174,12 @@ namespace React
 		/// <returns>The JavaScript engine</returns>
 		public virtual IJsEngine GetEngineForCurrentThread()
 		{
-			EnsureNotDisposed();
+			EnsureValidState();
 			return _engines.GetOrAdd(Thread.CurrentThread.ManagedThreadId, id =>
 			{
 				var engine = _factory();
 				InitialiseEngine(engine);
+				EnsureValidState();
 				return engine;
 			});
 		}
@@ -192,7 +205,7 @@ namespace React
 		/// <returns>The JavaScript engine</returns>
 		public virtual IJsEngine GetEngine()
 		{
-			EnsureNotDisposed();
+			EnsureValidState();
 			return _pool.GetEngine();
 		}
 
@@ -298,13 +311,19 @@ namespace React
 		}
 
 		/// <summary>
-		/// Ensures that this object has not been disposed.
+		/// Ensures that this object has not been disposed, and that no error was thrown while
+		/// loading the scripts.
 		/// </summary>
-		public void EnsureNotDisposed()
+		public void EnsureValidState()
 		{
 			if (_disposed)
 			{
 				throw new ObjectDisposedException(GetType().Name);
+			}
+			if (_scriptLoadException != null)
+			{
+				// This means an exception occurred while loading the script (eg. syntax error in the file)
+				throw _scriptLoadException;
 			}
 		}
 
