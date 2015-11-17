@@ -9,6 +9,7 @@
 
 var global = global || {};
 var React;
+var ReactDOM;
 
 // Basic console shim. Caches all calls to console methods.
 function MockConsole() {
@@ -58,11 +59,13 @@ function ReactNET_initReact() {
 	}
 	if (global.React) {
 		React = global.React;
+		ReactDOM = React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED; // YOLO
 		return true;
 	}
 	if (typeof require === 'function') {
 		// CommonJS-like environment (eg. Browserify)
 		React = require('react');
+		ReactDOM = React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED; // YOLO
 		return true;
 	}
 	// :'(

@@ -108,6 +108,8 @@ namespace React
 			{
 				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
 				engine.Execute("React = global.React");
+				// Expose ReactDOM as some scripts may be using it. #yolo
+				engine.Execute("ReactDOM = React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED");
 			}
 
 			LoadUserScripts(engine);
