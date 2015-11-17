@@ -85,6 +85,15 @@ namespace React
 		protected readonly IList<IReactComponent> _components = new List<IReactComponent>();
 
 		/// <summary>
+		/// Gets the <see cref="IReactEnvironment"/> for the current request. If no environment
+		/// has been created for the current request, creates a new one.
+		/// </summary>
+		public static IReactEnvironment Current
+		{
+			get { return AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
+		}
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ReactEnvironment"/> class.
 		/// </summary>
 		/// <param name="engineFactory">The JavaScript engine factory</param>

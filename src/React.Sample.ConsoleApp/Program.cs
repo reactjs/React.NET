@@ -21,7 +21,7 @@ namespace React.Sample.ConsoleApp
 				.SetReuseJavaScriptEngines(false)
 				.AddScript("Sample.jsx");
 
-			var environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+			var environment = ReactEnvironment.Current;
 			var component = environment.CreateComponent("HelloWorld", new { name = "Daniel" });
 			// renderServerOnly omits the data-reactid attributes
 			var html = component.RenderHtml(renderServerOnly: true);

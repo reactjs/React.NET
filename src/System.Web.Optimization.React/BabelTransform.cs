@@ -24,7 +24,7 @@ namespace System.Web.Optimization.React
 		/// <param name="response">The bundle response.</param>
 		public void Process(BundleContext context, BundleResponse response)
 		{
-			var environment = AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+			var environment = ReactEnvironment.Current;
 			response.Content = environment.Babel.Transform(response.Content);
 		}
 	}

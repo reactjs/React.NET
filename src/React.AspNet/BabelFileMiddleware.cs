@@ -62,8 +62,7 @@ namespace React.AspNet
 				return;
 			}
 
-			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
-			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.Babel);
+			var internalStaticMiddleware = CreateFileMiddleware(ReactEnvironment.Current.Babel);
 			await internalStaticMiddleware.Invoke(context);
 		}
 

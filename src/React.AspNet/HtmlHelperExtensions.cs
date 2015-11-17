@@ -40,7 +40,7 @@ namespace React.AspNet
 			{
 				try
 				{
-					return global::React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+					return ReactEnvironment.Current;
 				}
 				catch (TinyIoCResolutionException ex)
 				{

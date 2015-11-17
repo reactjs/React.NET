@@ -53,7 +53,7 @@ namespace React.Owin
 		public async Task Invoke(IDictionary<string, object> environment)
 		{
 			// Create all "per request" instances
-			var reactEnvironment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+			var reactEnvironment = ReactEnvironment.Current;
 
 			var internalStaticMiddleware = CreateFileMiddleware(reactEnvironment.Babel);
 			await internalStaticMiddleware.Invoke(environment);

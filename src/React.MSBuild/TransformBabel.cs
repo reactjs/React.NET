@@ -41,7 +41,7 @@ namespace React.MSBuild
 			config
 				.SetReuseJavaScriptEngines(false);
 
-			_environment = React.AssemblyRegistration.Container.Resolve<IReactEnvironment>();
+			_environment = ReactEnvironment.Current;
 
 			Log.LogMessage("Starting Babel transform");
 			var stopwatch = Stopwatch.StartNew();
