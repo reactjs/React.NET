@@ -3,7 +3,7 @@ os: Visual Studio 2015
 install:
 - set PATH=%ProgramFiles(x86)%\MSBuild\14.0\Bin;%PATH%
 - dnvm update-self
-- dnvm install rc1-final
+- dnvm install 1.0.0-rc1-final
 build:
   project: build.proj
   verbosity: normal
