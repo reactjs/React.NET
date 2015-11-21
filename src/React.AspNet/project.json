@@ -14,19 +14,19 @@
             }
         }
     },
-    "dependencies": {
-        "JsPool": "0.3.1",
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta8",
-        "Microsoft.AspNet.Mvc.Core": "6.0.0-beta8",
-        "Microsoft.AspNet.StaticFiles": "1.0.0-beta8",
-        "Microsoft.AspNet.FileProviders.Physical": "1.0.0-beta8",
-        "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-beta8",
-        "MsieJavaScriptEngine": "1.5.1",
-        "React.Core": "",
-        "JavaScriptEngineSwitcher.Core": "1.2.4.0",
-        "JavaScriptEngineSwitcher.Msie": "1.2.4",
-        "JavaScriptEngineSwitcher.V8": "1.2.4"
-    },
+  "dependencies": {
+    "JsPool": "0.3.1",
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+    "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
+    "MsieJavaScriptEngine": "1.5.1",
+    "React.Core": "",
+    "JavaScriptEngineSwitcher.Core": "1.2.4.0",
+    "JavaScriptEngineSwitcher.Msie": "1.2.4",
+    "JavaScriptEngineSwitcher.V8": "1.2.4",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final"
+  },
     "frameworks": {
         "dnx451": { }
     },

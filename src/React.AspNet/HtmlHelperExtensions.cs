@@ -124,7 +124,7 @@ namespace React.AspNet
 			};
 #else
 			var script = new TagBuilder("script");
-			script.InnerHtml.AppendEncoded(reactComponent.RenderJavaScript());
+			script.InnerHtml.AppendHtml(reactComponent.RenderJavaScript());
 #endif
 			return new HtmlString(html + System.Environment.NewLine + script.ToString());
 		}
@@ -145,7 +145,7 @@ namespace React.AspNet
 			return new HtmlString(tag.ToString());
 #else
 			var tag = new TagBuilder("script");
-			tag.InnerHtml.AppendEncoded(script);
+			tag.InnerHtml.AppendHtml(script);
 			return tag;
 #endif
 		}

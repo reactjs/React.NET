@@ -17,7 +17,7 @@ using Microsoft.Owin.FileSystems;
 using IOwinFileSystem = Microsoft.Owin.FileSystems.IFileSystem;
 #else
 using Microsoft.AspNet.FileProviders;
-using Microsoft.Framework.Primitives;
+using Microsoft.Extensions.Primitives;
 using IOwinFileSystem = Microsoft.AspNet.FileProviders.IFileProvider;
 using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
 #endif

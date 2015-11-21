@@ -10,10 +10,10 @@
 using System;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.DependencyInjection;
+using Microsoft.Extensions.PlatformAbstractions;
 using React.Exceptions;
 using React.TinyIoC;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace React.AspNet
 {

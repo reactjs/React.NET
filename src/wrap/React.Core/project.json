@@ -14,7 +14,7 @@
         "JSPool": "0.3.1",
         "MsieJavaScriptEngine": "1.5.1",
         "Newtonsoft.Json": "6.0.8",
-        "VroomJs": "2.1.0-*"
+        "VroomJs": "2.1.1-*"
       }
     }
   }
