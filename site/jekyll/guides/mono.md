@@ -10,7 +10,7 @@ ReactJS.NET includes full support for Mono via Google's [V8 JavaScript engine](h
 cd /usr/local/src/
 git clone https://github.com/v8/v8.git v8-3.17
 cd v8-3.17
-git checkout 3.17
+git checkout tags/3.17.16.2
 
 # Build V8
 make dependencies
