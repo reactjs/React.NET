@@ -231,6 +231,14 @@ namespace React
 			var header = GetFileHeader(hash);
 			result.Code = header + result.Code;
 			result.Hash = hash;
+
+			// Since we prepend a header to the code, the source map no longer matches up exactly
+			// (it's off by the number of lines in the header). Fix this issue by adding five 
+			// blank lines to the source map. This is kinda hacky but saves us having to load a
+			// proper source map library. If this ever breaks, I'll replace it with actual proper
+			// source map modification code (https://gist.github.com/Daniel15/4bdb15836bfd960c2956).
+			result.SourceMap.Mappings = ";;;;;" + result.SourceMap.Mappings;
+
 			return result;
 		}
 
