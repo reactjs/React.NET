@@ -108,7 +108,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
-		<Exec WorkingDirectory="src/React.Core" Command="gulp" />
+		<Exec WorkingDirectory="src/React.Core" Command="node_modules/.bin/gulp" />
 		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035" />
 	</Target>
 
