@@ -9,6 +9,7 @@ src/React.Sample.*/ClearScript.V8
 src/React.Sample.Webpack/build
 *.generated.js
 *.generated.js.map
+*.generated.min.js
 src/React.Sample.Mvc6/wwwroot/js/Sample.js
 *.lock.json
 src/.vs

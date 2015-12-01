@@ -90,8 +90,8 @@ namespace React
 				if (!renderContainerOnly)
 				{
 					var reactRenderCommand = renderServerOnly
-						? string.Format("React.renderToStaticMarkup({0})", GetComponentInitialiser())
-						: string.Format("React.renderToString({0})", GetComponentInitialiser());
+						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
+						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
 					html = _environment.Execute<string>(reactRenderCommand);
 				}
 				return string.Format(

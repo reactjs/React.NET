@@ -8,8 +8,7 @@
  */
 
 var global = global || {};
-var React;
-var ReactDOM;
+var React, ReactDOM, ReactDOMServer;
 
 // Basic console shim. Caches all calls to console methods.
 function MockConsole() {
@@ -23,11 +22,6 @@ MockConsole.prototype = {
 		var serializedArgs = [];
 		for (var i = 1; i < arguments.length; i++) {
 			serializedArgs.push(JSON.stringify(arguments[i]));
-		}
-		// Ignore "React.renderToString is deprecated" until there's a nice way to build a standalone
-		// version of ReactDOMServer.
-		if (arguments[1].indexOf('React.renderToString is deprecated') > -1) {
-			return;
 		}
 		this._calls.push({
 			method: methodName,
@@ -53,19 +47,19 @@ if (!Object.freeze) {
  * @return {bool}
  */
 function ReactNET_initReact() {
-	if (typeof React !== 'undefined') {
+	if (
+		typeof React !== 'undefined' &&
+		typeof ReactDOM !== 'undefined' &&
+		typeof ReactDOMServer !== 'undefined'
+	) {
 		// React is already a global, woohoo
 		return true;
 	}
-	if (global.React) {
+
+	if (global.React && global.ReactDOM && global.ReactDOMServer) {
 		React = global.React;
-		ReactDOM = React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED; // YOLO
-		return true;
-	}
-	if (typeof require === 'function') {
-		// CommonJS-like environment (eg. Browserify)
-		React = require('react');
-		ReactDOM = React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED; // YOLO
+		ReactDOM = global.ReactDOM;
+		ReactDOMServer = global.ReactDOMServer;
 		return true;
 	}
 	// :'(

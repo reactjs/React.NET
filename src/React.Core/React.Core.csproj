@@ -136,13 +136,16 @@
     <None Include="React.Core.nutrans" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\react-with-addons.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\shims.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="node_modules\babel-core\browser.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="gulpfile.js" />
+    <EmbeddedResource Include="Resources\react.generated.js" />
+    <EmbeddedResource Include="Resources\react.generated.min.js" />
+    <Content Include="Resources\react.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

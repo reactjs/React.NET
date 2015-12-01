@@ -106,10 +106,8 @@ namespace React
 			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
 			if (_config.LoadReact)
 			{
-				engine.ExecuteResource("React.Resources.react-with-addons.js", thisAssembly);
-				engine.Execute("React = global.React");
-				// Expose ReactDOM as some scripts may be using it. #yolo
-				engine.Execute("ReactDOM = React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED");
+				// TODO: Add option to choose whether to load dev vs prod version of React.
+				engine.ExecuteResource("React.Resources.react.generated.js", thisAssembly);
 			}
 
 			LoadUserScripts(engine);
@@ -162,9 +160,10 @@ namespace React
 			if (!result)
 			{
 				throw new ReactNotInitialisedException(
-					"React has not been loaded correctly. Please expose your version of React as a global " +
-					"variable named 'React', or enable the 'LoadReact' configuration option to " +
-					"use the built-in version of React."
+					"React has not been loaded correctly. Please expose your version of React as global " +
+					"variables named 'React', 'ReactDOM' and 'ReactDOMServer', or enable the " +
+					"'LoadReact' configuration option to use the built-in version of React. See " +
+					"http://reactjs.net/guides/byo-react.html for more information."
 				);
 			}
 		}

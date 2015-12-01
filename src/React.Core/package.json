@@ -3,6 +3,11 @@
   "name": "React.Core",
   "private": true,
   "devDependencies": {
-    "babel-core": "^5.8.25"
+    "babel-core": "^5.8.25",
+    "gulp": "^3.9.0",
+    "gulp-uglify": "^1.5.1",
+    "react": "^0.14.3",
+    "webpack": "^1.12.9",
+    "webpack-stream": "^2.2.0"
   }
 }

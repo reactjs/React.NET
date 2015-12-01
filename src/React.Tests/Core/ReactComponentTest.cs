@@ -42,7 +42,7 @@ namespace React.Tests.Core
 			};
 			component.RenderHtml();
 
-			environment.Verify(x => x.Execute<string>(@"React.renderToString(React.createElement(Foo, {""hello"":""World""}))"));
+			environment.Verify(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"));
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"React.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
 			var config = new Mock<IReactSiteConfiguration>();
 
@@ -95,7 +95,7 @@ namespace React.Tests.Core
 			};
 			component.RenderHtml(renderServerOnly: true);
 
-			environment.Verify(x => x.Execute<string>(@"React.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
+			environment.Verify(x => x.Execute<string>(@"ReactDOMServer.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"React.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
 
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
