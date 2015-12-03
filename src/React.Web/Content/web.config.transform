@@ -3,7 +3,7 @@
 		<!-- Uncomment if using IIS 7 Classic Mode, IIS 6, or Mono -->
 		<!--
 		<httpHandlers>
-			<add verb="GET" path="*.jsx" type="React.Web.JsxHandlerFactory, React.Web" />
+			<add verb="GET" path="*.jsx" type="React.Web.BabelHandlerFactory, React.Web" />
 		</httpHandlers>
 		-->
 	</system.web>
