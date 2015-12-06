@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace React
 {
@@ -10,52 +11,27 @@ namespace React
 	public class BabelConfig
 	{
 		/// <summary>
-		/// Gets or sets whether Babel's "loose mode" is used for all transformers. See 
-		/// http://babeljs.io/docs/advanced/loose/ for more information. Only one of 
-		/// <see cref="AllLoose"/> or <see cref="Loose"/> can be used at a time.
+		/// Gets or sets the Babel plugins to use. See http://babeljs.io/docs/plugins/ for a full
+		/// list of plugins.
 		/// </summary>
-		public bool AllLoose { get; set; }
+		public ISet<string> Plugins { get; set; }
 
 		/// <summary>
-		/// Gets or sets the transformers to blacklist
+		/// Gets or sets the Babel presets to use. See http://babeljs.io/docs/plugins/ for a full
+		/// list of presets.
 		/// </summary>
-		public IEnumerable<string> Blacklist { get; set; } 
-
-		/// <summary>
-		/// Gets or sets whether Babel should use a reference to babelHelpers instead of placing
-		/// helpers at the top of your code. Meant to be used in conjunction with external 
-		/// helpers (http://babeljs.io/docs/advanced/external-helpers/)
-		/// </summary>
-		public bool ExternalHelpers { get; set; }
-
-		/// <summary>
-		/// Gets or sets the transformers to use in Babel's "loose mode". See
-		/// http://babeljs.io/docs/advanced/loose/ for more information. Only one of 
-		/// <see cref="AllLoose"/> or <see cref="Loose"/> can be used at a time.
-		/// </summary>
-		public IEnumerable<string> Loose { get; set; }
-
-		/// <summary>
-		/// Gets or sets an transformers to optionally use. See 
-		/// http://babeljs.io/docs/advanced/transformers/#optional for a full list of transformers
-		/// </summary>
-		public IEnumerable<string> Optional { get; set; }
-
-		/// <summary>
-		/// Gets or sets the experimental proposal stage (http://babeljs.io/docs/usage/experimental/).
-		/// </summary>
-		public int Stage { get; set; }
+		public ISet<string> Presets { get; set; }
 
 		/// <summary>
 		/// Creates a new instance of <see cref="BabelConfig" />.
 		/// </summary>
 		public BabelConfig()
 		{
-			// By default, we blacklist the "strict" transform, as it messes with the top-level "this".
-			// This is required since we're not actually using JavaScript modules directly in ReactJS.NET yet.
-			// See https://babeljs.io/docs/faq/#why-is-this-being-remapped-to-undefined-
-			Blacklist = new[] {"strict"};
-			Stage = 2;
+			// Use es2015-no-commonjs by default so Babel doesn't prepend "use strict" to the start of the
+			// output. This messes with the top-level "this", as we're not actually using JavaScript modules
+			// in ReactJS.NET yet.
+			Presets = new HashSet<string> { "es2015-no-commonjs", "stage-1", "react" };
+			Plugins = new HashSet<string>();
 		}
 
 		/// <summary>
@@ -64,22 +40,10 @@ namespace React
 		/// <returns></returns>
 		public string Serialize()
 		{
-			var config = new Dictionary<string, object>
+			return JsonConvert.SerializeObject(this, new JsonSerializerSettings
 			{
-				{"blacklist", Blacklist},
-				{"externalHelpers", ExternalHelpers},
-				{"optional", Optional},
-				{"stage", Stage},
-			};
-			if (AllLoose)
-			{
-				config.Add("loose", "all");
-			}
-			else if (Loose != null)
-			{
-				config.Add("loose", Loose);
-			}
-			return JsonConvert.SerializeObject(config);
+				ContractResolver = new CamelCasePropertyNamesContractResolver(),
+			});
 		}
 	}
 }

@@ -434,10 +434,10 @@ namespace React
 				throw new BabelNotLoadedException();
 			}
 
-			var babelLoaded = engine.Evaluate<bool>("typeof global.Babel !== 'undefined'");
+			var babelLoaded = engine.Evaluate<bool>("typeof ReactNET_transform !== 'undefined'");
 			if (!babelLoaded)
 			{
-				engine.ExecuteResource("React.node_modules.babel_core.browser.js", typeof(ReactEnvironment).Assembly);
+				engine.ExecuteResource("React.Resources.babel.generated.min.js", typeof(ReactEnvironment).Assembly);
 			}
 		}
 	}

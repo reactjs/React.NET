@@ -131,6 +131,7 @@
     <Compile Include="TinyIoC\TinyIoC.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="package.json" />
     <None Include="packages.config" />
     <Compile Include="SimpleFileSystem.cs" />
     <None Include="React.Core.nutrans" />
@@ -139,12 +140,11 @@
     <EmbeddedResource Include="Resources\shims.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="node_modules\babel-core\browser.js" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="gulpfile.js" />
     <EmbeddedResource Include="Resources\react.generated.js" />
     <EmbeddedResource Include="Resources\react.generated.min.js" />
+    <EmbeddedResource Include="Resources\babel.generated.min.js" />
+    <Content Include="Resources\babel.js" />
     <Content Include="Resources\react.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

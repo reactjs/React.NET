@@ -8,12 +8,15 @@
  */
 
 var gulp = require('gulp');
+var named = require('vinyl-named');
 var webpack = require('webpack');
 var webpackStream = require('webpack-stream');
 var uglify = require('gulp-uglify');
 
+var OUTPUT_DIR = 'Resources/';
+
 gulp.task('default', ['build']);
-gulp.task('build', ['build-react-dev', 'build-react-prod']);
+gulp.task('build', ['build-react-dev', 'build-deps-prod']);
 
 gulp.task('build-react-dev', function() {
 	return gulp.src('Resources/react.js')
@@ -23,27 +26,44 @@ gulp.task('build-react-dev', function() {
 				libraryTarget: 'this'
 			},
 			plugins: [
-			  new webpack.DefinePlugin({
-			  	'process.env.NODE_ENV': '"development"'
-			  })
+				new webpack.DefinePlugin({
+					'process.env.NODE_ENV': '"development"'
+				}),
+				new webpack.optimize.OccurenceOrderPlugin(),
+				new webpack.optimize.DedupePlugin()
 			]
 		}))
-		.pipe(gulp.dest('Resources/'));
+		.pipe(gulp.dest(OUTPUT_DIR));
 });
 
-gulp.task('build-react-prod', function () {
-	return gulp.src('Resources/react.js')
+gulp.task('build-deps-prod', function () {
+	return gulp.src(['Resources/react.js', 'Resources/babel.js'])
+		.pipe(named())
 		.pipe(webpackStream({
+			module: {
+				loaders: [
+					{
+						exclude: /node_modules/,
+						test: /\.js$/,
+						loader: 'babel',
+						query: {
+							presets: ['es2015', 'stage-0']
+						}
+					},
+				]
+			},
 			output: {
-				filename: 'react.generated.min.js',
+				filename: '[name].generated.min.js',
 				libraryTarget: 'this'
 			},
 			plugins: [
-			  new webpack.DefinePlugin({
-			  	'process.env.NODE_ENV': '"production"'
-			  })
+				new webpack.DefinePlugin({
+					'process.env.NODE_ENV': '"production"'
+				}),
+				new webpack.optimize.OccurenceOrderPlugin(),
+				new webpack.optimize.DedupePlugin()
 			]
 		}))
 		.pipe(uglify())
-		.pipe(gulp.dest('Resources/'));
+		.pipe(gulp.dest(OUTPUT_DIR));
 });

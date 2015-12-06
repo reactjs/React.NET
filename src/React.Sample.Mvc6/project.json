@@ -1,6 +1,6 @@
 {
     "webroot": "wwwroot",
-    "version": "2.1.3-*",
+    "version": "2.2.0-*",
   "dependencies": {
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",

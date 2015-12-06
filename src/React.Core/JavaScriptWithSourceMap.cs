@@ -19,6 +19,11 @@ namespace React
 	public class JavaScriptWithSourceMap
 	{
 		/// <summary>
+		/// Gets or sets the version of Babel used to perform this transformation.
+		/// </summary>
+		public string BabelVersion { get; set; }
+
+		/// <summary>
 		/// The transformed result
 		/// </summary>
 		public string Code { get; set; }
