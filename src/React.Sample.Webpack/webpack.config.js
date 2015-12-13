@@ -25,7 +25,7 @@ module.exports = {
       {
       	test: /\.jsx?$/,
       	exclude: /node_modules/,
-      	loader: 'babel-loader?loose=all&stage=1'
+      	loader: 'babel'
       }
 	  // Uncomment this if you want to use your own version of React instead of the version 
 	  // bundled with ReactJS.NET.
