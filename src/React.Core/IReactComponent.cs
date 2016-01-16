@@ -35,6 +35,11 @@ namespace React
 		string ContainerTag { get; set; }
 
 		/// <summary>
+		/// Gets or sets the HTML class for the container of this component
+		/// </summary>
+		string ContainerClass { get; set; }
+
+		/// <summary>
 		/// Renders the HTML for this component. This will execute the component server-side and
 		/// return the rendered HTML.
 		/// </summary>

@@ -118,6 +118,25 @@ namespace React.Tests.Core
 		}
 
 		[Test]
+		public void RenderHtmlShouldAddClassToElement()
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
+				.Returns("[HTML]");
+
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" },
+				ContainerClass="test-class"
+			};
+			var result = component.RenderHtml();
+
+			Assert.AreEqual(@"<div id=""container"" class=""test-class"">[HTML]</div>", result);
+		}
+
+		[Test]
 		public void RenderJavaScriptShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
