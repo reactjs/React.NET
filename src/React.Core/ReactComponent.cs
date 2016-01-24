@@ -53,6 +53,11 @@ namespace React
 		public string ContainerTag { get; set; }
 
 		/// <summary>
+		/// Gets or sets the HTML class for the container of this component
+		/// </summary>
+		public string ContainerClass { get; set; }
+
+		/// <summary>
 		/// Gets or sets the props for this component
 		/// </summary>
 		public object Props { get; set; }
@@ -94,12 +99,19 @@ namespace React
 						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
 					html = _environment.Execute<string>(reactRenderCommand);
 				}
+
+				string attributes = string.Format("id=\"{0}\"", ContainerId);
+				if (!string.IsNullOrEmpty(ContainerClass))
+				{
+					attributes += string.Format(" class=\"{0}\"", ContainerClass);
+				}
+
 				return string.Format(
-					"<{2} id=\"{0}\">{1}</{2}>",
-					ContainerId,
+					"<{2} {0}>{1}</{2}>",
+					attributes,
 					html,
 					ContainerTag
-				);
+					);
 			}
 			catch (JsRuntimeException ex)
 			{
