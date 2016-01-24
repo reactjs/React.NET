@@ -1,32 +1,32 @@
 [ReactJS.NET](http://reactjs.net/)
 ===========
 
-ReactJS.NET is a library that makes it easier to use Facebook's
-[React](http://facebook.github.io/react/) and
-[JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
+ReactJS.NET is a library that makes it easier to use [Babel](http://babeljs.io/) along with Facebook's [React](http://facebook.github.io/react/) and [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C#.
 
 [![Build status](https://img.shields.io/appveyor/ci/Daniel15/react-net/master.svg)](https://ci.appveyor.com/project/Daniel15/react-net/branch/master)&nbsp;
-[![Code coverage](http://img.shields.io/teamcity/coverage/ReactJSNet_Master.svg)](http://teamcity.codebetter.com/viewType.html?buildTypeId=ReactJSNet_Master&guest=1)&nbsp;
 [![NuGet downloads](http://img.shields.io/nuget/dt/React.Core.svg)](https://www.nuget.org/packages/React.Core/)&nbsp;
 [![NuGet version](http://img.shields.io/nuget/v/React.Core.svg)](https://www.nuget.org/packages/React.Core/)
 
 Features
 ========
- * On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/usage.html)
+ * On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/usage.html) via [Babel](http://babeljs.io/)
  * JSX to JavaScript compilation via popular minification/combination
    libraries:
    * [ASP.NET Bundling and Minification](http://reactjs.net/guides/weboptimizer.html)
    * [Cassette](http://reactjs.net/guides/cassette.html)
    * [Webpack](http://reactjs.net/guides/webpack.html)
+   * [MSBuild](http://reactjs.net/guides/msbuild.html)
  * [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
    to make your initial render super-fast (experimental!)
  * [Runs on Linux](http://reactjs.net/guides/mono.html) via Mono and V8
+ * Supports both ASP.NET 4.0/4.5 and ASP.NET 5
 
 Quick Start
 ===========
 Install the package
 ```
-Install-Package React.Web.Mvc4
+Install-Package React.Web.Mvc4 # For ASP.NET MVC 4 or 5
+Install-Package React.AspNet   # For ASP.NET MVC 6 (ASP.NET 5)
 ```
 
 Create JSX files
