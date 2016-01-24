@@ -20,12 +20,12 @@
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
     "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
-    "MsieJavaScriptEngine": "1.5.1",
+    "MsieJavaScriptEngine": "1.6.0",
     "React.Core": "",
     "JavaScriptEngineSwitcher.Core": "1.2.4.0",
-    "JavaScriptEngineSwitcher.Msie": "1.2.4",
-    "JavaScriptEngineSwitcher.V8": "1.2.4",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final"
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
+    "JavaScriptEngineSwitcher.Msie": "1.4.0",
+    "JavaScriptEngineSwitcher.V8": "1.4.1"
   },
     "frameworks": {
         "dnx451": { }

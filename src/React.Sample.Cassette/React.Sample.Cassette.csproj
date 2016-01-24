@@ -26,6 +26,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>12.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,25 +48,25 @@
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxMin, Version=4.84.4790.14405, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AjaxMin.4.84.4790.14417\lib\net40\AjaxMin.dll</HintPath>
+    <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cassette, Version=2.4.1.23586, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Cassette.2.4.1\lib\net40-client\Cassette.dll</HintPath>
+    <Reference Include="Cassette, Version=2.4.2.13844, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cassette.2.4.2\lib\net40-client\Cassette.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cassette.Aspnet, Version=2.4.1.23587, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Cassette.Aspnet.2.4.1\lib\net40\Cassette.Aspnet.dll</HintPath>
+    <Reference Include="Cassette.Aspnet, Version=2.4.2.13845, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cassette.Aspnet.2.4.2\lib\net40\Cassette.Aspnet.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cassette.MSBuild, Version=2.4.1.23587, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Cassette.MSBuild.2.4.1\lib\net40\Cassette.MSBuild.dll</HintPath>
+    <Reference Include="Cassette.MSBuild, Version=2.4.2.13846, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cassette.MSBuild.2.4.2\lib\net40\Cassette.MSBuild.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Cassette.Views, Version=2.4.2.13844, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Cassette.Views.2.4.1\lib\net40\Cassette.Views.dll</HintPath>
+      <HintPath>..\packages\Cassette.Views.2.4.2\lib\net40\Cassette.Views.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="JavaScriptEngineSwitcher.Core">
       <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.2.4\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
@@ -121,8 +122,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="WebActivatorEx">
-      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

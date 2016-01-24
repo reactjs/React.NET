@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\JavaScriptEngineSwitcher.V8.1.4.1\build\JavaScriptEngineSwitcher.V8.props" Condition="Exists('..\packages\JavaScriptEngineSwitcher.V8.1.4.1\build\JavaScriptEngineSwitcher.V8.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,6 +27,9 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>12.0</OldToolsVersion>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,17 +51,17 @@
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClearScript, Version=5.4.1.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.4\lib\net40\ClearScript.dll</HintPath>
+    <Reference Include="ClearScript, Version=5.4.4.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.4.1\lib\net40\ClearScript.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="JavaScriptEngineSwitcher.Core, Version=1.2.4.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.2.4\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.V8, Version=1.2.4.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.2.4\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
+    <Reference Include="JavaScriptEngineSwitcher.V8, Version=1.4.1.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.4.1\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -107,8 +111,8 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -134,22 +138,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\ClearScriptV8-32.dll">
-      <Link>ClearScript.V8\ClearScriptV8-32.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\ClearScriptV8-64.dll">
-      <Link>ClearScript.V8\ClearScriptV8-64.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\v8-ia32.dll">
-      <Link>ClearScript.V8\v8-ia32.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.2.4\content\ClearScript.V8\v8-x64.dll">
-      <Link>ClearScript.V8\v8-x64.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\client.js" />
     <Content Include="Content\components\index.js" />
     <Content Include="Content\Sample.css" />
@@ -217,6 +205,12 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\JavaScriptEngineSwitcher.V8.1.4.1\build\JavaScriptEngineSwitcher.V8.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JavaScriptEngineSwitcher.V8.1.4.1\build\JavaScriptEngineSwitcher.V8.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -68,18 +68,23 @@ namespace React
 
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
-				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraJsRt }),
+				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraEdgeJsRt }),
 				Priority = 20
-			}, "MsieChakraRT");
+			}, "MsieChakraEdgeRT");
+			container.Register(new JavaScriptEngineFactory.Registration
+			{
+				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraIeJsRt }),
+				Priority = 30
+			}, "MsieChakraIeRT");
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
-				Priority = 30
+				Priority = 40
 			}, "MsieChakraActiveScript");
 			container.Register(new JavaScriptEngineFactory.Registration
 			{
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
-				Priority = 40
+				Priority = 50
 			}, "MsieClassic");
 		}
 	}

@@ -35,13 +35,13 @@
     <DocumentationFile>..\..\bin\Release\Cassette.React\Cassette.React.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxMin, Version=4.84.4790.14405, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AjaxMin.4.84.4790.14417\lib\net40\AjaxMin.dll</HintPath>
+    <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Cassette, Version=2.4.1.23586, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Cassette.2.4.1\lib\net40-client\Cassette.dll</HintPath>
+    <Reference Include="Cassette, Version=2.4.2.13844, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cassette.2.4.2\lib\net40-client\Cassette.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

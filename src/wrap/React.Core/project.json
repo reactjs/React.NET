@@ -9,10 +9,10 @@
       },
       "dependencies": {
         "JavaScriptEngineSwitcher.Core": "1.2.4",
-        "JavaScriptEngineSwitcher.Msie": "1.2.4",
-        "JavaScriptEngineSwitcher.V8": "1.2.4",
+        "JavaScriptEngineSwitcher.Msie": "1.4.0",
+        "JavaScriptEngineSwitcher.V8": "1.4.1",
         "JSPool": "0.3.1",
-        "MsieJavaScriptEngine": "1.5.1",
+        "MsieJavaScriptEngine": "1.6.0",
         "Newtonsoft.Json": "6.0.8",
         "VroomJs": ""
       }
