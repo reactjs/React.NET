@@ -8,6 +8,6 @@ build:
   project: build.proj
   verbosity: normal
 test_script:
-- nunit-console.exe bin\ReleaseTests\React.Tests\React.Tests.dll
+- nunit3-console.exe bin\ReleaseTests\React.Tests\React.Tests.dll
 artifacts:
 - path: output\*.nupkg
