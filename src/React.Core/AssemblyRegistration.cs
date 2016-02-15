@@ -81,11 +81,6 @@ namespace React
 				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
 				Priority = 40
 			}, "MsieChakraActiveScript");
-			container.Register(new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.Classic }),
-				Priority = 50
-			}, "MsieClassic");
 		}
 	}
 }
