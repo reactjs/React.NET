@@ -145,12 +145,12 @@
     <EmbeddedResource Include="Resources\shims.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="gulpfile.js" />
+    <None Include="gulpfile.js" />
     <EmbeddedResource Include="Resources\react.generated.js" />
     <EmbeddedResource Include="Resources\react.generated.min.js" />
     <EmbeddedResource Include="Resources\babel.generated.min.js" />
-    <Content Include="Resources\babel.js" />
-    <Content Include="Resources\react.js" />
+    <None Include="Resources\babel.js" />
+    <None Include="Resources\react.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
