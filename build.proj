@@ -18,11 +18,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageOutputDir>output</PackageOutputDir>
 		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
 		
-		<!-- Only build ASP.NET 5 projects if on MSBuild 14+ (VS2015+) -->
-		<BuildAspNet5>false</BuildAspNet5>
-		<BuildAspNet5 Condition="$(VisualStudioVersion) == '14.0'">true</BuildAspNet5>
-		<SolutionFile>src\React.VS2015.sln</SolutionFile>
-		<SolutionFile Condition="$(BuildAspNet5) == 'false'">src\React.sln</SolutionFile>
+		<SolutionFile>src\React.sln</SolutionFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageAssemblies Include="React.Core" />
@@ -48,7 +44,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 		/>
 		<!-- NuGet packages for ASP.NET 5 projects -->
 		<Exec
-			Condition="$(BuildAspNet5) == 'true'"
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="dnu restore --quiet --parallel src\React.AspNet src\React.Sample.Mvc6"
 		/>
@@ -92,7 +87,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 			build date) and reset it later so the dev build number isn't commited to the repo.
 		-->
 		<!--SetEnvironmentVariable
-			Condition="$(BuildAspNet5) == 'true'"
 			Name="K_BUILD_VERSION"
 			Value="$(Build)"
 		/-->
@@ -155,7 +149,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		/>
 	</Target>
 
-	<Target Name="CopyAspNetPackages" AfterTargets="Package" Condition="$(BuildAspNet5) == 'true'">
+	<Target Name="CopyAspNetPackages" AfterTargets="Package">
 		<!-- Copy over ASP.NET 5 packages -->
 		<ItemGroup>
 			<AspNet5Packages Include="bin/%(PackageAssembliesAspNet5.Identity)/Release/*.nupkg" />
