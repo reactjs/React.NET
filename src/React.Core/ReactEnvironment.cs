@@ -27,11 +27,6 @@ namespace React
 	public class ReactEnvironment : IReactEnvironment, IDisposable
 	{
 		/// <summary>
-		/// Format string used for React component container IDs
-		/// </summary>
-		protected const string CONTAINER_ELEMENT_NAME = "react{0}";
-
-		/// <summary>
 		/// JavaScript variable set when user-provided scripts have been loaded
 		/// </summary>
 		protected const string USER_SCRIPTS_LOADED_KEY = "_ReactNET_UserScripts_Loaded";
@@ -75,10 +70,6 @@ namespace React
 		/// </summary>
 		protected readonly Lazy<IJsEngine> _engineFromPool;
 
-		/// <summary>
-		/// Number of components instantiated in this environment
-		/// </summary>
-		protected int _maxContainerId = 0;
 		/// <summary>
 		/// List of all components instantiated in this environment
 		/// </summary>
@@ -269,12 +260,6 @@ namespace React
 		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null)
 		{
 			EnsureUserScriptsLoaded();
-			if (string.IsNullOrEmpty(containerId))
-			{
-				_maxContainerId++;
-				containerId = string.Format(CONTAINER_ELEMENT_NAME, _maxContainerId);	
-			}
-			
 			var component = new ReactComponent(this, _config, componentName, containerId)
 			{
 				Props = props

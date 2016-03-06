@@ -173,5 +173,17 @@ namespace React.Tests.Core
 			}
 			Assert.AreEqual(expected, isValid);
 		}
+
+
+		[Test]
+		public void GeneratesContainerIdIfNotProvided()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = new Mock<IReactSiteConfiguration>();
+
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", null);
+			StringAssert.StartsWith("react_", component.ContainerId);
+		}
+
 	}
 }

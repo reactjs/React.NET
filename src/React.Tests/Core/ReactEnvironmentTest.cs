@@ -91,8 +91,8 @@ namespace React.Tests.Core
 
 			var component1 = environment.CreateComponent("ComponentName", new { });
 			var component2 = environment.CreateComponent("ComponentName", new { });
-			Assert.AreEqual("react1", component1.ContainerId);
-			Assert.AreEqual("react2", component2.ContainerId);
+			StringAssert.StartsWith("react_", component1.ContainerId);
+			StringAssert.StartsWith("react_", component2.ContainerId);
 		}
 
 		[Test]
@@ -105,7 +105,7 @@ namespace React.Tests.Core
 			var component1 = environment.CreateComponent("ComponentName", new { }, "foo");
 			var component2 = environment.CreateComponent("ComponentName", new { });
 			Assert.AreEqual("foo", component1.ContainerId);
-			Assert.AreEqual("react1", component2.ContainerId);
+			StringAssert.StartsWith("react_", component2.ContainerId);
 		}
 
 		private class Mocks

@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JavaScriptEngineSwitcher.Core;
@@ -75,7 +76,7 @@ namespace React
 			_environment = environment;
 			_configuration = configuration;
 			ComponentName = componentName;
-			ContainerId = containerId;
+			ContainerId = string.IsNullOrEmpty(containerId) ? GenerateId() : containerId;
 			ContainerTag = "div";
 		}
 
@@ -187,6 +188,15 @@ namespace React
 					componentName
 				));
 			}
+		}
+
+		/// <summary>
+		/// Generates a unique identifier for this component, if one was not passed in.
+		/// </summary>
+		/// <returns></returns>
+		private static string GenerateId()
+		{
+			return "react_" + Guid.NewGuid().ToShortGuid();
 		}
 	}
 }
