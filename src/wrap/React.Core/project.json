@@ -1,5 +1,5 @@
 {
-  "version": "2.2.2-*",
+  "version": "2.2.2-dev-20160307-1719",
   "frameworks": {
     "net40": {
       "wrappedProject": "../../React.Core/React.Core.csproj",

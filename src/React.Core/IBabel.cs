@@ -21,6 +21,14 @@ namespace React
 		/// <returns>JavaScript</returns>
 		string TransformFile(string filename);
 
+        /// <summary>
+        /// Transforms a JavaScript literal. Results of the transformation are cached.
+        /// </summary>
+        /// <param name="scriptId">The id of the script, used for caching purposes</param>
+        /// <param name="script">The script contents</param>
+        /// <returns>JavaScript</returns>
+        string TransformLiteral(string scriptId, string script);
+
 		/// <summary>
 		/// Transforms a JavaScript file via Babel and also returns a source map to map the
 		/// compiled source to the original version. Results of the transformation are cached.

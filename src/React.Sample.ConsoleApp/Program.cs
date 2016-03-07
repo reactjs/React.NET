@@ -17,14 +17,30 @@ namespace React.Sample.ConsoleApp
 		{
 			Initialize();
 
+            var sampleScript = @"
+var HelloWorld2 = React.createClass({
+	render() {
+		return (
+			<div>
+				Hello {this.props.name} (a second time)!
+			</div>
+		);
+	}
+});
+            ";
+
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
+                .AddScriptLiteral("Sample2", sampleScript)                                                
 				.AddScript("Sample.jsx");
 
 			var environment = ReactEnvironment.Current;
 			var component = environment.CreateComponent("HelloWorld", new { name = "Daniel" });
-			// renderServerOnly omits the data-reactid attributes
+			
+            // renderServerOnly omits the data-reactid attributes
 			var html = component.RenderHtml(renderServerOnly: true);
+
+            html += environment.CreateComponent("HelloWorld2", new { name = "aBe" }).RenderHtml(renderServerOnly: true);
 
 			Console.WriteLine(html);
 			Console.ReadKey();
