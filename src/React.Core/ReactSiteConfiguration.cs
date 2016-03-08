@@ -54,73 +54,53 @@ namespace React
 		/// transformation to be run.
 		/// </summary>
 		private readonly IList<string> _scriptFilesWithoutTransform = new List<string>();
-        /// <summary>
+		/// <summary>
 		/// All the script literals that have been added to this configuration as a string and require JSX 
 		/// transformation to be run. The key for the dictionary is used for caching.
 		/// </summary>
-        private readonly IDictionary<string, string> _scriptLiterals = new Dictionary<string, string>();
-        /// <summary>
-		/// All the script literals that have been added to this configuration and do not require JSX
-		/// transformation to be run.
-		/// </summary>
-        private readonly IList<string> _scriptLiteralsWithoutTransform = new List<string>();
+		private readonly IDictionary<string, string> _scriptLiterals = new Dictionary<string, string>();
 
-        /// <summary>
-        /// Adds a script to the list of scripts that are executed. This should be called for all
-        /// React components and their dependencies. If the script does not have any JSX in it
-        /// (for example, it's built using Webpack or Gulp), use 
-        /// <see cref="AddScriptWithoutTransform"/> instead.
-        /// </summary>
-        /// <param name="filename">
-        /// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
-        /// <c>~/Scripts/Awesome.js</c>)
-        /// </param>
-        /// <returns>This configuration, for chaining</returns>
-        public IReactSiteConfiguration AddScript(string filename)
+		/// <summary>
+		/// Adds a script to the list of scripts that are executed. This should be called for all
+		/// React components and their dependencies. If the script does not have any JSX in it
+		/// (for example, it's built using Webpack or Gulp), use 
+		/// <see cref="AddScriptWithoutTransform"/> instead.
+		/// </summary>
+		/// <param name="filename">
+		/// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
+		/// <c>~/Scripts/Awesome.js</c>)
+		/// </param>
+		/// <returns>This configuration, for chaining</returns>
+		public IReactSiteConfiguration AddScript(string filename)
 		{
 			_scriptFiles.Add(filename);
 			return this;
 		}
 
-        /// <summary>
-        /// Adds a script literal to the list of scripts that are executed. If the script doesn't have any JSX in it
-        /// use <see cref="AddScriptLiteralWithoutTransform"/> instead.
-        /// </summary>
-        /// <param name="scriptId">The id of the script, used for caching purposes.</param>
-        /// <param name="script">The script literal to execute.</param>
-        /// <returns>The configuration, for chaining</returns>
-        public IReactSiteConfiguration AddScriptLiteral(string scriptId, string script)
-        {
-            _scriptLiterals.Add(scriptId, script);
-            return this;
-        }
+		/// <summary>
+		/// Adds a script literal to the list of scripts that are executed. Script literals will be run through JSX transformation.
+		/// </summary>
+		/// <param name="scriptId">The id of the script, used for caching purposes.</param>
+		/// <param name="script">The script literal to execute.</param>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration AddScriptLiteral(string scriptId, string script)
+		{
+			_scriptLiterals.Add(scriptId, script);
+			return this;
+		}
+	   
 
-        /// <summary>
-        /// Adds a script literal to the list of scripts that are executed. This is the same as
-        /// <see cref="AddScriptLiteral"/> except it does not run JSX transformation on the script and thus is
-        /// more efficient.
-        /// </summary>
-        /// <param name="script">
-        /// The script literal to execute.
-        /// </param>
-        /// <returns>The configuration, for chaining</returns>
-        public IReactSiteConfiguration AddScriptLiteralWithoutTransform(string script)
-        {
-            _scriptLiteralsWithoutTransform.Add(script);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a script to the list of scripts that are executed. This is the same as
-        /// <see cref="AddScript"/> except it does not run JSX transformation on the script and thus is
-        /// more efficient.
-        /// </summary>
-        /// <param name="filename">
-        /// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
-        /// <c>~/Scripts/Awesome.js</c>)
-        /// </param>
-        /// <returns>The configuration, for chaining</returns>
-        public IReactSiteConfiguration AddScriptWithoutTransform(string filename)
+		/// <summary>
+		/// Adds a script to the list of scripts that are executed. This is the same as
+		/// <see cref="AddScript"/> except it does not run JSX transformation on the script and thus is
+		/// more efficient.
+		/// </summary>
+		/// <param name="filename">
+		/// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
+		/// <c>~/Scripts/Awesome.js</c>)
+		/// </param>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration AddScriptWithoutTransform(string filename)
 		{
 			_scriptFilesWithoutTransform.Add(filename);
 			return this;
@@ -157,28 +137,17 @@ namespace React
 			get { return _scriptFiles.SelectMany(Glob); }
 		}
 
-        /// <summary>
-        /// Gets a list of all the script literals that have been added to this configuration and require JSX 
-        /// transformation to be run.
-        /// </summary>
-        public IDictionary<string, string> ScriptLiterals
-        {
-            get
-            {
-                return _scriptLiterals;
-            }
-        }
-
-        /// <summary>
-		/// Gets a list of all the script literals that have been added to this configuration.
+		/// <summary>
+		/// Gets a list of all the script literals that have been added to this configuration and require JSX 
+		/// transformation to be run.
 		/// </summary>
-        public IEnumerable<string> ScriptLiteralsWithoutTransform
-        {
-            get
-            {
-                return _scriptLiteralsWithoutTransform;
-            }
-        }
+		public IDictionary<string, string> ScriptLiterals
+		{
+			get
+			{
+				return _scriptLiterals;
+			}
+		}		
 
 		/// <summary>
 		/// Gets a list of all the scripts that have been added to this configuration.

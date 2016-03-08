@@ -79,52 +79,47 @@ namespace React
 			_babelConfig = siteConfig.BabelConfig.Serialize();
 		}
 
-        /// <summary>
-        /// Transforms a JavaScript literal. Results of the transformation are cached.
-        /// </summary>
-        /// <param name="scriptId">The id of the script, used for caching purposes</param>
-        /// <param name="script">The script contents</param>
-        /// <returns>JavaScript</returns>
-        public virtual string TransformLiteral(string scriptId, string script)
-        {
-            var cacheKey = string.Format(JSX_CACHE_KEY, scriptId);
+		/// <summary>
+		/// Transforms a JavaScript literal. Results of the transformation are cached.
+		/// </summary>
+		/// <param name="scriptId">The id of the script, used for caching purposes</param>
+		/// <param name="script">The script contents</param>
+		/// <returns>JavaScript</returns>
+		public virtual string TransformWithSourceMapCached(string scriptId, string script)
+		{
+			var cacheKey = string.Format(JSX_CACHE_KEY, scriptId);
 
-            JavaScriptWithSourceMap output;
+			// 1. Check in-memory cache.            
+			JavaScriptWithSourceMap output = CheckInMemoryCache(cacheKey, false);
+			if (output != null)
+			{
+				return output.Code;
+			}
 
-            // 1. Check in-memory cache.            
-            if (CheckInMemoryCache(cacheKey, false, out output))
-            {
-                return output.Code;
-            }
+			// 2. Perform Translation
+			try
+			{
+				output = TransformWithSourceMap(script, scriptId);
+			}
+			catch (BabelException ex)
+			{
+				// Add the scriptId to the error message
+				throw new BabelException(string.Format(
+					"In script literal \"{0}\": {1}",
+					scriptId,
+					ex.Message
+				), ex);
+			}
 
-            // 2. Perform Translation
-            try
-            {
-                output = TransformWithSourceMap(script, scriptId);
-            }
-            catch (BabelException ex)
-            {
-                // Add the filename to the error message
-                throw new BabelException(string.Format(
-                    "In script literal \"{0}\": {1}",
-                    scriptId,
-                    ex.Message
-                ), ex);
-            }
+			// 3. Cache the result from above to memory
+			_cache.Set(
+				cacheKey,
+				output,
+				slidingExpiration: TimeSpan.FromMinutes(30)                
+			);
 
-
-            // 3. Cache the result from above to memory
-            _cache.Set(
-                cacheKey,
-                output,
-                slidingExpiration: TimeSpan.FromMinutes(30)                
-            );
-
-            return output.Code;
-
-
-
-        }
+			return output.Code;
+		}
 
 		/// <summary>
 		/// Transforms a JavaScript file. Results of the transformation are cached.
@@ -152,13 +147,13 @@ namespace React
 		{
 			var cacheKey = string.Format(JSX_CACHE_KEY, filename);
 
-            // 1. Check in-memory cache. We need to invalidate any in-memory cache if there's no 
-            // source map cached and forceGenerateSourceMap is true.
-            JavaScriptWithSourceMap cached;
-            if (CheckInMemoryCache(cacheKey, forceGenerateSourceMap, out cached))
-            {
-                return cached;
-            }
+			// 1. Check in-memory cache. We need to invalidate any in-memory cache if there's no 
+			// source map cached and forceGenerateSourceMap is true.
+			var cached = CheckInMemoryCache(cacheKey, forceGenerateSourceMap);
+			if (cached != null)
+			{
+				return cached;
+			}
 			
 			// 2. Check on-disk cache
 			var contents = _fileSystem.ReadAsString(filename);
@@ -193,22 +188,21 @@ namespace React
 			return output;
 		}
 
-        /// <summary>
-        /// Checks the in-memory cache. We need to invalidate any in-memory cache if there's no 
-        /// source map cached and forceGenerateSourceMap is true.
-        /// </summary>
-        /// <param name="cacheKey"></param>
-        /// <param name="forceGenerateSourceMap"></param>
-        /// <param name="cached"></param>
-        /// <returns>True if the cache contains the transformed source.</returns>
-        private bool CheckInMemoryCache(string cacheKey, bool forceGenerateSourceMap, out JavaScriptWithSourceMap cached)
-        {
-            cached = _cache.Get<JavaScriptWithSourceMap>(cacheKey);
+		/// <summary>
+		/// Checks the in-memory cache. We need to invalidate any in-memory cache if there's no 
+		/// source map cached and forceGenerateSourceMap is true.
+		/// </summary>
+		/// <param name="cacheKey"></param>
+		/// <param name="forceGenerateSourceMap"></param>		
+		/// <returns>A JavaScriptWithSourceMap object if found in the cache, otherwise returns null.</returns>
+		private JavaScriptWithSourceMap CheckInMemoryCache(string cacheKey, bool forceGenerateSourceMap)
+		{
+			var cached = _cache.Get<JavaScriptWithSourceMap>(cacheKey);
 
-            var cacheIsValid = cached != null && (!forceGenerateSourceMap || cached.SourceMap != null);
-
-            return cacheIsValid;            
-        }
+			return (cached != null && (!forceGenerateSourceMap || cached.SourceMap != null))
+				? cached 
+				: null;
+		}
 
 		/// <summary>
 		/// Loads a transformed JavaScript file from the disk cache. If the cache is invalid or there is

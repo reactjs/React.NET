@@ -43,48 +43,31 @@ namespace React
 		/// <returns>The configuration, for chaining</returns>
 		IReactSiteConfiguration AddScriptWithoutTransform(string filename);
 
-        /// <summary>
-        /// Adds a script literal to the list of scripts that are executed. If the script doesn't have any JSX in it
-        /// use <see cref="AddScriptLiteralWithoutTransform"/> instead.
-        /// </summary>
-        /// <param name="scriptId">The id of the script, used for caching purposes.</param>
-        /// <param name="script">The script literal to execute.</param>
-        /// <returns>The configuration, for chaining</returns>
-        IReactSiteConfiguration AddScriptLiteral(string scriptId, string script);
-
-        /// <summary>
-        /// Adds a script literal to the list of scripts that are executed. This is the same as
-        /// <see cref="AddScriptLiteral"/> except it does not run JSX transformation on the script and thus is
-        /// more efficient.
-        /// </summary>
-        /// <param name="script">
-        /// The script literal to execute.
-        /// </param>
-        /// <returns>The configuration, for chaining</returns>
-        IReactSiteConfiguration AddScriptLiteralWithoutTransform(string script);
-
-        /// <summary>
-        /// Gets a list of all the scripts that have been added to this configuration and require JSX
-        /// transformation to be run.
-        /// </summary>
-        IEnumerable<string> Scripts { get; }
-
-        /// <summary>
-        /// Gets a list of all the script literals that have been added to this configuration and require JSX 
-        /// transformation to be run.
-        /// </summary>
-        IDictionary<string, string> ScriptLiterals { get; }
-
-        /// <summary>
-		/// Gets a list of all the script literals that have been added to this configuration.
+		/// <summary>
+		/// Adds a script literal to the list of scripts that are executed. Script literals will be run through JSX transformation.
 		/// </summary>
-        IEnumerable<string> ScriptLiteralsWithoutTransform { get; }
+		/// <param name="scriptId">The id of the script, used for caching purposes.</param>
+		/// <param name="script">The script literal to execute.</param>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration AddScriptLiteral(string scriptId, string script);        
 
-        /// <summary>
-        /// Gets a list of all the scripts that have been added to this configuration and do not 
-        /// require JSX transformation to be run.
-        /// </summary>
-        IEnumerable<string> ScriptsWithoutTransform { get; } 
+		/// <summary>
+		/// Gets a list of all the scripts that have been added to this configuration and require JSX
+		/// transformation to be run.
+		/// </summary>
+		IEnumerable<string> Scripts { get; }
+
+		/// <summary>
+		/// Gets a list of all the script literals that have been added to this configuration and require JSX 
+		/// transformation to be run.
+		/// </summary>
+		IDictionary<string, string> ScriptLiterals { get; }        
+
+		/// <summary>
+		/// Gets a list of all the scripts that have been added to this configuration and do not 
+		/// require JSX transformation to be run.
+		/// </summary>
+		IEnumerable<string> ScriptsWithoutTransform { get; } 
 
 		/// <summary>
 		/// Gets or sets whether JavaScript engines should be reused across requests.

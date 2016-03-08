@@ -147,25 +147,7 @@ namespace React
 						ex.ColumnNumber
 					));
 				}
-			}
-
-            foreach (var script in _config.ScriptLiteralsWithoutTransform)
-            {
-                try
-                {
-                    engine.Execute(script);
-                }
-                catch (JsRuntimeException ex)
-                {
-                    _scriptLoadException = new ReactScriptLoadException(string.Format(
-                        "Error while loading \"{0}\": {1}\r\nLine: {2}\r\nColumn: {3}",
-                        script,
-                        ex.Message,
-                        ex.LineNumber,
-                        ex.ColumnNumber
-                    ));
-                }
-            }
+			}            
 		}
 
 		/// <summary>

@@ -88,6 +88,7 @@ namespace React.Tests.Core
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 			mocks.Config.Setup(x => x.Scripts).Returns(new List<string>());
+			mocks.Config.Setup(x => x.ScriptLiterals).Returns(new Dictionary<string, string>());
 
 			var component1 = environment.CreateComponent("ComponentName", new { });
 			var component2 = environment.CreateComponent("ComponentName", new { });
@@ -101,6 +102,7 @@ namespace React.Tests.Core
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 			mocks.Config.Setup(x => x.Scripts).Returns(new List<string>());
+			mocks.Config.Setup(x => x.ScriptLiterals).Returns(new Dictionary<string, string>());
 
 			var component1 = environment.CreateComponent("ComponentName", new { }, "foo");
 			var component2 = environment.CreateComponent("ComponentName", new { });
