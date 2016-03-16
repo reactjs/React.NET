@@ -516,7 +516,7 @@ var CommentBox = React.createClass({
 });
 ```
 
-Here, `componentDidMount` is a method called automatically by React when a component is rendered. The key to dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
+Here, `componentDidMount()` is a method called automatically by React *after* the component is rendered. So, by moving the XMLHttpRequest call from `componentWillMount()`, which is executed only once *before* rendering, to a function called `loadCommentsFromServer()`, we can then call it multiple times from `componentDidMount()` at a set interval to check for any updates to the comments. The key to dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
 
 ```javascript{2,15-16,30}
 var CommentBox = React.createClass({
