@@ -488,7 +488,7 @@ var CommentBox = React.createClass({
 `getInitialState()` executes exactly once during the lifecycle of the component and sets up the initial state of the component.
 
 #### Updating state
-When the component is first created, we want to GET some JSON from the server and update the state to reflect the latest data. We'll use the standard XMLHttpRequest API to retrieve the data. If you need support for old browsers (mainly old Internet Explorer), you can use an AJAX library or a multipurpose library such as jQuery.
+When the component is first created, we want to GET some JSON from the server and update the state to reflect the latest data. We'll use the standard XMLHttpRequest API to retrieve the data. If you need support for old browsers (mainly old Internet Explorer), you can use an AJAX library or a multipurpose library such as jQuery. `componentWillMount()` executes immediately and only once before the rendering occurs. In the following example, `componentWillMount()` loads the data from our XMLHttpRequest and assigns it to the `data` variable. Finally, it sets the `data` variable in state, using `setState()`.
 
 ```javascript{6-12}
 var CommentBox = React.createClass({
