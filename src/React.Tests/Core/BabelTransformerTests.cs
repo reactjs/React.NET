@@ -84,6 +84,19 @@ namespace React.Tests.Core
 		}
 
 		[Test]
+		public void ShouldUseCacheProviderScriptLiteral()
+		{
+			// Shouldn't the JSX_v3_ prefix be retrieved from a common constants class?
+			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v3_script_id", null)).Returns(new JavaScriptWithSourceMap
+			{
+				Code = "/* cached */"
+			});
+
+			var result = _babel.TransformWithSourceMapCached("script_id", "/* script goes here */");
+			Assert.AreEqual("/* cached */", result);
+		}
+
+		[Test]
 		public void ShouldUseFileSystemCacheIfHashValid()
 		{
 			SetUpEmptyCache();
@@ -128,6 +141,21 @@ namespace React.Tests.Core
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _babel.TransformFile("foo.jsx");
+			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
+		}
+
+		[Test]
+		public void ShouldTransformJsxScriptLiteralIfNoCache()
+		{
+			SetUpEmptyCache();
+			_environment.Setup(x => x.ExecuteWithBabel<JavaScriptWithSourceMap>(
+			   "ReactNET_transform_sourcemap",
+			   It.IsAny<string>(),
+			   It.IsAny<string>(),
+			   "script_id"
+			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
+
+			var result = _babel.TransformWithSourceMapCached("script_id", "/* script goes here */");
 			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 

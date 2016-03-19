@@ -147,7 +147,7 @@ namespace React
 						ex.ColumnNumber
 					));
 				}
-			}
+			}            
 		}
 
 		/// <summary>

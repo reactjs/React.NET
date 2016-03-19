@@ -176,6 +176,24 @@ namespace React
 					));
 				}
 			}
+
+			foreach (var script in _config.ScriptLiterals)
+			{
+				var contents = Babel.TransformWithSourceMapCached(script.Key, script.Value);
+				try
+				{
+					Execute(contents);
+				}
+				catch (JsRuntimeException ex)
+				{
+					throw new ReactScriptLoadException(string.Format(
+						"Error while loading script literal \"{0}\": {1}",
+						script.Key,
+						ex.Message
+					));
+				}
+			}
+
 			Engine.SetVariableValue(USER_SCRIPTS_LOADED_KEY, true);
 		}
 

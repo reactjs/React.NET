@@ -44,10 +44,24 @@ namespace React
 		IReactSiteConfiguration AddScriptWithoutTransform(string filename);
 
 		/// <summary>
+		/// Adds a script literal to the list of scripts that are executed. Script literals will be run through JSX transformation.
+		/// </summary>
+		/// <param name="scriptId">The id of the script, used for caching purposes.</param>
+		/// <param name="script">The script literal to execute.</param>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration AddScriptLiteral(string scriptId, string script);        
+
+		/// <summary>
 		/// Gets a list of all the scripts that have been added to this configuration and require JSX
 		/// transformation to be run.
 		/// </summary>
 		IEnumerable<string> Scripts { get; }
+
+		/// <summary>
+		/// Gets a list of all the script literals that have been added to this configuration and require JSX 
+		/// transformation to be run.
+		/// </summary>
+		IDictionary<string, string> ScriptLiterals { get; }        
 
 		/// <summary>
 		/// Gets a list of all the scripts that have been added to this configuration and do not 
