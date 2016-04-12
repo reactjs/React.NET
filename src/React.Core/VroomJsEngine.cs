@@ -23,6 +23,8 @@ namespace React
 	/// </summary>
 	public class VroomJsEngine : JsEngineBase
 	{
+		private bool _disposed;
+
 		/// <summary>
 		/// The VroomJs engine. One engine is shared for the whole app, and separate contexts are
 		/// used for each instance of this class.

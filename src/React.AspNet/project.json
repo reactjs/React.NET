@@ -15,17 +15,17 @@
         }
     },
   "dependencies": {
-    "JsPool": "0.3.1",
+    "JsPool": "0.4.1",
     "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
     "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
-    "MsieJavaScriptEngine": "1.6.0",
     "React.Core": "",
-    "JavaScriptEngineSwitcher.Core": "1.2.4.0",
     "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
-    "JavaScriptEngineSwitcher.Msie": "1.4.0",
-    "JavaScriptEngineSwitcher.V8": "1.4.1"
+    "JavaScriptEngineSwitcher.Core": "1.5.0",
+    "JavaScriptEngineSwitcher.Msie": "1.5.0",
+    "JavaScriptEngineSwitcher.V8": "1.5.2",
+    "MsieJavaScriptEngine": "1.7.0"
   },
     "frameworks": {
         "dnx451": { }

@@ -13,8 +13,8 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "React.AspNet": "",
     "React.Core": "",
-    "JavaScriptEngineSwitcher.Msie": "1.4.0",
-    "JavaScriptEngineSwitcher.V8": "1.4.1"
+    "JavaScriptEngineSwitcher.Msie": "1.5.0",
+    "JavaScriptEngineSwitcher.V8": "1.5.2"
   },
     "commands": {
       "web": "Microsoft.AspNet.Server.Kestrel",
