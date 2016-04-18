@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>React.Tests</RootNamespace>
     <AssemblyName>React.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1607</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -105,6 +108,7 @@
     <Compile Include="Core\BabelTransformerTests.cs" />
     <Compile Include="Core\ReactComponentTest.cs" />
     <Compile Include="Mvc\HtmlHelperExtensionsTests.cs" />
+    <Compile Include="Owin\EntryAssemblyFileSystemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\ReactEnvironmentTest.cs" />
   </ItemGroup>
@@ -112,6 +116,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\React.Owin\React.Owin.csproj">
+      <Project>{c3bf8d49-b7cc-4d7f-b0f0-a94347c595ea}</Project>
+      <Name>React.Owin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\React.Web.Mvc4\React.Web.Mvc4.csproj">
       <Project>{662d52ac-1ee9-4372-bd74-379f9ac56451}</Project>
       <Name>React.Web.Mvc4</Name>
