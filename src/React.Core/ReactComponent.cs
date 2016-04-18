@@ -110,7 +110,11 @@ namespace React
 		/// <returns>HTML</returns>
 		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false)
 		{
-			EnsureComponentExists();
+			if (!renderContainerOnly)
+			{
+				EnsureComponentExists();
+			}
+
 			try
 			{
 				var html = string.Empty;

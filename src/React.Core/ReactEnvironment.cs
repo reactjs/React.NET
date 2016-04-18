@@ -256,10 +256,15 @@ namespace React
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to use</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <returns>The component</returns>
-		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null)
+		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false)
 		{
-			EnsureUserScriptsLoaded();
+			if (!clientOnly)
+			{
+				EnsureUserScriptsLoaded();
+			}
+
 			var component = new ReactComponent(this, _config, componentName, containerId)
 			{
 				Props = props
@@ -272,14 +277,18 @@ namespace React
 		/// Renders the JavaScript required to initialise all components client-side. This will 
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <returns>JavaScript for all components</returns>
-		public virtual string GetInitJavaScript()
+		public virtual string GetInitJavaScript(bool clientOnly = false)
 		{
 			var fullScript = new StringBuilder();
 			
 			// Propagate any server-side console.log calls to corresponding client-side calls.
-			var consoleCalls = Execute<string>("console.getCalls()");
-			fullScript.Append(consoleCalls);
+			if (!clientOnly)
+			{
+				var consoleCalls = Execute<string>("console.getCalls()");
+				fullScript.Append(consoleCalls);
+			}
 			
 			foreach (var component in _components)
 			{

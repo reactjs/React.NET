@@ -80,15 +80,17 @@ namespace React
 		/// <param name="componentName">Name of the component</param>
 		/// <param name="props">Props to use</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <returns>The component</returns>
-		IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null);
+		IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will 
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <returns>JavaScript for all components</returns>
-		string GetInitJavaScript();
+		string GetInitJavaScript(bool clientOnly = false);
 
 		/// <summary>
 		/// Gets the JSX Transformer for this environment.
