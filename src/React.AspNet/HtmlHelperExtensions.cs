@@ -81,7 +81,7 @@ namespace React.AspNet
 			string containerClass = null
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
+			var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
 			if (!string.IsNullOrEmpty(htmlTag))
 			{
 				reactComponent.ContainerTag = htmlTag;
@@ -118,7 +118,7 @@ namespace React.AspNet
 			string containerClass = null
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props, containerId);
+			var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
 			if (!string.IsNullOrEmpty(htmlTag))
 			{
 				reactComponent.ContainerTag = htmlTag;
@@ -146,9 +146,9 @@ namespace React.AspNet
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript for all components</returns>
-		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper)
+		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper, bool clientOnly = false)
 		{
-			var script = Environment.GetInitJavaScript();
+			var script = Environment.GetInitJavaScript(clientOnly);
 #if LEGACYASPNET
 			var tag = new TagBuilder("script")
 			{
