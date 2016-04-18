@@ -39,6 +39,11 @@ namespace React
 		protected readonly IReactSiteConfiguration _configuration;
 
 		/// <summary>
+		/// Serialized <see cref="Props" />
+		/// </summary>
+		protected string _serializedProps;
+
+		/// <summary>
 		/// Gets or sets the name of the component
 		/// </summary>
 		public string ComponentName { get; set; }
@@ -166,11 +171,15 @@ namespace React
 		/// <returns>JavaScript for component initialisation</returns>
 		protected virtual string GetComponentInitialiser()
 		{
-			var encodedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
+			if (_serializedProps == null)
+			{
+				_serializedProps = JsonConvert.SerializeObject(Props, _configuration.JsonSerializerSettings); // SerializeObject accepts null settings
+			}
+
 			return string.Format(
 				"React.createElement({0}, {1})",
 				ComponentName,
-				encodedProps
+				_serializedProps
 			);
 		}
 
