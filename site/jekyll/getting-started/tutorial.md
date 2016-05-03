@@ -602,14 +602,14 @@ Let's make the form interactive. When the user submits the form, we should clear
 var CommentForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.getDOMNode().value.trim();
-    var text = this.refs.text.getDOMNode().value.trim();
+    var author = this.refs.author.value;
+    var text = this.refs.text.value;
     if (!text || !author) {
       return;
     }
     // TODO: send request to the server
-    this.refs.author.getDOMNode().value = '';
-    this.refs.text.getDOMNode().value = '';
+    this.refs.author.value = '';
+    this.refs.text.value = '';
     return;
   },
   render: function() {
@@ -632,7 +632,7 @@ Call `preventDefault()` on the event to prevent the browser's default action of 
 
 ##### Refs
 
-We use the `ref` attribute to assign a name to a child component and `this.refs` to reference the component. We can call `getDOMNode()` on a component to get the native browser DOM element.
+We use the `ref` attribute to assign a name to a child component and `this.refs` to reference the component. We can call the `value` attribute to get the native browser DOM element's value.
 
 ##### Callbacks as props
 
@@ -679,14 +679,14 @@ Let's call the callback from the `CommentForm` when the user submits the form:
 var CommentForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.getDOMNode().value.trim();
-    var text = this.refs.text.getDOMNode().value.trim();
+    var author = this.refs.author.value;
+    var text = this.refs.text.value;
     if (!text || !author) {
       return;
     }
     this.props.onCommentSubmit({Author: author, Text: text});
-    this.refs.author.getDOMNode().value = '';
-    this.refs.text.getDOMNode().value = '';
+    this.refs.author.value = '';
+    this.refs.text.value = '';
     return;
   },
   render: function() {
