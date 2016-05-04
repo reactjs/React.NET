@@ -811,7 +811,7 @@ var CommentBox = React.createClass({
 ## Optimization: Bundling and minification
 Bundling refers to the practice of combining multiple JavaScript files into a single large file to reduce the number of HTTP requests to load a page. Minification refers to the removal of comments and unnecessary whitespace from JavaScript files to make them smaller. Together, bundling and minification can help to significantly improve the performance of your website. ReactJS.NET supports ASP.NET Bundling and Minification to achieve this. You can refer to [Microsoft's official documentation](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification) for more information on ASP.NET Bundling and Minification. This tutorial will just cover the basics.
 
-To get started, install the "ReactJS.NET - JSX for ASP.NET Web Optimization Framework" NuGet package. This will automatically install the ASP.NET Bundling and Minification package along with all its dependencies.
+To get started, install the "System.Web.Optimization.React" NuGet package. This will automatically install the ASP.NET Bundling and Minification package along with all its dependencies.
 
 Once installed, modify `BundleConfig.cs` to reference the Showdown and Tutorial JavaScript files:
 
@@ -826,7 +826,7 @@ namespace ReactDemo
 		// For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new JsxBundle("~/bundles/main").Include(
+			bundles.Add(new BabelBundle("~/bundles/main").Include(
 				"~/Scripts/Tutorial.jsx",
 				"~/Scripts/showdown.js"
 			));
