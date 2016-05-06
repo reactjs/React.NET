@@ -602,14 +602,14 @@ Let's make the form interactive. When the user submits the form, we should clear
 var CommentForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.getDOMNode().value.trim();
-    var text = this.refs.text.getDOMNode().value.trim();
+    var author = this.refs.author.value.trim();
+    var text = this.refs.text.value.trim();
     if (!text || !author) {
       return;
     }
     // TODO: send request to the server
-    this.refs.author.getDOMNode().value = '';
-    this.refs.text.getDOMNode().value = '';
+    this.refs.author.value = '';
+    this.refs.text.value = '';
     return;
   },
   render: function() {
@@ -632,7 +632,7 @@ Call `preventDefault()` on the event to prevent the browser's default action of 
 
 ##### Refs
 
-We use the `ref` attribute to assign a name to a child component and `this.refs` to reference the component. We can call `getDOMNode()` on a component to get the native browser DOM element.
+We use the `ref` attribute to assign a name to a child component and `this.refs` to reference the component. We can call the `value` attribute to get the native browser DOM element's value.
 
 ##### Callbacks as props
 
@@ -679,14 +679,14 @@ Let's call the callback from the `CommentForm` when the user submits the form:
 var CommentForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.getDOMNode().value.trim();
-    var text = this.refs.text.getDOMNode().value.trim();
+    var author = this.refs.author.value.trim();
+    var text = this.refs.text.value.trim();
     if (!text || !author) {
       return;
     }
     this.props.onCommentSubmit({Author: author, Text: text});
-    this.refs.author.getDOMNode().value = '';
-    this.refs.text.getDOMNode().value = '';
+    this.refs.author.value = '';
+    this.refs.text.value = '';
     return;
   },
   render: function() {
@@ -811,7 +811,7 @@ var CommentBox = React.createClass({
 ## Optimization: Bundling and minification
 Bundling refers to the practice of combining multiple JavaScript files into a single large file to reduce the number of HTTP requests to load a page. Minification refers to the removal of comments and unnecessary whitespace from JavaScript files to make them smaller. Together, bundling and minification can help to significantly improve the performance of your website. ReactJS.NET supports ASP.NET Bundling and Minification to achieve this. You can refer to [Microsoft's official documentation](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification) for more information on ASP.NET Bundling and Minification. This tutorial will just cover the basics.
 
-To get started, install the "ReactJS.NET - JSX for ASP.NET Web Optimization Framework" NuGet package. This will automatically install the ASP.NET Bundling and Minification package along with all its dependencies.
+To get started, install the "System.Web.Optimization.React" NuGet package. This will automatically install the ASP.NET Bundling and Minification package along with all its dependencies.
 
 Once installed, modify `BundleConfig.cs` to reference the Showdown and Tutorial JavaScript files:
 
@@ -826,7 +826,7 @@ namespace ReactDemo
 		// For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new JsxBundle("~/bundles/main").Include(
+			bundles.Add(new BabelBundle("~/bundles/main").Include(
 				"~/Scripts/Tutorial.jsx",
 				"~/Scripts/showdown.js"
 			));
