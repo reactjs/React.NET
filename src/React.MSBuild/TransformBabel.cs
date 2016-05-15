@@ -31,6 +31,11 @@ namespace React.MSBuild
 		public string SourceDir { get; set; }
 
 		/// <summary>
+		/// The file extension pattern of the JavaScript files to transpile. Optional, defaults to *.jsx
+		/// </summary>
+		public string FileExtensionPattern { get; set; } = "*.jsx";
+
+		/// <summary>
 		/// Executes the task.
 		/// </summary>
 		/// <returns><c>true</c> on success</returns>
@@ -56,7 +61,7 @@ namespace React.MSBuild
 		/// <returns><c>true</c> on success</returns>
 		private bool ExecuteInternal()
 		{
-			var files = Directory.EnumerateFiles(SourceDir, "*.jsx", SearchOption.AllDirectories);
+			var files = Directory.EnumerateFiles(SourceDir, FileExtensionPattern, SearchOption.AllDirectories);
 			foreach (var path in files)
 			{
 				var relativePath = path.Substring(SourceDir.Length + 1);
