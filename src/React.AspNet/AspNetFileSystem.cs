@@ -8,7 +8,7 @@
  */
 
 using System.IO;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Hosting;
 
 namespace React.AspNet
 {

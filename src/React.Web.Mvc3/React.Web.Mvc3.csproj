@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Views\web.config.transform" />
+    <None Include="packages.config" />
     <None Include="React.Web.Mvc3.nutrans" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 #if OWIN
 using Microsoft.Owin.StaticFiles;
 #else
-using Microsoft.AspNet.StaticFiles;
+using Microsoft.AspNetCore.Builder;
 #endif
 
 #if OWIN

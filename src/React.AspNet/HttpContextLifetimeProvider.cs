@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using React.Exceptions;
 using React.TinyIoC;
 using Microsoft.Extensions.DependencyInjection;
