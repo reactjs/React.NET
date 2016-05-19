@@ -68,7 +68,7 @@ namespace React
 		/// Contains an engine acquired from a pool of engines. Only used if 
 		/// <see cref="IReactSiteConfiguration.ReuseJavaScriptEngines"/> is enabled.
 		/// </summary>
-		protected readonly Lazy<IJsEngine> _engineFromPool;
+		protected Lazy<IJsEngine> _engineFromPool;
 
 		/// <summary>
 		/// List of all components instantiated in this environment
@@ -379,9 +379,18 @@ namespace React
 		public virtual void Dispose()
 		{
 			_engineFactory.DisposeEngineForCurrentThread();
+			ReturnEngineToPool();
+		}
+
+		/// <summary>
+		/// Returns the currently held JS engine to the pool. (no-op if engine pooling is disabled)
+		/// </summary>
+		public void ReturnEngineToPool()
+		{
 			if (_engineFromPool.IsValueCreated)
 			{
 				_engineFactory.ReturnEngineToPool(_engineFromPool.Value);
+				_engineFromPool = new Lazy<IJsEngine>(() => _engineFactory.GetEngine());
 			}
 		}
 

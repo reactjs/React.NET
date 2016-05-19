@@ -81,17 +81,24 @@ namespace React.AspNet
 			string containerClass = null
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
-			if (!string.IsNullOrEmpty(htmlTag))
+			try
 			{
-				reactComponent.ContainerTag = htmlTag;
+				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
+				if (!string.IsNullOrEmpty(htmlTag))
+				{
+					reactComponent.ContainerTag = htmlTag;
+				}
+				if (!string.IsNullOrEmpty(containerClass))
+				{
+					reactComponent.ContainerClass = containerClass;
+				}
+				var result = reactComponent.RenderHtml(clientOnly, serverOnly);
+				return new HtmlString(result);
 			}
-			if (!string.IsNullOrEmpty(containerClass))
+			finally
 			{
-				reactComponent.ContainerClass = containerClass;
+				Environment.ReturnEngineToPool();
 			}
-			var result = reactComponent.RenderHtml(clientOnly, serverOnly);
-			return new HtmlString(result);
 		}
 
 		/// <summary>
@@ -114,31 +121,38 @@ namespace React.AspNet
 			T props,
 			string htmlTag = null,
 			string containerId = null,
-            bool clientOnly = false,
+			bool clientOnly = false,
 			string containerClass = null
 		)
 		{
-			var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
-			if (!string.IsNullOrEmpty(htmlTag))
+			try
 			{
-				reactComponent.ContainerTag = htmlTag;
-			}
-			if (!string.IsNullOrEmpty(containerClass))
-			{
-				reactComponent.ContainerClass = containerClass;
-			}
-			var html = reactComponent.RenderHtml(clientOnly);
+				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
+				if (!string.IsNullOrEmpty(htmlTag))
+				{
+					reactComponent.ContainerTag = htmlTag;
+				}
+				if (!string.IsNullOrEmpty(containerClass))
+				{
+					reactComponent.ContainerClass = containerClass;
+				}
+				var html = reactComponent.RenderHtml(clientOnly);
 
 #if LEGACYASPNET
-			var script = new TagBuilder("script")
-			{
-				InnerHtml = reactComponent.RenderJavaScript()
-			};
+				var script = new TagBuilder("script")
+				{
+					InnerHtml = reactComponent.RenderJavaScript()
+				};
 #else
 			var script = new TagBuilder("script");
 			script.InnerHtml.AppendHtml(reactComponent.RenderJavaScript());
 #endif
-			return new HtmlString(html + System.Environment.NewLine + script.ToString());
+				return new HtmlString(html + System.Environment.NewLine + script.ToString());
+			}
+			finally
+			{
+				Environment.ReturnEngineToPool();
+			}
 		}
 
 		/// <summary>
@@ -148,18 +162,25 @@ namespace React.AspNet
 		/// <returns>JavaScript for all components</returns>
 		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper, bool clientOnly = false)
 		{
-			var script = Environment.GetInitJavaScript(clientOnly);
-#if LEGACYASPNET
-			var tag = new TagBuilder("script")
+			try
 			{
-				InnerHtml = script
-			};
-			return new HtmlString(tag.ToString());
+				var script = Environment.GetInitJavaScript(clientOnly);
+#if LEGACYASPNET
+				var tag = new TagBuilder("script")
+				{
+					InnerHtml = script
+				};
+				return new HtmlString(tag.ToString());
 #else
 			var tag = new TagBuilder("script");
 			tag.InnerHtml.AppendHtml(script);
 			return tag;
 #endif
+			}
+			finally
+			{
+				Environment.ReturnEngineToPool();
+			}
 		}
 	}
 }
