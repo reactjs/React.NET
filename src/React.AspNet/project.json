@@ -20,7 +20,7 @@
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
     "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
-    "React.Core": "",
+    "React.Core": "2.3.0-*",
     "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
     "JavaScriptEngineSwitcher.Core": "1.5.0",
     "JavaScriptEngineSwitcher.Msie": "1.5.0",
