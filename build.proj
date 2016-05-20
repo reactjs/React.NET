@@ -29,9 +29,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="Cassette.React" />
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.Owin" />
-    <PackageAssemblies Include="React.AspNet" />
+		<PackageAssembliesAspNetCore Include="React.AspNet" />
 		<AspNetCoreProjectJson Include="src/wrap/**/project.json" />
-    <AspNetCoreProjectJson Include="src/React.Sample.Mvc6/project.json" />
+		<AspNetCoreProjectJson Include="src/React.AspNet/project.json" />
+		<AspNetCoreProjectJson Include="src/React.Sample.Mvc6/project.json" />
 	</ItemGroup>
 
 	<Import Project="src/React.tasks.proj" />
@@ -146,6 +147,14 @@ of patent rights can be found in the PATENTS file in the same directory.
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release -OutputDirectory output"
 		/>
+	</Target>
+  
+	<Target Name="CopyAspNetPackages" AfterTargets="Package">
+		<!-- Copy over ASP.NET Core packages -->
+		<ItemGroup>
+			<AspNetCorePackages Include="bin/%(PackageAssembliesAspNetCore.Identity)/*.nupkg" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AspNetCorePackages)" DestinationFolder="$(PackageOutputDir)" />
 	</Target>
 
 	<Target Name="Push">
