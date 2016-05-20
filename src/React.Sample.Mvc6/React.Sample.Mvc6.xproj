@@ -18,7 +18,7 @@
     <TypeScriptCompileBlocked>True</TypeScriptCompileBlocked>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\React.Core\React.Core.csproj" />
+    <ProjectReference Include="..\React.AspNet\React.AspNet.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet.Web\Microsoft.DotNet.Web.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>
