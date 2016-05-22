@@ -108,6 +108,21 @@ namespace React.Tests.Core
 			StringAssert.StartsWith("react_", component2.ContainerId);
 		}
 
+		[Test]
+		public void ReturnsEngineToPool()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+			mocks.Config.Setup(x => x.ReuseJavaScriptEngines).Returns(true);
+
+			environment.CreateComponent("ComponentName", new { });
+			mocks.EngineFactory.Verify(x => x.GetEngine(), Times.Once);
+			environment.ReturnEngineToPool();
+
+			environment.CreateComponent("ComponentName", new { });
+			mocks.EngineFactory.Verify(x => x.GetEngine(), Times.AtLeast(2));
+		}
+
 		private class Mocks
 		{
 			public Mock<IJsEngine> Engine { get; private set; }
@@ -125,6 +140,7 @@ namespace React.Tests.Core
 				FileSystem = new Mock<IFileSystem>();
 				FileCacheHash = new Mock<IFileCacheHash>();
 
+				EngineFactory.Setup(x => x.GetEngine()).Returns(Engine.Object);
 				EngineFactory.Setup(x => x.GetEngineForCurrentThread()).Returns(Engine.Object);
 				Config.Setup(x => x.LoadBabel).Returns(true);
 			}
