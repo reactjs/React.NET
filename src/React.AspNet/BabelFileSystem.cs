@@ -16,10 +16,10 @@ using System.Text;
 using Microsoft.Owin.FileSystems;
 using IOwinFileSystem = Microsoft.Owin.FileSystems.IFileSystem;
 #else
-using Microsoft.AspNet.FileProviders;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
-using IOwinFileSystem = Microsoft.AspNet.FileProviders.IFileProvider;
-using PhysicalFileSystem = Microsoft.AspNet.FileProviders.PhysicalFileProvider;
+using IOwinFileSystem = Microsoft.Extensions.FileProviders.IFileProvider;
+using PhysicalFileSystem = Microsoft.Extensions.FileProviders.PhysicalFileProvider;
 #endif
 
 #if OWIN

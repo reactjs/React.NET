@@ -52,7 +52,8 @@ of patent rights can be found in the PATENTS file in the same directory.
 					var contents = File.ReadAllText(path);
 					var newContents = versionRegex.Replace(
 						contents, 
-						string.Format("\"version\": \"{0}\"", Version)
+						string.Format("\"version\": \"{0}\"", Version),
+						1
 					);
 					File.WriteAllText(path, newContents);
 					Log.LogMessage("Updated version in {0}", path);

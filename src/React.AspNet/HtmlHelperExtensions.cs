@@ -15,8 +15,8 @@ using System.Web;
 using System.Web.Mvc;
 using IHtmlHelper = System.Web.Mvc.HtmlHelper;
 #else
-using Microsoft.AspNet.Mvc.Rendering;
-using IHtmlString = Microsoft.AspNet.Html.Abstractions.IHtmlContent;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using IHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 #endif
 
 #if LEGACYASPNET

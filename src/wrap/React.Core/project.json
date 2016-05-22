@@ -11,10 +11,11 @@
         "JavaScriptEngineSwitcher.Core": "1.5.0",
         "JavaScriptEngineSwitcher.Msie": "1.5.0",
         "JavaScriptEngineSwitcher.V8": "1.5.2",
-        "JSPool": "0.4.1",
         "MsieJavaScriptEngine": "1.7.0",
         "Newtonsoft.Json": "6.0.8",
-        "VroomJs": ""
+        "VroomJs": {
+          "target": "project"
+        }
       }
     }
   }

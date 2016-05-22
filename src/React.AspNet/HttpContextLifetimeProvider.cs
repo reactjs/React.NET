@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 using React.Exceptions;
 using React.TinyIoC;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,27 +44,13 @@ namespace React.AspNet
 		private readonly string _keyName = PREFIX + Guid.NewGuid();
 
 		/// <summary>
-		/// Gets the <see cref="HttpContext" /> of the current request.
-		/// </summary>
-		private HttpContext HttpContext => 
-			_appServiceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext;
-
-		/// <summary>
 		/// Gets the current per-request registrations for the current request.
 		/// </summary>
 		private PerRequestRegistrations Registrations
 		{
 			get
 			{
-				var requestServices = HttpContext.RequestServices;
-				if (requestServices == null)
-				{
-					throw new ReactNotInitialisedException(
-						"ASP.NET request services have not been initialised correctly. Please " +
-						"ensure you are calling app.UseRequestServices() before app.UseReact()."
-					);
-				}
-				var registrations = requestServices.GetService<PerRequestRegistrations>();
+				var registrations = _appServiceProvider.GetService<PerRequestRegistrations>();
 				if (registrations == null)
 				{
 					throw new ReactNotInitialisedException(

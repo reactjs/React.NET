@@ -1,43 +1,51 @@
 {
-    "version": "2.3.0-*",
-    "configurations": {
-        "Debug": {
-            "compilationOptions": {
-                "define": [ "DEBUG", "TRACE", "ASPNET5" ]
-            }
-        },
-        "Release": {
-            "compilationOptions": {
-                "define": [ "RELEASE", "TRACE", "ASPNET5" ],
-                "optimize": true,
-                "warningsAsErrors": true
-            }
-        }
-    },
-  "dependencies": {
-    "JsPool": "0.4.1",
-    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
-    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-    "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
-    "React.Core": "2.3.0-*",
-    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc1-final",
-    "JavaScriptEngineSwitcher.Core": "1.5.0",
-    "JavaScriptEngineSwitcher.Msie": "1.5.0",
-    "JavaScriptEngineSwitcher.V8": "1.5.2",
-    "MsieJavaScriptEngine": "1.7.0"
-  },
-    "frameworks": {
-        "dnx451": { }
-    },
-
-    "authors": [ "Daniel Lo Nigro" ],
+  "version": "2.3.0-*",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+  "title": "ReactJS.NET (MVC Core)",
+  "description": "ReactJS and Babel tools for ASP.NET Core, including ASP.NET MVC Core. Please refer to project site (http://reactjs.net/) for full installation instructions, usage examples and sample code",
+  "packOptions": {
     "owners": [ "Daniel Lo Nigro" ],
     "licenseUrl": "https://github.com/reactjs/React.NET#licence",
     "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
-    "copyright": "Copyright 2014-Present Facebook, Inc",
-    "title": "ReactJS.NET (MVC 6)",
-    "description": "ReactJS and Babel tools for ASP.NET 5, including ASP.NET MVC 6. Please refer to project site (http://reactjs.net/) for full installation instructions, usage examples and sample code",
     "tags": [ "asp.net", "mvc", "asp", "javascript", "js", "react", "facebook", "reactjs", "vnext" ],
     "projectUrl": "http://reactjs.net/"
+  },
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG", "TRACE", "ASPNETCORE" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "define": [ "RELEASE", "TRACE", "ASPNETCORE" ],
+        "optimize": true,
+        "warningsAsErrors": true
+      }
+    }
+  },
+  "dependencies": {
+    "JsPool": "0.4.1",
+    "Microsoft.AspNetCore.Mvc.Core": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.StaticFiles": "1.0.0-rc2-final",
+    "Microsoft.Extensions.FileProviders.Physical": "1.0.0-rc2-final",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0-rc2-final",
+    "Microsoft.Extensions.DependencyInjection": "1.0.0-rc2-final",
+    "JavaScriptEngineSwitcher.Core": "1.5.0",
+    "JavaScriptEngineSwitcher.Msie": "1.5.0",
+    "JavaScriptEngineSwitcher.V8": "1.5.2",
+    "MsieJavaScriptEngine": "1.7.0",
+    "React.Core": {
+      "target": "project"
+    }
+  },
+  "frameworks": {
+    "net451": {
+      "bin": {
+        "assembly": "../../bin/React.AspNet/bin/{configuration}/net451/React.AspNet.dll",
+        "pdb": "../../bin/React.AspNet/bin/{configuration}/net451/React.AspNet.pdb"
+      }
+    }
+  }
 }

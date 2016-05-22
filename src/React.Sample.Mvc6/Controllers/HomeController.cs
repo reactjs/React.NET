@@ -12,7 +12,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using React.Sample.Mvc6.Models;
 using React.Sample.Mvc6.ViewModels;
 

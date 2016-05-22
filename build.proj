@@ -29,10 +29,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="Cassette.React" />
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.Owin" />
-		<PackageAssembliesAspNet5 Include="React.AspNet" />
-		<AspNet5ProjectJson Include="src/React.AspNet/project.json" />
-		<AspNet5ProjectJson Include="src/React.Sample.Mvc6/project.json" />
-		<AspNet5ProjectJson Include="src/wrap/**/project.json" />
+		<PackageAssembliesAspNetCore Include="React.AspNet" />
+		<AspNetCoreProjectJson Include="src/wrap/**/project.json" />
+		<AspNetCoreProjectJson Include="src/React.AspNet/project.json" />
+		<AspNetCoreProjectJson Include="src/React.Sample.Mvc6/project.json" />
 	</ItemGroup>
 
 	<Import Project="src/React.tasks.proj" />
@@ -42,10 +42,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
 		/>
-		<!-- NuGet packages for ASP.NET 5 projects -->
+		<!-- NuGet packages for ASP.NET Core projects -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dnu restore --quiet --parallel src\React.AspNet src\React.Sample.Mvc6"
+			Command="dotnet restore --quiet src\React.AspNet src\React.Sample.Mvc6"
 		/>
 		<!-- npm packages -->
 		<Exec
@@ -81,7 +81,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 			AssemblyInformationalVersion="$(Major).$(Minor).$(FullBuild)"
 		/>
 		<!-- 
-			Set version for ASP.NET 5 projects. In theory K_BUILD_VERSION should work but it doesn't seem 
+			Set version for ASP.NET Core projects. In theory K_BUILD_VERSION should work but it doesn't seem 
 			to be functional yet :(. We work around this by physically writing the build number to the 
 			project.json files. For development builds we write the full version number (including 
 			build date) and reset it later so the dev build number isn't commited to the repo.
@@ -91,18 +91,18 @@ of patent rights can be found in the PATENTS file in the same directory.
 			Value="$(Build)"
 		/-->
 		<UpdateAspNetProjectVersion
-			Files="@(AspNet5ProjectJson)"
+			Files="@(AspNetCoreProjectJson)"
 			Version="$(Major).$(Minor).$(FullBuild)"
 		/>
 	</Target>
 
 	<Target Name="Clean" BeforeTargets="Build">
 		<!-- 
-			ASP.NET 5 projects don't delete generated .nupkg files when cleaned or rebuilt, so we need to
+			ASP.NET Core projects don't delete generated .nupkg files when cleaned or rebuilt, so we need to
 			do it here. See https://github.com/aspnet/XRE/issues/1301 
 		-->
 		<DeleteTree Directories="src/artifacts" />
-		<DeleteTree Directories="bin/%(PackageAssembliesAspNet5.Identity)/Release" />
+		<DeleteTree Directories="bin/%(PackageAssembliesAspNetCore.Identity)/Release" />
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
@@ -111,10 +111,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Exec WorkingDirectory="src/React.Sample.Webpack" Command="node_modules/.bin/webpack" />
 	</Target>
 
-	<Target Name="ResetAspNetVersion" AfterTargets="Build">
-		<!-- Resets the version number in ASP.NET project.json files so we don't commit -dev- version numbers -->
+	<Target Name="ResetAspNetVersion" AfterTargets="AspNetPackages">
+		<!-- Resets the version number in ASP.NET Core project.json files so we don't commit -dev- version numbers -->
 		<UpdateAspNetProjectVersion
-			Files="@(AspNet5ProjectJson)"
+			Files="@(AspNetCoreProjectJson)"
 			Version="$(Major).$(Minor).$(Build)-*"
 		/>
 	</Target>
@@ -148,13 +148,12 @@ of patent rights can be found in the PATENTS file in the same directory.
 			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release -OutputDirectory output"
 		/>
 	</Target>
-
-	<Target Name="CopyAspNetPackages" AfterTargets="Package">
-		<!-- Copy over ASP.NET 5 packages -->
-		<ItemGroup>
-			<AspNet5Packages Include="bin/%(PackageAssembliesAspNet5.Identity)/Release/*.nupkg" />
-		</ItemGroup>
-		<Copy SourceFiles="@(AspNet5Packages)" DestinationFolder="$(PackageOutputDir)" />
+  
+	<Target Name="AspNetPackages" AfterTargets="Package">
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet pack --output $(PackageOutputDir) --build-base-path bin/ --configuration Release --no-build src/%(PackageAssembliesAspNetCore.Identity)/project.json"
+		/>
 	</Target>
 
 	<Target Name="Push">

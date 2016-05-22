@@ -8,8 +8,8 @@
  */
 
 using System;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.PlatformAbstractions;
 using React.Exceptions;
 using React.TinyIoC;
@@ -37,10 +37,6 @@ namespace React.AspNet
 		{
 			EnsureServicesRegistered(app);
 
-			// Register IApplicationEnvironment in our dependency injection container
-			// Ideally this would be in AddReact(IServiceCollection) but we can't 
-			// access IApplicationEnvironment there.
-			React.AssemblyRegistration.Container.Register(app.ApplicationServices.GetRequiredService<IApplicationEnvironment>());
 			React.AssemblyRegistration.Container.Register(app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
 
 			Initializer.Initialize(registerOptions => AsPerRequestSingleton(app.ApplicationServices, registerOptions));

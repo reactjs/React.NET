@@ -10,11 +10,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.StaticFiles;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace React.AspNet
 {
@@ -76,7 +77,7 @@ namespace React.AspNet
 			return new StaticFileMiddleware(
 				_next,
 				_hostingEnv,
-				new StaticFileOptions
+				Options.Create(new StaticFileOptions
 				{
 					ContentTypeProvider = _options.StaticFileOptions.ContentTypeProvider,
 					DefaultContentType = _options.StaticFileOptions.DefaultContentType,
@@ -84,11 +85,11 @@ namespace React.AspNet
 					RequestPath = _options.StaticFileOptions.RequestPath,
 					ServeUnknownFileTypes = _options.StaticFileOptions.ServeUnknownFileTypes,
 					FileProvider = new BabelFileSystem(
-						babel, 
+						babel,
 						_options.StaticFileOptions.FileProvider ?? _hostingEnv.WebRootFileProvider,
 						_options.Extensions
 					)
-				},
+				}),
 				_loggerFactory
 			);
 		}
