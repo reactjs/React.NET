@@ -16,8 +16,12 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc2-final",
     "JavaScriptEngineSwitcher.Msie": "1.5.0",
     "JavaScriptEngineSwitcher.V8": "1.5.2",
-    "React.Core": "2.3.0-*",
-    "React.AspNet": "2.3.0-*"
+    "React.Core": {
+      "target": "project"
+    },
+    "React.AspNet": {
+      "target": "project"
+    }
   },
 
   "tools": {

@@ -37,9 +37,6 @@ namespace React.AspNet
 		{
 			EnsureServicesRegistered(app);
 
-			// Register IApplicationEnvironment in our dependency injection container
-			// Ideally this would be in AddReact(IServiceCollection) but we can't 
-			// access IApplicationEnvironment there.
 			React.AssemblyRegistration.Container.Register(app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
 
 			Initializer.Initialize(registerOptions => AsPerRequestSingleton(app.ApplicationServices, registerOptions));

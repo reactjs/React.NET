@@ -16,14 +16,14 @@ using React.AspNet;
 
 namespace React.Sample.Mvc6
 {
-    public class Startup
+	public class Startup
 	{
 		public Startup(IHostingEnvironment env)
 		{
-            // Setup configuration sources.
-            var builder = new ConfigurationBuilder().AddEnvironmentVariables();
+			// Setup configuration sources.
+			var builder = new ConfigurationBuilder().AddEnvironmentVariables();
 
-            Configuration = builder.Build();
+			Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; set; }
@@ -40,7 +40,7 @@ namespace React.Sample.Mvc6
 
 		// Configure is called after ConfigureServices is called.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory)
-        { 
+		{ 
 			// Add the console logger.
 			loggerfactory.AddConsole();
 
@@ -56,7 +56,7 @@ namespace React.Sample.Mvc6
 				// send the request to the following path or controller action.
 				app.UseExceptionHandler("/Home/Error");
 			}
-            
+			
 			// Initialise ReactJS.NET. Must be before static files.
 			app.UseReact(config =>
 			{
@@ -84,5 +84,5 @@ namespace React.Sample.Mvc6
 				);
 			});
 		}
-    }
+	}
 }

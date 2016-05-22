@@ -74,22 +74,22 @@ namespace React.AspNet
 		/// <returns></returns>
 		private StaticFileMiddleware CreateFileMiddleware(IBabel babel)
 		{
-            return new StaticFileMiddleware(
+			return new StaticFileMiddleware(
 				_next,
 				_hostingEnv,
-                Options.Create(new StaticFileOptions
-                {
-                    ContentTypeProvider = _options.StaticFileOptions.ContentTypeProvider,
-                    DefaultContentType = _options.StaticFileOptions.DefaultContentType,
-                    OnPrepareResponse = _options.StaticFileOptions.OnPrepareResponse,
-                    RequestPath = _options.StaticFileOptions.RequestPath,
-                    ServeUnknownFileTypes = _options.StaticFileOptions.ServeUnknownFileTypes,
-                    FileProvider = new BabelFileSystem(
-                        babel,
-                        _options.StaticFileOptions.FileProvider ?? _hostingEnv.WebRootFileProvider,
-                        _options.Extensions
-                    )
-                }),
+				Options.Create(new StaticFileOptions
+				{
+					ContentTypeProvider = _options.StaticFileOptions.ContentTypeProvider,
+					DefaultContentType = _options.StaticFileOptions.DefaultContentType,
+					OnPrepareResponse = _options.StaticFileOptions.OnPrepareResponse,
+					RequestPath = _options.StaticFileOptions.RequestPath,
+					ServeUnknownFileTypes = _options.StaticFileOptions.ServeUnknownFileTypes,
+					FileProvider = new BabelFileSystem(
+						babel,
+						_options.StaticFileOptions.FileProvider ?? _hostingEnv.WebRootFileProvider,
+						_options.Extensions
+					)
+				}),
 				_loggerFactory
 			);
 		}

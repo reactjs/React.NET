@@ -13,7 +13,9 @@
         "JavaScriptEngineSwitcher.V8": "1.5.2",
         "MsieJavaScriptEngine": "1.7.0",
         "Newtonsoft.Json": "6.0.8",
-        "VroomJs": "1.0.0-build-1"
+        "VroomJs": {
+          "target": "project"
+        }
       }
     }
   }

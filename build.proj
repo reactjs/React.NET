@@ -111,7 +111,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Exec WorkingDirectory="src/React.Sample.Webpack" Command="node_modules/.bin/webpack" />
 	</Target>
 
-	<Target Name="ResetAspNetVersion" AfterTargets="Build">
+	<Target Name="ResetAspNetVersion" AfterTargets="AspNetPackages">
 		<!-- Resets the version number in ASP.NET Core project.json files so we don't commit -dev- version numbers -->
 		<UpdateAspNetProjectVersion
 			Files="@(AspNetCoreProjectJson)"
@@ -149,12 +149,11 @@ of patent rights can be found in the PATENTS file in the same directory.
 		/>
 	</Target>
   
-	<Target Name="CopyAspNetPackages" AfterTargets="Package">
-		<!-- Copy over ASP.NET Core packages -->
-		<ItemGroup>
-			<AspNetCorePackages Include="bin/%(PackageAssembliesAspNetCore.Identity)/*.nupkg" />
-		</ItemGroup>
-		<Copy SourceFiles="@(AspNetCorePackages)" DestinationFolder="$(PackageOutputDir)" />
+	<Target Name="AspNetPackages" AfterTargets="Package">
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet pack --output $(PackageOutputDir) --build-base-path bin/ --configuration Release --no-build src/%(PackageAssembliesAspNetCore.Identity)/project.json"
+		/>
 	</Target>
 
 	<Target Name="Push">
