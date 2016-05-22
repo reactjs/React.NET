@@ -96,5 +96,10 @@ namespace React
 		/// Gets the JSX Transformer for this environment.
 		/// </summary>
 		IBabel Babel { get; }
+
+		/// <summary>
+		/// Returns the currently held JS engine to the pool. (no-op if engine pooling is disabled)
+		/// </summary>
+		void ReturnEngineToPool();
 	}
 }
