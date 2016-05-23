@@ -53,7 +53,32 @@ namespace React.Tests.Mvc
 				"HTML" + System.Environment.NewLine + "<script>JS</script>",
 				result.ToString()
 			);
+		}
 
+		[Test]
+		public void EngineIsReturnedToPoolAfterRender()
+		{
+			var component = new Mock<IReactComponent>();
+			component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
+			var environment = ConfigureMockEnvironment();
+			environment.Setup(x => x.CreateComponent(
+				"ComponentName",
+				new { },
+				null,
+				true
+			)).Returns(component.Object);
+
+			environment.Verify(x => x.ReturnEngineToPool(), Times.Never);
+			var result = HtmlHelperExtensions.React(
+				htmlHelper: null,
+				componentName: "ComponentName",
+				props: new { },
+				htmlTag: "span",
+				clientOnly: true,
+				serverOnly: true
+			);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
+			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
 
 		[Test]
