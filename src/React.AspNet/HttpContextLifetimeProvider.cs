@@ -22,15 +22,22 @@ namespace React.AspNet
 	/// </summary>
 	internal class HttpContextLifetimeProvider : TinyIoCContainer.ITinyIoCObjectLifetimeProvider
 	{
-		private readonly IServiceProvider _appServiceProvider;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
 		/// <summary>
 		/// Creates a new <see cref="HttpContextLifetimeProvider" />.
 		/// </summary>
-		/// <param name="appServiceProvider">ASP.NET dependency injection service provider</param>
-		public HttpContextLifetimeProvider(IServiceProvider appServiceProvider)
+		public HttpContextLifetimeProvider(IHttpContextAccessor httpContextAccessor)
 		{
-			_appServiceProvider = appServiceProvider;
+			if (httpContextAccessor == null)
+			{
+				throw new ReactNotInitialisedException(
+					"IHttpContextAccessor is not registered correctly. Please add it to your " +
+					"application startup:\n" +
+					"services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();"
+				);
+			}
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		/// <summary>
@@ -50,7 +57,8 @@ namespace React.AspNet
 		{
 			get
 			{
-				var registrations = _appServiceProvider.GetService<PerRequestRegistrations>();
+				var requestServices = _httpContextAccessor.HttpContext.RequestServices;
+				var registrations = requestServices.GetService<PerRequestRegistrations>();
 				if (registrations == null)
 				{
 					throw new ReactNotInitialisedException(

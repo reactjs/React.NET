@@ -10,6 +10,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.PlatformAbstractions;
 using React.Exceptions;
 using React.TinyIoC;
@@ -39,7 +40,10 @@ namespace React.AspNet
 
 			React.AssemblyRegistration.Container.Register(app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
 
-			Initializer.Initialize(registerOptions => AsPerRequestSingleton(app.ApplicationServices, registerOptions));
+			Initializer.Initialize(registerOptions => AsPerRequestSingleton(
+				app.ApplicationServices.GetService<IHttpContextAccessor>(), 
+				registerOptions
+			));
 			configure(ReactSiteConfiguration.Configuration);
 
 			// Allow serving of .jsx files
@@ -55,13 +59,13 @@ namespace React.AspNet
 		/// <param name="registerOptions">Registration options</param>
 		/// <returns>Registration options (for chaining)</returns>
 		private static TinyIoCContainer.RegisterOptions AsPerRequestSingleton(
-			IServiceProvider appServiceProvider,
+			IHttpContextAccessor httpContextAccessor,
 			TinyIoCContainer.RegisterOptions registerOptions
 		)
 		{
 			return TinyIoCContainer.RegisterOptions.ToCustomLifetimeManager(
 				registerOptions,
-				new HttpContextLifetimeProvider(appServiceProvider),
+				new HttpContextLifetimeProvider(httpContextAccessor),
 				"per request singleton"
 			);
 		}

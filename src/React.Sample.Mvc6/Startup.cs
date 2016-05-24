@@ -9,6 +9,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,8 @@ namespace React.Sample.Mvc6
 		{
 			// Add MVC services to the services container.
 			services.AddMvc();
+
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 			// Add ReactJS.NET services.
 			services.AddReact();
