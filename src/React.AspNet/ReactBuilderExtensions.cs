@@ -55,7 +55,7 @@ namespace React.AspNet
 		/// <summary>
 		/// Registers a class such that every ASP.NET web request has a single instance of it.
 		/// </summary>
-		/// <param name="appServiceProvider">ASP.NET service provider</param>
+		/// <param name="httpContextAccessor">ASP.NET HTTP context accessor</param>
 		/// <param name="registerOptions">Registration options</param>
 		/// <returns>Registration options (for chaining)</returns>
 		private static TinyIoCContainer.RegisterOptions AsPerRequestSingleton(
