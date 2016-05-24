@@ -42,5 +42,8 @@
         "pdb": "../../bin/React.AspNet/bin/{configuration}/net451/React.AspNet.pdb"
       }
     }
+  },
+  "buildOptions": {
+    "xmlDoc": true
   }
 }
