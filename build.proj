@@ -45,7 +45,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<!-- NuGet packages for ASP.NET Core projects -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet restore --quiet src\React.AspNet src\React.Sample.Mvc6"
+			Command="dotnet restore src\React.AspNet src\React.Sample.Mvc6"
 		/>
 		<!-- npm packages -->
 		<Exec
