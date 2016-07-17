@@ -10,8 +10,8 @@ of patent rights can be found in the PATENTS file in the same directory.
 <Project ToolsVersion="4.0" DefaultTargets="Build;Test;Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<Major>2</Major>
-		<Minor>4</Minor>
-		<Build>1</Build>
+		<Minor>5</Minor>
+		<Build>0</Build>
 		<Revision>0</Revision>
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
