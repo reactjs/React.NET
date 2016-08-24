@@ -4,6 +4,10 @@ title: Tutorial
 layout: docs
 ---
 
+> Note:
+>
+> This tutorial was written for Visual Studio 2013 and ASP.NET MVC 4, and will be updated to Visual Studio 2015 and ASP.NET Core in the near future.
+
 This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](http://facebook.github.io/react/docs/tutorial.html) but has been modified specifically for ReactJS.NET.
 
 We'll be building a simple, but realistic comments box that you can drop into a blog, a basic version of the realtime comments offered by Disqus, LiveFyre or Facebook comments.

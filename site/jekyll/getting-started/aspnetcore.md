@@ -1,14 +1,14 @@
 ---
-id: aspnet5
+id: aspnetcore
 layout: docs
-title: Getting Started on ASP.NET 5
+title: Getting Started on ASP.NET Core
 ---
 
-Getting started with ReactJS.NET on ASP.NET 5 and MVC 6 requires a few more steps compared to previous versions of ASP.NET and MVC. A more fully featured tutorial will be released once the stable release of ASP.NET 5 is out.
+Getting started with ReactJS.NET on ASP.NET Core requires a few more steps compared to previous versions of ASP.NET and MVC. A more fully featured tutorial will be released soon.
 
-Note that ASP.NET 5 is still in beta, and so there may still be some sharp edges. ReactJS.NET requires at least Visual Studio 2015 and ASP.NET 5 **Beta 8**. Additionally, ReactJS.NET does not support the Core CLR at this point in time, so you will need to ensure your project is not referencing it. Remove the `"dnxcore50": { }` line from your `project.json` file.
+ReactJS.NET requires Visual Studio 2015 and ASP.NET Core RTM (final release). Additionally, ReactJS.NET does not support .NET Core at this point in time, so you will need to ensure your project is not referencing it. If you're creating a new website, use the "ASP.NET Core Web Application (.NET Framework)" project template. Otherwise, make sure your `project.json` references `net452` in its `frameworks` section, **not** `netcoreapp`.
 
-Once this has been removed, install the `React.AspNet` package through NuGet. After the package is installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator). At the top of the file, add:
+Install the `React.AspNet` package through NuGet. After the package is installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator). At the top of the file, add:
 ```
 using React.AspNet;
 ```
@@ -16,13 +16,14 @@ using React.AspNet;
 Directly above:
 
 ```csharp
-// Add MVC services to the services container.
+// Add framework services.
 services.AddMvc();
 ```
 
 Add:
 
 ```csharp
+services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddReact();
 ```
 
@@ -30,7 +31,6 @@ services.AddReact();
 Directly **above**:
 
 ```csharp
-// Add static files to the request pipeline.
 app.UseStaticFiles();
 ```
 
