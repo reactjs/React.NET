@@ -351,35 +351,36 @@ namespace React
 		{
 			var outputPath = GetOutputPath(filename);
 			var contents = _fileSystem.ReadAsString(filename);
-            if (MustTranspileFile(contents, outputPath))
-            {
-                var result = TransformWithHeader(filename, contents, null);
+			if (CacheIsValid(contents, outputPath))
+				return outputPath;
+			
+			var result = TransformWithHeader(filename, contents, null);
 
-                var sourceMapPath = GetSourceMapOutputPath(filename);
-                _fileSystem.WriteAsString(outputPath, result.Code);
-                _fileSystem.WriteAsString(sourceMapPath, result.SourceMap == null ? string.Empty : result.SourceMap.ToJson());                
-            }
-		    return outputPath;
+			var sourceMapPath = GetSourceMapOutputPath(filename);
+			_fileSystem.WriteAsString(outputPath, result.Code);
+			_fileSystem.WriteAsString(sourceMapPath, result.SourceMap == null ? string.Empty : result.SourceMap.ToJson());                
+			
+			return outputPath;
 		}
 
-        /// <summary>
-        /// Checks whether an input file (given as inputFileContents) should be transpiled
-        /// by calculating the hash and comparing it to the hash value stored
-        /// in the file given by outputPath. If the outputPath file does not
-        /// exist the input file should always be transpiled.
-        /// </summary>
-        /// <param name="inputFileContents">The contents of the input file.</param>
-        /// <param name="outputPath">The output path of the (possibly previously) generated file.</param>
-        /// <returns>Returns true if the file should be transpiled, false otherwise.</returns>
-	    public virtual bool MustTranspileFile(string inputFileContents, string outputPath)
-	    {
-	        if (!File.Exists(outputPath))
-	            return true;
+		/// <summary>
+		/// Checks whether an input file (given as inputFileContents) should be transpiled
+		/// by calculating the hash and comparing it to the hash value stored
+		/// in the file given by outputPath. If the outputPath file does not
+		/// exist the input file should always be transpiled.
+		/// </summary>
+		/// <param name="inputFileContents">The contents of the input file.</param>
+		/// <param name="outputPath">The output path of the (possibly previously) generated file.</param>
+		/// <returns>Returns true if the file should be transpiled, false otherwise.</returns>
+		public virtual bool CacheIsValid(string inputFileContents, string outputPath)
+		{            
+			if (!_fileSystem.FileExists(outputPath))
+				return false;
 
-	        var hashForInputFile = _fileCacheHash.CalculateHash(inputFileContents);
-	        var existingOutputContents = _fileSystem.ReadAsString(outputPath);
-	        var fileHasNotChanged = _fileCacheHash.ValidateHash(existingOutputContents, hashForInputFile);
-	        return !fileHasNotChanged;
-	    }
+			var hashForInputFile = _fileCacheHash.CalculateHash(inputFileContents);
+			var existingOutputContents = _fileSystem.ReadAsString(outputPath);
+			var fileHasNotChanged = _fileCacheHash.ValidateHash(existingOutputContents, hashForInputFile);
+			return fileHasNotChanged;
+		}
 	}
 }
