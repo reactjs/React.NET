@@ -32,6 +32,10 @@ namespace React.Tests.Core
 			_fileSystem = new Mock<IFileSystem>();
 			_fileSystem.Setup(x => x.MapPath(It.IsAny<string>())).Returns<string>(x => x);
 
+			// Per default the output file should not exist, then individual tests
+			// can choose otherwise.
+			_fileSystem.Setup(x => x.FileExists(It.IsAny<string>())).Returns(false);
+
 			_fileCacheHash = new Mock<IFileCacheHash>();
 
 			_babel = new Babel(
@@ -150,6 +154,29 @@ namespace React.Tests.Core
 			var resultFilename = _babel.TransformAndSaveFile("foo.jsx");
 			Assert.AreEqual("foo.generated.js", resultFilename);
 			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
+		}
+
+		[Test]
+		public void ShouldSkipTransformationIfCacheIsValid()
+		{
+			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
+			_fileSystem.Setup(x => x.FileExists(It.IsAny<string>())).Returns(true);
+			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+			_environment.Setup(x => x.ExecuteWithBabel<JavaScriptWithSourceMap>(
+				"ReactNET_transform_sourcemap",
+				It.IsAny<string>(),
+				It.IsAny<string>(), // Babel config
+				"foo.jsx" // File name
+			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
+
+			string result = null;
+			_fileSystem.Setup(x => x.WriteAsString("foo.generated.js", It.IsAny<string>())).Callback(
+				(string filename, string contents) => result = contents
+			);
+
+			var resultFilename = _babel.TransformAndSaveFile("foo.jsx");
+			Assert.AreEqual("foo.generated.js", resultFilename);
+			Assert.IsNull(result, "There should be no result. Cached result should have been used.");
 		}
 
 		private void SetUpEmptyCache()
