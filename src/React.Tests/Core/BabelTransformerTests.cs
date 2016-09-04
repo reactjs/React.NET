@@ -154,7 +154,6 @@ namespace React.Tests.Core
 			var resultFilename = _babel.TransformAndSaveFile("foo.jsx");
 			Assert.AreEqual("foo.generated.js", resultFilename);
 			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
-			System.IO.File.WriteAllText("c:\\temp\\foo.generated.js", result, System.Text.Encoding.UTF8);
 		}
 
 		[Test]
