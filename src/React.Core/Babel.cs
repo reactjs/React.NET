@@ -371,7 +371,7 @@ namespace React
 		/// </summary>
 		/// <param name="inputFileContents">The contents of the input file.</param>
 		/// <param name="outputPath">The output path of the (possibly previously) generated file.</param>
-		/// <returns>Returns true if the file should be transpiled, false otherwise.</returns>
+		/// <returns>Returns false if the file should be transpiled, true otherwise.</returns>
 		public virtual bool CacheIsValid(string inputFileContents, string outputPath)
 		{            
 			if (!_fileSystem.FileExists(outputPath))
