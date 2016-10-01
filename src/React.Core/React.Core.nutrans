@@ -17,7 +17,4 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<description xdt:Transform="Insert">ReactJS and Babel tools for .NET. 
 Important: This package does not do much on its own; you probably want an integration package (like React.Web.Mvc4) as well. Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</description>
 	</metadata>
-	<files xdt:Transform="Insert">
-		<file src="..\..\lib\VroomJs.dll" target="lib\net40" />
-	</files>
 </package>

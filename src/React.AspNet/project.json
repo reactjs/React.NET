@@ -33,7 +33,8 @@
     "Microsoft.Extensions.DependencyInjection": "1.0.0",
     "React.Core": {
       "target": "project"
-    }
+    },
+    "VroomJs": "1.2.3" 
   },
   "frameworks": {
     "net451": {
