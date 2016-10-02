@@ -15,7 +15,9 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when the ClearScript V8 JavaScript engine fails to initialise
 	/// </summary>
+#if NET40
 	[Serializable]
+#endif
 	public class ClearScriptV8InitialisationException : ReactException
 	{
 		/// <summary>
@@ -24,11 +26,13 @@ namespace React.Exceptions
 		public ClearScriptV8InitialisationException(Exception innerException) :
 			base(GetMessage(innerException), innerException) { }
 
+#if NET40
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected ClearScriptV8InitialisationException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
+#endif
 
 		/// <summary>
 		/// Gets a message that describes the current exception.

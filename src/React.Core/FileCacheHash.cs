@@ -23,10 +23,15 @@ namespace React
 		/// </summary>
 		private const string HASH_PREFIX = "// @hash v3-";
 
+		// TODO: Do we really need to use SHA1Cng specifically?
 		/// <summary>
 		/// Algorithm for calculating file hashes
 		/// </summary>
+#if NET40
 		private readonly HashAlgorithm _hash = SHA1.Create("System.Security.Cryptography.SHA1Cng");
+#else
+		private readonly HashAlgorithm _hash = SHA1.Create();
+#endif
 
 		/// <summary>
 		/// Calculates a hash for the specified input

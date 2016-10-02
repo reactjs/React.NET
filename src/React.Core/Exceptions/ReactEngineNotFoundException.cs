@@ -15,7 +15,9 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when no valid JavaScript engine is found.
 	/// </summary>
+#if NET40
 	[Serializable]
+#endif
 	public class ReactEngineNotFoundException : ReactException
 	{
 		/// <summary>
@@ -23,11 +25,13 @@ namespace React.Exceptions
 		/// </summary>
 		public ReactEngineNotFoundException() : base(GetMessage()) { }
 
+#if NET40
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected ReactEngineNotFoundException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
+#endif
 
 		/// <summary>
 		/// Gets a message that describes the current exception.

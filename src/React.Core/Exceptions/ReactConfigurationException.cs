@@ -15,7 +15,9 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when an error occurs while reading a site configuration file.
 	/// </summary>
+#if NET40
 	[Serializable]
+#endif
 	public class ReactConfigurationException : ReactException
 	{
 		/// <summary>
@@ -30,10 +32,13 @@ namespace React.Exceptions
 		/// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
 		public ReactConfigurationException(string message, Exception innerException)
 			: base(message, innerException) { }
+
+#if NET40
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected ReactConfigurationException(SerializationInfo info, StreamingContext context) 
 			: base(info, context) { }
+#endif
 	}
 }

@@ -13,6 +13,10 @@ using System.Linq;
 using System.Reflection;
 using RegisterOptions = React.TinyIoC.TinyIoCContainer.RegisterOptions;
 
+#if !NET40
+using Microsoft.Extensions.DependencyModel;
+#endif
+
 namespace React
 {
 	/// <summary>
@@ -51,9 +55,15 @@ namespace React
 		private static void InitializeIoC(Func<RegisterOptions, RegisterOptions> requestLifetimeRegistration)
 		{
 			TinyIoCExtensions.AsRequestLifetime = requestLifetimeRegistration;
+#if NET40
 			var types = AppDomain.CurrentDomain.GetAssemblies()
 				// Only bother checking React assemblies
 				.Where(IsReactAssembly)
+#else
+			var types = DependencyContext.Default.RuntimeLibraries
+				.Where(library => IsReactAssembly(library.Name))
+				.Select(library => Assembly.Load(new AssemblyName(library.Name)))
+#endif
 				.SelectMany(assembly => assembly.GetTypes())
 				.Where(IsComponentRegistration);
 
@@ -74,11 +84,23 @@ namespace React
 		private static bool IsReactAssembly(Assembly assembly)
 		{
 			var nameWithoutVersion = assembly.FullName.Split(',')[0];
+			return IsReactAssembly(nameWithoutVersion);
+		}
+
+		/// <summary>
+		/// Determines if the specified assembly is part of ReactJS.NET
+		/// </summary>
+		/// <param name="assemblyName">Name of the assembly</param>
+		/// <returns>
+		///   <c>true</c> if this is a ReactJS.NET assembly; otherwise, <c>false</c>.
+		/// </returns>
+		private static bool IsReactAssembly(string assemblyName)
+		{
 			return
-				(nameWithoutVersion == "React" || 
-				nameWithoutVersion.StartsWith("React.") ||
-				nameWithoutVersion.EndsWith(".React")) &&
-				!_obsoleteAssemblies.Contains(nameWithoutVersion);
+				(assemblyName == "React" ||
+				assemblyName.StartsWith("React.") ||
+				assemblyName.EndsWith(".React")) &&
+				!_obsoleteAssemblies.Contains(assemblyName);
 		}
 
 		/// <summary>

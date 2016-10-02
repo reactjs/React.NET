@@ -35,17 +35,26 @@
   "dependencies": {
     "JavaScriptEngineSwitcher.Core": "2.0.0",
     "JavaScriptEngineSwitcher.Msie": "2.0.0",
-    "JavaScriptEngineSwitcher.V8": "2.0.0",
     "JSPool": "2.0.0",
     "MsieJavaScriptEngine": "2.0.0",
-    "Newtonsoft.Json": "6.0.8",
-    "VroomJs": "1.2.3"
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {
     "net40": {
+      "dependencies": {
+        "JavaScriptEngineSwitcher.V8": "2.0.0",
+        "VroomJs": "1.2.3"
+      },
       "frameworkAssemblies": {
         "System.Runtime.Caching": "4.0.0.0"
+      }
+    },
+    "netstandard16": {
+      "dependencies": {
+        "JavaScriptEngineSwitcher.ChakraCore": "2.0.0",
+        "Microsoft.Extensions.DependencyModel": "1.0.0",
+        "VroomJs": "1.2.3"
       }
     }
   }

@@ -65,17 +65,19 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<!-- Prepend date to build version if a dev build-->
 		<PropertyGroup Condition="$(BuildType) == 'Release'">
 			<BuildSuffix></BuildSuffix>
+			<BuildWithSuffix>$(Build)</BuildWithSuffix>
 		</PropertyGroup>
 		<PropertyGroup Condition="$(BuildType) != 'Release'">
 			<BuildSuffix>dev-$(Date)</BuildSuffix>
+			<BuildWithSuffix>$(Build)-$(BuildSuffix)</BuildWithSuffix>
 		</PropertyGroup>
 		<!-- Set version for assemblies -->
 		<AssemblyInfo
 			CodeLanguage="CS"
 			OutputFile="src\SharedAssemblyVersionInfo.cs"
 			AssemblyVersion="$(Major).$(Minor)"
-			AssemblyFileVersion="$(Major).$(Minor).$(Build)$(BuildSuffix).$(Revision)"
-			AssemblyInformationalVersion="$(Major).$(Minor).$(Build)$(BuildSuffix)"
+			AssemblyFileVersion="$(Major).$(Minor).$(BuildWithSuffix).$(Revision)"
+			AssemblyInformationalVersion="$(Major).$(Minor).$(BuildWithSuffix)"
 		/>
 		<!-- Ensure version numbers in project.json files are in sync -->
 		<UpdateAspNetProjectVersion

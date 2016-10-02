@@ -24,7 +24,11 @@ namespace React.AspNet
 		public void Register(TinyIoCContainer container)
 		{
 			container.Register<IFileSystem, AspNetFileSystem>().AsSingleton();
+#if NET451
 			container.Register<ICache, MemoryFileCache>().AsSingleton();
+#else
+			container.Register<ICache, MemoryFileCacheCore>().AsSingleton();
+#endif
 		}
 	}
 }

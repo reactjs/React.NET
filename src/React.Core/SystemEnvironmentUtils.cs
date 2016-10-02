@@ -17,8 +17,10 @@ namespace React
 	/// </summary>
 	public static class SystemEnvironmentUtils
 	{
+#if NET40
 		[DllImport("libc")]
 		private static extern int uname(IntPtr buf);
+#endif
 
 		/// <summary>
 		/// Determines whether the application is running on Mac OS.
@@ -32,6 +34,7 @@ namespace React
 
 		private readonly static Lazy<bool> _isRunningOnMac = new Lazy<bool>(() =>
 		{
+#if NET40
 			if (Environment.OSVersion.Platform != PlatformID.Unix)
 			{
 				return false;
@@ -58,6 +61,11 @@ namespace React
 					Marshal.FreeHGlobal(buf);
 			}
 			return false;
+#else
+			// This code was specifically to work around a bug in Mono. If running under .NET Core, we
+			// don't need to worry.
+			return false;
+#endif
 		});
 	}
 }

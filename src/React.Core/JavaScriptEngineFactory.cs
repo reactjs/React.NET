@@ -2,10 +2,13 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Msie;
+#if NET40
 using JavaScriptEngineSwitcher.V8;
+#endif
 using JSPool;
 using React.Exceptions;
 
@@ -108,7 +111,11 @@ namespace React
 		/// </summary>
 		protected virtual void InitialiseEngine(IJsEngine engine)
 		{
+#if NET40
 			var thisAssembly = typeof(ReactEnvironment).Assembly;
+#else
+			var thisAssembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
+#endif
 			engine.ExecuteResource("React.Core.Resources.shims.js", thisAssembly);
 			if (_config.LoadReact)
 			{
@@ -266,18 +273,22 @@ namespace React
 
 			// Epic fail, none of the engines worked. Nothing we can do now.
 			// Throw an error relevant to the engine they should be able to use.
+#if NET40
 			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
 			{
 				JavaScriptEngineUtils.EnsureEngineFunctional<V8JsEngine, ClearScriptV8InitialisationException>(
 					ex => new ClearScriptV8InitialisationException(ex)
 				);
 			}
-			else if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
+#endif
+#if NET40 || NETSTANDARD1_6
+			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
 			{
 				JavaScriptEngineUtils.EnsureEngineFunctional<VroomJsEngine, VroomJsInitialisationException>(
 					ex => new VroomJsInitialisationException(ex.Message)
 				);
 			}
+#endif
 			throw new ReactEngineNotFoundException();
 		}
 
@@ -353,15 +364,19 @@ namespace React
 				"for more information."
 			);
 
+#if NET40
 			jsEngineSwitcher.EngineFactories.AddV8();
+#endif
 			if (allowMsie)
 			{
 				jsEngineSwitcher.EngineFactories.AddMsie();
 			}
+#if NET40 || NETSTANDARD1_6
 			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
 			{
 				jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
 			}
+#endif
 		}
 	}
 }

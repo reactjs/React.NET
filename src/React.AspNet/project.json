@@ -36,8 +36,12 @@
     }
   },
   "frameworks": {
-    "net451": {
-    }
+    "net451": {},
+    "netstandard16": {
+      "dependencies": {
+        "Microsoft.Extensions.Caching.Abstractions": "1.0.0"
+      }
+    } 
   },
   "buildOptions": {
     "compile": {

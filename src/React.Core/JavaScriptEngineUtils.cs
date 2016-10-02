@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Runtime.InteropServices;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Core.Helpers;
 using Newtonsoft.Json;
@@ -26,7 +27,13 @@ namespace React
 		/// <returns><c>true</c> if VroomJs is supported</returns>
 		public static bool EnvironmentSupportsVroomJs()
 		{
+#if NET40
 			return Environment.OSVersion.Platform == PlatformID.Unix;
+#else
+			return
+				RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+				RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+#endif
 		}
 
 		/// <summary>
@@ -35,7 +42,11 @@ namespace React
 		/// <returns><c>true</c> if ClearScript is supported</returns>
 		public static bool EnvironmentSupportsClearScript()
 		{
+#if NET40
 			return Environment.OSVersion.Platform == PlatformID.Win32NT;
+#else
+			return false;
+#endif
 		}
 
 		/// <summary>

@@ -318,10 +318,12 @@ namespace React
 			var engine = _engineFactory.GetEngineForCurrentThread();
 			EnsureBabelLoaded(engine);
 
+#if NET40
 			try
 			{
 				return engine.CallFunctionReturningJson<T>(function, args);
 			}
+
 			catch (Exception)
 			{
 				// Assume the exception MAY be an "out of stack space" error. Try running the code 
@@ -358,6 +360,9 @@ namespace React
 				}
 				return result;
 			}
+#else
+			return engine.CallFunctionReturningJson<T>(function, args);
+#endif
 		}
 
 		/// <summary>
@@ -365,8 +370,13 @@ namespace React
 		/// </summary>
 		private static string GetVersion()
 		{
+#if NET40
 			var assembly = Assembly.GetExecutingAssembly();
 			var rawVersion = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+#else
+			var assembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
+			var rawVersion = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+#endif
 			var lastDot = rawVersion.LastIndexOf('.');
 			var version = rawVersion.Substring(0, lastDot);
 			var build = rawVersion.Substring(lastDot + 1);
@@ -440,7 +450,12 @@ namespace React
 			var babelLoaded = engine.Evaluate<bool>("typeof ReactNET_transform !== 'undefined'");
 			if (!babelLoaded)
 			{
-				engine.ExecuteResource("React.Core.Resources.babel.generated.min.js", typeof(ReactEnvironment).Assembly);
+#if NET40
+				var assembly = typeof(ReactEnvironment).Assembly;
+#else
+				var assembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
+#endif
+				engine.ExecuteResource("React.Core.Resources.babel.generated.min.js", assembly);
 			}
 		}
 	}

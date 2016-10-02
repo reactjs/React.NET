@@ -15,7 +15,9 @@ namespace React
 	/// Represents the result of a Babel transformation along with its
 	/// corresponding source map.
 	/// </summary>
+#if NET40
 	[Serializable]
+#endif
 	public class JavaScriptWithSourceMap
 	{
 		/// <summary>

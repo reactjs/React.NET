@@ -1,5 +1,5 @@
-/*
- *  Copyright (c) 2014-Present, Facebook, Inc.
+﻿/*
+ *  Copyright (c) 2016-Present, Facebook, Inc.
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
@@ -7,27 +7,32 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#if NET40
+#if NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
-using System.Runtime.Caching;
+using Microsoft.Extensions.FileProviders;
 
-namespace React
+namespace React.AspNet
 {
 	/// <summary>
-	/// Memory cache implementation for React.ICache. Uses System.Runtime.Caching.
+	/// Memory cache implementation for React.ICache. Uses IMemoryCache from .NET Core.
 	/// </summary>
-	public class MemoryFileCache : ICache
+	public class MemoryFileCacheCore : ICache
 	{
-		private readonly ObjectCache _cache;
+		private readonly IMemoryCache _cache;
+		private readonly IFileProvider _fileProvider;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MemoryFileCache"/> class.
-		/// </summary>		
-		public MemoryFileCache()
+		/// Initializes a new instance of the <see cref="MemoryFileCacheCore" /> class.
+		/// </summary>
+		/// <param name="cache">The cache to use</param>
+		/// <param name="fileProvider">The file provider.</param>
+		public MemoryFileCacheCore(IMemoryCache cache, IFileProvider fileProvider)
 		{
-			_cache = MemoryCache.Default;
+			_cache = cache;
+			_fileProvider = fileProvider;
 		}
 
 		/// <summary>
@@ -69,15 +74,26 @@ namespace React
 				return;
 			}
 
-			var policy = new CacheItemPolicy { SlidingExpiration = slidingExpiration };
+			var options = new MemoryCacheEntryOptions
+			{
+				SlidingExpiration = slidingExpiration,
+			};
 
-			if (cacheDependencyFiles != null && cacheDependencyFiles.Any())
-				policy.ChangeMonitors.Add(new HostFileChangeMonitor(cacheDependencyFiles.ToList()));
+			if (cacheDependencyFiles != null)
+			{
+				foreach (var file in cacheDependencyFiles)
+				{
+					options.AddExpirationToken(_fileProvider.Watch(file));
+				}
+			}
 
 			if (cacheDependencyKeys != null && cacheDependencyKeys.Any())
-				policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(cacheDependencyKeys));
+			{
+				// https://github.com/aspnet/Docs/issues/1938
+				throw new NotImplementedException();
+			}
 
-			_cache.Set(key, data, policy);
+			_cache.Set(key, data, options);
 		}
 	}
 }

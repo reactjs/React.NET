@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+#if NET40 || NETSTANDARD1_6
 using System;
 using System.Linq;
 using JavaScriptEngineSwitcher.Core;
@@ -291,3 +292,4 @@ namespace React
 		}
 	}
 }
+#endif
