@@ -31,12 +31,19 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Mvc4", "React.Sample.Mvc4\React.Sample.Mvc4.csproj", "{22796879-968A-4C26-9B4B-4C44792B36DB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AF531A37-B93F-4113-9C2C-4DB28064B926} = {AF531A37-B93F-4113-9C2C-4DB28064B926}
+		{889CEF81-75D6-4BAB-8E2C-B64B7CA97C77} = {889CEF81-75D6-4BAB-8E2C-B64B7CA97C77}
 		{662D52AC-1EE9-4372-BD74-379F9AC56451} = {662D52AC-1EE9-4372-BD74-379F9AC56451}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Cassette", "React.Sample.Cassette\React.Sample.Cassette.csproj", "{F1EB6834-80A5-411C-90FD-CECC05715A10}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7D39E1D-6CAA-4489-A03F-0C176402CFB2} = {B7D39E1D-6CAA-4489-A03F-0C176402CFB2}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Webpack", "React.Sample.Webpack\React.Sample.Webpack.csproj", "{E20376AD-80F7-4865-ACE3-1DE616991DF7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{662D52AC-1EE9-4372-BD74-379F9AC56451} = {662D52AC-1EE9-4372-BD74-379F9AC56451}
+	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Sample.Mvc6", "React.Sample.Mvc6\React.Sample.Mvc6.xproj", "{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}"
 	ProjectSection(ProjectDependencies) = postProject

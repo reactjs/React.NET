@@ -9,27 +9,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 -->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
-	<UsingTask
-		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Web\Microsoft.Web.Publishing.Tasks.dll"
-		TaskName="TransformXml"
-	/>
-	
-	<UsingTask
-		TaskName="SetEnvironmentVariable"
-		TaskFactory="CodeTaskFactory"
-		AssemblyFile="C:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll">
-		<ParameterGroup>
-			<Name Required="true" />
-			<Value Required="true" />
-		</ParameterGroup>
-		<Task>
-			<Using Namespace="System" />
-			<Code Type="Fragment" Language="cs"><![CDATA[
-				Log.LogError(Name + " = " + Value);
-        Environment.SetEnvironmentVariable(Name, Value);
-      ]]></Code>
-		</Task>
-	</UsingTask>
 	
 	<UsingTask
 		TaskName="UpdateAspNetProjectVersion"

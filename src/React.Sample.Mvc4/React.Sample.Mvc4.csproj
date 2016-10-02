@@ -84,13 +84,13 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="React.Core">
-      <HintPath>..\React.Core\bin\Debug\net40\React.Core.dll</HintPath>
+      <HintPath>..\React.Core\bin\$(Configuration)\net40\React.Core.dll</HintPath>
     </Reference>
     <Reference Include="React.Web">
-      <HintPath>..\React.Web\bin\Debug\net40\React.Web.dll</HintPath>
+      <HintPath>..\React.Web\bin\$(Configuration)\net40\React.Web.dll</HintPath>
     </Reference>
     <Reference Include="React.Web.Mvc4">
-      <HintPath>..\React.Web.Mvc4\bin\Debug\net40\React.Web.Mvc4.dll</HintPath>
+      <HintPath>..\React.Web.Mvc4\bin\$(Configuration)\net40\React.Web.Mvc4.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -106,7 +106,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Optimization.React">
-      <HintPath>..\System.Web.Optimization.React\bin\Debug\net40\System.Web.Optimization.React.dll</HintPath>
+      <HintPath>..\System.Web.Optimization.React\bin\$(Configuration)\net40\System.Web.Optimization.React.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />

@@ -6,6 +6,6 @@ build:
   project: build.proj
   verbosity: normal
 test_script:
-- nunit3-console.exe bin\ReleaseTests\React.Tests\React.Tests.dll
+- dotnet test --configuration Release --no-build tests/React.Tests
 artifacts:
 - path: output\*.nupkg

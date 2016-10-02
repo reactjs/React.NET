@@ -10,7 +10,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 <Project ToolsVersion="4.0" DefaultTargets="Build;Test;Package" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<Major>2</Major>
-		<Minor>5</Minor>
+		<Minor>6</Minor>
 		<Build>0</Build>
 		<Revision>0</Revision>
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
@@ -21,30 +21,28 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<SolutionFile>src\React.sln</SolutionFile>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageAssemblies Include="Cassette.React" />
+		<PackageAssemblies Include="React.AspNet" />
 		<PackageAssemblies Include="React.Core" />
+		<PackageAssemblies Include="React.MSBuild" />
+		<PackageAssemblies Include="React.Owin" />
 		<PackageAssemblies Include="React.Web" />
 		<PackageAssemblies Include="React.Web.Mvc4" />
 		<PackageAssemblies Include="System.Web.Optimization.React" />
-		<PackageAssemblies Include="Cassette.React" />
-		<PackageAssemblies Include="React.MSBuild" />
-		<PackageAssemblies Include="React.Owin" />
-		<PackageAssembliesAspNetCore Include="React.AspNet" />
-		<AspNetCoreProjectJson Include="src/wrap/**/project.json" />
-		<AspNetCoreProjectJson Include="src/React.AspNet/project.json" />
-		<AspNetCoreProjectJson Include="src/React.Sample.Mvc6/project.json" />
 	</ItemGroup>
 
 	<Import Project="src/React.tasks.proj" />
 	
 	<Target Name="RestorePackages" DependsOnTargets="Clean">
+		<!-- NuGet packages for .xproj projects -->
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet restore"
+		/>
+		<!-- NuGet packages for "legacy" projects (eg. React.Samples.Mvc4) -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
-		/>
-		<!-- NuGet packages for ASP.NET Core projects -->
-		<Exec
-			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet restore src\React.AspNet src\React.Sample.Mvc6"
 		/>
 		<!-- npm packages -->
 		<Exec
@@ -66,32 +64,23 @@ of patent rights can be found in the PATENTS file in the same directory.
 		</Time>
 		<!-- Prepend date to build version if a dev build-->
 		<PropertyGroup Condition="$(BuildType) == 'Release'">
-			<FullBuild>$(Build)</FullBuild>
+			<BuildSuffix></BuildSuffix>
 		</PropertyGroup>
 		<PropertyGroup Condition="$(BuildType) != 'Release'">
-			<FullBuild>$(Build)-dev-$(Date)</FullBuild>
+			<BuildSuffix>dev-$(Date)</BuildSuffix>
 		</PropertyGroup>
-		<!-- Set version for .csproj projects -->
+		<!-- Set version for assemblies -->
 		<AssemblyInfo
 			CodeLanguage="CS"
 			OutputFile="src\SharedAssemblyVersionInfo.cs"
 			AssemblyVersion="$(Major).$(Minor)"
-			AssemblyFileVersion="$(Major).$(Minor).$(FullBuild).$(Revision)"
-			AssemblyInformationalVersion="$(Major).$(Minor).$(FullBuild)"
+			AssemblyFileVersion="$(Major).$(Minor).$(Build)$(BuildSuffix).$(Revision)"
+			AssemblyInformationalVersion="$(Major).$(Minor).$(Build)$(BuildSuffix)"
 		/>
-		<!-- 
-			Set version for ASP.NET Core projects. In theory K_BUILD_VERSION should work but it doesn't seem 
-			to be functional yet :(. We work around this by physically writing the build number to the 
-			project.json files. For development builds we write the full version number (including 
-			build date) and reset it later so the dev build number isn't commited to the repo.
-		-->
-		<!--SetEnvironmentVariable
-			Name="K_BUILD_VERSION"
-			Value="$(Build)"
-		/-->
+		<!-- Ensure version numbers in project.json files are in sync -->
 		<UpdateAspNetProjectVersion
-			Files="@(AspNetCoreProjectJson)"
-			Version="$(Major).$(Minor).$(FullBuild)"
+			Files="src/%(PackageAssemblies.Identity)/project.json"
+			Version="$(Major).$(Minor).$(Build)-*"
 		/>
 	</Target>
 
@@ -101,7 +90,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 			do it here. See https://github.com/aspnet/XRE/issues/1301 
 		-->
 		<DeleteTree Directories="src/artifacts" />
-		<DeleteTree Directories="bin/%(PackageAssembliesAspNetCore.Identity)/Release" />
+		<DeleteTree Directories="src/%(PackageAssemblies.Identity)/bin" />
 	</Target>
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
@@ -110,33 +99,14 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Exec WorkingDirectory="src/React.Sample.Webpack" Command="node_modules/.bin/webpack" />
 	</Target>
 
-	<Target Name="ResetAspNetVersion" AfterTargets="AspNetPackages">
-		<!-- Resets the version number in ASP.NET Core project.json files so we don't commit -dev- version numbers -->
-		<UpdateAspNetProjectVersion
-			Files="@(AspNetCoreProjectJson)"
-			Version="$(Major).$(Minor).$(Build)-*"
-		/>
-	</Target>
-
 	<Target Name="Test" DependsOnTargets="Build">
-		<ItemGroup>
-			<TestAssemblies Include="bin/ReleaseTests/**/React.Tests*.dll" />
-		</ItemGroup>
-		<NUnit
-			ToolPath="src\packages\NUnit.Runners.2.6.3\tools"
-			Assemblies="@(TestAssemblies)"
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet test --configuration Release --no-build tests/React.Tests"
 		/>
 	</Target>
 
-	<Target Name="GenerateNuSpecs">
-		<TransformXml
-			Source="src/template.nuspec"
-			Transform="src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).nutrans"
-			Destination="src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).nuspec"
-		/>
-	</Target>
-
-	<Target Name="Package" DependsOnTargets="Build;GenerateNuSpecs">
+	<Target Name="Package" DependsOnTargets="Build">
 		<!-- Delete old packages -->
 		<RemoveDir Directories="$(PackageOutputDir)" />
 
@@ -144,14 +114,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<MakeDir Directories="$(PackageOutputDir)" />
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe pack src/%(PackageAssemblies.Identity)/%(PackageAssemblies.Identity).csproj -IncludeReferencedProjects -Symbols -Prop Configuration=Release -OutputDirectory output"
-		/>
-	</Target>
-  
-	<Target Name="AspNetPackages" AfterTargets="Package">
-		<Exec
-			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet pack --output $(PackageOutputDir) --build-base-path bin/ --configuration Release --no-build src/%(PackageAssembliesAspNetCore.Identity)/project.json"
+			Command="dotnet pack --output $(PackageOutputDir) --configuration Release  --version-suffix $(BuildSuffix) --no-build src/%(PackageAssemblies.Identity)"
 		/>
 	</Target>
 

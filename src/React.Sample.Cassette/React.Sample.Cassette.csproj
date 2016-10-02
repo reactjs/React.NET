@@ -66,7 +66,7 @@
     </Reference>
     <Reference Include="Cassette.React, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Cassette.React\bin\Debug\net40\Cassette.React.dll</HintPath>
+      <HintPath>..\Cassette.React\bin\$(Configuration)\net40\Cassette.React.dll</HintPath>
     </Reference>
     <Reference Include="Cassette.Views, Version=2.4.2.13844, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Cassette.Views.2.4.2\lib\net40\Cassette.Views.dll</HintPath>
@@ -79,15 +79,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="React.Core, Version=2.6.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\React.Core\bin\Debug\net40\React.Core.dll</HintPath>
+      <HintPath>..\React.Core\bin\$(Configuration)\net40\React.Core.dll</HintPath>
     </Reference>
     <Reference Include="React.Web, Version=2.6.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\React.Web\bin\Debug\net40\React.Web.dll</HintPath>
+      <HintPath>..\React.Web\bin\$(Configuration)\net40\React.Web.dll</HintPath>
     </Reference>
     <Reference Include="React.Web.Mvc4, Version=2.6.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\React.Web.Mvc4\bin\Debug\net40\React.Web.Mvc4.dll</HintPath>
+      <HintPath>..\React.Web.Mvc4\bin\$(Configuration)\net40\React.Web.Mvc4.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
