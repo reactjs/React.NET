@@ -6,7 +6,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">    
     <UsingTask AssemblyFile="$(OutputPath)\Cassette.MSBuild.dll" TaskName="CreateBundles"/>
     <Target Name="Bundle">
-		<!--CreateBundles /-->
+		<CreateBundles />
         <!--
         CreateBundles has the following optional properties:
             Source: The root directory of the web application.

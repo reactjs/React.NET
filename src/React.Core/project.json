@@ -1,5 +1,5 @@
 {
-  "version": "2.6.0-*",
+  "version": "3.0.0-*",
   "title": "ReactJS.NET Core",
   "authors": [ "Daniel Lo Nigro" ],
   "copyright": "Copyright 2014-Present Facebook, Inc",
@@ -33,11 +33,11 @@
   },
 
   "dependencies": {
-    "JavaScriptEngineSwitcher.Core": "1.5.0",
-    "JavaScriptEngineSwitcher.Msie": "1.5.0",
-    "JavaScriptEngineSwitcher.V8": "1.5.8",
-    "JSPool": "0.4.1",
-    "MsieJavaScriptEngine": "1.7.2",
+    "JavaScriptEngineSwitcher.Core": "2.0.0",
+    "JavaScriptEngineSwitcher.Msie": "2.0.0",
+    "JavaScriptEngineSwitcher.V8": "2.0.0",
+    "JSPool": "2.0.0",
+    "MsieJavaScriptEngine": "2.0.0",
     "Newtonsoft.Json": "6.0.8",
     "VroomJs": "1.2.3"
   },

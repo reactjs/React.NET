@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\JavaScriptEngineSwitcher.V8.1.5.8\build\JavaScriptEngineSwitcher.V8.props" Condition="Exists('..\packages\JavaScriptEngineSwitcher.V8.1.5.8\build\JavaScriptEngineSwitcher.V8.props')" />
+  <Import Project="..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props" Condition="Exists('..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -58,25 +58,25 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ClearScript, Version=5.4.6.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.5.8\lib\net40\ClearScript.dll</HintPath>
+    <Reference Include="ClearScript, Version=5.4.7.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.2.0.0\lib\net40-client\ClearScript.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Core, Version=1.5.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.1.5.0\lib\net40\JavaScriptEngineSwitcher.Core.dll</HintPath>
+    <Reference Include="JavaScriptEngineSwitcher.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.2.0.0\lib\net40-client\JavaScriptEngineSwitcher.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Msie, Version=1.5.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.1.5.0\lib\net40\JavaScriptEngineSwitcher.Msie.dll</HintPath>
+    <Reference Include="JavaScriptEngineSwitcher.Msie, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.2.0.0\lib\net40-client\JavaScriptEngineSwitcher.Msie.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.V8, Version=1.5.8.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.1.5.8\lib\net40\JavaScriptEngineSwitcher.V8.dll</HintPath>
+    <Reference Include="JavaScriptEngineSwitcher.V8, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.V8.2.0.0\lib\net40-client\JavaScriptEngineSwitcher.V8.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MsieJavaScriptEngine, Version=1.7.0.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
-      <HintPath>..\packages\MsieJavaScriptEngine.1.7.0\lib\net40\MsieJavaScriptEngine.dll</HintPath>
+    <Reference Include="MsieJavaScriptEngine, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\MsieJavaScriptEngine.2.0.0\lib\net40-client\MsieJavaScriptEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -168,22 +168,6 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.5.8\content\ClearScript.V8\ClearScriptV8-32.dll">
-      <Link>ClearScript.V8\ClearScriptV8-32.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.5.8\content\ClearScript.V8\ClearScriptV8-64.dll">
-      <Link>ClearScript.V8\ClearScriptV8-64.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.5.8\content\ClearScript.V8\v8-ia32.dll">
-      <Link>ClearScript.V8\v8-ia32.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\packages\JavaScriptEngineSwitcher.V8.1.5.8\content\ClearScript.V8\v8-x64.dll">
-      <Link>ClearScript.V8\v8-x64.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\Sample.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -244,7 +228,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\JavaScriptEngineSwitcher.V8.1.5.8\build\JavaScriptEngineSwitcher.V8.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JavaScriptEngineSwitcher.V8.1.5.8\build\JavaScriptEngineSwitcher.V8.props'))" />
+    <Error Condition="!Exists('..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JavaScriptEngineSwitcher.V8.2.0.0\build\JavaScriptEngineSwitcher.V8.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

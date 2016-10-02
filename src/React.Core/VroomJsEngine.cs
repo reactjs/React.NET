@@ -270,5 +270,24 @@ namespace React
 				_disposed = true;
 			}
 		}
+
+		/// <summary>
+		/// Engine factory for <see cref="VroomJs" />.
+		/// </summary>
+		public class Factory : IJsEngineFactory
+		{
+			/// <summary>
+			/// Creates the engine
+			/// </summary>
+			public IJsEngine CreateEngine()
+			{
+				return new VroomJsEngine();
+			}
+
+			/// <summary>
+			/// Gets the name of the engine.
+			/// </summary>
+			public string EngineName => "VroomJs";
+		}
 	}
 }

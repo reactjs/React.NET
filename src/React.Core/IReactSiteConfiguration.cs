@@ -105,11 +105,13 @@ namespace React
 		/// <summary>
 		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
 		/// </summary>
+		[Obsolete("This should be managed in the JavaScriptEngineSwitcher configuration instead")]
 		bool AllowMsieEngine { get; set; }
 		/// <summary>
 		/// Sets whether the MSIE engine should be used if V8 is unavailable.
 		/// </summary>
 		/// <returns></returns>
+		[Obsolete("This should be managed in the JavaScriptEngineSwitcher configuration instead")]
 		IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine);
 
 		/// <summary>

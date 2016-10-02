@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -28,7 +27,11 @@ namespace React
 		/// <summary>
 		/// Function used to create new JavaScript engine instances.
 		/// </summary>
-		protected readonly Func<IJsEngine> _factory; 
+		protected readonly Func<IJsEngine> _factory;
+		/// <summary>
+		/// The JavaScript Engine Switcher instance used by ReactJS.NET
+		/// </summary>
+		protected readonly JsEngineSwitcher _jsEngineSwitcher;
 		/// <summary>
 		/// Contains all current JavaScript engine instances. One per thread, keyed on thread ID.
 		/// </summary>
@@ -51,14 +54,17 @@ namespace React
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
 		/// </summary>
 		public JavaScriptEngineFactory(
-			IEnumerable<Registration> availableFactories, 
+			JsEngineSwitcher jsEngineSwitcher,
 			IReactSiteConfiguration config,
 			IFileSystem fileSystem
 		)
 		{
+			_jsEngineSwitcher = jsEngineSwitcher;
 			_config = config;
 			_fileSystem = fileSystem;
-			_factory = GetFactory(availableFactories, config.AllowMsieEngine);
+#pragma warning disable 618
+			_factory = GetFactory(_jsEngineSwitcher, config.AllowMsieEngine);
+#pragma warning restore 618
 			if (_config.ReuseJavaScriptEngines)
 			{
 				_pool = CreatePool();
@@ -229,21 +235,19 @@ namespace React
 		/// The first functioning JavaScript engine with the lowest priority will be used.
 		/// </summary>
 		/// <returns>Function to create JavaScript engine</returns>
-		private static Func<IJsEngine> GetFactory(IEnumerable<Registration> availableFactories, bool allowMsie)
+		private static Func<IJsEngine> GetFactory(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
 		{
-			var availableEngineFactories = availableFactories
-				.OrderBy(x => x.Priority)
-				.Select(x => x.Factory);
-			foreach (var engineFactory in availableEngineFactories)
+			EnsureJsEnginesRegistered(jsEngineSwitcher, allowMsie);
+			foreach (var engineFactory in jsEngineSwitcher.EngineFactories)
 			{
 				IJsEngine engine = null;
 				try
 				{
-					engine = engineFactory();
+					engine = engineFactory.CreateEngine();
 					if (EngineIsUsable(engine, allowMsie))
 					{
 						// Success! Use this one.
-						return engineFactory;
+						return engineFactory.CreateEngine;
 					}
 				}
 				catch (Exception ex)
@@ -329,20 +333,35 @@ namespace React
 		}
 
 		/// <summary>
-		/// Represents a factory for a supported JavaScript engine. 
+		/// Ensures that some engines have been registered with JavaScriptEngineSwitcher. IF not,
+		/// registers some default engines.
 		/// </summary>
-		public class Registration
+		/// <param name="jsEngineSwitcher">JavaScript Engine Switcher instance</param>
+		/// <param name="allowMsie">Whether to allow the MSIE JS engine</param>
+		private static void EnsureJsEnginesRegistered(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
 		{
-			/// <summary>
-			/// Gets or sets the factory for this JavaScript engine
-			/// </summary>
-			public Func<IJsEngine> Factory { get; set; }
+			if (jsEngineSwitcher.EngineFactories.Any())
+			{
+				// Engines have been registered, nothing to do here!
+				return;
+			}
 
-			/// <summary>
-			/// Gets or sets the priority for this JavaScript engine. Engines with lower priority
-			/// are preferred.
-			/// </summary>
-			public int Priority { get; set; }
+			Trace.WriteLine(
+				"No JavaScript engines were registered, falling back to a default config! It is " +
+				"recommended that you configure JavaScriptEngineSwitcher in your app. See " +
+				"https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines " +
+				"for more information."
+			);
+
+			jsEngineSwitcher.EngineFactories.AddV8();
+			if (allowMsie)
+			{
+				jsEngineSwitcher.EngineFactories.AddMsie();
+			}
+			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
+			{
+				jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
+			}
 		}
 	}
 }

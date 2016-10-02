@@ -7,9 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using JavaScriptEngineSwitcher.Msie;
-using JavaScriptEngineSwitcher.Msie.Configuration;
-using JavaScriptEngineSwitcher.V8;
+using JavaScriptEngineSwitcher.Core;
 using React.TinyIoC;
 
 namespace React
@@ -37,50 +35,10 @@ namespace React
 			// One instance shared for the whole app
 			container.Register<IReactSiteConfiguration>((c, o) => ReactSiteConfiguration.Configuration);
 			container.Register<IFileCacheHash, FileCacheHash>().AsPerRequestSingleton();
+			container.Register<JsEngineSwitcher>((c, o) => JsEngineSwitcher.Instance);
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsSingleton();
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
-			RegisterSupportedEngines(container);
-		}
-
-		/// <summary>
-		/// Registers JavaScript engines that may be able to run in the current environment
-		/// </summary>
-		/// <param name="container"></param>
-		private void RegisterSupportedEngines(TinyIoCContainer container)
-		{
-			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
-			{
-				container.Register(new JavaScriptEngineFactory.Registration
-				{
-					Factory = () => new V8JsEngine(),
-					Priority = 10
-				}, "ClearScriptV8");
-			}
-			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
-			{
-				container.Register(new JavaScriptEngineFactory.Registration
-				{
-					Factory = () => new VroomJsEngine(),
-					Priority = 10
-				}, "VroomJs");
-			}
-
-			container.Register(new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraEdgeJsRt }),
-				Priority = 20
-			}, "MsieChakraEdgeRT");
-			container.Register(new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraIeJsRt }),
-				Priority = 30
-			}, "MsieChakraIeRT");
-			container.Register(new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => new MsieJsEngine(new MsieConfiguration { EngineMode = JsEngineMode.ChakraActiveScript }),
-				Priority = 40
-			}, "MsieChakraActiveScript");
 		}
 	}
 }

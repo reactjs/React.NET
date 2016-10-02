@@ -2,6 +2,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="TransformBabel">    
 	<UsingTask AssemblyFile="..\React.MSBuild\bin\$(Configuration)\net40\React.MSBuild.dll" TaskName="TransformBabel" />
 	<Target Name="TransformBabel">
-		<!--TransformBabel SourceDir="$(MSBuildProjectDirectory)" /-->
+		<TransformBabel SourceDir="$(MSBuildProjectDirectory)" />
 	</Target>
 </Project>

@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
@@ -19,29 +20,47 @@ namespace React.Tests.Core
 	[TestFixture]
 	public class JavaScriptEngineFactoryTest
 	{
-		private JavaScriptEngineFactory CreateFactory()
+		private JavaScriptEngineFactory CreateBasicFactory()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(true);
 			var fileSystem = new Mock<IFileSystem>();
-			var registration = new JavaScriptEngineFactory.Registration
+			return CreateFactory(config, fileSystem, () =>
 			{
-				Factory = () =>
-				{
-					var mockJsEngine = new Mock<IJsEngine>();
-					mockJsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-					return mockJsEngine.Object;
-				},
-				Priority = 1
-			};
-			return new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+				var mockJsEngine = new Mock<IJsEngine>();
+				mockJsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+				return mockJsEngine.Object;
+			});
+		}
+
+		private JavaScriptEngineFactory CreateFactory(
+			Mock<IReactSiteConfiguration> config, 
+			Mock<IFileSystem> fileSystem,
+			Func<IJsEngine> innerEngineFactory
+		)
+		{
+			var engineFactory = new Mock<IJsEngineFactory>();
+			engineFactory.Setup(x => x.EngineName).Returns("MockEngine");
+			engineFactory.Setup(x => x.CreateEngine()).Returns(innerEngineFactory);
+
+			// JsEngineSwitcher is a singleton :(
+			var engineFactories = JsEngineSwitcher.Instance.EngineFactories;
+			engineFactories.Clear();
+			engineFactories.Add(engineFactory.Object);
+			
+			return new JavaScriptEngineFactory(JsEngineSwitcher.Instance, config.Object, fileSystem.Object);
+		}
+
+		[SetUp]
+		public void BeforeEach()
+		{
 		}
 
 		[Test]
 		public void ShouldReturnSameEngine()
 		{
-			var factory = CreateFactory();
+			var factory = CreateBasicFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
 			
@@ -52,7 +71,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldReturnNewEngineAfterDisposing()
 		{
-			var factory = CreateFactory();
+			var factory = CreateBasicFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			factory.DisposeEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
@@ -64,7 +83,7 @@ namespace React.Tests.Core
 		[Test]
 		public void ShouldCreateNewEngineForNewThread()
 		{
-			var factory = CreateFactory();
+			var factory = CreateBasicFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 
 			IJsEngine engine2 = null;
@@ -99,12 +118,7 @@ namespace React.Tests.Core
 			var fileSystem = new Mock<IFileSystem>();
 			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
 
-			var registration = new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => jsEngine.Object,
-				Priority = 1
-			};
-			var factory = new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
 
 			factory.GetEngineForCurrentThread();
 
@@ -122,12 +136,7 @@ namespace React.Tests.Core
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(false);
 			var fileSystem = new Mock<IFileSystem>();
-			var registration = new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => jsEngine.Object,
-				Priority = 1
-			};
-			var factory = new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
 
 			factory.GetEngineForCurrentThread();
 
@@ -144,12 +153,7 @@ namespace React.Tests.Core
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(false);
 			var fileSystem = new Mock<IFileSystem>();
-			var registration = new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => jsEngine.Object,
-				Priority = 1
-			};
-			var factory = new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
 
 			Assert.Throws<ReactNotInitialisedException>(() =>
 			{
@@ -173,12 +177,7 @@ namespace React.Tests.Core
 				LineNumber = 42,
 				ColumnNumber = 911,
 			});
-			var registration = new JavaScriptEngineFactory.Registration
-			{
-				Factory = () => jsEngine.Object,
-				Priority = 1
-			};
-			var factory = new JavaScriptEngineFactory(new[] { registration }, config.Object, fileSystem.Object);
+			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
 			Assert.AreEqual("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);

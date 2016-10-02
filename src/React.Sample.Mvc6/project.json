@@ -19,7 +19,7 @@
     "React.AspNet": {
       "target": "project"
     },
-    "JavaScriptEngineSwitcher.V8": "1.5.8"
+    "JavaScriptEngineSwitcher.V8": "2.0.0"
   },
 
   "tools": {
