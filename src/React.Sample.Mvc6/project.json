@@ -18,8 +18,7 @@
     },
     "React.AspNet": {
       "target": "project"
-    },
-    "JavaScriptEngineSwitcher.V8": "2.0.0"
+    }
   },
 
   "tools": {
@@ -30,12 +29,31 @@
   },
 
   "frameworks": {
-    "net451": { }
+    "net451": {
+      "dependencies": {
+        "JavaScriptEngineSwitcher.V8": "2.0.0"
+      }
+    },
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0",
+          "type": "platform"
+        },
+        "VroomJs": "1.2.3"
+      }
+    }
   },
 
   "buildOptions": {
     "emitEntryPoint": true,
     "preserveCompilationContext": true
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
   },
 
   "publishOptions": {

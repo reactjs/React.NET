@@ -8,6 +8,8 @@ using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Msie;
 #if NET40
 using JavaScriptEngineSwitcher.V8;
+#else
+using JavaScriptEngineSwitcher.ChakraCore;
 #endif
 using JSPool;
 using React.Exceptions;
@@ -367,15 +369,13 @@ namespace React
 #if NET40
 			jsEngineSwitcher.EngineFactories.AddV8();
 #endif
+			jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
 			if (allowMsie)
 			{
 				jsEngineSwitcher.EngineFactories.AddMsie();
 			}
-#if NET40 || NETSTANDARD1_6
-			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
-			{
-				jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
-			}
+#if !NET40
+			jsEngineSwitcher.EngineFactories.AddChakraCore();
 #endif
 		}
 	}

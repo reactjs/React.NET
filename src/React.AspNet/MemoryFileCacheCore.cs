@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 
 namespace React.AspNet
@@ -28,11 +29,11 @@ namespace React.AspNet
 		/// Initializes a new instance of the <see cref="MemoryFileCacheCore" /> class.
 		/// </summary>
 		/// <param name="cache">The cache to use</param>
-		/// <param name="fileProvider">The file provider.</param>
-		public MemoryFileCacheCore(IMemoryCache cache, IFileProvider fileProvider)
+		/// <param name="hostingEnv">The ASP.NET hosting environment.</param>
+		public MemoryFileCacheCore(IMemoryCache cache, IHostingEnvironment hostingEnv)
 		{
 			_cache = cache;
-			_fileProvider = fileProvider;
+			_fileProvider = hostingEnv.ContentRootFileProvider;
 		}
 
 		/// <summary>

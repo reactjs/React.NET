@@ -11,10 +11,12 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.PlatformAbstractions;
 using React.Exceptions;
 using React.TinyIoC;
 using Microsoft.Extensions.DependencyInjection;
+#if !NET451
+using Microsoft.Extensions.Caching.Memory;
+#endif
 
 namespace React.AspNet
 {
@@ -38,7 +40,7 @@ namespace React.AspNet
 		{
 			EnsureServicesRegistered(app);
 
-			React.AssemblyRegistration.Container.Register(app.ApplicationServices.GetRequiredService<IHostingEnvironment>());
+			RegisterAspNetServices(React.AssemblyRegistration.Container, app.ApplicationServices);
 
 			Initializer.Initialize(registerOptions => AsPerRequestSingleton(
 				app.ApplicationServices.GetService<IHttpContextAccessor>(), 
@@ -81,6 +83,20 @@ namespace React.AspNet
 			{
 				throw new ReactNotInitialisedException("Please call app.AddReact() before app.UseReact().");
 			}
+		}
+
+		/// <summary>
+		/// Registers required ASP.NET services in ReactJS.NET's TinyIoC container. This is used
+		/// for ASP.NET services that are required by ReactJS.NET.
+		/// </summary>
+		/// <param name="container">ReactJS.NET dependency injection container</param>
+		/// <param name="services">ASP.NET dependency injection container</param>
+		private static void RegisterAspNetServices(TinyIoCContainer container, IServiceProvider services)
+		{
+			container.Register(services.GetRequiredService<IHostingEnvironment>());
+#if !NET451
+			container.Register(services.GetRequiredService<IMemoryCache>());
+#endif
 		}
 	}
 }

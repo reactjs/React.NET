@@ -1,5 +1,5 @@
 {
-  "version": "2.6.0-*",
+  "version": "3.0.0-*",
   "title": "ReactJS.NET Console Sample",
   "authors": [ "Daniel Lo Nigro" ],
   "copyright": "Copyright 2014-Present Facebook, Inc",
@@ -20,6 +20,14 @@
   },
 
   "frameworks": {
-    "net40": {}
+    "net40": {},
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        }
+      }
+    } 
   }
 }
