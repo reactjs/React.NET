@@ -16,11 +16,17 @@
   },
 
   "packOptions": {
+    "files": {
+      "include": [
+        "tools",
+        "Content"
+      ]
+    },
     "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
     "licenseUrl": "https://github.com/reactjs/React.NET#licence",
     "owners": [ "Daniel Lo Nigro" ],
     "projectUrl": "http://reactjs.net/",
-    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel", "msbuild" ]
+    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel", "msbuild" ],
   },
 
   "dependencies": {
