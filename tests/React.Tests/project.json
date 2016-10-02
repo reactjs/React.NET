@@ -1,0 +1,30 @@
+﻿{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET Unit Tests",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+
+  "buildOptions": {
+    "keyFile": "../../src/key.snk"
+  },
+
+  "dependencies": {
+    "dotnet-test-nunit": "3.4.0-beta-2",
+    "Moq": "4.5.22",
+    "NUnit": "3.4.1",
+    "React.Core": {
+      "target": "project"
+    },
+    "React.Owin": {
+      "target": "project"
+    },
+    "React.Web.Mvc4": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net451": {}
+  },
+  "testRunner": "nunit"
+}

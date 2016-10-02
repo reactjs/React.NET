@@ -64,6 +64,10 @@
       <HintPath>..\packages\Cassette.MSBuild.2.4.2\lib\net40\Cassette.MSBuild.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Cassette.React, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Cassette.React\bin\Debug\net40\Cassette.React.dll</HintPath>
+    </Reference>
     <Reference Include="Cassette.Views, Version=2.4.2.13844, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Cassette.Views.2.4.2\lib\net40\Cassette.Views.dll</HintPath>
       <Private>True</Private>
@@ -73,6 +77,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="React.Core, Version=2.6.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\React.Core\bin\Debug\net40\React.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="React.Web, Version=2.6.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\React.Web\bin\Debug\net40\React.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="React.Web.Mvc4, Version=2.6.0.0, Culture=neutral, PublicKeyToken=9aed67b161f7db78, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\React.Web.Mvc4\bin\Debug\net40\React.Web.Mvc4.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -176,24 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Cassette.React\Cassette.React.csproj">
-      <Project>{f591f1e8-3d6b-494a-b72a-152fcca6210d}</Project>
-      <Name>Cassette.React</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\React.Web.Mvc4\React.Web.Mvc4.csproj">
-      <Project>{662d52ac-1ee9-4372-bd74-379f9ac56451}</Project>
-      <Name>React.Web.Mvc4</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\React.Web\React.Web.csproj">
-      <Project>{134edd16-8dc8-4983-a2e0-b38dab1ecf1c}</Project>
-      <Name>React.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\React.Core\React.Core.csproj">
-      <Project>{d0cc8a22-cee6-485c-924b-1f94426fea59}</Project>
-      <Name>React.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Sample.jsx" />

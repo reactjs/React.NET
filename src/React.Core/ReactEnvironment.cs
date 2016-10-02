@@ -440,7 +440,7 @@ namespace React
 			var babelLoaded = engine.Evaluate<bool>("typeof ReactNET_transform !== 'undefined'");
 			if (!babelLoaded)
 			{
-				engine.ExecuteResource("React.Resources.babel.generated.min.js", typeof(ReactEnvironment).Assembly);
+				engine.ExecuteResource("React.Core.Resources.babel.generated.min.js", typeof(ReactEnvironment).Assembly);
 			}
 		}
 	}

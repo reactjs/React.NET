@@ -1,0 +1,43 @@
+﻿{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET - Babel for OWIN",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+  "description": "OWIN middleware for transpiling JavaScript via Babel.",
+
+  "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs",
+        "../React.AspNet/BabelFileOptions.cs",
+        "../React.AspNet/BabelFileSystem.cs"
+      ]
+    },
+    "define": [ "OWIN" ],
+    "keyFile": "../key.snk",
+    "xmlDoc": true
+  },
+
+  "packOptions": {
+    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "licenseUrl": "https://github.com/reactjs/React.NET#licence",
+    "owners": [ "Daniel Lo Nigro" ],
+    "projectUrl": "http://reactjs.net/",
+    "summary": "ReactJS and Babel tools for .NET",
+    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel", "owin" ]
+  },
+
+  "dependencies": {
+    "Microsoft.Owin": "3.0.1",
+    "Microsoft.Owin.FileSystems": "3.0.1",
+    "Microsoft.Owin.StaticFiles": "3.0.1",
+    "Owin": "1.0.0",
+    "React.Core": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net45": {}
+  }
+}

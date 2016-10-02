@@ -1,0 +1,53 @@
+﻿{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET Core",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+  "description": "ReactJS and Babel tools for .NET. Important: This package does not do much on its own; you probably want an integration package (like React.Web.Mvc4) as well. Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.",
+
+  "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs"
+      ]
+    },
+    "embed": {
+      "includeFiles": [
+        "Resources/shims.js",
+        "Resources/react.generated.js",
+        "Resources/react.generated.min.js",
+        "Resources/babel.generated.min.js"
+      ]
+    },
+    "keyFile": "../key.snk",
+    "xmlDoc": true
+  },
+
+  "packOptions": {
+    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "licenseUrl": "https://github.com/reactjs/React.NET#licence",
+    "owners": [ "Daniel Lo Nigro" ],
+    "projectUrl": "http://reactjs.net/",
+    "summary": "ReactJS and Babel tools for .NET",
+    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel" ]
+  },
+
+  "dependencies": {
+    "JavaScriptEngineSwitcher.Core": "1.5.0",
+    "JavaScriptEngineSwitcher.Msie": "1.5.0",
+    "JavaScriptEngineSwitcher.V8": "1.5.8",
+    "JSPool": "0.4.1",
+    "MsieJavaScriptEngine": "1.7.2",
+    "Newtonsoft.Json": "6.0.8",
+    "VroomJs": "1.2.3"
+  },
+
+  "frameworks": {
+    "net40": {
+      "frameworkAssemblies": {
+        "System.Runtime.Caching": "4.0.0.0"
+      }
+    }
+  }
+}
+

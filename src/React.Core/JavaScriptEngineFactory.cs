@@ -103,11 +103,11 @@ namespace React
 		protected virtual void InitialiseEngine(IJsEngine engine)
 		{
 			var thisAssembly = typeof(ReactEnvironment).Assembly;
-			engine.ExecuteResource("React.Resources.shims.js", thisAssembly);
+			engine.ExecuteResource("React.Core.Resources.shims.js", thisAssembly);
 			if (_config.LoadReact)
 			{
 				// TODO: Add option to choose whether to load dev vs prod version of React.
-				engine.ExecuteResource("React.Resources.react.generated.js", thisAssembly);
+				engine.ExecuteResource("React.Core.Resources.react.generated.js", thisAssembly);
 			}
 
 			LoadUserScripts(engine);

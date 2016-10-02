@@ -1,0 +1,46 @@
+﻿{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET (MVC 4 and 5)",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+  "description": "ReactJS tools for ASP.NET MVC 4 and 5. For ASP.NET Core, install React.AspNet instead! Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.",
+
+  "buildOptions": {
+    "define": [ "LEGACYASPNET" ],
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs",
+        "../React.AspNet/HtmlHelperExtensions.cs"
+      ]
+    },
+    "keyFile": "../key.snk",
+    "xmlDoc": true
+  },
+
+  "packOptions": {
+    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "licenseUrl": "https://github.com/reactjs/React.NET#licence",
+    "owners": [ "Daniel Lo Nigro" ],
+    "projectUrl": "http://reactjs.net/",
+    "summary": "ReactJS and Babel tools for ASP.NET MVC 4 and 5",
+    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel" ]
+  },
+
+  "dependencies": {
+    "Microsoft.AspNet.Mvc": "4.0.20710",
+    "React.Core": {
+      "target": "project"
+    },
+    "React.Web": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net40": {
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0" 
+      }
+    }
+  }
+}

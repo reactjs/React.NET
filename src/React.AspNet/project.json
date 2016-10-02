@@ -33,18 +33,19 @@
     "Microsoft.Extensions.DependencyInjection": "1.0.0",
     "React.Core": {
       "target": "project"
-    },
-    "VroomJs": "1.2.3" 
+    }
   },
   "frameworks": {
     "net451": {
-      "bin": {
-        "assembly": "../../bin/React.AspNet/bin/{configuration}/net451/React.AspNet.dll",
-        "pdb": "../../bin/React.AspNet/bin/{configuration}/net451/React.AspNet.pdb"
-      }
     }
   },
   "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs"
+      ]
+    },
+    "keyFile": "../key.snk",
     "xmlDoc": true
   }
 }

@@ -1,0 +1,42 @@
+﻿{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET for ASP.NET",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+  "description": "ReactJS tools for ASP.NET. If using ASP.NET MVC, also install React.Web.Mvc4. For ASP.NET Core, install React.AspNet instead! Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.",
+
+  "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs"
+      ]
+    },
+    "keyFile": "../key.snk",
+    "xmlDoc": true
+  },
+
+  "packOptions": {
+    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "licenseUrl": "https://github.com/reactjs/React.NET#licence",
+    "owners": [ "Daniel Lo Nigro" ],
+    "projectUrl": "http://reactjs.net/",
+    "summary": "ReactJS and Babel tools for ASP.NET 4",
+    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel" ]
+  },
+
+  "dependencies": {
+    "React.Core": {
+      "target": "project"
+    },
+    "Microsoft.Web.Infrastructure": "1.0.0",
+    "WebActivatorEx": "2.1.0"
+  },
+
+  "frameworks": {
+    "net40": {
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0"
+      }
+    }
+  }
+}

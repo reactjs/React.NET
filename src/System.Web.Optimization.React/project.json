@@ -1,0 +1,37 @@
+﻿{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET - Babel for ASP.NET Web Optimization Framework",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+  "description": "Allows you to transpile JavaScript via Babel in the ASP.NET Web Optimization Framework.",
+
+  "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs"
+      ]
+    },
+    "keyFile": "../key.snk",
+    "xmlDoc": true
+  },
+
+  "packOptions": {
+    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "licenseUrl": "https://github.com/reactjs/React.NET#licence",
+    "owners": [ "Daniel Lo Nigro" ],
+    "projectUrl": "http://reactjs.net/",
+    "tags": [ "asp.net", "mvc", "asp", "jquery", "javascript", "js", "react", "facebook", "reactjs", "babel" ]
+  },
+
+  "dependencies": {
+    "Microsoft.AspNet.Web.Optimization": "1.1.3",
+    "React.Core": {
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "net40": {
+    }
+  }
+}

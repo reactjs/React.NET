@@ -1,0 +1,25 @@
+{
+  "version": "2.6.0-*",
+  "title": "ReactJS.NET Console Sample",
+  "authors": [ "Daniel Lo Nigro" ],
+  "copyright": "Copyright 2014-Present Facebook, Inc",
+
+  "buildOptions": {
+    "compile": {
+      "includeFiles": [
+        "../SharedAssemblyInfo.cs"
+      ]
+    },
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "React.Core": {
+      "target": "project"
+    } 
+  },
+
+  "frameworks": {
+    "net40": {}
+  }
+}
