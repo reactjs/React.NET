@@ -19,7 +19,7 @@
   },
 
   "packOptions": {
-    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "iconUrl": "http://reactjs.net/img/logo_64.png",
     "licenseUrl": "https://github.com/reactjs/React.NET#licence",
     "owners": [ "Daniel Lo Nigro" ],
     "projectUrl": "http://reactjs.net/",

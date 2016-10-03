@@ -7,7 +7,7 @@
   "packOptions": {
     "owners": [ "Daniel Lo Nigro" ],
     "licenseUrl": "https://github.com/reactjs/React.NET#licence",
-    "iconUrl": "http://facebook.github.io/react/img/logo_og.png",
+    "iconUrl": "http://reactjs.net/img/logo_64.png",
     "tags": [ "asp.net", "mvc", "asp", "javascript", "js", "react", "facebook", "reactjs", "vnext", "asp.net 5" ],
     "projectUrl": "http://reactjs.net/"
   },
