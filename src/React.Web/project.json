@@ -1,6 +1,6 @@
 {
   "version": "3.0.0-*",
-  "title": "ReactJS.NET for ASP.NET",
+  "title": "ReactJS.NET for ASP.NET 4",
   "authors": [ "Daniel Lo Nigro" ],
   "copyright": "Copyright 2014-Present Facebook, Inc",
   "description": "ReactJS tools for ASP.NET. If using ASP.NET MVC, also install React.Web.Mvc4. For ASP.NET Core, install React.AspNet instead! Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.",
