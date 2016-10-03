@@ -42,7 +42,7 @@ var CommentsBox = React.createClass({
 	},
 	render() {
 		var commentNodes = this.state.comments.map(comment =>
-			<Comment author={comment.Author}>{comment.Text}</Comment>
+			<Comment key={comment.id} author={comment.author}>{comment.text}</Comment>
 		);
 
 		return (
@@ -78,7 +78,7 @@ var Comment = React.createClass({
 		return (
 			<li>
 				<Avatar author={this.props.author} />
-				<strong>{this.props.author.Name}</strong>{': '}
+				<strong>{this.props.author.name}</strong>{': '}
 				{this.props.children}
 			</li>
 		);
@@ -93,7 +93,7 @@ var Avatar = React.createClass({
 		return (
 			<img
 				src={this.getPhotoUrl(this.props.author)}
-				alt={'Photo of ' + this.props.author.Name}
+				alt={'Photo of ' + this.props.author.name}
 				width={50}
 				height={50}
 				className="commentPhoto"
@@ -101,6 +101,6 @@ var Avatar = React.createClass({
 		);
 	},
 	getPhotoUrl(author) {
-		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
+		return 'https://avatars.githubusercontent.com/' + author.githubUsername + '?s=50';
 	}
 });

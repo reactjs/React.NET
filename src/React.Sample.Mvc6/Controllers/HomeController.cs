@@ -13,6 +13,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using React.Sample.Mvc6.Models;
 using React.Sample.Mvc6.ViewModels;
 
@@ -26,6 +28,7 @@ namespace React.Sample.Mvc6.Models
 	public class CommentModel
 	{
 		public AuthorModel Author { get; set; }
+		public int Id { get; set; }
 		public string Text { get; set; }
 	}
 }
@@ -62,13 +65,13 @@ namespace React.Sample.Mvc6.Controllers
 			};
 			_comments = new List<CommentModel>
 			{
-				new CommentModel { Author = _authors["daniel"], Text = "First!!!!111!" },
-				new CommentModel { Author = _authors["zpao"], Text = "React is awesome!" },
-				new CommentModel { Author = _authors["cpojer"], Text = "Awesome!" },
-				new CommentModel { Author = _authors["vjeux"], Text = "Hello World" },
-				new CommentModel { Author = _authors["daniel"], Text = "Foo" },
-				new CommentModel { Author = _authors["daniel"], Text = "Bar" },
-				new CommentModel { Author = _authors["daniel"], Text = "FooBarBaz" },
+				new CommentModel { Id = 1, Author = _authors["daniel"], Text = "First!!!!111!" },
+				new CommentModel { Id = 2, Author = _authors["zpao"], Text = "React is awesome!" },
+				new CommentModel { Id = 3, Author = _authors["cpojer"], Text = "Awesome!" },
+				new CommentModel { Id = 4, Author = _authors["vjeux"], Text = "Hello World" },
+				new CommentModel { Id = 5, Author = _authors["daniel"], Text = "Foo" },
+				new CommentModel { Id = 6, Author = _authors["daniel"], Text = "Bar" },
+				new CommentModel { Id = 7, Author = _authors["daniel"], Text = "FooBarBaz" },
 			};
 		}
 

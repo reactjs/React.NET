@@ -70,8 +70,8 @@ Replace the contents of the new view file with the following:
 </head>
 <body>
 	<div id="content"></div>
-	<script src="https://fb.me/react-15.0.1.js"></script>
-	<script src="https://fb.me/react-dom-15.0.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 </body>
 </html>
@@ -240,8 +240,8 @@ Markdown is a simple way to format your text inline. For example, surrounding te
 First, add the third-party **Showdown** library to your application. This is a JavaScript library which takes Markdown text and converts it to raw HTML. We will add it via NuGet (search for "Showdown" and install it, similar to how you installed ReactJS.NET earlier) and reference the script tag in your view:
 
 ```html{3}
-<script src="https://fb.me/react-15.0.1.js"></script>
-<script src="https://fb.me/react-dom-15.0.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 <script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
 <script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 ```
@@ -857,8 +857,8 @@ Now that the bundle has been registered, we need to reference it from the view:
 </head>
 <body>
 	<div id="content"></div>
-	<script src="https://fb.me/react-15.0.1.js"></script>
-	<script src="https://fb.me/react-dom-15.0.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 	@Scripts.Render("~/bundles/main")
 	@Html.ReactInitJavaScript()
 </body>
@@ -944,8 +944,8 @@ In the view, we will accept the list of comments as the model, and use `Html.Rea
 		submitUrl = Url.Action("AddComment"),
 		pollInterval = 2000,
 	})
-	<script src="https://fb.me/react-15.0.1.js"></script>
-	<script src="https://fb.me/react-dom-15.0.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 	<script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 	@Html.ReactInitJavaScript()

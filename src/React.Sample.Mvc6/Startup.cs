@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using React.AspNet;
 
 namespace React.Sample.Mvc6
@@ -65,7 +67,12 @@ namespace React.Sample.Mvc6
 			{
 				config
 					.SetReuseJavaScriptEngines(true)
-					.AddScript("~/js/Sample.jsx");
+					.AddScript("~/js/Sample.jsx")
+					.SetJsonSerializerSettings(new JsonSerializerSettings
+					{
+						ContractResolver = new CamelCasePropertyNamesContractResolver(),
+						StringEscapeHandling = StringEscapeHandling.EscapeHtml,
+					});
 			});
 
 			// Add static files to the request pipeline.
