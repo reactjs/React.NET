@@ -121,8 +121,12 @@ namespace React
 			engine.ExecuteResource("React.Core.Resources.shims.js", thisAssembly);
 			if (_config.LoadReact)
 			{
-				// TODO: Add option to choose whether to load dev vs prod version of React.
-				engine.ExecuteResource("React.Core.Resources.react.generated.js", thisAssembly);
+				engine.ExecuteResource(
+					_config.UseDebugReact 
+						? "React.Core.Resources.react.generated.js" 
+						: "React.Core.Resources.react.generated.min.js", 
+					thisAssembly
+				);
 			}
 
 			LoadUserScripts(engine);

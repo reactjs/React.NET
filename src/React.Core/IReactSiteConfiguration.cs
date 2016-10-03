@@ -148,5 +148,16 @@ namespace React
 		/// </summary>
 		/// <returns>The configuration, for chaining</returns>
 		IReactSiteConfiguration SetBabelConfig(BabelConfig value);
+
+		/// <summary>
+		/// Gets or sets whether to use the debug version of React. This is slower, but gives
+		/// useful debugging tips.
+		/// </summary>
+		bool UseDebugReact { get; set; }
+		/// <summary>
+		/// Sets whether to use the debug version of React. This is slower, but gives
+		/// useful debugging tips.
+		/// </summary>
+		IReactSiteConfiguration SetUseDebugReact(bool value);
 	}
 }

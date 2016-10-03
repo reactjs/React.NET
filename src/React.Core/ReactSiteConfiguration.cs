@@ -42,6 +42,7 @@ namespace React
 			{
 				StringEscapeHandling = StringEscapeHandling.EscapeHtml
 			};
+			UseDebugReact = false;
 		}
 
 		/// <summary>
@@ -251,6 +252,22 @@ namespace React
 		public IReactSiteConfiguration SetBabelConfig(BabelConfig value)
 		{
 			BabelConfig = value;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets whether to use the debug version of React. This is slower, but gives
+		/// useful debugging tips.
+		/// </summary>
+		public bool UseDebugReact { get; set; }
+
+		/// <summary>
+		/// Sets whether to use the debug version of React. This is slower, but gives
+		/// useful debugging tips.
+		/// </summary>
+		public IReactSiteConfiguration SetUseDebugReact(bool value)
+		{
+			UseDebugReact = value;
 			return this;
 		}
 	}
