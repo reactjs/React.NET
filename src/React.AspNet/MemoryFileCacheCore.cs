@@ -23,7 +23,7 @@ namespace React.AspNet
 	public class MemoryFileCacheCore : ICache
 	{
 		private readonly IMemoryCache _cache;
-		private readonly IFileProvider _fileProvider;
+		private readonly IHostingEnvironment _hostingEnv;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryFileCacheCore" /> class.
@@ -33,7 +33,7 @@ namespace React.AspNet
 		public MemoryFileCacheCore(IMemoryCache cache, IHostingEnvironment hostingEnv)
 		{
 			_cache = cache;
-			_fileProvider = hostingEnv.ContentRootFileProvider;
+			_hostingEnv = hostingEnv;
 		}
 
 		/// <summary>
@@ -84,13 +84,15 @@ namespace React.AspNet
 			{
 				foreach (var file in cacheDependencyFiles)
 				{
-					options.AddExpirationToken(_fileProvider.Watch(file));
+					var relativePath = file.Replace(_hostingEnv.WebRootPath, string.Empty).TrimStart('\\', '/');
+					options.AddExpirationToken(_hostingEnv.WebRootFileProvider.Watch(relativePath));
 				}
 			}
 
 			if (cacheDependencyKeys != null && cacheDependencyKeys.Any())
 			{
 				// https://github.com/aspnet/Docs/issues/1938
+				// https://github.com/aspnet/Caching/issues/236
 				throw new NotImplementedException();
 			}
 
