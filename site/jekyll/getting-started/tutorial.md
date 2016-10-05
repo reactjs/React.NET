@@ -860,7 +860,6 @@ Now that the bundle has been registered, we need to reference it from the view:
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 	@Scripts.Render("~/bundles/main")
-	@Html.ReactInitJavaScript()
 </body>
 </html>
 ```
