@@ -21,8 +21,8 @@ We'll provide:
 It'll also have a few neat features:
 
 * **Optimistic commenting:** comments appear in the list before they're saved on the server so it feels fast.
-* **Live updates:** as other users comment we'll pop them into the comment view in real time
-* **Markdown formatting:** users can use Markdown to format their text
+* **Live updates:** other users' comments are popped into the comment view in real time.
+* **Markdown formatting:** users can use Markdown to format their text.
 
 ## Getting started
 
@@ -72,6 +72,7 @@ Replace the contents of the new view file with the following:
 	<div id="content"></div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 </body>
 </html>
@@ -109,6 +110,8 @@ ReactDOM.render(
   document.getElementById('content')
 );
 ```
+
+Note that native HTML element names start with a lowercase letter, while custom React class names begin with an uppercase letter.
 
 At this point, run your application by clicking the "Play" button in Visual Studio. If successful, your default browser should start and you should see "Hello, world! I am a CommentBox."
 
@@ -148,9 +151,10 @@ You do not have to return basic HTML. You can return a tree of components that y
 
 `ReactDOM.render()` instantiates the root component, starts the framework, and injects the markup into a raw DOM element, provided as the second argument.
 
+The `ReactDOM` module exposes DOM-specific methods, while `React` has the core tools shared by React on different platforms (e.g., [React Native](http://facebook.github.io/react-native/)).
 ## Composing components
 
-Let's build skeletons for `CommentList` and `CommentForm` which will, again, be simple `<div>`s:
+Let's build skeletons for `CommentList` and `CommentForm` which will, again, be simple `<div>`s. Add these two components to your file, keeping the existing `CommentBox` declaration and `ReactDOM.render` call:
 
 ```javascript
 var CommentList = React.createClass({
@@ -174,7 +178,7 @@ var CommentForm = React.createClass({
 });
 ```
 
-Next, update the `CommentBox` component to use its new friends:
+Next, update the `CommentBox` component to use these new components:
 
 ```javascript{5-7}
 var CommentBox = React.createClass({
@@ -192,29 +196,9 @@ var CommentBox = React.createClass({
 
 Notice how we're mixing HTML tags and components we've built. HTML components are regular React components, just like the ones you define, with one difference. The JSX compiler will automatically rewrite HTML tags to `React.createElement(tagName)` expressions and leave everything else alone. This is to prevent the pollution of the global namespace.
 
-### Component Properties
-
-Let's create our third component, `Comment`. We will want to pass it the author name and comment text so we can reuse the same code for each unique comment. First let's add some comments to the `CommentList`:
-
-```javascript{5-7}
-var CommentList = React.createClass({
-  render: function() {
-    return (
-      <div className="commentList">
-        <Comment author="Daniel Lo Nigro">Hello ReactJS.NET World!</Comment>
-        <Comment author="Pete Hunt">This is one comment</Comment>
-        <Comment author="Jordan Walke">This is *another* comment</Comment>
-      </div>
-    );
-  }
-});
-```
-
-Note that we have passed some data from the parent `CommentList` component to the child `Comment` components. For example, we passed *Pete Hunt* (via an attribute) and *This is one comment* (via an XML-like child node) to the first `Comment`. Data passed from parent to children components is called **props**, short for properties.
-
 ### Using props
 
-Let's create the Comment component. Using **props** we will be able to read the data passed to it from the `CommentList`, and render some markup:
+Let's create the `Comment` component, which will depend on data passed in from our `CommentList` component. Data passed in from the `CommentList` component is available as a 'property' on our `Comment` component. These 'properties' are accessed through `this.props`. Using props, we will be able to read the data passed to the `Comment` from the `CommentList`, and render some markup:
 
 ```javascript
 var Comment = React.createClass({
@@ -233,63 +217,78 @@ var Comment = React.createClass({
 
 By surrounding a JavaScript expression in braces inside JSX (as either an attribute or child), you can drop text or React components into the tree. We access named attributes passed to the component as keys on `this.props` and any nested elements as `this.props.children`.
 
+### Component Properties
+
+Now that we have defined the `Comment` component, we will want to pass it the author name and comment text. This allows us to reuse the same code for each unique comment. Now let's add some comments within our `CommentList`:
+
+```javascript{5-7}
+var CommentList = React.createClass({
+  render: function() {
+    return (
+      <div className="commentList">
+        <Comment author="Daniel Lo Nigro">Hello ReactJS.NET World!</Comment>
+        <Comment author="Pete Hunt">This is one comment</Comment>
+        <Comment author="Jordan Walke">This is *another* comment</Comment>
+      </div>
+    );
+  }
+});
+```
+
+Note that we have passed some data from the parent `CommentList` component to the child `Comment` components. For example, we passed *Daniel Lo Nigro* (via the `author` attribute) and *This is one comment* (via an XML-like child node) to the first `Comment`. As noted above, the `Comment` component will access these 'properties' through `this.props.author`, and `this.props.children`.
+
 ### Adding Markdown
 
 Markdown is a simple way to format your text inline. For example, surrounding text with asterisks will make it emphasized.
 
-First, add the third-party **Showdown** library to your application. This is a JavaScript library which takes Markdown text and converts it to raw HTML. We will add it via NuGet (search for "Showdown" and install it, similar to how you installed ReactJS.NET earlier) and reference the script tag in your view:
-
-```html{3}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
-<script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
-<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
-```
-
-Next, let's convert the comment text to Markdown and output it:
+In this tutorial we use a third-party library **remarkable** which takes Markdown text and converts it to raw HTML. We already included this library with the original markup for the page, so we can just start using it. Let's convert the comment text to Markdown and output it:
 
 ```javascript{3,9}
 var Comment = React.createClass({
   render: function() {
-    var converter = new Showdown.converter();
+    var md = new Remarkable();
     return (
       <div className="comment">
         <h2 className="commentAuthor">
           {this.props.author}
         </h2>
-        {converter.makeHtml(this.props.children.toString())}
+        {md.render(this.props.children.toString())}
       </div>
     );
   }
 });
 ```
 
-All we're doing here is calling the Showdown library. We need to convert `this.props.children` from React's wrapped text to a raw string that Showdown will understand so we explicitly call `toString()`.
+All we're doing here is calling the remarkable library. We need to convert `this.props.children` from React's wrapped text to a raw string that remarkable will understand so we explicitly call `toString()`.
 
 But there's a problem! Our rendered comments look like this in the browser: "`<p>`This is `<em>`another`</em>` comment`</p>`". We want those tags to actually render as HTML.
 
-That's React protecting you from an XSS attack. There's a way to get around it but the framework warns you not to use it:
+That's React protecting you from an [XSS attack](https://en.wikipedia.org/wiki/Cross-site_scripting). There's a way to get around it but the framework warns you not to use it:
 
-```javascript{4,10}
+```javascript{2-6,14}
 var Comment = React.createClass({
+  rawMarkup: function() {
+    var md = new Remarkable();
+    var rawMarkup = md.render(this.props.children.toString());
+    return { __html: rawMarkup };
+  },
+
   render: function() {
-    var converter = new Showdown.converter();
-    var rawMarkup = converter.makeHtml(this.props.children.toString());
     return (
       <div className="comment">
         <h2 className="commentAuthor">
           {this.props.author}
         </h2>
-        <span dangerouslySetInnerHTML={{"{{"}}__html: rawMarkup}} />
+        <span dangerouslySetInnerHTML={this.rawMarkup()} />
       </div>
     );
   }
 });
 ```
 
-This is a special API that intentionally makes it difficult to insert raw HTML, but for Showdown we'll take advantage of this backdoor.
+This is a special API that intentionally makes it difficult to insert raw HTML, but for remarkable we'll take advantage of this backdoor.
 
-**Remember:** by using this feature you're relying on Showdown to be secure.
+**Remember:** by using this feature you're relying on remarkable to be secure. In this case, remarkable automatically strips HTML markup and insecure links from the output.
 
 ### Hook up the data model
 
@@ -329,9 +328,9 @@ Now that the data is available in the `CommentList`, let's render the comments d
 ```javascript{3-9,12}
 var CommentList = React.createClass({
   render: function() {
-    var commentNodes = this.props.data.map(function (comment) {
+    var commentNodes = this.props.data.map(function(comment) {
       return (
-        <Comment author={comment.Author}>
+        <Comment author={comment.Author} key={comment.Id}>
           {comment.Text}
         </Comment>
       );
@@ -466,7 +465,7 @@ This component is different from the prior components because it will have to re
 
 ### Reactive state
 
-So far, each component has rendered itself once based on its props. `props` are immutable: they are passed from the parent and are "owned" by the parent. To implement interactions, we introduce mutable **state** to the component. `this.state` is private to the component and can be changed by calling `this.setState()`. When the state is updated, the component re-renders itself.
+So far, based on its props, each component has rendered itself once. `props` are immutable: they are passed from the parent and are "owned" by the parent. To implement interactions, we introduce mutable **state** to the component. `this.state` is private to the component and can be changed by calling `this.setState()`. When the state updates, the component re-renders itself.
 
 `render()` methods are written declaratively as functions of `this.props` and `this.state`. The framework guarantees the UI is always consistent with the inputs.
 
@@ -520,7 +519,7 @@ var CommentBox = React.createClass({
 });
 ```
 
-Here, `componentDidMount()` is a method called automatically by React *after* the component is rendered. So, by moving the XMLHttpRequest call from `componentWillMount()`, which is executed only once *before* rendering, to a function called `loadCommentsFromServer()`, we can then call it multiple times from `componentDidMount()` at a set interval to check for any updates to the comments. The key to dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
+Here, `componentDidMount()` is a method called automatically by React *after* a component is rendered for the first time. So, by moving the XMLHttpRequest call from `componentWillMount()`, which is executed only once *before* rendering, to a function called `loadCommentsFromServer()`, we can then call it multiple times from `componentDidMount()` at a set interval to check for any updates to the comments. The key to dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
 
 ```javascript{2,15-16,30}
 var CommentBox = React.createClass({
@@ -600,27 +599,38 @@ var CommentForm = React.createClass({
 });
 ```
 
-Let's make the form interactive. When the user submits the form, we should clear it, submit a request to the server, and refresh the list of comments. To start, let's listen for the form's submit event and clear it.
+#### Controlled components
 
-```javascript{2-13,16-18}
+With the traditional DOM, `input` elements are rendered and the browser manages the state (its rendered value). As a result, the state of the actual DOM will differ from that of the component. This is not ideal as the state of the view will differ from that of the component. In React, components should always represent the state of the view and not only at the point of initialization.
+
+Hence, we will be using `this.state` to save the user's input as it is entered. We define an initial `state` with two properties `author` and `text` and set them to be empty strings. In our `<input>` elements, we set the `value` prop to reflect the `state` of the component and attach `onChange` handlers to them. These `<input>` elements with a `value` set are called controlled components. Read more about controlled components on the [Forms article](http://facebook.github.io/react/docs/forms.html#controlled-components).
+
+```javascript{2-10,14-25}
 var CommentForm = React.createClass({
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var author = this.refs.author.value.trim();
-    var text = this.refs.text.value.trim();
-    if (!text || !author) {
-      return;
-    }
-    // TODO: send request to the server
-    this.refs.author.value = '';
-    this.refs.text.value = '';
-    return;
+  getInitialState: function() {
+    return {author: '', text: ''};
+  },
+  handleAuthorChange: function(e) {
+    this.setState({author: e.target.value});
+  },
+  handleTextChange: function(e) {
+    this.setState({text: e.target.value});
   },
   render: function() {
     return (
-      <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Your name" ref="author" />
-        <input type="text" placeholder="Say something..." ref="text" />
+      <form className="commentForm">
+        <input
+          type="text"
+          placeholder="Your name"
+          value={this.state.author}
+          onChange={this.handleAuthorChange}
+        />
+        <input
+          type="text"
+          placeholder="Say something..."
+          value={this.state.text}
+          onChange={this.handleTextChange}
+        />
         <input type="submit" value="Post" />
       </form>
     );
@@ -628,21 +638,68 @@ var CommentForm = React.createClass({
 });
 ```
 
-##### Events
+#### Events
 
-React attaches event handlers to components using a camelCase naming convention. We attach an `onSubmit` handler to the form that clears the form fields when the form is submitted with valid input.
+React attaches event handlers to components using a camelCase naming convention. We attach `onChange` handlers to the two `<input>` elements. Now, as the user enters text into the `<input>` fields, the attached `onChange` callbacks are fired and the `state` of the component is modified. Subsequently, the rendered value of the `input` element will be updated to reflect the current component `state`.
+
+(The astute reader may be surprised that these event handlers work as described, given that the method references are not explicitly bound to `this`. `React.createClass(...)` [automatically binds](/react/docs/interactivity-and-dynamic-uis.html#under-the-hood-autobinding-and-event-delegation) each method to its component instance, obviating the need for explicit binding.)
+
+#### Submitting the form
+
+Let's make the form interactive. When the user submits the form, we should clear it, submit a request to the server, and refresh the list of comments. To start, let's listen for the form's submit event and clear it.
+
+```javascript{2-13,16-18}
+var CommentForm = React.createClass({
+  getInitialState: function() {
+    return {author: '', text: ''};
+  },
+  handleAuthorChange: function(e) {
+    this.setState({author: e.target.value});
+  },
+  handleTextChange: function(e) {
+    this.setState({text: e.target.value});
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var author = this.state.author.trim();
+    var text = this.state.text.trim();
+    if (!text || !author) {
+      return;
+    }
+    // TODO: send request to the server
+    this.setState({author: '', text: ''});
+  },
+  render: function() {
+    return (
+      <form className="commentForm" onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          placeholder="Your name"
+          value={this.state.author}
+          onChange={this.handleAuthorChange}
+        />
+        <input
+          type="text"
+          placeholder="Say something..."
+          value={this.state.text}
+          onChange={this.handleTextChange}
+        />
+        <input type="submit" value="Post" />
+      </form>
+    );
+  }
+});
+```
+
+We attach an `onSubmit` handler to the form that clears the form fields when the form is submitted with valid input.
 
 Call `preventDefault()` on the event to prevent the browser's default action of submitting the form.
 
-##### Refs
-
-We use the `ref` attribute to assign a name to a child component and `this.refs` to reference the component. We can call the `value` attribute to get the native browser DOM element's value.
-
-##### Callbacks as props
+#### Callbacks as props
 
 When a user submits a comment, we will need to refresh the list of comments to include the new one. It makes sense to do all of this logic in `CommentBox` since `CommentBox` owns the state that represents the list of comments.
 
-We need to pass data from the child component to its parent. We do this by passing a `callback` in props from parent to child:
+We need to pass data from the child component back up to its parent. We do this in our parent's `render` method by passing a new callback (`handleCommentSubmit`) into the child, binding it to the child's `onCommentSubmit` event. Whenever the event is triggered, the callback will be invoked:
 
 ```javascript{11-13,26}
 var CommentBox = React.createClass({
@@ -677,27 +734,44 @@ var CommentBox = React.createClass({
 });
 ```
 
-Let's call the callback from the `CommentForm` when the user submits the form:
+Now that `CommentBox` has made the callback available to `CommentForm` via the `onCommentSubmit` prop, the `CommentForm` can call the callback when the user submits the form:
 
 ```javascript{9}
 var CommentForm = React.createClass({
+  getInitialState: function() {
+    return {author: '', text: ''};
+  },
+  handleAuthorChange: function(e) {
+    this.setState({author: e.target.value});
+  },
+  handleTextChange: function(e) {
+    this.setState({text: e.target.value});
+  },
   handleSubmit: function(e) {
     e.preventDefault();
-    var author = this.refs.author.value.trim();
-    var text = this.refs.text.value.trim();
+    var author = this.state.author.trim();
+    var text = this.state.text.trim();
     if (!text || !author) {
       return;
     }
     this.props.onCommentSubmit({Author: author, Text: text});
-    this.refs.author.value = '';
-    this.refs.text.value = '';
-    return;
+    this.setState({author: '', text: ''});
   },
   render: function() {
     return (
       <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input type="text" placeholder="Your name" ref="author" />
-        <input type="text" placeholder="Say something..." ref="text" />
+        <input
+          type="text"
+          placeholder="Your name"
+          value={this.state.author}
+          onChange={this.handleAuthorChange}
+        />
+        <input
+          type="text"
+          placeholder="Say something..."
+          value={this.state.text}
+          onChange={this.handleTextChange}
+        />
         <input type="submit" value="Post" />
       </form>
     );
@@ -779,6 +853,10 @@ var CommentBox = React.createClass({
   },
   handleCommentSubmit: function(comment) {
     var comments = this.state.data;
+    // Optimistically set an id on the new comment. It will be replaced by an
+    // id generated by the server. In a production application you would likely
+    // not use Date.now() for this and would have a more robust system in place.
+    comment.id = Date.now();
     var newComments = comments.concat([comment]);
     this.setState({data: newComments});
 
@@ -817,9 +895,9 @@ Bundling refers to the practice of combining multiple JavaScript files into a si
 
 To get started, install the "System.Web.Optimization.React" NuGet package. This will automatically install the ASP.NET Bundling and Minification package along with all its dependencies.
 
-Once installed, modify `BundleConfig.cs` to reference the Showdown and Tutorial JavaScript files:
+Once installed, modify `BundleConfig.cs` to reference the tutorial JavaScript file:
 
-```csharp{11-19}
+```csharp{11-18}
 using System.Web.Optimization;
 using System.Web.Optimization.React;
 
@@ -832,7 +910,6 @@ namespace ReactDemo
 		{
 			bundles.Add(new BabelBundle("~/bundles/main").Include(
 				"~/Scripts/Tutorial.jsx",
-				"~/Scripts/showdown.js"
 			));
 
 			// Forces files to be combined and minified in debug mode
@@ -872,13 +949,13 @@ That's it! Now if you view the source for the page, you should see a single scri
 <script src="/bundles/main?v=Or-R8LndNHguz2FwrDeQQg_o3wo7TjIZZnPKxmYJfRs1"></script>
 ```
 
-If you go to this URL in your browser, you should notice that the code has been minified, and both the tutorial code and the Showdown code are in the same file.
+If you go to this URL in your browser, you should notice that the code has been minified.
 
 ## Optimization: Server-side rendering
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using JavaScript. This enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required.
+We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required. Also, we need to remove the `ReactDOM.render` call from the JSX file, as server-side rendering automatically outputs the correct `ReactDOM.render` call for you.
 
 ```javascript{28}
 var CommentBox = React.createClass({
@@ -946,7 +1023,7 @@ In the view, we will accept the list of comments as the model, and use `Html.Rea
 	})
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
-	<script src="@Url.Content("~/Scripts/showdown.min.js")"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
 	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 	@Html.ReactInitJavaScript()
 </body>
@@ -964,7 +1041,7 @@ public ActionResult Index()
 
 We also need to modify `App_Start\ReactConfig.cs` to tell ReactJS.NET which JavaScript files it requires for the server-side rendering:
 
-```csharp{13-15}
+```csharp{11-12}
 using React;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(ReactDemo.ReactConfig), "Configure")]
@@ -976,7 +1053,6 @@ namespace ReactDemo
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
-				.AddScript("~/Scripts/showdown.js")
 				.AddScript("~/Scripts/Tutorial.jsx");
 		}
 	}
