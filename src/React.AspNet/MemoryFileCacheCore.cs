@@ -63,11 +63,7 @@ namespace React.AspNet
 		/// Filenames this cached item is dependent on. If any of these files change, the cache
 		/// will be cleared automatically
 		/// </param>
-		/// <param name="cacheDependencyKeys">
-		/// Other cache keys this cached item is dependent on. If any of these keys change, the
-		/// cache will be cleared automatically
-		/// </param>
-		public void Set<T>(string key, T data, TimeSpan slidingExpiration, IEnumerable<string> cacheDependencyFiles = null, IEnumerable<string> cacheDependencyKeys = null)
+		public void Set<T>(string key, T data, TimeSpan slidingExpiration, IEnumerable<string> cacheDependencyFiles = null)
 		{
 			if (data == null)
 			{
@@ -87,13 +83,6 @@ namespace React.AspNet
 					var relativePath = file.Replace(_hostingEnv.WebRootPath, string.Empty).TrimStart('\\', '/');
 					options.AddExpirationToken(_hostingEnv.WebRootFileProvider.Watch(relativePath));
 				}
-			}
-
-			if (cacheDependencyKeys != null && cacheDependencyKeys.Any())
-			{
-				// https://github.com/aspnet/Docs/issues/1938
-				// https://github.com/aspnet/Caching/issues/236
-				throw new NotImplementedException();
 			}
 
 			_cache.Set(key, data, options);

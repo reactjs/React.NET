@@ -44,12 +44,7 @@ namespace React
 		/// Filenames this cached item is dependent on. If any of these files change, the cache
 		/// will be cleared automatically
 		/// </param>
-		/// <param name="cacheDependencyKeys">
-		/// Other cache keys this cached item is dependent on. If any of these keys change, the
-		/// cache will be cleared automatically
-		/// </param>
-		public void Set<T>(string key, T data, TimeSpan slidingExpiration, IEnumerable<string> cacheDependencyFiles = null,
-			IEnumerable<string> cacheDependencyKeys = null)
+		public void Set<T>(string key, T data, TimeSpan slidingExpiration, IEnumerable<string> cacheDependencyFiles = null)
 		{
 			// no-op
 		}

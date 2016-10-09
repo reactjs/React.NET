@@ -61,20 +61,14 @@ namespace React.Web
 		/// Filenames this cached item is dependent on. If any of these files change, the cache
 		/// will be cleared automatically
 		/// </param>
-		/// <param name="cacheDependencyKeys">
-		/// Other cache keys this cached item is dependent on. If any of these keys change, the
-		/// cache will be cleared automatically
-		/// </param>
 		public void Set<T>(
 			string key, T data, 
 			TimeSpan slidingExpiration, 
-			IEnumerable<string> cacheDependencyFiles = null,
-			IEnumerable<string> cacheDependencyKeys = null
+			IEnumerable<string> cacheDependencyFiles = null
 		)
 		{
 			var cacheDependency = new CacheDependency(
-				(cacheDependencyFiles ?? Enumerable.Empty<string>()).ToArray(),
-				(cacheDependencyKeys ?? Enumerable.Empty<string>()).ToArray()
+				(cacheDependencyFiles ?? Enumerable.Empty<string>()).ToArray()
 			);
 			_cache.Insert(key, data, cacheDependency, Cache.NoAbsoluteExpiration, slidingExpiration);
 		}

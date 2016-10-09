@@ -57,11 +57,7 @@ namespace React
 		/// Filenames this cached item is dependent on. If any of these files change, the cache
 		/// will be cleared automatically
 		/// </param>
-		/// <param name="cacheDependencyKeys">
-		/// Other cache keys this cached item is dependent on. If any of these keys change, the
-		/// cache will be cleared automatically
-		/// </param>
-		public void Set<T>(string key, T data, TimeSpan slidingExpiration, IEnumerable<string> cacheDependencyFiles = null, IEnumerable<string> cacheDependencyKeys = null)
+		public void Set<T>(string key, T data, TimeSpan slidingExpiration, IEnumerable<string> cacheDependencyFiles = null)
 		{
 			if (data == null)
 			{
@@ -73,9 +69,6 @@ namespace React
 
 			if (cacheDependencyFiles != null && cacheDependencyFiles.Any())
 				policy.ChangeMonitors.Add(new HostFileChangeMonitor(cacheDependencyFiles.ToList()));
-
-			if (cacheDependencyKeys != null && cacheDependencyKeys.Any())
-				policy.ChangeMonitors.Add(_cache.CreateCacheEntryChangeMonitor(cacheDependencyKeys));
 
 			_cache.Set(key, data, policy);
 		}
