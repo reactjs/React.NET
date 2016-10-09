@@ -1,12 +1,12 @@
 ---
 id: tutorial
-title: Tutorial (ASP.NET Core)
+title: Tutorial (ASP.NET MVC 5)
 layout: docs
 ---
 
 > Note:
 >
-> This tutorial is for Visual Studio 2015 and ASP.NET Core MVC. If you're still using ASP.NET 4 and ASP.NET MVC 5, you can [follow the ASP.NET 4 tutorial instead](/getting-started/tutorial_aspnet4.html)
+> This tutorial is for Visual Studio 2013 and ASP.NET MVC 4. If you like, you can [see the tutorial for ASP.NET Core instead](/getting-started/tutorial.html)
 
 This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](http://facebook.github.io/react/docs/tutorial.html) but has been modified specifically for ReactJS.NET.
 
@@ -26,108 +26,37 @@ It'll also have a few neat features:
 
 ## Getting started
 
-For this tutorial we'll be using Visual Studio 2015. If you do not already have a copy of Visual Studio, [the Community version](https://www.visualstudio.com/vs/community/) is free. We will be using ASP.NET Core MVC.
+For this tutorial we'll be using Visual Studio 2013, although any version of Visual Studio from 2010 onwards is fine, including [Visual Studio Express 2013](http://www.visualstudio.com/en-us/products/visual-studio-express-vs.aspx) which is completely free. We will be using ASP.NET MVC 4, although similar steps apply for ASP.NET MVC 5.
 
 ### New Project
 
-Start by creating a new ASP.NET Core MVC project:
+Start by creating a new ASP.NET MVC 4 project:
 
-<!-- TODO make thumbnails -->
-<!-- TODO add note about .NET Core vs .NET Framework -->
-
-1. File → New → Project
-2. Ensure ".NET Framework 4.6" is selected in the dropdown list at the top
-3. Go to Templates → Visual C# → Web and select the "ASP.NET Core Web Application (.NET Framework)" template. Call it "ReactDemo"
-   <img src="/img/tutorial/newproject_core.png" alt="Screenshot: New Project" width="600" />
-3. In the "New ASP.NET Core Web Application" dialog, select the Web Application template. Also, click "Change Authentication" and select "No Authentication"
-   <img src="/img/tutorial/new_webapp.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />
-
-### Remove example content
-
-The default Web Application template includes some example content that we don't need. Delete the following files:
- - `Controllers\HomeController.cs`
- - `Views\Home` and `Views\Shared` folders
- - `bundleconfig.json`
- - `Project_Readme.html`
+1. File → New &rarr; Project
+2. Select ".NET Framework 4" and Templates → Visual C# → Web → ASP.NET MVC 4 Web Application. Call it "ReactDemo"
+   <img src="/img/tutorial/newproject.png" alt="Screenshot: New Project" width="650" />
+3. In the "New ASP.NET MVC 4 Project" dialog, select the Empty template. I always recommend using this template for new sites, as the others include a large amount of third-party packages that you may not even use.
+   <img src="/img/tutorial/basicmvc.png" alt="Screenshot: New ASP.NET MVC 4 Project dialog" width="500" />
 
 ### Install ReactJS.NET
 
-We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages". Click the "Browse" tab, search for "React.AspNet", and install the **React.AspNet** package.
+We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages". Search for "ReactJS.NET" and install the **ReactJS.NET (MVC 4 and 5)** package.
 
-<img src="/img/tutorial/nuget_core.png" alt="Screenshot: Install NuGet Packages" width="650" />
-
-We also need to modify the `Startup.cs` file to initialize ReactJS.NET. You can learn more about this on the [Getting Started on ASP.NET Core](/getting-started/aspnetcore.html) page. Open `Startup.cs` and perform the following changes:
-
-At the top of the file, add:
-
-```csharp
-using Microsoft.AspNetCore.Http;
-using React.AspNet;
-```
-
-Directly above:
-
-```csharp
-// Add framework services.
-services.AddMvc();
-```
-
-Add:
-
-```csharp
-services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-services.AddReact();
-```
-
-Directly **above**:
-
-```csharp
-app.UseStaticFiles();
-```
-
-Add:
-
-```csharp
-// Initialise ReactJS.NET. Must be before static files.
-app.UseReact(config =>
-{
-  // If you want to use server-side rendering of React components,
-  // add all the necessary JavaScript files here. This includes
-  // your components as well as all of their dependencies.
-  // See http://reactjs.net/ for more information. Example:
-  //config
-  //  .AddScript("~/Scripts/First.jsx")
-  //  .AddScript("~/Scripts/Second.jsx");
-
-  // If you use an external build too (for example, Babel, Webpack,
-  // Browserify or Gulp), you can improve performance by disabling
-  // ReactJS.NET's version of Babel and loading the pre-transpiled
-  // scripts. Example:
-  //config
-  //  .SetLoadBabel(false)
-  //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
-});
-```
-
-Finally, add this to `Views\_ViewImports.cshtml`:
-
-```csharp
-@using React.AspNet
-```
+<img src="/img/tutorial/nuget.png" alt="Screenshot: Install NuGet Packages" width="650" />
 
 ### Create basic controller and view
 
 Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover creation of an MVC controller in much detail. To learn more about ASP.NET MVC, refer to [its official website](http://www.asp.net/mvc).
 
-1. Right-click on the Controllers folder and select Add → New Item
-3. Select .NET Core → ASP.NET → MVC Controller Class
-4. Name the file `HomeController.cs`
+Right-click on the Controllers folder and click Add → Controller. Name the controller "HomeController" and select "Empty MVC Controller" as the template. Once the controller has been created, right-click on `return View()` and click "Add View". Enter the following details:
 
-Once the controller has been created, we also need to create a view
-1. Right-click on the Views folder, click "New Folder", and create a "Home" folder
-2. Right-click on the Views\Home folder and select Add → New Item
-3. Select .NET Core → ASP.NET → MVC View Page
-4. Name the file `Index.cshtml`
+ - View name: Index
+ - View Engine: Razor (CSHTML)
+ - Create a strongly-typed view: Unticked
+ - Create as a partial view: Unticked
+ - Use a layout or master page: Unticked
+
+*Note: In a real ASP.NET MVC site, you'd use a layout. However, to keep this tutorial simple, we will keep all HTML in the one view file.*
 
 Replace the contents of the new view file with the following:
 
@@ -143,15 +72,13 @@ Replace the contents of the new view file with the following:
 	<div id="content"></div>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-	<script src="@Url.Content("~/js/tutorial.jsx")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 </body>
 </html>
 ```
 
-*Note: In a real ASP.NET MVC site, you'd use a layout. However, to keep this tutorial simple, we will keep all HTML in the one view file.*
-
-We also need to create the referenced JavaScript file (`tutorial.jsx`). Right-click on `wwwroot\js` and select Add → New Item. Select .NET Core → Client-side → JavaScript File, enter "tutorial.jsx" as the file name, and click "Add".
+We also need to create the referenced JavaScript file (`Tutorial.jsx`). Right-click on ReactDemo project, select Add → New Folder, and enter "Scripts" as the folder name. Once created, right-click on the folder and select Add → New Item. Select Web → JavaScript File, enter "Tutorial.jsx" as the file name, and click "Add".
 
 For the remainder of this tutorial, we'll be writing our JavaScript code in this file.
 
@@ -369,9 +296,9 @@ So far we've been inserting the comments directly in the source code. Instead, l
 
 ```javascript
 var data = [
-  { id: 1, author: "Daniel Lo Nigro", text: "Hello ReactJS.NET World!" },
-  { id: 2, author: "Pete Hunt", text: "This is one comment" },
-  { id: 3, author: "Jordan Walke", text: "This is *another* comment" }
+  { Author: "Daniel Lo Nigro", Text: "Hello ReactJS.NET World!" },
+  { Author: "Pete Hunt", Text: "This is one comment" },
+  { Author: "Jordan Walke", Text: "This is *another* comment" }
 ];
 ```
 
@@ -403,8 +330,8 @@ var CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.data.map(function(comment) {
       return (
-        <Comment author={comment.author} key={comment.id}>
-          {comment.text}
+        <Comment author={comment.Author} key={comment.Id}>
+          {comment.Text}
         </Comment>
       );
     });
@@ -421,14 +348,13 @@ That's it!
 
 ### Server-side Data
 
-Let's return some data from the server. To do so, we need to first create a C# class to represent our comments. Right-click on ReactDemo and select Add → New Folder and name the folder "Models". Once the models folder has been created, right click on it, select Add → Class, and enter "CommentModel.cs" as the file name. We'll create a basic comment model:
+Let's return some data from the server. To do so, we need to first create a C# class to represent our comments. Right-click on the Models folder (which should be empty), select Add → Class, and enter "CommentModel.cs" as the file name. We'll create a basic comment model:
 
 ```csharp
 namespace ReactDemo.Models
 {
 	public class CommentModel
 	{
-		public int Id { get; set; }
 		public string Author { get; set; }
 		public string Text { get; set; }
 	}
@@ -437,64 +363,88 @@ namespace ReactDemo.Models
 
 In a real application, you'd use the repository pattern here, and retrieve the comments from a database. For simplicity, we'll just modify our controller to have a hard-coded list of comments.
 
-```csharp{9,13-33}
+```csharp{9,13-30}
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+using System.Web.Mvc;
 using ReactDemo.Models;
 
 namespace ReactDemo.Controllers
 {
-	public class HomeController : Controller
-	{
-		private static readonly IList<CommentModel> _comments;
+    public class HomeController : Controller
+    {
+	    private static readonly IList<CommentModel> _comments;
 
-		static HomeController()
-		{
+	    static HomeController()
+	    {
 			_comments = new List<CommentModel>
 			{
 				new CommentModel
 				{
-					Id = 1,
 					Author = "Daniel Lo Nigro",
 					Text = "Hello ReactJS.NET World!"
 				},
 				new CommentModel
 				{
-					Id = 2,
 					Author = "Pete Hunt",
 					Text = "This is one comment"
 				},
 				new CommentModel
 				{
-					Id = 3,
 					Author = "Jordan Walke",
 					Text = "This is *another* comment"
 				},
 			};
-		}
+	    }
 
-		public ActionResult Index()
-		{
-			return View();
-		}
-	}
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }
 }
 ```
 
 Let's also add a new controller action to return the list of comments:
 
 ```csharp
-[Route("comments")]
-[ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+[OutputCache(Location = OutputCacheLocation.None)]
 public ActionResult Comments()
 {
-	return Json(_comments);
+	return Json(_comments, JsonRequestBehavior.AllowGet);
 }
 ```
 
-The `Route` attribute specifies that this action should be used when `/comments` is loaded. This method of defining  URL routes is known as "attribute routing".
+The OutputCache attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
 
-The `ResponseCache` attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
+Finally we add a corresponding route in `App_Start\RouteConfig.cs`:
+
+```csharp{12-16}
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace ReactDemo
+{
+	public class RouteConfig
+	{
+		public static void RegisterRoutes(RouteCollection routes)
+		{
+			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+			routes.MapRoute(
+				name: "Comments",
+				url: "comments",
+				defaults: new { controller = "Home", action = "Comments" }
+			);
+
+			routes.MapRoute(
+				name: "Default",
+				url: "{controller}/{action}/{id}",
+				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+			);
+		}
+	}
+}
+```
 
 If you hit `/comments` in your browser, you should now see the data encoded as JSON:
 
@@ -510,8 +460,6 @@ ReactDOM.render(
   document.getElementById('content')
 );
 ```
-
-Note that in a real app, you should generate the URL server-side (via `Url.Action` call) and pass it down, or use [RouteJs](http://dan.cx/projects/routejs) rather than hard-coding it. This tutorial hard-codes it for simplicity.
 
 This component is different from the prior components because it will have to re-render itself. The component won't have any data until the request from the server comes back, at which point the component may need to render some new comments.
 
@@ -615,15 +563,22 @@ All we have done here is move the AJAX call to a separate method and call it whe
 To accept new comments, we need to first add a controller action to handle it. This will just be some simple C# code that appends the new comment to the static list of comments:
 
 ```csharp
-[Route("comments/new")]
 [HttpPost]
 public ActionResult AddComment(CommentModel comment)
 {
-	// Create a fake ID for this comment
-	comment.Id = _comments.Count + 1;
 	_comments.Add(comment);
 	return Content("Success :)");
 }
+```
+Let's also add it to the `App_Start\RouteConfig.cs` file, like we did earlier for the comments list:
+
+```csharp
+routes.MapRoute(
+	name: "NewComment",
+	url: "comments/new",
+	defaults: new { controller = "Home", action = "AddComment" }
+);
+
 ```
 
 #### The Form
@@ -799,7 +754,7 @@ var CommentForm = React.createClass({
     if (!text || !author) {
       return;
     }
-    this.props.onCommentSubmit({author: author, text: text});
+    this.props.onCommentSubmit({Author: author, Text: text});
     this.setState({author: '', text: ''});
   },
   render: function() {
@@ -839,8 +794,8 @@ var CommentBox = React.createClass({
   },
   handleCommentSubmit: function(comment) {
     var data = new FormData();
-    data.append('author', comment.author);
-    data.append('text', comment.text);
+    data.append('Author', comment.Author);
+    data.append('Text', comment.Text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
@@ -906,8 +861,8 @@ var CommentBox = React.createClass({
     this.setState({data: newComments});
 
     var data = new FormData();
-    data.append('author', comment.author);
-    data.append('text', comment.text);
+    data.append('Author', comment.Author);
+    data.append('Text', comment.Text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
@@ -936,9 +891,65 @@ var CommentBox = React.createClass({
 ```
 
 ## Optimization: Bundling and minification
-Bundling refers to the practice of combining multiple JavaScript files into a single large file to reduce the number of HTTP requests to load a page. Minification refers to the removal of comments and unnecessary whitespace from JavaScript files to make them smaller. Together, bundling and minification can help to significantly improve the performance of your website. 
+Bundling refers to the practice of combining multiple JavaScript files into a single large file to reduce the number of HTTP requests to load a page. Minification refers to the removal of comments and unnecessary whitespace from JavaScript files to make them smaller. Together, bundling and minification can help to significantly improve the performance of your website. ReactJS.NET supports ASP.NET Bundling and Minification to achieve this. You can refer to [Microsoft's official documentation](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification) for more information on ASP.NET Bundling and Minification. This tutorial will just cover the basics.
 
-There used to be a section on bundling and minification in this tutorial, but unfortunately the latest library being used by ASP.NET Core MVC ([BundlerMinifier](https://github.com/madskristensen/BundlerMinifier)) is not easily extensible, which makes it difficult to add JSX processing to it. For production use, it is currently recommended to use a tool like Gulp or [Webpack](/guides/webpack.html) to bundle and minify your JavaScript.
+To get started, install the "System.Web.Optimization.React" NuGet package. This will automatically install the ASP.NET Bundling and Minification package along with all its dependencies.
+
+Once installed, modify `BundleConfig.cs` to reference the tutorial JavaScript file:
+
+```csharp{11-18}
+using System.Web.Optimization;
+using System.Web.Optimization.React;
+
+namespace ReactDemo
+{
+	public static class BundleConfig
+	{
+		// For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
+		public static void RegisterBundles(BundleCollection bundles)
+		{
+			bundles.Add(new BabelBundle("~/bundles/main").Include(
+				"~/Scripts/Tutorial.jsx",
+			));
+
+			// Forces files to be combined and minified in debug mode
+			// Only used here to demonstrate how combination/minification works
+			// Normally you would use unminified versions in debug mode.
+			BundleTable.EnableOptimizations = true;
+		}
+	}
+}
+```
+
+Now that the bundle has been registered, we need to reference it from the view:
+
+```html{13}
+@model IEnumerable<ReactDemo.Models.CommentModel>
+@{
+    Layout = null;
+}
+<html>
+<head>
+	<title>Hello React</title>
+</head>
+<body>
+	<div id="content"></div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+	@Scripts.Render("~/bundles/main")
+	@Html.ReactInitJavaScript()
+</body>
+</html>
+```
+
+That's it! Now if you view the source for the page, you should see a single script tag for the bundle:
+
+```html
+<!-- This is just an example; your URL will be different -->
+<script src="/bundles/main?v=Or-R8LndNHguz2FwrDeQQg_o3wo7TjIZZnPKxmYJfRs1"></script>
+```
+
+If you go to this URL in your browser, you should notice that the code has been minified.
 
 ## Optimization: Server-side rendering
 
@@ -962,9 +973,9 @@ var CommentBox = React.createClass({
     var newComments = comments.concat([comment]);
     this.setState({data: newComments});
 
-    var data = new FormData();
-    data.append('author', comment.author);
-    data.append('text', comment.text);
+	var data = new FormData();
+	data.append('Author', comment.Author);
+	data.append('Text', comment.Text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
@@ -991,16 +1002,6 @@ var CommentBox = React.createClass({
 });
 ```
 
-We also need to update the `Comment` component to use `Remarkable` from either `global` or `window`, due to a bug in Remarkable:
-```javascript{3}
-var Comment = React.createClass({
-	rawMarkup: function () {
-		var md = new (global.Remarkable || window.Remarkable)();
-		var rawMarkup = md.render(this.props.children.toString());
-		return { __html: rawMarkup };
-	},
-```
-
 In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `ReactDOM.render` call that currently exists in Tutorial.jsx. All the props from the current `ReactDOM.render` call should be moved here, and the `ReactDOM.render` call should be deleted.
 
 ```html{1,10-16,21}
@@ -1023,7 +1024,7 @@ In the view, we will accept the list of comments as the model, and use `Html.Rea
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
-	<script src="@Url.Content("~/js/tutorial.jsx")"></script>
+	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 	@Html.ReactInitJavaScript()
 </body>
 </html>
@@ -1038,24 +1039,25 @@ public ActionResult Index()
 }
 ```
 
-We also need to modify `Startup.cs` to tell ReactJS.NET which JavaScript files it requires for the server-side rendering, and ensure it encodes properties as camelcase just like ASP.NET Core does with JSON responses (this [will be fixed with ReactJS.NET 3.0](https://github.com/reactjs/React.NET/issues/330)):
+We also need to modify `App_Start\ReactConfig.cs` to tell ReactJS.NET which JavaScript files it requires for the server-side rendering:
 
-```csharp{4-10}
-// Initialise ReactJS.NET. Must be before static files.
-app.UseReact(config =>
+```csharp{11-12}
+using React;
+
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(ReactDemo.ReactConfig), "Configure")]
+
+namespace ReactDemo
 {
-	config
-		.AddScript("~/js/remarkable.min.js")
-		.AddScript("~/js/tutorial.jsx")
-		.SetJsonSerializerSettings(new JsonSerializerSettings
+	public static class ReactConfig
+	{
+		public static void Configure()
 		{
-			StringEscapeHandling = StringEscapeHandling.EscapeHtml,
-			ContractResolver = new CamelCasePropertyNamesContractResolver()
-		});
-});
+			ReactSiteConfiguration.Configuration
+				.AddScript("~/Scripts/Tutorial.jsx");
+		}
+	}
+}
 ```
-
-Note that we need a copy of Remarkable in order to load it for server-side rendering. In a production app you'd probably use Bower or npm for this, but for our tutorial you can just [download the file from CDNJS](https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js) and save it into `~/js`.
 
 That's it! Now if you build and refresh your application, you should notice that the comments box is rendered immediately rather than having a slight delay. If you view the source of the page, you will see the initial comments directly in the HTML itself:
 

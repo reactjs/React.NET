@@ -9,7 +9,9 @@ Getting started with ReactJS.NET on ASP.NET Core requires a few more steps compa
 ReactJS.NET requires Visual Studio 2015 and ASP.NET Core RTM (final release). Additionally, ReactJS.NET does not support .NET Core at this point in time, so you will need to ensure your project is not referencing it. If you're creating a new website, use the "ASP.NET Core Web Application (.NET Framework)" project template. Otherwise, make sure your `project.json` references `net452` in its `frameworks` section, **not** `netcoreapp`.
 
 Install the `React.AspNet` package through NuGet. After the package is installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator). At the top of the file, add:
+
 ```
+using Microsoft.AspNetCore.Http;
 using React.AspNet;
 ```
 
@@ -58,7 +60,7 @@ app.UseReact(config =>
 });
 ```
 
-Finally, add this to `Views/_ViewImports.cshtml` (or create it if it doesn't exist):
+Finally, add this to `Views\_ViewImports.cshtml` (or create it if it doesn't exist):
 
 ```csharp
 @using React.AspNet
