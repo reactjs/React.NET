@@ -43,6 +43,7 @@ namespace React
 				StringEscapeHandling = StringEscapeHandling.EscapeHtml
 			};
 			UseDebugReact = false;
+			UseServerSideRendering = true;
 		}
 
 		/// <summary>
@@ -268,6 +269,20 @@ namespace React
 		public IReactSiteConfiguration SetUseDebugReact(bool value)
 		{
 			UseDebugReact = value;
+			return this;
+		}
+
+		/// <summary>
+		/// Gets or sets whether server-side rendering is enabled.
+		/// </summary>
+		public bool UseServerSideRendering { get; set; }
+
+		/// <summary>
+		/// Disables server-side rendering. This is useful when debugging your scripts.
+		/// </summary>
+		public IReactSiteConfiguration DisableServerSideRendering()
+		{
+			UseServerSideRendering = false;
 			return this;
 		}
 	}

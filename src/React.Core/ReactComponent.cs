@@ -110,6 +110,11 @@ namespace React
 		/// <returns>HTML</returns>
 		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false)
 		{
+			if (!_configuration.UseServerSideRendering)
+			{
+				renderContainerOnly = true;
+			}
+
 			if (!renderContainerOnly)
 			{
 				EnsureComponentExists();

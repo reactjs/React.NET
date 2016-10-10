@@ -159,5 +159,14 @@ namespace React
 		/// useful debugging tips.
 		/// </summary>
 		IReactSiteConfiguration SetUseDebugReact(bool value);
+
+		/// <summary>
+		/// Gets or sets whether server-side rendering is enabled.
+		/// </summary>
+		bool UseServerSideRendering { get; set; }
+		/// <summary>
+		/// Disables server-side rendering. This is useful when debugging your scripts.
+		/// </summary>
+		IReactSiteConfiguration DisableServerSideRendering();
 	}
 }
