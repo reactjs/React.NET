@@ -24,6 +24,10 @@ It'll also have a few neat features:
 * **Live updates:** other users' comments are popped into the comment view in real time.
 * **Markdown formatting:** users can use Markdown to format their text.
 
+## Want to skip all this and just see the source?
+
+[It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/tutorial-code).
+
 ## Getting started
 
 For this tutorial we'll be using Visual Studio 2015. If you do not already have a copy of Visual Studio, [the Community version](https://www.visualstudio.com/vs/community/) is free. We will be using ASP.NET Core MVC.

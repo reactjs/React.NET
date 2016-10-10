@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ReactDemo.Models.CommentModel>
+@{
+	Layout = null;
+}
+<html>
+<head>
+	<title>Hello React</title>
+</head>
+<body>
+	@Html.React("CommentBox", new
+	{
+		initialData = Model,
+		url = Url.Action("Comments"),
+		submitUrl = Url.Action("AddComment"),
+		pollInterval = 2000,
+	})
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
+	<script src="@Url.Content("~/js/tutorial.jsx")"></script>
+	@Html.ReactInitJavaScript()
+</body>
+</html>
