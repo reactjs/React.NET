@@ -940,7 +940,7 @@ var CommentBox = React.createClass({
 ```
 
 ## Optimization: Bundling and minification
-Bundling refers to the practice of combining multiple JavaScript files into a single large file to reduce the number of HTTP requests to load a page. Minification refers to the removal of comments and unnecessary whitespace from JavaScript files to make them smaller. Together, bundling and minification can help to significantly improve the performance of your website. 
+Bundling refers to the practice of combining multiple JavaScript files into a single large file to reduce the number of HTTP requests to load a page. Minification refers to the removal of comments and unnecessary whitespace from JavaScript files to make them smaller. Together, bundling and minification can help to significantly improve the performance of your website.
 
 There used to be a section on bundling and minification in this tutorial, but unfortunately the latest library being used by ASP.NET Core MVC ([BundlerMinifier](https://github.com/madskristensen/BundlerMinifier)) is not easily extensible, which makes it difficult to add JSX processing to it. For production use, it is currently recommended to use a tool like Gulp or [Webpack](/guides/webpack.html) to bundle and minify your JavaScript.
 
@@ -1042,7 +1042,7 @@ public ActionResult Index()
 }
 ```
 
-We also need to modify `Startup.cs` to tell ReactJS.NET which JavaScript files it requires for the server-side rendering, and ensure it encodes properties as camelcase just like ASP.NET Core does with JSON responses (this [will be fixed with ReactJS.NET 3.0](https://github.com/reactjs/React.NET/issues/330)):
+We also need to modify `Startup.cs` to tell ReactJS.NET which JavaScript files it requires for the server-side rendering:
 
 ```csharp{4-10}
 // Initialise ReactJS.NET. Must be before static files.
@@ -1050,12 +1050,7 @@ app.UseReact(config =>
 {
 	config
 		.AddScript("~/js/remarkable.min.js")
-		.AddScript("~/js/tutorial.jsx")
-		.SetJsonSerializerSettings(new JsonSerializerSettings
-		{
-			StringEscapeHandling = StringEscapeHandling.EscapeHtml,
-			ContractResolver = new CamelCasePropertyNamesContractResolver()
-		});
+		.AddScript("~/js/tutorial.jsx");
 });
 ```
 

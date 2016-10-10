@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Http;
 using React.Exceptions;
 using React.TinyIoC;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+
 #if !NET451
 using Microsoft.Extensions.Caching.Memory;
 #endif
@@ -46,6 +48,11 @@ namespace React.AspNet
 				app.ApplicationServices.GetService<IHttpContextAccessor>(), 
 				registerOptions
 			));
+
+			// Camelcase JSON properties by default - Can be overridden per-site in "configure".
+			ReactSiteConfiguration.Configuration.JsonSerializerSettings.ContractResolver =
+				new CamelCasePropertyNamesContractResolver();
+
 			configure(ReactSiteConfiguration.Configuration);
 
 			// Allow serving of .jsx files

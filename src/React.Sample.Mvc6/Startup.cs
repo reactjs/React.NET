@@ -68,11 +68,7 @@ namespace React.Sample.Mvc6
 				config
 					.SetReuseJavaScriptEngines(true)
 					.AddScript("~/js/Sample.jsx")
-					.SetJsonSerializerSettings(new JsonSerializerSettings
-					{
-						ContractResolver = new CamelCasePropertyNamesContractResolver(),
-						StringEscapeHandling = StringEscapeHandling.EscapeHtml,
-					});
+					.SetUseDebugReact(true);
 			});
 
 			// Add static files to the request pipeline.
