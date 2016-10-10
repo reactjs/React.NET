@@ -36,19 +36,19 @@ For this tutorial we'll be using Visual Studio 2015. If you do not already have 
 
 Start by creating a new ASP.NET Core MVC project:
 
-<!-- TODO make thumbnails -->
-<!-- TODO add note about .NET Core vs .NET Framework -->
-
 1. File → New → Project
 2. Ensure ".NET Framework 4.6" is selected in the dropdown list at the top
 3. Go to Templates → Visual C# → Web and select the "ASP.NET Core Web Application (.NET Framework)" template. Call it "ReactDemo"
-   <img src="/img/tutorial/newproject_core.png" alt="Screenshot: New Project" width="600" />
+   [<img src="/img/tutorial/newproject_core_600.png" alt="Screenshot: New Project" width="600" />](/img/tutorial/newproject_core.png)
 3. In the "New ASP.NET Core Web Application" dialog, select the Web Application template. Also, click "Change Authentication" and select "No Authentication"
-   <img src="/img/tutorial/new_webapp.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />
+   [<img src="/img/tutorial/new_webapp_600.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />](/img/tutorial/new_webapp.png)
+
+Note: We are using .NET Framework in this tutorial, but you can instead use .NET Core if you want to be able to run your site on Linux or Mac OS. Currently .NET Core is missing some of the functionality provided by .NET Framework, so it is recommended to use .NET Framework unless you have a reason to use .NET Core specifically (eg. cross-platform support).
 
 ### Remove example content
 
 The default Web Application template includes some example content that we don't need. Delete the following files:
+
  - `Controllers\HomeController.cs`
  - `Views\Home` and `Views\Shared` folders
  - `bundleconfig.json`
@@ -58,7 +58,7 @@ The default Web Application template includes some example content that we don't
 
 We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages". Click the "Browse" tab, search for "React.AspNet", and install the **React.AspNet** package.
 
-<img src="/img/tutorial/nuget_core.png" alt="Screenshot: Install NuGet Packages" width="650" />
+[<img src="/img/tutorial/nuget_core_650.png" alt="Screenshot: Install NuGet Packages" width="650" />](/img/tutorial/nuget_core.png)
 
 We also need to modify the `Startup.cs` file to initialize ReactJS.NET. You can learn more about this on the [Getting Started on ASP.NET Core](/getting-started/aspnetcore.html) page. Open `Startup.cs` and perform the following changes:
 
