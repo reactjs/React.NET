@@ -9,7 +9,7 @@ to wait for all the JavaScript to load before seeing the web page.
 
 To use server-side rendering in your application, follow the following steps:
 
-1 - Modify `App_Start\ReactConfig.cs` to reference your components:
+1 - Modify `App_Start\ReactConfig.cs` (for ASP.NET MVC 4 or 5) or `Startup.cs` (for ASP.NET Core) to reference your components:
 
 ```csharp
 namespace MyApp
@@ -72,12 +72,14 @@ code.
 The server-rendered HTML will automatically be reused by React client-side,
 meaning your initial render will be super fast.
 
+If you encounter any errors with the JavaScript, you may want to temporarily disable server-side rendering in order to debug your components in your browser. You can do this by calling `DisableServerSideRendering()` in your ReactJS.NET config.
+
 For a more in-depth example, take a look at the included sample application
 (**React.Samples.Mvc4**).
 
 5 - Server-side only rendering
 
-If there is no need to have a React application client side and you just want to use the server side rendering but without the React specific data attributes call `Html.React` and pass serverOnly parameter as true.
+If there is no need to have a React application client side and you just want to use the server side rendering but without the React specific data attributes, call `Html.React` and pass serverOnly parameter as true.
 
 ```csharp
 @Html.React("HelloWorld", new
@@ -86,7 +88,7 @@ If there is no need to have a React application client side and you just want to
 }, serverOnly: true)
 ```
 
-And the Html mark up will look like the one following which is a lot cleaner. In this case there is no need to load the React script or call the `Html.ReactInitJavaScript()` method.
+And the HTML will look like the one following which is a lot cleaner. In this case there is no need to load the React script or call the `Html.ReactInitJavaScript()` method.
 
 ```html
 <div id="react1">

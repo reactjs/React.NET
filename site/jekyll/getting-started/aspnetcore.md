@@ -4,9 +4,9 @@ layout: docs
 title: Getting Started on ASP.NET Core
 ---
 
-Getting started with ReactJS.NET on ASP.NET Core requires a few more steps compared to previous versions of ASP.NET and MVC. A more fully featured tutorial will be released soon.
+Getting started with ReactJS.NET on ASP.NET Core requires a few more steps compared to previous versions of ASP.NET and MVC. If you want a step-by-step guide on configuring a brand new site, see [the ReactJS.NET tutorial for ASP.NET Core](/getting-started/tutorial.html).
 
-ReactJS.NET requires Visual Studio 2015 and ASP.NET Core RTM (final release). Additionally, ReactJS.NET does not support .NET Core at this point in time, so you will need to ensure your project is not referencing it. If you're creating a new website, use the "ASP.NET Core Web Application (.NET Framework)" project template. Otherwise, make sure your `project.json` references `net452` in its `frameworks` section, **not** `netcoreapp`.
+ReactJS.NET requires Visual Studio 2015 and ASP.NET Core RTM (final release). It is recommended to use .NET Framework, but ReactJS.NET also works with .NET Core.
 
 Install the `React.AspNet` package through NuGet. After the package is installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator). At the top of the file, add:
 
@@ -66,4 +66,4 @@ Finally, add this to `Views\_ViewImports.cshtml` (or create it if it doesn't exi
 @using React.AspNet
 ```
 
-Once ReactJS.NET has been configured, you will be able to use [on-the-fly JSX to JavaScript compilation](http://reactjs.net/getting-started/usage.html) and [server-side rendering](http://reactjs.net/guides/server-side-rendering.html).
+Once ReactJS.NET has been configured, you will be able to use [on-the-fly JSX to JavaScript compilation](/getting-started/usage.html) and [server-side rendering](/guides/server-side-rendering.html).

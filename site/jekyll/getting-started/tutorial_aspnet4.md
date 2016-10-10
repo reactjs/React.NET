@@ -296,9 +296,9 @@ So far we've been inserting the comments directly in the source code. Instead, l
 
 ```javascript
 var data = [
-  { Author: "Daniel Lo Nigro", Text: "Hello ReactJS.NET World!" },
-  { Author: "Pete Hunt", Text: "This is one comment" },
-  { Author: "Jordan Walke", Text: "This is *another* comment" }
+  { Id: 1, Author: "Daniel Lo Nigro", Text: "Hello ReactJS.NET World!" },
+  { Id: 2, Author: "Pete Hunt", Text: "This is one comment" },
+  { Id: 3, Author: "Jordan Walke", Text: "This is *another* comment" }
 ];
 ```
 
@@ -355,6 +355,7 @@ namespace ReactDemo.Models
 {
 	public class CommentModel
 	{
+		public int Id { get; set; }
 		public string Author { get; set; }
 		public string Text { get; set; }
 	}
@@ -370,37 +371,40 @@ using ReactDemo.Models;
 
 namespace ReactDemo.Controllers
 {
-    public class HomeController : Controller
-    {
-	    private static readonly IList<CommentModel> _comments;
+	public class HomeController : Controller
+	{
+		private static readonly IList<CommentModel> _comments;
 
-	    static HomeController()
-	    {
+		static HomeController()
+		{
 			_comments = new List<CommentModel>
 			{
 				new CommentModel
 				{
+					Id = 1,
 					Author = "Daniel Lo Nigro",
 					Text = "Hello ReactJS.NET World!"
 				},
 				new CommentModel
 				{
+					Id = 2,
 					Author = "Pete Hunt",
 					Text = "This is one comment"
 				},
 				new CommentModel
 				{
+					Id = 3,
 					Author = "Jordan Walke",
 					Text = "This is *another* comment"
 				},
 			};
-	    }
+		}
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-    }
+		public ActionResult Index()
+		{
+			return View();
+		}
+	}
 }
 ```
 
@@ -414,7 +418,7 @@ public ActionResult Comments()
 }
 ```
 
-The OutputCache attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
+The `OutputCache` attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
 
 Finally we add a corresponding route in `App_Start\RouteConfig.cs`:
 
@@ -460,6 +464,8 @@ ReactDOM.render(
   document.getElementById('content')
 );
 ```
+
+Note that in a real app, you should generate the URL server-side (via `Url.Action` call) and pass it down, or use [RouteJs](http://dan.cx/projects/routejs) rather than hard-coding it. This tutorial hard-codes it for simplicity.
 
 This component is different from the prior components because it will have to re-render itself. The component won't have any data until the request from the server comes back, at which point the component may need to render some new comments.
 
@@ -566,6 +572,8 @@ To accept new comments, we need to first add a controller action to handle it. T
 [HttpPost]
 public ActionResult AddComment(CommentModel comment)
 {
+	// Create a fake ID for this comment
+	comment.Id = _comments.Count + 1;
 	_comments.Add(comment);
 	return Content("Success :)");
 }
@@ -973,9 +981,9 @@ var CommentBox = React.createClass({
     var newComments = comments.concat([comment]);
     this.setState({data: newComments});
 
-	var data = new FormData();
-	data.append('Author', comment.Author);
-	data.append('Text', comment.Text);
+    var data = new FormData();
+    data.append('Author', comment.Author);
+    data.append('Text', comment.Text);
 
     var xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
@@ -1000,6 +1008,16 @@ var CommentBox = React.createClass({
     );
   }
 });
+```
+
+We also need to update the `Comment` component to use `Remarkable` from either `global` or `window`, due to a bug in Remarkable:
+```javascript{3}
+var Comment = React.createClass({
+	rawMarkup: function () {
+		var md = new (global.Remarkable || window.Remarkable)();
+		var rawMarkup = md.render(this.props.children.toString());
+		return { __html: rawMarkup };
+	},
 ```
 
 In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `ReactDOM.render` call that currently exists in Tutorial.jsx. All the props from the current `ReactDOM.render` call should be moved here, and the `ReactDOM.render` call should be deleted.
@@ -1053,11 +1071,14 @@ namespace ReactDemo
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
+				.AddScript("~/js/remarkable.min.js")
 				.AddScript("~/Scripts/Tutorial.jsx");
 		}
 	}
 }
 ```
+
+Note that we need a copy of Remarkable in order to load it for server-side rendering. In a production app you'd probably use Bower or npm for this, but for our tutorial you can just [download the file from CDNJS](https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js) and save it into `~/js`.
 
 That's it! Now if you build and refresh your application, you should notice that the comments box is rendered immediately rather than having a slight delay. If you view the source of the page, you will see the initial comments directly in the HTML itself:
 
