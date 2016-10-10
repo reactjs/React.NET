@@ -21,7 +21,9 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
-			var component = new ReactComponent(environment.Object, null, "Foo", "container");
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container");
 
 			Assert.Throws<ReactInvalidComponentException>(() =>
 			{
@@ -35,6 +37,7 @@ namespace React.Tests.Core
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
@@ -53,6 +56,7 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
 			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
@@ -88,6 +92,7 @@ namespace React.Tests.Core
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
@@ -102,6 +107,7 @@ namespace React.Tests.Core
 		public void RenderHtmlShouldWrapComponentInCustomElement()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
@@ -121,6 +127,7 @@ namespace React.Tests.Core
 		public void RenderHtmlShouldAddClassToElement()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
