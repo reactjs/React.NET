@@ -100,7 +100,7 @@ namespace React
 				(assemblyName.Equals("React", StringComparison.OrdinalIgnoreCase) ||
 				assemblyName.StartsWith("React.", StringComparison.OrdinalIgnoreCase) ||
 				assemblyName.EndsWith(".React", StringComparison.OrdinalIgnoreCase)) &&
-				!_obsoleteAssemblies.Contains(assemblyName, StringComparison.OrdinalIgnoreCase);
+				!_obsoleteAssemblies.Contains(assemblyName, StringComparer.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
