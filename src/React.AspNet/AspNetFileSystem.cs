@@ -36,8 +36,12 @@ namespace React.AspNet
 		/// <returns>Full path of the file</returns>
 		public override string MapPath(string relativePath)
 		{
-			relativePath = relativePath.TrimStart('~').TrimStart('/');
-			return Path.Combine(_hostingEnv.WebRootPath, relativePath);
+            if (relativePath.StartsWith(_hostingEnv.WebRootPath))
+            {
+                return relativePath;
+            }
+            relativePath = relativePath.TrimStart('~').TrimStart('/');
+            return Path.Combine(_hostingEnv.WebRootPath, relativePath);
 		}
 	}
 }
