@@ -97,10 +97,10 @@ namespace React
 		private static bool IsReactAssembly(string assemblyName)
 		{
 			return
-				(assemblyName == "React" ||
-				assemblyName.StartsWith("React.") ||
-				assemblyName.EndsWith(".React")) &&
-				!_obsoleteAssemblies.Contains(assemblyName);
+				(assemblyName.Equals("React", StringComparison.OrdinalIgnoreCase) ||
+				assemblyName.StartsWith("React.", StringComparison.OrdinalIgnoreCase) ||
+				assemblyName.EndsWith(".React", StringComparison.OrdinalIgnoreCase)) &&
+				!_obsoleteAssemblies.Contains(assemblyName, StringComparer.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
