@@ -373,7 +373,12 @@ namespace React
 #if NET40
 			jsEngineSwitcher.EngineFactories.AddV8();
 #endif
-			jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
+			try {
+				jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
+			} catch (VroomJsInitialisationException e) {
+				Trace.WriteLine("Failed to initialise VroomJs, skip it.");
+			}
+
 			if (allowMsie)
 			{
 				jsEngineSwitcher.EngineFactories.AddMsie();
