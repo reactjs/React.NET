@@ -995,11 +995,16 @@ var CommentBox = React.createClass({
 });
 ```
 
-We also need to update the `Comment` component to use `Remarkable` from either `global` or `window`, due to a bug in Remarkable:
+We also need to update the `Comment` component to use `Remarkable` from either `global` or `window`, due to a bug in Remarkable. We will do this by creating a function to create an instance of `Remarkable` and then calling it from the `Comment` component:
 ```javascript{3}
+function createRemarkable() {
+    var remarkable = (("undefined" != typeof global) && (global.Remarkable)) ? global.Remarkable : window.Remarkable;
+    return new remarkable();
+}
+
 var Comment = React.createClass({
 	rawMarkup: function () {
-		var md = new (global.Remarkable || window.Remarkable)();
+		var md = createRemarkable();
 		var rawMarkup = md.render(this.props.children.toString());
 		return { __html: rawMarkup };
 	},

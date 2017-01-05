@@ -103,9 +103,14 @@ var CommentForm = React.createClass({
 	}
 });
 
+function createRemarkable() {
+    var remarkable = (("undefined" != typeof global) && (global.Remarkable)) ? global.Remarkable : window.Remarkable;
+    return new remarkable();
+}
+
 var Comment = React.createClass({
 	rawMarkup: function () {
-		var md = new (global.Remarkable || window.Remarkable)();
+		var md = createRemarkable();
 		var rawMarkup = md.render(this.props.children.toString());
 		return { __html: rawMarkup };
 	},
