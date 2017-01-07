@@ -785,7 +785,7 @@ var CommentBox = React.createClass({
 
 Now that `CommentBox` has made the callback available to `CommentForm` via the `onCommentSubmit` prop, the `CommentForm` can call the callback when the user submits the form:
 
-```javascript{9}
+```javascript{18}
 var CommentForm = React.createClass({
   getInitialState: function() {
     return {author: '', text: ''};
