@@ -697,7 +697,7 @@ React attaches event handlers to components using a camelCase naming convention.
 
 Let's make the form interactive. When the user submits the form, we should clear it, submit a request to the server, and refresh the list of comments. To start, let's listen for the form's submit event and clear it.
 
-```javascript{2-13,16-18}
+```javascript{2-13,16-18,23}
 var CommentForm = React.createClass({
   getInitialState: function() {
     return {author: '', text: ''};
