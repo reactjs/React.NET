@@ -848,7 +848,7 @@ Continue on for more awesomeness!
 
 Our application is now feature complete but it feels slow to have to wait for the request to complete before your comment appears in the list. We can optimistically add this comment to the list to make the app feel faster.
 
-```javascript{12-14}
+```javascript{12-18}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
