@@ -128,6 +128,7 @@ Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover crea
 4. Name the file `HomeController.cs`
 
 Once the controller has been created, we also need to create a view
+
 1. Right-click on the Views folder, click "New Folder", and create a "Home" folder
 2. Right-click on the Views\Home folder and select Add → New Item
 3. Select .NET Core → ASP.NET → MVC View Page
