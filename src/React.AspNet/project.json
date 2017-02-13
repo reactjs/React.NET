@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-*",
+  "version": "3.0.1-*",
   "authors": [ "Daniel Lo Nigro" ],
   "copyright": "Copyright 2014-Present Facebook, Inc",
   "title": "ReactJS.NET (ASP.NET Core MVC)",

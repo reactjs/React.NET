@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "2.6.0-*",
   "title": "ReactJS.NET Unit Tests",
   "authors": [ "Daniel Lo Nigro" ],
@@ -10,8 +10,8 @@
 
   "dependencies": {
     "dotnet-test-nunit": "3.4.0-beta-2",
-    "Moq": "4.5.22",
-    "NUnit": "3.4.1",
+    "Moq": "4.5.30",
+    "NUnit": "3.6.0",
     "React.Core": {
       "target": "project"
     },

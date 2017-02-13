@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-*",
+  "version": "3.0.1-*",
   "title": "ReactJS.NET for ASP.NET 4",
   "authors": [ "Daniel Lo Nigro" ],
   "copyright": "Copyright 2014-Present Facebook, Inc",
@@ -34,8 +34,7 @@
       "target": "project"
     },
     "Microsoft.Web.Infrastructure": "1.0.0",
-    "WebActivatorEx": "2.1.0"
-  },
+    "WebActivatorEx": "2.2.0"  },
 
   "frameworks": {
     "net40": {
