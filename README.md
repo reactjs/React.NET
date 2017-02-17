@@ -25,7 +25,7 @@ Quick Start
 Install the package
 ```
 Install-Package React.Web.Mvc4 # For ASP.NET MVC 4 or 5
-Install-Package React.AspNet   # For ASP.NET MVC Core 1.0
+Install-Package React.AspNet   # For ASP.NET Core MVC 1.0
 ```
 
 Create JSX files
