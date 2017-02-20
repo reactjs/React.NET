@@ -231,7 +231,7 @@ You do not have to return basic HTML. You can return a tree of components that y
 The `ReactDOM` module exposes DOM-specific methods, while `React` has the core tools shared by React on different platforms (e.g., [React Native](http://facebook.github.io/react-native/)).
 ## Composing components
 
-Let's build skeletons for `CommentList` and `CommentForm` which will, again, be simple `<div>`s. Add these two components to your file, keeping the existing `CommentBox` declaration and `ReactDOM.render` call:
+Let's build skeletons for `CommentList` and `CommentForm` which will, again, be simple `<div>`s. Add these two components to the top of your file, just before the existing `CommentBox` declaration and `ReactDOM.render` call:
 
 ```javascript
 var CommentList = React.createClass({
