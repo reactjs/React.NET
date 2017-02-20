@@ -656,7 +656,7 @@ React attaches event handlers to components using a camelCase naming convention.
 
 Let's make the form interactive. When the user submits the form, we should clear it, submit a request to the server, and refresh the list of comments. To start, let's listen for the form's submit event and clear it.
 
-```javascript{2-13,16-18}
+```javascript{2-13,16-18,23}
 var CommentForm = React.createClass({
   getInitialState: function() {
     return {author: '', text: ''};
@@ -744,7 +744,7 @@ var CommentBox = React.createClass({
 
 Now that `CommentBox` has made the callback available to `CommentForm` via the `onCommentSubmit` prop, the `CommentForm` can call the callback when the user submits the form:
 
-```javascript{9}
+```javascript{18}
 var CommentForm = React.createClass({
   getInitialState: function() {
     return {author: '', text: ''};
@@ -848,7 +848,7 @@ Continue on for more awesomeness!
 
 Our application is now feature complete but it feels slow to have to wait for the request to complete before your comment appears in the list. We can optimistically add this comment to the list to make the app feel faster.
 
-```javascript{12-14}
+```javascript{12-18}
 var CommentBox = React.createClass({
   loadCommentsFromServer: function() {
     var xhr = new XMLHttpRequest();
