@@ -12,7 +12,8 @@ GEM
       highline (~> 1.6.11)
     crass (1.0.2)
     fast-stemmer (1.0.2)
-    ffi (1.9.17-x64-mingw32)
+    ffi (1.9.18)
+    ffi (1.9.18-x64-mingw32)
     highline (1.6.21)
     hike (1.2.3)
     jekyll (1.5.1)
@@ -40,7 +41,9 @@ GEM
     maruku (0.7.0)
     mini_portile2 (2.1.0)
     multi_json (1.12.1)
-    nokogiri (1.7.0.1-x64-mingw32)
+    nokogiri (1.7.1)
+      mini_portile2 (~> 2.1.0)
+    nokogiri (1.7.1-x64-mingw32)
       mini_portile2 (~> 2.1.0)
     nokogumbo (1.4.10)
       nokogiri
@@ -80,6 +83,7 @@ GEM
     yajl-ruby (1.1.0)
 
 PLATFORMS
+  ruby
   x64-mingw32
 
 DEPENDENCIES

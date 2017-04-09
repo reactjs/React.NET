@@ -17,6 +17,7 @@
   <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml" />
 
   {% stylesheet main %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" />
 
   <script type="text/javascript" src="//use.typekit.net/vqa1hcx.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
@@ -41,6 +42,7 @@
           <img class="nav-logo" src="/img/logo.svg" width="48" height="36">
           {{ site.name }}
         </a>
+        <input id="algolia-doc-search" type="text" placeholder="Search docs..." />
         <ul class="nav-site">
           <li><a href="/docs"{% if page.sectionid == 'docs' and page.id != 'tutorial' and page.id != 'download' %} class="active"{% endif %}>Docs</a></li>
           <li><a href="/getting-started/tutorial.html"{% if page.id == 'tutorial' %} class="active"{% endif %}>Tutorial</a></li>
@@ -62,6 +64,17 @@
       </div>
     </footer>
   </div>
+
+  <!-- Algolia search -->
+  <script src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script>
+  <script>
+  docsearch({
+    apiKey: 'e9888f8a8af8c16709c02402b15c7695',
+    indexName: 'reactjs_net',
+    inputSelector: '#algolia-doc-search',
+    debug: false // Set debug to true if you want to inspect the dropdown
+  });
+  </script>
 
   <!-- Facebook SDK -->
   <div id="fb-root"></div>

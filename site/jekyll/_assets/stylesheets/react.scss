@@ -17,7 +17,28 @@ $columnGutter: 40px;
 $twoColumnWidth: 2 * $columnWidth + $columnGutter;
 $navHeight: 50px;
 
+// Breakpoints
+$bp-large: 960px;
+$bp-medium: 640px;
+$bp-small: 480px;
 
+@mixin bp-small {
+  @media (max-width: $bp-small) {
+    @content;
+  }
+}
+
+@mixin bp-medium {
+  @media (max-width: $bp-medium) {
+    @content;
+  }
+}
+
+@mixin bp-large {
+  @media (max-width: $bp-large) {
+    @content;
+  }
+}
 
 // basic reset
 * {
@@ -763,4 +784,48 @@ div[data-twttr-id] iframe {
 
 .three-column > ul:first-child {
   margin-left: 20px;
+}
+
+/* Algolia Doc Search */
+
+input#algolia-doc-search {
+  background: transparent url('../img/search.png') no-repeat 10px center;
+  background-size: 16px 16px;
+
+  position: relative;
+  vertical-align: top;
+  margin-left: 10px;
+  padding: 0 10px;
+  padding-left: 35px;
+  height: 30px;
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 20px;
+  background-color: #333;
+  border-radius: 4px;
+  color: white;
+  outline: none;
+  width: 170px;
+
+  transition: width .2s ease;
+
+  &:focus {
+    width: 240px;
+  }
+
+  @include bp-large {
+    background-color: transparent;
+    width: 0;
+    cursor: pointer;
+
+    &:focus {
+      width: 200px;
+      background-color: #333;
+    }
+  }
+}
+
+.algolia-autocomplete {
+  vertical-align: top;
+  height: 53px;
 }
