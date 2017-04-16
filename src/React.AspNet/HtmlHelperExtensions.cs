@@ -50,7 +50,7 @@ namespace React.AspNet
 						"ReactJS.NET has not been initialised correctly.",
 #else
 						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
-						"called app.AddReact() and app.UseReact() in your Startup.cs file.",
+						"called services.AddReact() and app.UseReact() in your Startup.cs file.",
 #endif
 						ex
 					);
