@@ -88,7 +88,7 @@ namespace React.AspNet
 			var registrations = app.ApplicationServices.GetService<HttpContextLifetimeProvider.PerRequestRegistrations>();
 			if (registrations == null)
 			{
-				throw new ReactNotInitialisedException("Please call app.AddReact() before app.UseReact().");
+				throw new ReactNotInitialisedException("Please call services.AddReact() before app.UseReact().");
 			}
 		}
 

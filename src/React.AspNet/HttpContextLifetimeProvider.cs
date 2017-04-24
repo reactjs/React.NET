@@ -63,7 +63,7 @@ namespace React.AspNet
 				{
 					throw new ReactNotInitialisedException(
 						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
-						"called app.AddReact() and app.UseReact() in your Startup.cs file."
+						"called services.AddReact() and app.UseReact() in your Startup.cs file."
 					);
 				}
 				return registrations;
