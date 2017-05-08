@@ -7,55 +7,54 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using NUnit.Framework;
+using Xunit;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class FileCacheHashTests
 	{
 		private const string SAMPLE_HASH = "0A4D55A8D778E5022FAB701977C5D840BBC486D0";
 
-		[Test]
+		[Fact]
 		public void TestCalculateHash()
 		{
 			var hash = new FileCacheHash();
-			Assert.AreEqual(SAMPLE_HASH, hash.CalculateHash("Hello World"));
+			Assert.Equal(SAMPLE_HASH, hash.CalculateHash("Hello World"));
 		}
 
-		[Test]
+		[Fact]
 		public void ValidateHashShouldReturnFalseForEmptyString()
 		{
 			var hash = new FileCacheHash();
-			Assert.IsFalse(hash.ValidateHash(string.Empty, SAMPLE_HASH));
+			Assert.False(hash.ValidateHash(string.Empty, SAMPLE_HASH));
 		}
 
-		[Test]
+		[Fact]
 		public void ValidateHashShouldReturnFalseForNull()
 		{
 			var hash = new FileCacheHash();
-			Assert.IsFalse(hash.ValidateHash(null, SAMPLE_HASH));
+			Assert.False(hash.ValidateHash(null, SAMPLE_HASH));
 		}
 
-		[Test]
+		[Fact]
 		public void ValidateHashShouldReturnFalseWhenNoHashPrefix()
 		{
 			var hash = new FileCacheHash();
-			Assert.IsFalse(hash.ValidateHash("Hello World", SAMPLE_HASH));
+			Assert.False(hash.ValidateHash("Hello World", SAMPLE_HASH));
 		}
 
-		[Test]
+		[Fact]
 		public void ValidateHashShouldReturnFalseWhenHashDoesNotMatch()
 		{
 			var hash = new FileCacheHash();
-			Assert.IsFalse(hash.ValidateHash("// @hash NOTCORRECT\nHello World", SAMPLE_HASH));
+			Assert.False(hash.ValidateHash("// @hash NOTCORRECT\nHello World", SAMPLE_HASH));
 		}
 
-		[Test]
+		[Fact]
 		public void ValidateHashShouldReturnTrueWhenHashMatches()
 		{
 			var hash = new FileCacheHash();
-			Assert.IsTrue(hash.ValidateHash("// @hash v3-" + SAMPLE_HASH + "\nHello World", SAMPLE_HASH));
+			Assert.True(hash.ValidateHash("// @hash v3-" + SAMPLE_HASH + "\nHello World", SAMPLE_HASH));
 		}
 	}
 }

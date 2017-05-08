@@ -23,11 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F
 		template.nuspec = template.nuspec
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F2875D3A-0C8A-439B-B734-ECABA00AC629}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Mvc4", "React.Sample.Mvc4\React.Sample.Mvc4.csproj", "{22796879-968A-4C26-9B4B-4C44792B36DB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AF531A37-B93F-4113-9C2C-4DB28064B926} = {AF531A37-B93F-4113-9C2C-4DB28064B926}

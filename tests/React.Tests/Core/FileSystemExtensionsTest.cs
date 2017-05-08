@@ -7,22 +7,22 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using NUnit.Framework;
+using Xunit;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class FileSystemExtensionsTests
 	{
-		[TestCase("*.txt", true)]
-		[TestCase("foo?.js", true)]
-		[TestCase("first\\second\\third\\*.js", true)]
-		[TestCase("lol.js", false)]
-		[TestCase("", false)]
-		[TestCase("hello\\world.js", false)]
+        [Theory]
+        [InlineData("*.txt", true)]
+		[InlineData("foo?.js", true)]
+		[InlineData("first\\second\\third\\*.js", true)]
+		[InlineData("lol.js", false)]
+		[InlineData("", false)]
+		[InlineData("hello\\world.js", false)]
 		public void IsGlobPattern(string input, bool expected)
 		{
-			Assert.AreEqual(expected, input.IsGlobPattern());
+			Assert.Equal(expected, input.IsGlobPattern());
 		}
 	}
 }

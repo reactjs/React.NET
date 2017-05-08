@@ -7,11 +7,10 @@
   "buildOptions": {
     "keyFile": "../../src/key.snk"
   },
-
   "dependencies": {
-    "dotnet-test-nunit": "3.4.0-beta-2",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Moq": "4.5.30",
-    "NUnit": "3.6.0",
+    "xunit": "2.3.0-beta1-build3642",
     "React.Core": {
       "target": "project"
     },
@@ -22,9 +21,8 @@
       "target": "project"
     }
   },
-
   "frameworks": {
     "net451": {}
   },
-  "testRunner": "nunit"
+  "testRunner": "xunit"
 }
