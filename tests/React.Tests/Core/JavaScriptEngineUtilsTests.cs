@@ -9,15 +9,14 @@
 
 using JavaScriptEngineSwitcher.Core;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using React.Exceptions;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class JavaScriptEngineUtilsTests
 	{
-		[Test]
+		[Fact]
 		public void CallFunctionReturningJsonHandlesScalarReturnValue()
 		{
 			var engine = new Mock<IJsEngine>();
@@ -25,16 +24,16 @@ namespace React.Tests.Core
 			engine.Verify(x => x.CallFunction<int>("hello"));
 		}
 
-		[Test]
+		[Fact]
 		public void CallFunctionReturningJsonHandlesJson()
 		{
 			var engine = new Mock<IJsEngine>();
 			engine.Setup(x => x.CallFunction<string>("hello")).Returns("{\"message\":\"Hello World\"}");
 			var result = engine.Object.CallFunctionReturningJson<Example>("hello");
-			Assert.AreEqual("Hello World", result.Message);
+			Assert.Equal("Hello World", result.Message);
 		}
 
-		[Test]
+		[Fact]
 		public void CallFunctionReturningJsonThrowsOnInvalidJson()
 		{
 			var engine = new Mock<IJsEngine>();

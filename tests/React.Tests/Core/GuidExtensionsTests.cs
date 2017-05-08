@@ -8,18 +8,17 @@
  */
 
 using System;
-using NUnit.Framework;
+using Xunit;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class GuidExtensionsTests
 	{
-		[TestCase]
+		[Fact]
 		public void ToShortGuid()
 		{
 			var guid = Guid.Parse("c027191d-3785-485d-9fd7-5e0b376bd547");
-			Assert.AreEqual("HRknwIU3XUif114LN2vVRw", guid.ToShortGuid());
+			Assert.Equal("HRknwIU3XUif114LN2vVRw", guid.ToShortGuid());
 		}
 	}
 }

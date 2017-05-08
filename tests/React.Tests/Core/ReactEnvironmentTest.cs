@@ -12,15 +12,14 @@ using System.Collections.Generic;
 using System.Linq;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using React.Exceptions;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class ReactEnvironmentTest
 	{
-		[Test]
+		[Fact]
 		public void ExecuteWithBabelWithNoNewThread()
 		{
 			var mocks = new Mocks();
@@ -30,7 +29,7 @@ namespace React.Tests.Core
 			mocks.Engine.Verify(x => x.CallFunction<int>("foo"), Times.Exactly(1));
 		}
 
-		[Test]
+		[Fact]
 		public void ExecuteWithBabelWithNewThread()
 		{
 			var mocks = new Mocks();
@@ -54,7 +53,7 @@ namespace React.Tests.Core
 			);
 		}
 
-		[Test]
+		[Fact]
 		public void ExecuteWithBabelShouldBubbleExceptions()
 		{
 			var mocks = new Mocks();
@@ -69,7 +68,7 @@ namespace React.Tests.Core
 			});
 		}
 
-		[Test]
+		[Fact]
 		public void ExecuteWithBabelShouldThrowIfBabelDisabled()
 		{
 			var mocks = new Mocks();
@@ -82,7 +81,7 @@ namespace React.Tests.Core
 			});
 		}
 
-		[Test]
+		[Fact]
 		public void GeneratesContainerIdIfNotProvided()
 		{
 			var mocks = new Mocks();
@@ -91,11 +90,11 @@ namespace React.Tests.Core
 
 			var component1 = environment.CreateComponent("ComponentName", new { });
 			var component2 = environment.CreateComponent("ComponentName", new { });
-			StringAssert.StartsWith("react_", component1.ContainerId);
-			StringAssert.StartsWith("react_", component2.ContainerId);
+			Assert.StartsWith("react_", component1.ContainerId);
+			Assert.StartsWith("react_", component2.ContainerId);
 		}
 
-		[Test]
+		[Fact]
 		public void UsesProvidedContainerId()
 		{
 			var mocks = new Mocks();
@@ -104,11 +103,11 @@ namespace React.Tests.Core
 
 			var component1 = environment.CreateComponent("ComponentName", new { }, "foo");
 			var component2 = environment.CreateComponent("ComponentName", new { });
-			Assert.AreEqual("foo", component1.ContainerId);
-			StringAssert.StartsWith("react_", component2.ContainerId);
+			Assert.Equal("foo", component1.ContainerId);
+			Assert.StartsWith("react_", component2.ContainerId);
 		}
 
-		[Test]
+		[Fact]
 		public void ReturnsEngineToPool()
 		{
 			var mocks = new Mocks();

@@ -8,15 +8,14 @@
  */
 
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using React.Exceptions;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class ReactComponentTest
 	{
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldThrowExceptionIfComponentDoesNotExist()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -31,7 +30,7 @@ namespace React.Tests.Core
 			});
 		}
 
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -48,7 +47,7 @@ namespace React.Tests.Core
 			environment.Verify(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"));
 		}
 
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldWrapComponentInDiv()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -64,10 +63,10 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderHtml();
 
-			Assert.AreEqual(@"<div id=""container"">[HTML]</div>", result);
+			Assert.Equal(@"<div id=""container"">[HTML]</div>", result);
 		}
 
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldNotRenderComponentHtml()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -82,11 +81,11 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderHtml(renderContainerOnly: true);
 
-			Assert.AreEqual(@"<div id=""container""></div>", result);
+			Assert.Equal(@"<div id=""container""></div>", result);
 			environment.Verify(x => x.Execute(It.IsAny<string>()), Times.Never);
 		}
 
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldNotRenderClientSideAttributes()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -103,7 +102,7 @@ namespace React.Tests.Core
 			environment.Verify(x => x.Execute<string>(@"ReactDOMServer.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
 		}
 
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldWrapComponentInCustomElement()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
@@ -120,10 +119,10 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderHtml();
 
-			Assert.AreEqual(@"<span id=""container"">[HTML]</span>", result);
+			Assert.Equal(@"<span id=""container"">[HTML]</span>", result);
 		}
 
-		[Test]
+		[Fact]
 		public void RenderHtmlShouldAddClassToElement()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
@@ -140,10 +139,10 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderHtml();
 
-			Assert.AreEqual(@"<div id=""container"" class=""test-class"">[HTML]</div>", result);
+			Assert.Equal(@"<div id=""container"" class=""test-class"">[HTML]</div>", result);
 		}
 
-		[Test]
+		[Fact]
 		public void RenderJavaScriptShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
@@ -155,18 +154,19 @@ namespace React.Tests.Core
 			};
 			var result = component.RenderJavaScript();
 
-			Assert.AreEqual(
+			Assert.Equal(
 				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
 		}
 
-		[TestCase("Foo", true)]
-		[TestCase("Foo.Bar", true)]
-		[TestCase("Foo.Bar.Baz", true)]
-		[TestCase("alert()", false)]
-		[TestCase("Foo.alert()", false)]
-		[TestCase("lol what", false)]
+        [Theory]
+		[InlineData("Foo", true)]
+		[InlineData("Foo.Bar", true)]
+		[InlineData("Foo.Bar.Baz", true)]
+		[InlineData("alert()", false)]
+		[InlineData("Foo.alert()", false)]
+		[InlineData("lol what", false)]
 		public void TestEnsureComponentNameValid(string input, bool expected)
 		{
 			var isValid = true;
@@ -178,18 +178,18 @@ namespace React.Tests.Core
 			{
 				isValid =  false;
 			}
-			Assert.AreEqual(expected, isValid);
+			Assert.Equal(expected, isValid);
 		}
 
 
-		[Test]
+		[Fact]
 		public void GeneratesContainerIdIfNotProvided()
 		{
 			var environment = new Mock<IReactEnvironment>();
 			var config = new Mock<IReactSiteConfiguration>();
 
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", null);
-			StringAssert.StartsWith("react_", component.ContainerId);
+			Assert.StartsWith("react_", component.ContainerId);
 		}
 
 	}

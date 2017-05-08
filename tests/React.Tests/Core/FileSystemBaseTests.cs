@@ -7,19 +7,19 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using NUnit.Framework;
+using Xunit;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class FileSystemBaseTests
 	{
-		[TestCase("~/Test.txt", "C:\\Test.txt")]
-		[TestCase("~/Scripts/lol.js", "C:\\Scripts\\lol.js")]
+        [Theory]
+		[InlineData("~/Test.txt", "C:\\Test.txt")]
+		[InlineData("~/Scripts/lol.js", "C:\\Scripts\\lol.js")]
 		public void ToRelativePath(string expected, string input)
 		{
 			var fileSystem = new TestFileSystem();
-			Assert.AreEqual(expected, fileSystem.ToRelativePath(input));
+			Assert.Equal(expected, fileSystem.ToRelativePath(input));
 		}
 
 		private class TestFileSystem : FileSystemBase
