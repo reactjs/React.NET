@@ -4,7 +4,6 @@
     <Description>ReactJS and Babel tools for ASP.NET Core, including ASP.NET Core MVC. Please refer to project site (http://reactjs.net/) for full installation instructions, usage examples and sample code</Description>
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET (ASP.NET Core MVC)</AssemblyTitle>
-    <VersionPrefix>3.0.1</VersionPrefix>
     <Authors>Daniel Lo Nigro</Authors>
     <TargetFrameworks>net451;netstandard1.6</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -18,6 +17,7 @@
     <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,10 +41,6 @@
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
-  </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

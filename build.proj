@@ -33,16 +33,16 @@ of patent rights can be found in the PATENTS file in the same directory.
 
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
 
-	<Target Name="RestorePackages" DependsOnTargets="Clean">
-		<!-- NuGet packages for .xproj projects -->
-		<Exec
-			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet restore src\React.sln"
-		/>
+	<Target Name="RestorePackages" DependsOnTargets="Clean;UpdateVersion">
 		<!-- NuGet packages for "legacy" projects (eg. React.Samples.Mvc4) -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
+		/>
+		<!-- NuGet packages for modern .csproj projects -->
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet restore $(SolutionFile) /p:Version=$(VersionString)"
 		/>
 		<!-- npm packages -->
 		<Exec
@@ -65,19 +65,22 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<!-- Prepend date to build version if a dev build-->
 		<PropertyGroup Condition="$(BuildType) == 'Release'">
 			<BuildSuffix></BuildSuffix>
-			<BuildWithSuffix>$(Build)</BuildWithSuffix>
+			<VersionString>$(Major).$(Minor).$(Build)</VersionString>
 		</PropertyGroup>
 		<PropertyGroup Condition="$(BuildType) != 'Release'">
 			<BuildSuffix>dev-$(Date)</BuildSuffix>
-			<BuildWithSuffix>$(Build)-$(BuildSuffix)</BuildWithSuffix>
+			<VersionString>$(Major).$(Minor).$(Build)-$(BuildSuffix)</VersionString>
+		</PropertyGroup>
+		<PropertyGroup>
+			
 		</PropertyGroup>
 		<!-- Set version for assemblies -->
 		<AssemblyInfo
 			CodeLanguage="CS"
 			OutputFile="src\SharedAssemblyVersionInfo.cs"
 			AssemblyVersion="$(Major).$(Minor)"
-			AssemblyFileVersion="$(Major).$(Minor).$(BuildWithSuffix).$(Revision)"
-			AssemblyInformationalVersion="$(Major).$(Minor).$(BuildWithSuffix)"
+			AssemblyFileVersion="$(VersionString).$(Revision)"
+			AssemblyInformationalVersion="$(VersionString)"
 		/>
 	</Target>
 
@@ -111,7 +114,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<MakeDir Directories="$(PackageOutputDir)" />
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet pack --output $(PackageOutputDir) --configuration Release  --no-build src/%(PackageAssemblies.Identity) /p:Version=$(Major).$(Minor).$(BuildWithSuffix)"
+			Command="dotnet pack --output $(PackageOutputDir) --configuration Release  --no-build src/%(PackageAssemblies.Identity) /p:Version=$(VersionString)"
 		/>
 	</Target>
 
