@@ -3,13 +3,12 @@
   <PropertyGroup>
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET Console Sample</AssemblyTitle>
-    <VersionPrefix>3.0.0</VersionPrefix>
     <Authors>Daniel Lo Nigro</Authors>
-    <TargetFrameworks>net40;netcoreapp1.0</TargetFrameworks>
+    <TargetFrameworks>net40;netcoreapp1.1</TargetFrameworks>
     <AssemblyName>React.Sample.ConsoleApp</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>React.Sample.ConsoleApp</PackageId>
-    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.1</RuntimeFrameworkVersion>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
