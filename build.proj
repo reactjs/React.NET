@@ -34,6 +34,12 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
 
 	<Target Name="RestorePackages" DependsOnTargets="Clean;UpdateVersion">
+		<!-- NuGet packages for "legacy" projects (eg. React.Samples.Mvc4) -->
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
+		/>
+		<!-- NuGet packages for modern .csproj projects -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="dotnet restore $(SolutionFile) /p:Version=$(VersionString)"
