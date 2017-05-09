@@ -34,12 +34,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
 
 	<Target Name="RestorePackages" DependsOnTargets="Clean;UpdateVersion">
-		<!-- NuGet packages for "legacy" projects (eg. React.Samples.Mvc4) -->
-		<Exec
-			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
-		/>
-		<!-- NuGet packages for modern .csproj projects -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="dotnet restore $(SolutionFile) /p:Version=$(VersionString)"
@@ -95,7 +89,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
 		<Exec WorkingDirectory="src/React.Core" Command="node_modules/.bin/gulp" />
-		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035" />
+		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035;Version=$(VersionString)" />
 		<Exec WorkingDirectory="src/React.Sample.Webpack" Command="node_modules/.bin/webpack" />
 	</Target>
 
