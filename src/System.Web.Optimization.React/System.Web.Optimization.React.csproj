@@ -4,7 +4,6 @@
     <Description>Allows you to transpile JavaScript via Babel in the ASP.NET Web Optimization Framework.</Description>
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET - Babel for ASP.NET Web Optimization Framework</AssemblyTitle>
-    <VersionPrefix>3.0.1</VersionPrefix>
     <Authors>Daniel Lo Nigro</Authors>
     <TargetFramework>net40</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

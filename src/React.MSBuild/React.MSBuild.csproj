@@ -4,7 +4,6 @@
     <Description>An MSBuild task to transpile JavaScript via Babel.</Description>
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET - Babel for MSBuild</AssemblyTitle>
-    <VersionPrefix>3.0.1</VersionPrefix>
     <Authors>Daniel Lo Nigro</Authors>
     <TargetFramework>net40</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

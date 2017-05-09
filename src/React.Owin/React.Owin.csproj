@@ -4,7 +4,6 @@
     <Description>OWIN middleware for transpiling JavaScript via Babel.</Description>
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET - Babel for OWIN</AssemblyTitle>
-    <VersionPrefix>3.0.1</VersionPrefix>
     <Authors>Daniel Lo Nigro</Authors>
     <TargetFramework>net45</TargetFramework>
     <DefineConstants>$(DefineConstants);OWIN</DefineConstants>

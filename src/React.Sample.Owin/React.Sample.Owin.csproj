@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET OWIN Sample</AssemblyTitle>
-    <VersionPrefix>2.6.0</VersionPrefix>
     <Authors>Daniel Lo Nigro</Authors>
     <TargetFramework>net45</TargetFramework>
     <AssemblyName>React.Sample.Owin</AssemblyName>
