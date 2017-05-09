@@ -6,6 +6,7 @@
     <AssemblyName>React.Sample.Mvc6</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>React.Sample.Mvc6</PackageId>
+    <NoWarn>1701</NoWarn>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.1</RuntimeFrameworkVersion>
   </PropertyGroup>
 

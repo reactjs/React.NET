@@ -8,6 +8,7 @@
     <AssemblyName>React.Sample.ConsoleApp</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>React.Sample.ConsoleApp</PackageId>
+    <NoWarn>1701</NoWarn>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.1</RuntimeFrameworkVersion>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
