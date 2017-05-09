@@ -23,9 +23,10 @@
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
-    <None Update="Content\**\*">
+    <Content Include="Content\**\*">
       <Pack>true</Pack>
-    </None>
+      <PackagePath>content\</PackagePath>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

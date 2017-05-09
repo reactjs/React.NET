@@ -23,9 +23,10 @@
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
-    <None Update="readme.txt">
+    <Content Include="readme.txt">
       <Pack>true</Pack>
-    </None>
+      <PackagePath>content\</PackagePath>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
