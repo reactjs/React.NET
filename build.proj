@@ -64,15 +64,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		</Time>
 		<!-- Prepend date to build version if a dev build-->
 		<PropertyGroup Condition="$(BuildType) == 'Release'">
-			<BuildSuffix></BuildSuffix>
 			<VersionString>$(Major).$(Minor).$(Build)</VersionString>
 		</PropertyGroup>
 		<PropertyGroup Condition="$(BuildType) != 'Release'">
-			<BuildSuffix>dev-$(Date)</BuildSuffix>
-			<VersionString>$(Major).$(Minor).$(Build)-$(BuildSuffix)</VersionString>
-		</PropertyGroup>
-		<PropertyGroup>
-			
+			<VersionString>$(Major).$(Minor).$(Build)-dev-$(Date)</VersionString>
 		</PropertyGroup>
 		<!-- Set version for assemblies -->
 		<AssemblyInfo
