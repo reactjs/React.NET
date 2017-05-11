@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>OWIN middleware for transpiling JavaScript via Babel.</Description>
+    <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
+    <AssemblyTitle>ReactJS.NET - Babel for OWIN</AssemblyTitle>
+    <Authors>Daniel Lo Nigro</Authors>
+    <TargetFramework>net45</TargetFramework>
+    <DefineConstants>$(DefineConstants);OWIN</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>React.Owin</AssemblyName>
+    <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>React.Owin</PackageId>
+    <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel;owin</PackageTags>
+    <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+    <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs;..\React.AspNet\BabelFileOptions.cs;..\React.AspNet\BabelFileSystem.cs" />
+    <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\React.Core\React.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.FileSystems" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="3.0.1" />
+    <PackageReference Include="Owin" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

@@ -15,7 +15,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Revision>0</Revision>
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
-		<PackageOutputDir>output</PackageOutputDir>
+		<PackageOutputDir>$(MSBuildProjectDirectory)\output</PackageOutputDir>
 		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
 		
 		<SolutionFile>src\React.sln</SolutionFile>
@@ -31,18 +31,18 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="System.Web.Optimization.React" />
 	</ItemGroup>
 
-	<Import Project="src/React.tasks.proj" />
-	
-	<Target Name="RestorePackages" DependsOnTargets="Clean">
-		<!-- NuGet packages for .xproj projects -->
-		<Exec
-			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet restore"
-		/>
+	<Import Project="$(MSBuildProjectDirectory)\tools\MSBuildTasks\MSBuild.Community.Tasks.Targets" />
+
+	<Target Name="RestorePackages" DependsOnTargets="Clean;UpdateVersion">
 		<!-- NuGet packages for "legacy" projects (eg. React.Samples.Mvc4) -->
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="tools\NuGet\nuget.exe restore $(SolutionFile)"
+		/>
+		<!-- NuGet packages for modern .csproj projects -->
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet restore $(SolutionFile) /p:Version=$(VersionString)"
 		/>
 		<!-- npm packages -->
 		<Exec
@@ -64,25 +64,18 @@ of patent rights can be found in the PATENTS file in the same directory.
 		</Time>
 		<!-- Prepend date to build version if a dev build-->
 		<PropertyGroup Condition="$(BuildType) == 'Release'">
-			<BuildSuffix></BuildSuffix>
-			<BuildWithSuffix>$(Build)</BuildWithSuffix>
+			<VersionString>$(Major).$(Minor).$(Build)</VersionString>
 		</PropertyGroup>
 		<PropertyGroup Condition="$(BuildType) != 'Release'">
-			<BuildSuffix>dev-$(Date)</BuildSuffix>
-			<BuildWithSuffix>$(Build)-$(BuildSuffix)</BuildWithSuffix>
+			<VersionString>$(Major).$(Minor).$(Build)-dev-$(Date)</VersionString>
 		</PropertyGroup>
 		<!-- Set version for assemblies -->
 		<AssemblyInfo
 			CodeLanguage="CS"
 			OutputFile="src\SharedAssemblyVersionInfo.cs"
 			AssemblyVersion="$(Major).$(Minor)"
-			AssemblyFileVersion="$(Major).$(Minor).$(BuildWithSuffix).$(Revision)"
-			AssemblyInformationalVersion="$(Major).$(Minor).$(BuildWithSuffix)"
-		/>
-		<!-- Ensure version numbers in project.json files are in sync -->
-		<UpdateAspNetProjectVersion
-			Files="src/%(PackageAssemblies.Identity)/project.json"
-			Version="$(Major).$(Minor).$(Build)-*"
+			AssemblyFileVersion="$(VersionString).$(Revision)"
+			AssemblyInformationalVersion="$(VersionString)"
 		/>
 	</Target>
 
@@ -97,14 +90,14 @@ of patent rights can be found in the PATENTS file in the same directory.
 
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
 		<Exec WorkingDirectory="src/React.Core" Command="node_modules/.bin/gulp" />
-		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035" />
+		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035,1701;Version=$(VersionString)" />
 		<Exec WorkingDirectory="src/React.Sample.Webpack" Command="node_modules/.bin/webpack" />
 	</Target>
 
 	<Target Name="Test" DependsOnTargets="Build">
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet test --configuration Release --no-build tests/React.Tests"
+			Command="dotnet test --configuration Release --no-build tests/React.Tests/React.Tests.csproj"
 		/>
 	</Target>
 
@@ -116,7 +109,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<MakeDir Directories="$(PackageOutputDir)" />
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="dotnet pack --output $(PackageOutputDir) --configuration Release  --version-suffix $(BuildSuffix) --no-build src/%(PackageAssemblies.Identity)"
+			Command="dotnet pack --output $(PackageOutputDir) --configuration Release  --no-build src/%(PackageAssemblies.Identity) /p:Version=$(VersionString)"
 		/>
 	</Target>
 

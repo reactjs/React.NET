@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
+    <AssemblyTitle>ReactJS.NET Console Sample</AssemblyTitle>
+    <Authors>Daniel Lo Nigro</Authors>
+    <TargetFrameworks>net40;netcoreapp1.1</TargetFrameworks>
+    <AssemblyName>React.Sample.ConsoleApp</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>React.Sample.ConsoleApp</PackageId>
+    <NoWarn>1701</NoWarn>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">1.1</RuntimeFrameworkVersion>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <None Include="App.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\React.Core\React.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

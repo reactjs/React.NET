@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F567B25C-E869-4C93-9C96-077761250F87}"
 EndProject
@@ -15,7 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{CB51F03F
 		..\build.proj = ..\build.proj
 		..\dev-build-push.bat = ..\dev-build-push.bat
 		..\dev-build.bat = ..\dev-build.bat
-		React.tasks.proj = React.tasks.proj
 		..\README.md = ..\README.md
 		..\release-build-push.bat = ..\release-build-push.bat
 		..\release-build.bat = ..\release-build.bat
@@ -40,36 +39,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Sample.Webpack", "Rea
 		{662D52AC-1EE9-4372-BD74-379F9AC56451} = {662D52AC-1EE9-4372-BD74-379F9AC56451}
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Sample.Mvc6", "React.Sample.Mvc6\React.Sample.Mvc6.xproj", "{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D0CC8A22-CEE6-485C-924B-1F94426FEA59} = {D0CC8A22-CEE6-485C-924B-1F94426FEA59}
-		{A7ACDB56-5E43-40A6-92C9-2C52228E6074} = {A7ACDB56-5E43-40A6-92C9-2C52228E6074}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Core", "React.Core\React.Core.csproj", "{D0CC8A22-CEE6-485C-924B-1F94426FEA59}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.AspNet", "React.AspNet\React.AspNet.xproj", "{A7ACDB56-5E43-40A6-92C9-2C52228E6074}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D0CC8A22-CEE6-485C-924B-1F94426FEA59} = {D0CC8A22-CEE6-485C-924B-1F94426FEA59}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cassette.React", "Cassette.React\Cassette.React.csproj", "{B7D39E1D-6CAA-4489-A03F-0C176402CFB2}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Core", "React.Core\React.Core.xproj", "{D0CC8A22-CEE6-485C-924B-1F94426FEA59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Web", "React.Web\React.Web.csproj", "{134EDD16-8DC8-4983-A2E0-B38DAB1ECF1C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Cassette.React", "Cassette.React\Cassette.React.xproj", "{B7D39E1D-6CAA-4489-A03F-0C176402CFB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Web.Mvc4", "React.Web.Mvc4\React.Web.Mvc4.csproj", "{662D52AC-1EE9-4372-BD74-379F9AC56451}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Web", "React.Web\React.Web.xproj", "{134EDD16-8DC8-4983-A2E0-B38DAB1ECF1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Web.Optimization.React", "System.Web.Optimization.React\System.Web.Optimization.React.csproj", "{889CEF81-75D6-4BAB-8E2C-B64B7CA97C77}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Web.Mvc4", "React.Web.Mvc4\React.Web.Mvc4.xproj", "{662D52AC-1EE9-4372-BD74-379F9AC56451}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.MSBuild", "React.MSBuild\React.MSBuild.csproj", "{AF531A37-B93F-4113-9C2C-4DB28064B926}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "System.Web.Optimization.React", "System.Web.Optimization.React\System.Web.Optimization.React.xproj", "{889CEF81-75D6-4BAB-8E2C-B64B7CA97C77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Owin", "React.Owin\React.Owin.csproj", "{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.MSBuild", "React.MSBuild\React.MSBuild.xproj", "{AF531A37-B93F-4113-9C2C-4DB28064B926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Sample.Owin", "React.Sample.Owin\React.Sample.Owin.csproj", "{68F48008-ED43-4BDB-933D-D30D757F5EEA}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Owin", "React.Owin\React.Owin.xproj", "{C3BF8D49-B7CC-4D7F-B0F0-A94347C595EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Sample.ConsoleApp", "React.Sample.ConsoleApp\React.Sample.ConsoleApp.csproj", "{350EFB8E-693C-4DFE-8162-C99C359CFC71}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Sample.Owin", "React.Sample.Owin\React.Sample.Owin.xproj", "{68F48008-ED43-4BDB-933D-D30D757F5EEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Tests", "..\tests\React.Tests\React.Tests.csproj", "{6AA0D75E-5797-4690-BEFC-098A60C511A3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Sample.ConsoleApp", "React.Sample.ConsoleApp\React.Sample.ConsoleApp.xproj", "{350EFB8E-693C-4DFE-8162-C99C359CFC71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.AspNet", "React.AspNet\React.AspNet.csproj", "{631FCC55-0219-46DC-838A-C5A3E878943A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "React.Tests", "..\tests\React.Tests\React.Tests.xproj", "{6AA0D75E-5797-4690-BEFC-098A60C511A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Sample.Mvc6", "React.Sample.Mvc6\React.Sample.Mvc6.csproj", "{6E2C1144-703C-4FF5-893D-B9C1A2C55C3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,14 +81,6 @@ Global
 		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20376AD-80F7-4865-ACE3-1DE616991DF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A7ACDB56-5E43-40A6-92C9-2C52228E6074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7ACDB56-5E43-40A6-92C9-2C52228E6074}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7ACDB56-5E43-40A6-92C9-2C52228E6074}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7ACDB56-5E43-40A6-92C9-2C52228E6074}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0CC8A22-CEE6-485C-924B-1F94426FEA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0CC8A22-CEE6-485C-924B-1F94426FEA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0CC8A22-CEE6-485C-924B-1F94426FEA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -137,6 +121,14 @@ Global
 		{6AA0D75E-5797-4690-BEFC-098A60C511A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AA0D75E-5797-4690-BEFC-098A60C511A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AA0D75E-5797-4690-BEFC-098A60C511A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631FCC55-0219-46DC-838A-C5A3E878943A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631FCC55-0219-46DC-838A-C5A3E878943A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631FCC55-0219-46DC-838A-C5A3E878943A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631FCC55-0219-46DC-838A-C5A3E878943A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E2C1144-703C-4FF5-893D-B9C1A2C55C3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E2C1144-703C-4FF5-893D-B9C1A2C55C3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E2C1144-703C-4FF5-893D-B9C1A2C55C3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E2C1144-703C-4FF5-893D-B9C1A2C55C3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,8 +137,6 @@ Global
 		{22796879-968A-4C26-9B4B-4C44792B36DB} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 		{F1EB6834-80A5-411C-90FD-CECC05715A10} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 		{E20376AD-80F7-4865-ACE3-1DE616991DF7} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
-		{022DC77E-5E48-4CF4-AD8B-DC4B9B52E02E} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
-		{A7ACDB56-5E43-40A6-92C9-2C52228E6074} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{D0CC8A22-CEE6-485C-924B-1F94426FEA59} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{B7D39E1D-6CAA-4489-A03F-0C176402CFB2} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{134EDD16-8DC8-4983-A2E0-B38DAB1ECF1C} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
@@ -157,5 +147,7 @@ Global
 		{68F48008-ED43-4BDB-933D-D30D757F5EEA} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 		{350EFB8E-693C-4DFE-8162-C99C359CFC71} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 		{6AA0D75E-5797-4690-BEFC-098A60C511A3} = {F567B25C-E869-4C93-9C96-077761250F87}
+		{631FCC55-0219-46DC-838A-C5A3E878943A} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
+		{6E2C1144-703C-4FF5-893D-B9C1A2C55C3B} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 	EndGlobalSection
 EndGlobal
