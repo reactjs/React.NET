@@ -12,12 +12,11 @@ using System.Collections.Generic;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using React.Exceptions;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class JavaScriptEngineFactoryTest
 	{
 		private JavaScriptEngineFactory CreateBasicFactory()
@@ -52,23 +51,18 @@ namespace React.Tests.Core
 			return new JavaScriptEngineFactory(JsEngineSwitcher.Instance, config.Object, fileSystem.Object);
 		}
 
-		[SetUp]
-		public void BeforeEach()
-		{
-		}
-
-		[Test]
+		[Fact]
 		public void ShouldReturnSameEngine()
 		{
 			var factory = CreateBasicFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
 			
-			Assert.AreEqual(engine1, engine2);
+			Assert.Equal(engine1, engine2);
 			factory.DisposeEngineForCurrentThread();
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldReturnNewEngineAfterDisposing()
 		{
 			var factory = CreateBasicFactory();
@@ -77,10 +71,10 @@ namespace React.Tests.Core
 			var engine2 = factory.GetEngineForCurrentThread();
 			factory.DisposeEngineForCurrentThread();
 
-			Assert.AreNotEqual(engine1, engine2);
+			Assert.NotEqual(engine1, engine2);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldCreateNewEngineForNewThread()
 		{
 			var factory = CreateBasicFactory();
@@ -99,13 +93,13 @@ namespace React.Tests.Core
 			var engine3 = factory.GetEngineForCurrentThread();
 
 			// Different threads should have different engines
-			Assert.AreNotEqual(engine1, engine2);
+			Assert.NotEqual(engine1, engine2);
 			// Same thread should share same engine
-			Assert.AreEqual(engine1, engine3);
+			Assert.Equal(engine1, engine3);
 			factory.DisposeEngineForCurrentThread();
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldLoadFilesThatDoNotRequireTransform()
 		{
 			var jsEngine = new Mock<IJsEngine>();
@@ -126,7 +120,7 @@ namespace React.Tests.Core
 			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js"));
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldHandleLoadingExternalReactVersion()
 		{
 			var jsEngine = new Mock<IJsEngine>();
@@ -143,7 +137,7 @@ namespace React.Tests.Core
 			jsEngine.Verify(x => x.CallFunction<bool>("ReactNET_initReact"));
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldThrowIfReactVersionNotLoaded()
 		{
 			var jsEngine = new Mock<IJsEngine>();
@@ -161,7 +155,7 @@ namespace React.Tests.Core
 			});
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldCatchErrorsWhileLoadingScripts()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
@@ -180,7 +174,7 @@ namespace React.Tests.Core
 			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
-			Assert.AreEqual("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
+			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
 		}
 	}
 }

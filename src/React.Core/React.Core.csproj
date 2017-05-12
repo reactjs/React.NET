@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>ReactJS and Babel tools for .NET. Important: This package does not do much on its own; you probably want an integration package (like React.Web.Mvc4) as well. Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</Description>
+    <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
+    <AssemblyTitle>ReactJS.NET Core</AssemblyTitle>
+    <Authors>Daniel Lo Nigro</Authors>
+    <TargetFrameworks>net40;netstandard1.6</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>React.Core</AssemblyName>
+    <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>React.Core</PackageId>
+    <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel</PackageTags>
+    <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+    <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <EmbeddedResource Include="Resources\shims.js;Resources\react.generated.js;Resources\react.generated.min.js;Resources\babel.generated.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="2.3.2" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="2.2.0" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="2.3.2" />
+    <PackageReference Include="JSPool" Version="2.0.1" />
+    <PackageReference Include="MsieJavaScriptEngine" Version="2.1.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="2.2.0" />
+    <PackageReference Include="VroomJs" Version="1.2.3" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
+    <PackageReference Include="VroomJs" Version="1.2.3" />
+  </ItemGroup>
+
+</Project>

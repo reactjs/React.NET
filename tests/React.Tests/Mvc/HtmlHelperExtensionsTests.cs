@@ -7,14 +7,12 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System.Runtime.Remoting;
 using Moq;
-using NUnit.Framework;
+using Xunit;
 using React.Web.Mvc;
 
 namespace React.Tests.Mvc
 {
-	[TestFixture]
 	class HtmlHelperExtensionsTests
 	{
 		/// <summary>
@@ -29,7 +27,7 @@ namespace React.Tests.Mvc
 			return environment;
 		}
 
-		[Test]
+		[Fact]
 		public void ReactWithInitShouldReturnHtmlAndScript()
 		{
 			var component = new Mock<IReactComponent>();
@@ -49,13 +47,13 @@ namespace React.Tests.Mvc
 				props: new { },
 				htmlTag: "span"
 			);
-			Assert.AreEqual(
+			Assert.Equal(
 				"HTML" + System.Environment.NewLine + "<script>JS</script>",
 				result.ToString()
 			);
 		}
 
-		[Test]
+		[Fact]
 		public void EngineIsReturnedToPoolAfterRender()
 		{
 			var component = new Mock<IReactComponent>();
@@ -81,7 +79,7 @@ namespace React.Tests.Mvc
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
 
-		[Test]
+		[Fact]
 		public void ReactWithClientOnlyTrueShouldCallRenderHtmlWithTrue()
 		{
 			var component = new Mock<IReactComponent>();
@@ -105,7 +103,7 @@ namespace React.Tests.Mvc
 			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
 		}
 
-		[Test]
+		[Fact]
 		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue() {
 			var component = new Mock<IReactComponent>();
 			component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");

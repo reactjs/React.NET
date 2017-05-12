@@ -7,21 +7,21 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using NUnit.Framework;
+using Xunit;
 using React.Owin;
 
 namespace React.Tests.Owin
 {
-	[TestFixture]
 	public class EntryAssemblyFileSystemTests
 	{
-		[TestCase("C:\\", "~/", "C:\\")]
-		[TestCase("C:\\", "~/foo/bar.js", "C:\\foo\\bar.js")]
+        [Theory]
+		[InlineData("C:\\", "~/", "C:\\")]
+		[InlineData("C:\\", "~/foo/bar.js", "C:\\foo\\bar.js")]
 		public void MapPath(string rootPath, string relativePath, string expected)
 		{
 			var fileSystem = new EntryAssemblyFileSystem(rootPath);
 			var result = fileSystem.MapPath(relativePath);
-			Assert.AreEqual(expected, result);
+			Assert.Equal(expected, result);
 		}
 	}
 }

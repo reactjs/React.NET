@@ -9,22 +9,20 @@
 
 using System;
 using Moq;
-using NUnit.Framework;
 using React.Exceptions;
+using Xunit;
 
 namespace React.Tests.Core
 {
-	[TestFixture]
 	public class BabelTransformerTests
 	{
-		private Mock<IReactEnvironment> _environment;
-		private Mock<ICache> _cache;
-		private Mock<IFileSystem> _fileSystem;
-		private Mock<IFileCacheHash> _fileCacheHash;
-		private Babel _babel;
+		private readonly Mock<IReactEnvironment> _environment;
+		private readonly Mock<ICache> _cache;
+		private readonly Mock<IFileSystem> _fileSystem;
+		private readonly Mock<IFileCacheHash> _fileCacheHash;
+		private readonly Babel _babel;
 
-		[SetUp]
-		public void SetUp()
+		public BabelTransformerTests()
 		{
 			_environment = new Mock<IReactEnvironment>();
 
@@ -47,7 +45,7 @@ namespace React.Tests.Core
 			);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldTransformJsx()
 		{
 			const string input = "<div>Hello World</div>";
@@ -61,7 +59,7 @@ namespace React.Tests.Core
 			));
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldWrapExceptionsInJsxExeption()
 		{
 			_environment.Setup(x => x.ExecuteWithBabel<string>(
@@ -75,7 +73,7 @@ namespace React.Tests.Core
 			Assert.Throws<BabelException>(() => _babel.Transform(input));
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldUseCacheProvider()
 		{
 			_cache.Setup(x => x.Get<JavaScriptWithSourceMap>("JSX_v3_foo.jsx", null)).Returns(new JavaScriptWithSourceMap
@@ -84,10 +82,10 @@ namespace React.Tests.Core
 			});
 
 			var result = _babel.TransformFile("foo.jsx");
-			Assert.AreEqual("/* cached */", result);
+			Assert.Equal("/* cached */", result);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldUseFileSystemCacheIfHashValid()
 		{
 			SetUpEmptyCache();
@@ -96,10 +94,10 @@ namespace React.Tests.Core
 			_fileCacheHash.Setup(x => x.ValidateHash(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
 
 			var result = _babel.TransformFile("foo.jsx");
-			Assert.AreEqual("/* filesystem cached */", result);
+			Assert.Equal("/* filesystem cached */", result);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldTransformJsxIfFileCacheHashInvalid()
 		{
 			SetUpEmptyCache();
@@ -115,10 +113,10 @@ namespace React.Tests.Core
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _babel.TransformFile("foo.jsx");
-			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
+			Assert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldTransformJsxIfNoCache()
 		{
 			SetUpEmptyCache();
@@ -132,10 +130,10 @@ namespace React.Tests.Core
 			)).Returns(new JavaScriptWithSourceMap { Code = "React.DOM.div('Hello World')" });
 
 			var result = _babel.TransformFile("foo.jsx");
-			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
+			Assert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldSaveTransformationResult()
 		{
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
@@ -152,11 +150,11 @@ namespace React.Tests.Core
 			);
 
 			var resultFilename = _babel.TransformAndSaveFile("foo.jsx");
-			Assert.AreEqual("foo.generated.js", resultFilename);
-			StringAssert.EndsWith("React.DOM.div('Hello World')", result);
+			Assert.Equal("foo.generated.js", resultFilename);
+			Assert.EndsWith("React.DOM.div('Hello World')", result);
 		}
 
-		[Test]
+		[Fact]
 		public void ShouldSkipTransformationIfCacheIsValid()
 		{
 			_fileSystem.Setup(x => x.ReadAsString("foo.jsx")).Returns("<div>Hello World</div>");
@@ -175,8 +173,9 @@ namespace React.Tests.Core
 			);
 
 			var resultFilename = _babel.TransformAndSaveFile("foo.jsx");
-			Assert.AreEqual("foo.generated.js", resultFilename);
-			Assert.IsNull(result, "There should be no result. Cached result should have been used.");
+			Assert.Equal("foo.generated.js", resultFilename);
+            // There should be no result. Cached result should have been used.
+            Assert.Null(result);
 		}
 
 		private void SetUpEmptyCache()

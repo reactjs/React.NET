@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>ReactJS tools for ASP.NET. If using ASP.NET MVC, also install React.Web.Mvc4. For ASP.NET Core, install React.AspNet instead! Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</Description>
+    <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
+    <AssemblyTitle>ReactJS.NET for ASP.NET 4</AssemblyTitle>
+    <Authors>Daniel Lo Nigro</Authors>
+    <TargetFramework>net40</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>React.Web</AssemblyName>
+    <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>React.Web</PackageId>
+    <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel</PackageTags>
+    <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+    <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <Content Include="Content\**\*">
+      <Pack>true</Pack>
+      <PackagePath>content\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\React.Core\React.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0" />
+    <PackageReference Include="WebActivatorEx" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <Reference Include="System.Web" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>

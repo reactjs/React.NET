@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>An MSBuild task to transpile JavaScript via Babel.</Description>
+    <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
+    <AssemblyTitle>ReactJS.NET - Babel for MSBuild</AssemblyTitle>
+    <Authors>Daniel Lo Nigro</Authors>
+    <TargetFramework>net40</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>React.MSBuild</AssemblyName>
+    <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+    <PackageId>React.MSBuild</PackageId>
+    <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel;msbuild</PackageTags>
+    <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+    <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <Content Include="tools\**\*">
+      <Pack>true</Pack>
+      <PackagePath>tools\</PackagePath>
+    </Content>
+    <Content Include="Content\**\*">
+      <Pack>true</Pack>
+      <PackagePath>content\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\React.Core\React.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+</Project>
