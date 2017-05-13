@@ -183,7 +183,7 @@ namespace React.Tests.Router
 				path: "/",
 				Response: httpResponse.Object
 			);
-			httpResponse.Verify(x => x.Redirect(It.IsAny<string>(), true));
+			httpResponse.Verify(x => x.RedirectPermanent(It.IsAny<string>()));
 		}
 
 		[Fact]
