@@ -32,14 +32,7 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Content\Views\web.config.transform">
-      <PackagePath>content\</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="1.0.3" />
   </ItemGroup>
