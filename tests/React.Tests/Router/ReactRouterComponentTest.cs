@@ -11,163 +11,19 @@ using Moq;
 using Xunit;
 using React.Exceptions;
 using React.Router;
+using React.Tests.Core;
 
 namespace React.Tests.Router
 {
 	public class ReactRouterComponentTest
 	{
 		[Fact]
-		public void RenderHtmlShouldThrowExceptionIfComponentDoesNotExist()
-		{
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container");
-
-			Assert.Throws<ReactInvalidComponentException>(() =>
-			{
-				component.RenderHtml();
-			});
-		}
-
-        [Fact]
-        public void blabla()
-        {
-            new Mock<object>().Verify(x => x.ToString());
-        }
-
-		[Fact]
-		public void RenderHtmlShouldCallRenderComponent()
-		{
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-
-			var component = new ReactRouterComponent(environment.Object, config.Object, "Foo", "container")
-			{
-				Props = new { hello = "World" }
-			};
-			component.RenderRouterWithContext("/bar");
-
-            environment.Verify(x => x.Execute<string>(@"
-
-                var context = {};
-
-                var renderResult = ReactDOMServer.renderToString(
-                    React.createElement(Foo, { path: '/bar', context: context })
-                );
-
-                JSON.stringify({
-                    renderResult: renderResult,
-                    context: context
-                });
-            "));
-        }
-
-        [Fact]
-		public void RenderHtmlShouldWrapComponentInDiv()
-		{
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
-				.Returns("[HTML]");
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
-			{
-				Props = new { hello = "World" }
-			};
-			var result = component.RenderHtml();
-
-			Assert.Equal(@"<div id=""container"">[HTML]</div>", result);
-		}
-
-		[Fact]
-		public void RenderHtmlShouldNotRenderComponentHtml()
-		{
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"React.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
-				.Returns("[HTML]");
-			var config = new Mock<IReactSiteConfiguration>();
-
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
-			{
-				Props = new { hello = "World" }
-			};
-			var result = component.RenderHtml(renderContainerOnly: true);
-
-			Assert.Equal(@"<div id=""container""></div>", result);
-			environment.Verify(x => x.Execute(It.IsAny<string>()), Times.Never);
-		}
-
-		[Fact]
-		public void RenderHtmlShouldNotRenderClientSideAttributes()
-		{
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
-			{
-				Props = new { hello = "World" }
-			};
-			component.RenderHtml(renderServerOnly: true);
-
-			environment.Verify(x => x.Execute<string>(@"ReactDOMServer.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"));
-		}
-
-		[Fact]
-		public void RenderHtmlShouldWrapComponentInCustomElement()
-		{
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
-				.Returns("[HTML]");
-
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
-			{
-				Props = new { hello = "World" },
-				ContainerTag = "span"
-			};
-			var result = component.RenderHtml();
-
-			Assert.Equal(@"<span id=""container"">[HTML]</span>", result);
-		}
-
-		[Fact]
-		public void RenderHtmlShouldAddClassToElement()
-		{
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-			var environment = new Mock<IReactEnvironment>();
-			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
-				.Returns("[HTML]");
-
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
-			{
-				Props = new { hello = "World" },
-				ContainerClass="test-class"
-			};
-			var result = component.RenderHtml();
-
-			Assert.Equal(@"<div id=""container"" class=""test-class"">[HTML]</div>", result);
-		}
-
-		[Fact]
-		public void RenderJavaScriptShouldCallRenderComponent()
+		public void RenderJavaScriptShouldNotIncludeContextOrPath()
 		{
 			var environment = new Mock<IReactEnvironment>();
 			var config = new Mock<IReactSiteConfiguration>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactRouterComponent(environment.Object, config.Object, "Foo", "container", "/bar")
 			{
 				Props = new { hello = "World" }
 			};
@@ -179,37 +35,24 @@ namespace React.Tests.Router
 			);
 		}
 
-        [Theory]
-		[InlineData("Foo", true)]
-		[InlineData("Foo.Bar", true)]
-		[InlineData("Foo.Bar.Baz", true)]
-		[InlineData("alert()", false)]
-		[InlineData("Foo.alert()", false)]
-		[InlineData("lol what", false)]
-		public void TestEnsureComponentNameValid(string input, bool expected)
-		{
-			var isValid = true;
-			try
-			{
-				ReactComponent.EnsureComponentNameValid(input);
-			}
-			catch (ReactInvalidComponentException)
-			{
-				isValid =  false;
-			}
-			Assert.Equal(expected, isValid);
-		}
+		//[Fact]
+		//public void ShouldUsePolifyfillSuccessfully()
+		//{
+		//    var mocks = new ReactEnvironmentTest.Mocks();
+		//    var environment = mocks.CreateReactEnvironment();
+		//    //environment.Setup(x => x.Execute<bool>("typeof Object.assign === 'function'")).Returns(false);
+		//    //environment.Setup(x => x.Execute<string>("JSON.stringify(context);")).Returns("{}");
 
+		//    var config = new Mock<IReactSiteConfiguration>();
+		//    config.Setup(x => x.UseServerSideRendering).Returns(false);
 
-		[Fact]
-		public void GeneratesContainerIdIfNotProvided()
-		{
-			var environment = new Mock<IReactEnvironment>();
-			var config = new Mock<IReactSiteConfiguration>();
-
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", null);
-			Assert.StartsWith("react_", component.ContainerId);
-		}
-
+		//    var component = new ReactRouterComponent(environment, config.Object, "Foo", "container", "/bar")
+		//    {
+		//        Props = new { hello = "World" }
+		//    };
+		//    var html = component.RenderRouterWithContext(true);
+		//    var result = environment.Execute<string>(@"Object.assign(""a"", { sup=""yo""})");
+		//    Assert.Equal(@"{ [string: ""a""], sup: ""yo""", result);
+		//}
 	}
 }

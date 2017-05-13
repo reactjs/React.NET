@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ *  Copyright (c) 2014-Present, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+using System;
 using React.Exceptions;
 using React.TinyIoC;
 
@@ -55,7 +64,7 @@ namespace React.Router
 		/// <param name="htmlHelper">MVC Razor <see cref="IHtmlHelper"/></param>
 		/// <param name="componentName">Name of React Static Router component. Expose component globally to ReactJS.NET</param>
 		/// <param name="props">Props to initialise the component with</param>
-		/// <param name="path">F.x. from Request.Url.AbsolutePath. Used by React Static Router to determine context and routing.</param>
+		/// <param name="path">F.x. from Request.Path. Used by React Static Router to determine context and routing.</param>
 		/// <param name="Response">Used either by contextHandler or internally to modify the Response status code and redirect.</param>
 		/// <param name="contextHandler">Optional custom context handler, can be used instead of providing a Response object</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
@@ -83,7 +92,10 @@ namespace React.Router
 				path = path ?? htmlHelper.ViewContext.HttpContext.Request.Path;
 				Response = Response ?? htmlHelper.ViewContext.HttpContext.Response;
 
-				var reactComponent = Environment.CreateRouterComponent(componentName, props, containerId, clientOnly);
+				var reactComponent 
+					= Environment.CreateRouterComponent
+						(componentName, props, path, containerId, clientOnly);
+
 				if (!string.IsNullOrEmpty(htmlTag))
 				{
 					reactComponent.ContainerTag = htmlTag;
@@ -93,23 +105,23 @@ namespace React.Router
 					reactComponent.ContainerClass = containerClass;
 				}
 				
-				var executionResult = reactComponent.RenderRouterWithContext(path, clientOnly, serverOnly);
+				var executionResult = reactComponent.RenderRouterWithContext(clientOnly, serverOnly);
 
-				if (executionResult.context?.status != null)
+				if (executionResult.Context?.status != null)
 				{
 					// Use provided contextHandler
 					if (contextHandler != null)
 					{
-						contextHandler(Response, executionResult.context);
+						contextHandler(Response, executionResult.Context);
 					}
 					// Handle routing context internally
 					else
 					{
-						HandleRoutingContext(executionResult.context, Response);
+						HandleRoutingContext(executionResult.Context, Response);
 					}
 				}
 
-				return new HtmlString(executionResult.renderResult);
+				return new HtmlString(executionResult.RenderResult);
 			}
 			finally
 			{

@@ -113,7 +113,7 @@ namespace React.Tests.Core
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 			mocks.Config.Setup(x => x.ReuseJavaScriptEngines).Returns(true);
-
+			 
 			environment.CreateComponent("ComponentName", new { });
 			mocks.EngineFactory.Verify(x => x.GetEngine(), Times.Once);
 			environment.ReturnEngineToPool();
@@ -122,7 +122,21 @@ namespace React.Tests.Core
 			mocks.EngineFactory.Verify(x => x.GetEngine(), Times.AtLeast(2));
 		}
 
-		private class Mocks
+		[Fact]
+		public void CreatesIReactComponent()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			var component = new Mock<IReactComponent>();
+
+			environment.CreateComponent(component.Object);
+
+			// A single nameless component was successfully added!
+			Assert.Equal(";\r\n", environment.GetInitJavaScript());
+		}
+
+		public class Mocks
 		{
 			public Mock<IJsEngine> Engine { get; private set; }
 			public Mock<IJavaScriptEngineFactory> EngineFactory { get; private set; }
