@@ -31,20 +31,20 @@ namespace React.Tests.Router
 			return environment;
 		}
 
-  //      [Fact]
-		//public void EnvironmentShouldGetCalledClientOnly()
-		//{
-  //          var environment = ConfigureMockReactEnvironment();
-		//	var component = ReactEnvironmentExtensions.CreateRouterComponent(
-		//		environment.Object,
-		//		"ComponentName",
-		//		new { },
-		//		"/",
-		//		null,
-		//		true
-		//	);
+        //[Fact]
+        //public void EnvironmentShouldGetCalledClientOnly()
+        //{
+        //  var environment = ConfigureMockReactEnvironment();
+        //	var component = ReactEnvironmentExtensions.CreateRouterComponent(
+        //		environment.Object,
+        //		"ComponentName",
+        //		new { },
+        //		"/",
+        //		null,
+        //		true
+        //	);
 
-		//	environment.Verify(x => x.CreateComponent("ComponentName", new { }, null, true));
-		//}
-	}
+        //	environment.Verify(x => x.CreateComponent("ComponentName", new { }, null, true));
+        //}
+    }
 }

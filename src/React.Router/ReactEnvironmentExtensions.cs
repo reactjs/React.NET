@@ -48,17 +48,8 @@ namespace React.Router
 				Props = props,
 			};
 
-			var reactEnvironment = env as ReactEnvironment;
-
-			if (reactEnvironment != null)
-			{
-				reactEnvironment.CreateComponent(component, clientOnly);
-				return component;
-			}
-			else
-			{
-				throw new ReactRouterException("Only the default ReactEnvironment is intended to be used with React.Router");
-			}
+			env.CreateComponent(component, clientOnly);
+			return component;
 		}
 	}
 }
