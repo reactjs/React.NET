@@ -5,6 +5,7 @@ ReactJS.NET is a library that makes it easier to use [Babel](http://babeljs.io/)
 
 [![Build status](https://img.shields.io/appveyor/ci/Daniel15/react-net/master.svg)](https://ci.appveyor.com/project/Daniel15/react-net/branch/master)&nbsp;
 [![NuGet version](http://img.shields.io/nuget/v/React.Core.svg)](https://www.nuget.org/packages/React.Core/)
+[![Download count](https://img.shields.io/nuget/dt/React.Core.svg)](https://www.nuget.org/packages/React.Core/)
 
 Features
 ========
