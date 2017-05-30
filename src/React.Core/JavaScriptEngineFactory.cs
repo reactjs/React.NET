@@ -251,6 +251,23 @@ namespace React
 		private static Func<IJsEngine> GetFactory(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
 		{
 			EnsureJsEnginesRegistered(jsEngineSwitcher, allowMsie);
+
+			string defaultEngineName = jsEngineSwitcher.DefaultEngineName;
+			if (!string.IsNullOrWhiteSpace(defaultEngineName))
+			{
+				var engineFactory = jsEngineSwitcher.EngineFactories.Get(defaultEngineName);
+				if (engineFactory != null)
+				{
+					return engineFactory.CreateEngine;
+				}
+				else
+				{
+					throw new ReactEngineNotFoundException(
+						"Could not find a factory, that creates an instance of the JavaScript " +
+						"engine with name `" + defaultEngineName + "`.");
+				}
+			}
+
 			foreach (var engineFactory in jsEngineSwitcher.EngineFactories)
 			{
 				IJsEngine engine = null;
