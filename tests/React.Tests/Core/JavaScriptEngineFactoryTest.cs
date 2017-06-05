@@ -19,6 +19,9 @@ namespace React.Tests.Core
 {
 	public class JavaScriptEngineFactoryTest
 	{
+		private static object _engineSwitcherSynchronizer = new object();
+
+
 		private JavaScriptEngineFactory CreateBasicFactory()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
@@ -44,11 +47,17 @@ namespace React.Tests.Core
 			engineFactory.Setup(x => x.CreateEngine()).Returns(innerEngineFactory);
 
 			// JsEngineSwitcher is a singleton :(
-			var engineFactories = JsEngineSwitcher.Instance.EngineFactories;
-			engineFactories.Clear();
-			engineFactories.Add(engineFactory.Object);
-			
-			return new JavaScriptEngineFactory(JsEngineSwitcher.Instance, config.Object, fileSystem.Object);
+			lock (_engineSwitcherSynchronizer)
+			{
+				var engineSwitcher = JsEngineSwitcher.Instance;
+				engineSwitcher.DefaultEngineName = string.Empty;
+
+				var engineFactories = engineSwitcher.EngineFactories;
+				engineFactories.Clear();
+				engineFactories.Add(engineFactory.Object);
+
+				return new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+			}
 		}
 
 		[Fact]
@@ -175,6 +184,117 @@ namespace React.Tests.Core
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
 			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
+		}
+
+		[Fact]
+		public void ShouldReturnDefaultEngine()
+		{
+			const string someEngineName = "SomeEngine";
+			const string defaultEngineName = "DefaultEngine";
+			const string someOtherEngineName = "SomeOtherEngine";
+
+			var someEngineFactory = new Mock<IJsEngineFactory>();
+			someEngineFactory.Setup(x => x.EngineName).Returns(someEngineName);
+			someEngineFactory.Setup(x => x.CreateEngine()).Returns(() =>
+			{
+				var someEngine = new Mock<IJsEngine>();
+				someEngine.Setup(x => x.Name).Returns(someEngineName);
+				return someEngine.Object;
+			});
+
+			var defaultEngineFactory = new Mock<IJsEngineFactory>();
+			defaultEngineFactory.Setup(x => x.EngineName).Returns(defaultEngineName);
+			defaultEngineFactory.Setup(x => x.CreateEngine()).Returns(() =>
+			{
+				var defaultEngine = new Mock<IJsEngine>();
+				defaultEngine.Setup(x => x.Name).Returns(defaultEngineName);
+				return defaultEngine.Object;
+			});
+
+			var someOtherEngineFactory = new Mock<IJsEngineFactory>();
+			someOtherEngineFactory.Setup(x => x.EngineName).Returns(someOtherEngineName);
+			someOtherEngineFactory.Setup(x => x.CreateEngine()).Returns(() =>
+			{
+				var someOtherEngine = new Mock<IJsEngine>();
+				someOtherEngine.Setup(x => x.Name).Returns(someOtherEngineName);
+				return someOtherEngine.Object;
+			});
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			JavaScriptEngineFactory factory;
+
+			// JsEngineSwitcher is a singleton :(
+			lock (_engineSwitcherSynchronizer)
+			{
+				var engineSwitcher = JsEngineSwitcher.Instance;
+				engineSwitcher.DefaultEngineName = defaultEngineName;
+
+				var engineFactories = engineSwitcher.EngineFactories;
+				engineFactories.Clear();
+				engineFactories.Add(someEngineFactory.Object);
+				engineFactories.Add(defaultEngineFactory.Object);
+				engineFactories.Add(someOtherEngineFactory.Object);
+
+				factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+			}
+
+			var engine = factory.GetEngineForCurrentThread();
+
+			Assert.Equal(defaultEngineName, engine.Name);
+		}
+
+		[Fact]
+		public void ShouldThrowIfDefaultEngineFactoryNotFound()
+		{
+			const string someEngineName = "SomeEngine";
+			const string defaultEngineName = "DefaultEngine";
+			const string someOtherEngineName = "SomeOtherEngine";
+
+			var someEngineFactory = new Mock<IJsEngineFactory>();
+			someEngineFactory.Setup(x => x.EngineName).Returns(someEngineName);
+			someEngineFactory.Setup(x => x.CreateEngine()).Returns(() =>
+			{
+				var someEngine = new Mock<IJsEngine>();
+				someEngine.Setup(x => x.Name).Returns(someEngineName);
+				return someEngine.Object;
+			});
+
+			var someOtherEngineFactory = new Mock<IJsEngineFactory>();
+			someOtherEngineFactory.Setup(x => x.EngineName).Returns(someOtherEngineName);
+			someOtherEngineFactory.Setup(x => x.CreateEngine()).Returns(() =>
+			{
+				var someOtherEngine = new Mock<IJsEngine>();
+				someOtherEngine.Setup(x => x.Name).Returns(someOtherEngineName);
+				return someOtherEngine.Object;
+			});
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			// JsEngineSwitcher is a singleton :(
+			lock (_engineSwitcherSynchronizer)
+			{
+				var engineSwitcher = JsEngineSwitcher.Instance;
+				engineSwitcher.DefaultEngineName = defaultEngineName;
+
+				var engineFactories = engineSwitcher.EngineFactories;
+				engineFactories.Clear();
+				engineFactories.Add(someEngineFactory.Object);
+				engineFactories.Add(someOtherEngineFactory.Object);
+
+				Assert.Throws<ReactEngineNotFoundException>(() =>
+				{
+					var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+				});
+			}
 		}
 	}
 }
