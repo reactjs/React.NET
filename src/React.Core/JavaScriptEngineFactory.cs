@@ -100,6 +100,10 @@ namespace React
 			{
 				poolConfig.StartEngines = _config.StartEngines.Value;
 			}
+			if (_config.MaxUsagesPerEngine != null)
+			{
+				poolConfig.MaxUsagesPerEngine = _config.MaxUsagesPerEngine.Value;
+			}
 
 			var pool = new JsPool(poolConfig);
 			// Reset the recycle exception on recycle. If there *are* errors loading the scripts
