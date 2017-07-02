@@ -230,20 +230,6 @@ namespace React
 		}
 
 		/// <summary>
-		/// Returns an engine to the pool so it can be reused
-		/// </summary>
-		/// <param name="engine">Engine to return</param>
-		public virtual void ReturnEngineToPool(PooledJsEngine engine)
-		{
-			// This could be called from ReactEnvironment.Dispose if that class is disposed after 
-			// this class. Let's just ignore this if it's disposed.
-			if (!_disposed)
-			{
-				engine.Dispose();
-			}
-		}
-
-		/// <summary>
 		/// Gets a factory for the most appropriate JavaScript engine for the current environment.
 		/// The first functioning JavaScript engine with the lowest priority will be used.
 		/// </summary>

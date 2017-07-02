@@ -400,7 +400,7 @@ namespace React
 		{
 			if (_engineFromPool.IsValueCreated)
 			{
-				_engineFactory.ReturnEngineToPool(_engineFromPool.Value);
+				_engineFromPool.Value.Dispose();
 				_engineFromPool = new Lazy<PooledJsEngine>(() => _engineFactory.GetEngine());
 			}
 		}

@@ -26,11 +26,5 @@ namespace React
 		/// </summary>
 		/// <returns>The JavaScript engine</returns>
 		PooledJsEngine GetEngine();
-
-		/// <summary>
-		/// Returns an engine to the pool so it can be reused
-		/// </summary>
-		/// <param name="engine">Engine to return</param>
-		void ReturnEngineToPool(PooledJsEngine engine);
 	}
 }
