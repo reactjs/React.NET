@@ -68,9 +68,8 @@
       <HintPath>..\packages\Cassette.Views.2.4.2\lib\net40\Cassette.Views.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.2.2.0\lib\net40-client\JavaScriptEngineSwitcher.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="JavaScriptEngineSwitcher.Core, Version=2.4.9.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.2.4.9\lib\net40-client\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />

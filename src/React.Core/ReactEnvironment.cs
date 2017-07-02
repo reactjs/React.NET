@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Core.Helpers;
+using JSPool;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -68,7 +69,7 @@ namespace React
 		/// Contains an engine acquired from a pool of engines. Only used if 
 		/// <see cref="IReactSiteConfiguration.ReuseJavaScriptEngines"/> is enabled.
 		/// </summary>
-		protected Lazy<IJsEngine> _engineFromPool;
+		protected Lazy<PooledJsEngine> _engineFromPool;
 
 		/// <summary>
 		/// List of all components instantiated in this environment
@@ -108,7 +109,7 @@ namespace React
 			_babelTransformer = new Lazy<IBabel>(() => 
 				new Babel(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
-			_engineFromPool = new Lazy<IJsEngine>(() => _engineFactory.GetEngine());
+			_engineFromPool = new Lazy<PooledJsEngine>(() => _engineFactory.GetEngine());
 		}
 
 		/// <summary>
@@ -399,8 +400,8 @@ namespace React
 		{
 			if (_engineFromPool.IsValueCreated)
 			{
-				_engineFactory.ReturnEngineToPool(_engineFromPool.Value);
-				_engineFromPool = new Lazy<IJsEngine>(() => _engineFactory.GetEngine());
+				_engineFromPool.Value.Dispose();
+				_engineFromPool = new Lazy<PooledJsEngine>(() => _engineFactory.GetEngine());
 			}
 		}
 
