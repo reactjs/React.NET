@@ -223,7 +223,7 @@ namespace React
 		/// Gets a JavaScript engine from the pool.
 		/// </summary>
 		/// <returns>The JavaScript engine</returns>
-		public virtual IJsEngine GetEngine()
+		public virtual PooledJsEngine GetEngine()
 		{
 			EnsureValidState();
 			return _pool.GetEngine();
@@ -233,13 +233,13 @@ namespace React
 		/// Returns an engine to the pool so it can be reused
 		/// </summary>
 		/// <param name="engine">Engine to return</param>
-		public virtual void ReturnEngineToPool(IJsEngine engine)
+		public virtual void ReturnEngineToPool(PooledJsEngine engine)
 		{
 			// This could be called from ReactEnvironment.Dispose if that class is disposed after 
 			// this class. Let's just ignore this if it's disposed.
 			if (!_disposed)
 			{
-				_pool.ReturnEngineToPool(engine);	
+				engine.Dispose();
 			}
 		}
 
