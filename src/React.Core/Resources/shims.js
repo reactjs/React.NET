@@ -24,22 +24,14 @@ MockConsole.prototype = {
 			serializedArgs.push(JSON.stringify(arguments[i]));
 		}
 
-		var callstack = this._getCallStack();
-
 		this._calls.push({
 			method: methodName,
 			args: serializedArgs,
-			stack: '"Call stack: ' + (callstack || 'not available') + '"'
+			stack: '\nCall stack: ' + (new Error().stack || 'not available')
 		});
 	},
 	_formatCall: function(call) {
-		return 'console.' + call.method + '("[.NET]", ' + call.args.join(', ') + ',' + call.stack + ');';
-	},
-	_getCallStack: function() {
-		var stack = new Error().stack;
-		return stack
-			? stack.replace(/[\n\r]/g, '\\n')
-			: '';
+		return 'console.' + call.method + '("[.NET]", ' + call.args.join(', ') + ', ' + JSON.stringify(call.stack) + ');';
 	},
 	getCalls: function() {
 		return this._calls.map(this._formatCall).join('\n');
