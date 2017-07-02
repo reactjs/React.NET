@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs;..\React.AspNet\BabelFileOptions.cs;..\React.AspNet\BabelFileSystem.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs;..\React.AspNet.Middleware\BabelFileOptions.cs;..\React.AspNet.Middleware\BabelFileSystem.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
   </ItemGroup>
 
