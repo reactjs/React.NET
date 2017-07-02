@@ -23,6 +23,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<ItemGroup>
 		<PackageAssemblies Include="Cassette.React" />
 		<PackageAssemblies Include="React.AspNet" />
+		<PackageAssemblies Include="React.AspNet.Middleware" />
 		<PackageAssemblies Include="React.Core" />
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.Owin" />
