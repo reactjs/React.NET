@@ -9,6 +9,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace React.MSBuild
 {
@@ -36,6 +37,8 @@ namespace React.MSBuild
 		/// <returns></returns>
 		private static bool Initialize()
 		{
+			AssemblyBindingRedirect.Enable();
+
 			// All "per-request" registrations should be singletons in MSBuild, since there's no
 			// such thing as a "request"
 			Initializer.Initialize(requestLifetimeRegistration: registration => registration.AsSingleton());
