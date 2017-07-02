@@ -25,6 +25,12 @@ namespace React.Exceptions
 		/// </summary>
 		public ReactEngineNotFoundException() : base(GetMessage()) { }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ReactEngineNotFoundException"/> class.
+		/// </summary>
+		/// <param name="message">The message that describes the error.</param>
+		public ReactEngineNotFoundException(string message) : base(message) { }
+
 #if NET40
 		/// <summary>
 		/// Used by deserialization
@@ -40,8 +46,8 @@ namespace React.Exceptions
 		{
 			return
 				"No usable JavaScript engine was found. Please install a JavaScript engine such " +
-				"as React.JavaScriptEngine.ClearScriptV8 (on Windows) or " +
-				"React.JavaScriptEngine.VroomJs (on Linux and Mac OS X). Refer to the ReactJS.NET " +
+				"as JavaScriptEngineSwitcher.V8.V8JsEngine (on Windows) or " +
+				"React.VroomJsEngine (on Linux and Mac OS X). Refer to the ReactJS.NET " +
 				"documentation for more details.";
 		}
 	}
