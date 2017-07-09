@@ -34,25 +34,5 @@ namespace React.Tests.Router
 				result
 			);
 		}
-
-		//[Fact]
-		//public void ShouldUsePolifyfillSuccessfully()
-		//{
-		//    var mocks = new ReactEnvironmentTest.Mocks();
-		//    var environment = mocks.CreateReactEnvironment();
-		//    //environment.Setup(x => x.Execute<bool>("typeof Object.assign === 'function'")).Returns(false);
-		//    //environment.Setup(x => x.Execute<string>("JSON.stringify(context);")).Returns("{}");
-
-		//    var config = new Mock<IReactSiteConfiguration>();
-		//    config.Setup(x => x.UseServerSideRendering).Returns(false);
-
-		//    var component = new ReactRouterComponent(environment, config.Object, "Foo", "container", "/bar")
-		//    {
-		//        Props = new { hello = "World" }
-		//    };
-		//    var html = component.RenderRouterWithContext(true);
-		//    var result = environment.Execute<string>(@"Object.assign(""a"", { sup=""yo""})");
-		//    Assert.Equal(@"{ [string: ""a""], sup: ""yo""", result);
-		//}
 	}
 }

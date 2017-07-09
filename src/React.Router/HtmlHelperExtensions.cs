@@ -37,35 +37,18 @@ namespace React.Router
 		{
 			get
 			{
-				try
-				{
-					return ReactEnvironment.Current;
-				}
-				catch (TinyIoCResolutionException ex)
-				{
-					throw new ReactNotInitialisedException(
-#if NET451
-						"ReactJS.NET has not been initialised correctly.",
-#else
-						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
-						"called services.AddReact() and app.UseReact() in your Startup.cs file.",
-#endif
-						ex
-					);
-				}
+				return ReactEnvironment.GetCurrentOrThrow;
 			}
 		}
 
 		/// <summary>
 		/// Render a React StaticRouter Component with context object.
 		/// Can optionally be provided with a custom context handler to handle the various status codes.
-		/// 
 		/// </summary>
 		/// <param name="htmlHelper">MVC Razor <see cref="IHtmlHelper"/></param>
 		/// <param name="componentName">Name of React Static Router component. Expose component globally to ReactJS.NET</param>
 		/// <param name="props">Props to initialise the component with</param>
 		/// <param name="path">F.x. from Request.Path. Used by React Static Router to determine context and routing.</param>
-		/// <param name="Response">Used either by contextHandler or internally to modify the Response status code and redirect.</param>
 		/// <param name="contextHandler">Optional custom context handler, can be used instead of providing a Response object</param>
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
@@ -78,7 +61,6 @@ namespace React.Router
 			string componentName,
 			T props,
 			string path = null,
-			HttpResponse Response = null,
 			string htmlTag = null,
 			string containerId = null,
 			bool clientOnly = false,
@@ -89,12 +71,17 @@ namespace React.Router
 		{
 			try
 			{
+				var response = htmlHelper.ViewContext.HttpContext.Response;
 				path = path ?? htmlHelper.ViewContext.HttpContext.Request.Path;
-				Response = Response ?? htmlHelper.ViewContext.HttpContext.Response;
 
 				var reactComponent 
-					= Environment.CreateRouterComponent
-						(componentName, props, path, containerId, clientOnly);
+					= Environment.CreateRouterComponent(
+						componentName, 
+						props, 
+						path, 
+						containerId, 
+						clientOnly
+					);
 
 				if (!string.IsNullOrEmpty(htmlTag))
 				{
@@ -112,12 +99,12 @@ namespace React.Router
 					// Use provided contextHandler
 					if (contextHandler != null)
 					{
-						contextHandler(Response, executionResult.Context);
+						contextHandler(response, executionResult.Context);
 					}
 					// Handle routing context internally
 					else
 					{
-						HandleRoutingContext(executionResult.Context, Response);
+						SetServerResponse.ModifyResponse(executionResult.Context, response);
 					}
 				}
 
@@ -126,41 +113,6 @@ namespace React.Router
 			finally
 			{
 				Environment.ReturnEngineToPool();
-			}
-		}
-
-		private static void HandleRoutingContext(RoutingContext context, HttpResponse Response)
-		{
-			var statusCode = context.status.Value;
-
-			// 300-399
-			if (statusCode >= 300 && statusCode < 400)
-			{
-				if (!string.IsNullOrEmpty(context.url))
-				{
-					if (statusCode == 301)
-					{
-
-#if NET451
-
-						Response.RedirectPermanent(context.url);
-#else
-						Response.Redirect(context.url, true);
-#endif
-					}
-					else // 302 and all others
-					{
-						Response.Redirect(context.url);
-					}
-				}
-				else
-				{
-					throw new ReactRouterException("Router requested redirect but no url provided.");
-				}
-			}
-			else
-			{
-				Response.StatusCode = statusCode;
 			}
 		}
 	}

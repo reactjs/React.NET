@@ -142,7 +142,7 @@ namespace React
 					attributes,
 					html,
 					ContainerTag
-					);
+				);
 			}
 			catch (JsRuntimeException ex)
 			{

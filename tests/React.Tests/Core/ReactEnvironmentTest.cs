@@ -113,7 +113,7 @@ namespace React.Tests.Core
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 			mocks.Config.Setup(x => x.ReuseJavaScriptEngines).Returns(true);
-			 
+
 			environment.CreateComponent("ComponentName", new { });
 			mocks.EngineFactory.Verify(x => x.GetEngine(), Times.Once);
 			environment.ReturnEngineToPool();
@@ -161,6 +161,17 @@ namespace React.Tests.Core
 			public ReactEnvironment CreateReactEnvironment()
 			{
 				return new ReactEnvironment(
+					EngineFactory.Object,
+					Config.Object,
+					Cache.Object,
+					FileSystem.Object,
+					FileCacheHash.Object
+				);
+			}
+			
+			public Mock<ReactEnvironment> CreateMockedReactEnvironment()
+			{
+				return new Mock<ReactEnvironment>(
 					EngineFactory.Object,
 					Config.Object,
 					Cache.Object,

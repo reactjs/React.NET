@@ -17,34 +17,24 @@ namespace React.Tests.Router
 {
 	public class ReactEnvironmentExtensionsTest
 	{
-		/// <summary>
-		/// Creates a mock <see cref="IReactEnvironment"/> and registers it with the IoC container
-		/// This is only required because <see cref="HtmlHelperExtensions"/> can not be
-		/// injected :(
-		/// </summary>
-		private ReactEnvironment ConfigureMockReactEnvironment()
+		[Fact]
+		public void EnvironmentShouldGetCalledClientOnly()
 		{
-			var mocks = new ReactEnvironmentTest.Mocks();
+			var environment = new Mock<IReactEnvironment>();
+			AssemblyRegistration.Container.Register(environment.Object);
+			var config = new Mock<IReactSiteConfiguration>();
+			AssemblyRegistration.Container.Register(config.Object);
 
-			var environment = mocks.CreateReactEnvironment();
-			AssemblyRegistration.Container.Register<IReactEnvironment>(environment);
-			return environment;
+			var component = ReactEnvironmentExtensions.CreateRouterComponent(
+				environment.Object,
+				"ComponentName",
+				new { },
+				"/",
+				null,
+				true
+			);
+
+			environment.Verify(x => x.CreateComponent(It.IsAny<IReactComponent>(), true));
 		}
-
-        //[Fact]
-        //public void EnvironmentShouldGetCalledClientOnly()
-        //{
-        //  var environment = ConfigureMockReactEnvironment();
-        //	var component = ReactEnvironmentExtensions.CreateRouterComponent(
-        //		environment.Object,
-        //		"ComponentName",
-        //		new { },
-        //		"/",
-        //		null,
-        //		true
-        //	);
-
-        //	environment.Verify(x => x.CreateComponent("ComponentName", new { }, null, true));
-        //}
-    }
+	}
 }

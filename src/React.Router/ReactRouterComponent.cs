@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
- using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -50,11 +50,6 @@ namespace React.Router
 		/// <returns>Object containing HTML in string format and the React Router context object</returns>
 		public virtual ExecutionResult RenderRouterWithContext(bool renderContainerOnly = false, bool renderServerOnly = false)
 		{
-			if (!EngineSupportsObjectAssign())
-			{
-				_environment.Execute(objectAssignPolyfill);
-			}
-
 			_environment.Execute("var context = {};");
 
 			var html = RenderHtml(renderContainerOnly, renderServerOnly);
@@ -99,43 +94,5 @@ namespace React.Router
 				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
 			);
 		}
-
-		/// <summary>
-		/// Ensure js engine supports Object.assign
-		/// </summary>
-		public virtual bool EngineSupportsObjectAssign()
-		{
-			return _environment.Execute<bool>(
-				"typeof Object.assign === 'function'"
-			);
-		}
-
-		/// <summary>
-		/// Polyfill for engines that do not support Object.assign
-		/// </summary>
-		protected static string objectAssignPolyfill =
-			@"Object.assign = function(target, varArgs) { // .length of function is 2
-				'use strict';
-				if (target == null) { // TypeError if undefined or null
-				  throw new TypeError('Cannot convert undefined or null to object');
-				}
-
-				var to = Object(target);
-
-				for (var index = 1; index < arguments.length; index++) {
-				  var nextSource = arguments[index];
-
-				  if (nextSource != null) { // Skip over if undefined or null
-					for (var nextKey in nextSource) {
-					  // Avoid bugs when hasOwnProperty is shadowed
-					  if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-						to[nextKey] = nextSource[nextKey];
-					  }
-					}
-				  }
-				}
-				return to;
-			  };
-			";
 	}
 }
