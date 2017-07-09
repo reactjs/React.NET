@@ -20,11 +20,6 @@ namespace React.Tests.Router
 {
 	public class HtmlHelperExtensionsTest
 	{
-		public interface IReactEnvironmentMock : IReactEnvironment
-		{
-			IJsEngine Engine { get; set; }
-		}
-
 		/// <summary>
 		/// Creates a mock <see cref="IReactEnvironment"/> and registers it with the IoC container
 		/// This is only required because <see cref="HtmlHelperExtensions"/> can not be
@@ -53,12 +48,16 @@ namespace React.Tests.Router
 			return config;
 		}
 
-		class HtmlHelperMock
+		/// <summary>
+		/// Mock an html helper with a mocked response object.
+		/// Used when testing for server response modification.
+		/// </summary>
+		class HtmlHelperMocks
 		{
 			public Mock<HtmlHelper> htmlHelper;
 			public Mock<HttpResponseBase> httpResponse;
 
-			public HtmlHelperMock()
+			public HtmlHelperMocks()
 			{
 				var viewDataContainer = new Mock<IViewDataContainer>();
 				var viewContext = new Mock<ViewContext>();
@@ -70,25 +69,51 @@ namespace React.Tests.Router
 			}
 		}
 
+		/// <summary>
+		/// Mocks alot of common functionality related to rendering a 
+		/// React Router component.
+		/// </summary>
+		class ReactRouterMocks
+		{
+			public Mock<IReactSiteConfiguration> config;
+			public Mock<IReactEnvironment> environment;
+			public Mock<ReactRouterComponent> component;
+
+			public ReactRouterMocks(
+				Mock<IReactSiteConfiguration> conf,
+				Mock<IReactEnvironment> env
+			)
+			{
+				config = conf;
+				environment = env;
+
+				component = new Mock<ReactRouterComponent>(
+					environment.Object,
+					config.Object,
+					"ComponentName",
+					"",
+					"/"
+				);
+				var execResult = new Mock<ExecutionResult>();
+
+				component.Setup(x => x.RenderRouterWithContext(It.IsAny<bool>(), It.IsAny<bool>()))
+					.Returns(execResult.Object);
+				environment.Setup(x => x.CreateComponent(
+					It.IsAny<IReactComponent>(),
+					It.IsAny<bool>()
+				)).Returns(component.Object);
+				environment.Setup(x => x.Execute<string>("JSON.stringify(context);"))
+							.Returns("{ }");
+			}
+		}
+
 		[Fact]
 		public void EngineIsReturnedToPoolAfterRender()
 		{
-			ConfigureMockConfiguration();
-
-			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
-
+			var config = ConfigureMockConfiguration();
 			var environment = ConfigureMockEnvironment();
-			environment.Setup(x => x.CreateComponent(
-				"ComponentName",
-				new { },
-				null,
-				true
-			)).Returns(component.Object);
-			environment.Setup(x => x.Execute<string>("JSON.stringify(context);"))
-						.Returns("{ }");
-
-			var htmlHelperMock = new HtmlHelperMock();
+			var routerMocks = new ReactRouterMocks(config, environment);
+			var htmlHelperMock = new HtmlHelperMocks();
 
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Never);
 			var result = HtmlHelperExtensions.ReactRouterWithContext(
@@ -103,53 +128,47 @@ namespace React.Tests.Router
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
 
-		//[Fact]
-		//public void ReactWithClientOnlyTrueShouldCallRenderHtmlWithTrue()
-		//{
-		//	var component = new Mock<IReactComponent>();
-		//	component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
-		//	var environment = ConfigureMockEnvironment();
-		//	environment.Setup(x => x.CreateComponent(
-		//		"ComponentName",
-		//		new { },
-		//		null,
-		//		true
-		//	)).Returns(component.Object);
+		[Fact]
+		public void ReactWithClientOnlyTrueShouldCallRenderHtmlWithTrue()
+		{
+			var config = ConfigureMockConfiguration();
 
-		//	var result = HtmlHelperExtensions.ReactRouterWithContext(
-		//		htmlHelper: null,
-		//		componentName: "ComponentName",
-		//		props: new { },
-		//		htmlTag: "span",
-		//		clientOnly: true,
-		//		serverOnly: true
-		//	);
-		//	component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
-		//}
+			var htmlHelperMock = new HtmlHelperMocks();
+			var environment = ConfigureMockEnvironment();
+			var routerMocks = new ReactRouterMocks(config, environment);
 
-		//[Fact]
-		//public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue()
-		//{
-		//	var component = new Mock<IReactComponent>();
-		//	component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
-		//	var environment = ConfigureMockEnvironment();
-		//	environment.Setup(x => x.CreateComponent(
-		//		"ComponentName",
-		//		new { },
-		//		null,
-		//		true
-		//	)).Returns(component.Object);
+			var result = HtmlHelperExtensions.ReactRouterWithContext(
+				htmlHelper: htmlHelperMock.htmlHelper.Object,
+				componentName: "ComponentName",
+				props: new { },
+				path: "/",
+				htmlTag: "span",
+				clientOnly: true,
+				serverOnly: false
+			);
+			routerMocks.component.Verify(x => x.RenderRouterWithContext(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false)), Times.Once);
+		}
 
-		//	var result = HtmlHelperExtensions.React(
-		//		htmlHelper: null,
-		//		componentName: "ComponentName",
-		//		props: new { },
-		//		htmlTag: "span",
-		//		clientOnly: true,
-		//		serverOnly: true
-		//	);
-		//	component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
-		//}
+		[Fact]
+		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue()
+		{
+			var config = ConfigureMockConfiguration();
+
+			var htmlHelperMock = new HtmlHelperMocks();
+			var environment = ConfigureMockEnvironment();
+			var routerMocks = new ReactRouterMocks(config, environment);
+
+			var result = HtmlHelperExtensions.ReactRouterWithContext(
+				htmlHelper: htmlHelperMock.htmlHelper.Object,
+				componentName: "ComponentName",
+				props: new { },
+				path: "/",
+				htmlTag: "span",
+				clientOnly: false,
+				serverOnly: true
+			);
+			routerMocks.component.Verify(x => x.RenderRouterWithContext(It.Is<bool>(y => y == false), It.Is<bool>(z => z == true)), Times.Once);
+		}
 
 		[Fact]
 		public void ShouldModifyStatusCode()
@@ -160,7 +179,7 @@ namespace React.Tests.Router
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns("{ status: 200 }");
 
-			var htmlHelperMock = new HtmlHelperMock();
+			var htmlHelperMock = new HtmlHelperMocks();
 
 			HtmlHelperExtensions.ReactRouterWithContext(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
@@ -180,7 +199,7 @@ namespace React.Tests.Router
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns("{ status: 200 }");
 
-			var htmlHelperMock = new HtmlHelperMock();
+			var htmlHelperMock = new HtmlHelperMocks();
 
 			HtmlHelperExtensions.ReactRouterWithContext(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
@@ -201,7 +220,7 @@ namespace React.Tests.Router
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns(@"{ status: 301, url: ""/foo"" }");
 
-			var htmlHelperMock = new HtmlHelperMock();
+			var htmlHelperMock = new HtmlHelperMocks();
 
 			HtmlHelperExtensions.ReactRouterWithContext(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
@@ -221,7 +240,7 @@ namespace React.Tests.Router
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns("{ status: 301 }");
 
-			var htmlHelperMock = new HtmlHelperMock();
+			var htmlHelperMock = new HtmlHelperMocks();
 
 			Assert.Throws<ReactRouterException>(() =>
 			
