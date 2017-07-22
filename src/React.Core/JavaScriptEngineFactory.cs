@@ -100,6 +100,10 @@ namespace React
 			{
 				poolConfig.StartEngines = _config.StartEngines.Value;
 			}
+			if (_config.MaxUsagesPerEngine != null)
+			{
+				poolConfig.MaxUsagesPerEngine = _config.MaxUsagesPerEngine.Value;
+			}
 
 			var pool = new JsPool(poolConfig);
 			// Reset the recycle exception on recycle. If there *are* errors loading the scripts
@@ -223,24 +227,10 @@ namespace React
 		/// Gets a JavaScript engine from the pool.
 		/// </summary>
 		/// <returns>The JavaScript engine</returns>
-		public virtual IJsEngine GetEngine()
+		public virtual PooledJsEngine GetEngine()
 		{
 			EnsureValidState();
 			return _pool.GetEngine();
-		}
-
-		/// <summary>
-		/// Returns an engine to the pool so it can be reused
-		/// </summary>
-		/// <param name="engine">Engine to return</param>
-		public virtual void ReturnEngineToPool(IJsEngine engine)
-		{
-			// This could be called from ReactEnvironment.Dispose if that class is disposed after 
-			// this class. Let's just ignore this if it's disposed.
-			if (!_disposed)
-			{
-				_pool.ReturnEngineToPool(engine);	
-			}
 		}
 
 		/// <summary>
@@ -251,6 +241,23 @@ namespace React
 		private static Func<IJsEngine> GetFactory(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
 		{
 			EnsureJsEnginesRegistered(jsEngineSwitcher, allowMsie);
+
+			string defaultEngineName = jsEngineSwitcher.DefaultEngineName;
+			if (!string.IsNullOrWhiteSpace(defaultEngineName))
+			{
+				var engineFactory = jsEngineSwitcher.EngineFactories.Get(defaultEngineName);
+				if (engineFactory != null)
+				{
+					return engineFactory.CreateEngine;
+				}
+				else
+				{
+					throw new ReactEngineNotFoundException(
+						"Could not find a factory, that creates an instance of the JavaScript " +
+						"engine with name `" + defaultEngineName + "`.");
+				}
+			}
+
 			foreach (var engineFactory in jsEngineSwitcher.EngineFactories)
 			{
 				IJsEngine engine = null;

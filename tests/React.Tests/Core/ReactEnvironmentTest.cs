@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JavaScriptEngineSwitcher.Core;
+using JSPool;
 using Moq;
 using Xunit;
 using React.Exceptions;
@@ -138,7 +139,7 @@ namespace React.Tests.Core
 
 		public class Mocks
 		{
-			public Mock<IJsEngine> Engine { get; private set; }
+			public Mock<PooledJsEngine> Engine { get; private set; }
 			public Mock<IJavaScriptEngineFactory> EngineFactory { get; private set; }
 			public Mock<IReactSiteConfiguration> Config { get; private set; }
 			public Mock<ICache> Cache { get; private set; }
@@ -146,7 +147,7 @@ namespace React.Tests.Core
 			public Mock<IFileCacheHash> FileCacheHash { get; private set; }
 			public Mocks()
 			{
-				Engine = new Mock<IJsEngine>();
+				Engine = new Mock<PooledJsEngine>();
 				EngineFactory = new Mock<IJavaScriptEngineFactory>();
 				Config = new Mock<IReactSiteConfiguration>();
 				Cache = new Mock<ICache>();

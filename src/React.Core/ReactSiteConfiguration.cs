@@ -192,6 +192,21 @@ namespace React
 		}
 
 		/// <summary>
+		/// Gets or sets the maximum number of times an engine can be reused before it is disposed.
+		/// <c>0</c> is unlimited. Defaults to <c>100</c>.
+		/// </summary>
+		public int? MaxUsagesPerEngine { get; set; }
+		/// <summary>
+		/// Sets the maximum number of times an engine can be reused before it is disposed.
+		/// <c>0</c> is unlimited. Defaults to <c>100</c>.
+		/// </summary>
+		public IReactSiteConfiguration SetMaxUsagesPerEngine(int? maxUsagesPerEngine)
+		{
+			MaxUsagesPerEngine = maxUsagesPerEngine;
+			return this;
+		}
+
+		/// <summary>
 		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
 		/// </summary>
 		public bool AllowMsieEngine { get; set; }

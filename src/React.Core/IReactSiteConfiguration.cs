@@ -103,6 +103,17 @@ namespace React
 		IReactSiteConfiguration SetMaxEngines(int? maxEngines);
 
 		/// <summary>
+		/// Gets or sets the maximum number of times an engine can be reused before it is disposed.
+		/// <c>0</c> is unlimited. Defaults to <c>100</c>.
+		/// </summary>
+		int? MaxUsagesPerEngine { get; set; }
+		/// <summary>
+		/// Sets the maximum number of times an engine can be reused before it is disposed.
+		/// <c>0</c> is unlimited. Defaults to <c>100</c>.
+		/// </summary>
+		IReactSiteConfiguration SetMaxUsagesPerEngine(int? maxUsagesPerEngine);
+
+		/// <summary>
 		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
 		/// </summary>
 		[Obsolete("This should be managed in the JavaScriptEngineSwitcher configuration instead")]

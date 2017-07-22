@@ -1,5 +1,5 @@
-﻿using System;
-using JavaScriptEngineSwitcher.Core;
+﻿using JavaScriptEngineSwitcher.Core;
+using JSPool;
 
 namespace React
 {
@@ -25,12 +25,6 @@ namespace React
 		/// Gets a JavaScript engine from the pool.
 		/// </summary>
 		/// <returns>The JavaScript engine</returns>
-		IJsEngine GetEngine();
-
-		/// <summary>
-		/// Returns an engine to the pool so it can be reused
-		/// </summary>
-		/// <param name="engine">Engine to return</param>
-		void ReturnEngineToPool(IJsEngine engine);
+		PooledJsEngine GetEngine();
 	}
 }

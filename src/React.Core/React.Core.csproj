@@ -26,16 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="2.3.2" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="2.2.0" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="2.3.2" />
-    <PackageReference Include="JSPool" Version="2.0.1" />
-    <PackageReference Include="MsieJavaScriptEngine" Version="2.1.2" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="2.4.8" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="2.4.9" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="2.4.9" />
+    <PackageReference Include="JSPool" Version="3.0.1" />
+    <PackageReference Include="MsieJavaScriptEngine" Version="2.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="2.2.0" />
+    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="2.4.2" />
     <PackageReference Include="VroomJs" Version="1.2.3" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System" />
