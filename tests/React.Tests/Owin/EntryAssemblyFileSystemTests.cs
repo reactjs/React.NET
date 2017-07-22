@@ -14,7 +14,7 @@ namespace React.Tests.Owin
 {
 	public class EntryAssemblyFileSystemTests
 	{
-        [Theory]
+		[Theory]
 		[InlineData("C:\\", "~/", "C:\\")]
 		[InlineData("C:\\", "~/foo/bar.js", "C:\\foo\\bar.js")]
 		public void MapPath(string rootPath, string relativePath, string expected)

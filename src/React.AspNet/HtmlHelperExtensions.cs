@@ -39,22 +39,7 @@ namespace React.AspNet
 		{
 			get
 			{
-				try
-				{
-					return ReactEnvironment.Current;
-				}
-				catch (TinyIoCResolutionException ex)
-				{
-					throw new ReactNotInitialisedException(
-#if LEGACYASPNET
-						"ReactJS.NET has not been initialised correctly.",
-#else
-						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
-						"called services.AddReact() and app.UseReact() in your Startup.cs file.",
-#endif
-						ex
-					);
-				}
+				return ReactEnvironment.GetCurrentOrThrow;
 			}
 		}
 

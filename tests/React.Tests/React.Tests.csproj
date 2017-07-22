@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\React.Core\React.Core.csproj" />
     <ProjectReference Include="..\..\src\React.Owin\React.Owin.csproj" />
+    <ProjectReference Include="..\..\src\React.Router\React.Router.csproj" />
     <ProjectReference Include="..\..\src\React.Web.Mvc4\React.Web.Mvc4.csproj" />
   </ItemGroup>
 

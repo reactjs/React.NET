@@ -123,7 +123,21 @@ namespace React.Tests.Core
 			mocks.EngineFactory.Verify(x => x.GetEngine(), Times.AtLeast(2));
 		}
 
-		private class Mocks
+		[Fact]
+		public void CreatesIReactComponent()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			var component = new Mock<IReactComponent>();
+
+			environment.CreateComponent(component.Object);
+
+			// A single nameless component was successfully added!
+			Assert.Equal(";\r\n", environment.GetInitJavaScript());
+		}
+
+		public class Mocks
 		{
 			public Mock<PooledJsEngine> Engine { get; private set; }
 			public Mock<IJavaScriptEngineFactory> EngineFactory { get; private set; }
@@ -148,6 +162,17 @@ namespace React.Tests.Core
 			public ReactEnvironment CreateReactEnvironment()
 			{
 				return new ReactEnvironment(
+					EngineFactory.Object,
+					Config.Object,
+					Cache.Object,
+					FileSystem.Object,
+					FileCacheHash.Object
+				);
+			}
+			
+			public Mock<ReactEnvironment> CreateMockedReactEnvironment()
+			{
+				return new Mock<ReactEnvironment>(
 					EngineFactory.Object,
 					Config.Object,
 					Cache.Object,

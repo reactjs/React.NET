@@ -85,6 +85,14 @@ namespace React
 		IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false);
 
 		/// <summary>
+		/// Adds the provided <see cref="IReactComponent"/> to the list of components to render client side.
+		/// </summary>
+		/// <param name="component">Component to add to client side render list</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
+		/// <returns>The component</returns>
+		IReactComponent CreateComponent(IReactComponent component, bool clientOnly = false);
+
+		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will 
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>

@@ -18,6 +18,7 @@ using JavaScriptEngineSwitcher.Core.Helpers;
 using JSPool;
 using Newtonsoft.Json;
 using React.Exceptions;
+using React.TinyIoC;
 
 namespace React
 {
@@ -83,6 +84,34 @@ namespace React
 		public static IReactEnvironment Current
 		{
 			get { return AssemblyRegistration.Container.Resolve<IReactEnvironment>(); }
+		}
+
+		/// <summary>
+		/// Gets the <see cref="IReactEnvironment"/> for the current request. If no environment
+		/// has been created for the current request, creates a new one.
+		/// Also provides more specific error information in the event that ReactJS.NET is misconfigured.
+		/// </summary>
+		public static IReactEnvironment GetCurrentOrThrow
+		{
+			get
+			{
+				try
+				{
+					return Current;
+				}
+				catch (TinyIoCResolutionException ex)
+				{
+					throw new ReactNotInitialisedException(
+#if NET451
+						"ReactJS.NET has not been initialised correctly.",
+#else
+						"ReactJS.NET has not been initialised correctly. Please ensure you have " +
+						"called services.AddReact() and app.UseReact() in your Startup.cs file.",
+#endif
+						ex
+					);
+				}
+			}
 		}
 
 		/// <summary>
@@ -270,6 +299,23 @@ namespace React
 			{
 				Props = props
 			};
+			_components.Add(component);
+			return component;
+		}
+
+		/// <summary>
+		/// Adds the provided <see cref="IReactComponent"/> to the list of components to render client side.
+		/// </summary>
+		/// <param name="component">Component to add to client side render list</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
+		/// <returns>The component</returns>
+		public virtual IReactComponent CreateComponent(IReactComponent component, bool clientOnly = false)
+		{
+			if (!clientOnly)
+			{
+				EnsureUserScriptsLoaded();
+			}
+
 			_components.Add(component);
 			return component;
 		}
