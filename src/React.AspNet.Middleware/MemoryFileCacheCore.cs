@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2016-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,7 +7,6 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#if NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
@@ -89,4 +88,3 @@ namespace React.AspNet
 		}
 	}
 }
-#endif
