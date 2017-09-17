@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -56,7 +56,7 @@ namespace React.Router
 		/// <param name="serverOnly">Skip rendering React specific data-attributes during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
 		/// <returns><see cref="IHtmlString"/> containing the rendered markup for provided React Router component</returns>
-		public static IHtmlString ReactRouterWithContext<T>(
+		public static IHtmlString ReactRouter<T>(
 			this IHtmlHelper htmlHelper, 
 			string componentName,
 			T props,
