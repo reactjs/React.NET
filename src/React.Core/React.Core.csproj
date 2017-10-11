@@ -20,6 +20,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="node_modules\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <None Remove="node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
     <EmbeddedResource Include="Resources\shims.js;Resources\react.generated.js;Resources\react.generated.min.js;Resources\babel.generated.min.js" />
