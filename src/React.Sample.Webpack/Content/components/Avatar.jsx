@@ -3,16 +3,17 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
 var React = require('react');
 
-var Avatar = React.createClass({
-	propTypes: {
-		author: React.PropTypes.object.isRequired	
-	},
+class Avatar extends React.Component {
+	static propTypes = {
+		author: PropTypes.object.isRequired
+	};
+
 	render() {
 		return (
 			<img
@@ -23,10 +24,11 @@ var Avatar = React.createClass({
 				className="commentPhoto"
 			/>
 		);
-	},
-	getPhotoUrl(author) {
-		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
 	}
-});
+
+	getPhotoUrl = (author) => {
+		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
+	};
+}
 
 module.exports = Avatar;

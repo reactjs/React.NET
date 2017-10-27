@@ -8,19 +8,19 @@
  */
 
 class CommentsBox extends React.Component {
-	constructor(props) {
-		super(props);
+	static propTypes = {
+		initialComments: React.PropTypes.array.isRequired,
+		page: React.PropTypes.number
+	};
 
-		this.state = {
+		state = {
 			comments: this.props.initialComments,
 			page: this.props.page,
 			hasMore: true,
 			loadingMore: false
-		}
-	}
+	};
 
-
-	loadMoreClicked(evt) {
+	loadMoreClicked = (evt) => {
 		var nextPage = this.state.page + 1;
 		this.setState({
 			page: nextPage,
@@ -41,7 +41,7 @@ class CommentsBox extends React.Component {
 		};
 		xhr.send();
 		evt.preventDefault();
-	}
+	};
 
 	render() {
 		var commentNodes = this.state.comments.map(comment =>
@@ -59,27 +59,26 @@ class CommentsBox extends React.Component {
 		);
 	}
 
-	renderMoreLink() {
+	renderMoreLink = () => {
 		if (this.state.loadingMore) {
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
 			return (
-				<a href={'/comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked.bind(this)}>
+				<a href={'/comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked}>
 					Load More
 				</a>
 			);
 		} else {
 			return <em>No more comments</em>;
 		}
-	}
-}
-
-CommentsBox.propTypes = {
-	initialComments: PropTypes.array.isRequired,
-	page: PropTypes.number
+	};
 }
 
 class Comment extends React.Component {
+	static propTypes = {
+		author: React.PropTypes.object.isRequired
+	};
+
 	render() {
 		return (
 			<li>
@@ -90,11 +89,12 @@ class Comment extends React.Component {
 		);
 	}
 }
-Comment.propTypes = {
-	author: PropTypes.object.isRequired
-};
 
 class Avatar extends React.Component {
+	static propTypes = {
+		author: React.PropTypes.object.isRequired
+	};
+
 	render() {
 		return (
 			<img
@@ -107,10 +107,7 @@ class Avatar extends React.Component {
 		);
 	}
 
-	getPhotoUrl(author) {
+	getPhotoUrl = (author) => {
 		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
-	}
+	};
 }
-Avatar.propTypes = {
-	author: PropTypes.object.isRequired
-};
