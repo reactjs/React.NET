@@ -38,7 +38,10 @@ class CommentsBox extends React.Component {
 			});
 		};
 		xhr.send();
-		evt.preventDefault();
+
+		if (evt.preventDefault) {
+			evt.preventDefault();
+		}
 	};
 
 	componentDidMount() {
