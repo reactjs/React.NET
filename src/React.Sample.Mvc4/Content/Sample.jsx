@@ -3,23 +3,23 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-var CommentsBox = React.createClass({
-	propTypes: {
-		initialComments: React.PropTypes.array.isRequired,
-		page: React.PropTypes.number
-	},
-	getInitialState() {
-		return {
+class CommentsBox extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
 			comments: this.props.initialComments,
 			page: this.props.page,
 			hasMore: true,
 			loadingMore: false
-		};
-	},
+		}
+	}
+
+
 	loadMoreClicked(evt) {
 		var nextPage = this.state.page + 1;
 		this.setState({
@@ -41,7 +41,8 @@ var CommentsBox = React.createClass({
 		};
 		xhr.send();
 		evt.preventDefault();
-	},
+	}
+
 	render() {
 		var commentNodes = this.state.comments.map(comment =>
 			<Comment author={comment.Author}>{comment.Text}</Comment>
@@ -56,13 +57,14 @@ var CommentsBox = React.createClass({
 				{this.renderMoreLink()}
 			</div>
 		);
-	},
+	}
+
 	renderMoreLink() {
 		if (this.state.loadingMore) {
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
 			return (
-				<a href={'/comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked}>
+				<a href={'/comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked.bind(this)}>
 					Load More
 				</a>
 			);
@@ -70,12 +72,14 @@ var CommentsBox = React.createClass({
 			return <em>No more comments</em>;
 		}
 	}
-});
+}
 
-var Comment = React.createClass({
-	propTypes: {
-		author: React.PropTypes.object.isRequired
-	},
+CommentsBox.propTypes = {
+	initialComments: PropTypes.array.isRequired,
+	page: PropTypes.number
+}
+
+class Comment extends React.Component {
 	render() {
 		return (
 			<li>
@@ -85,12 +89,12 @@ var Comment = React.createClass({
 			</li>
 		);
 	}
-});
+}
+Comment.propTypes = {
+	author: PropTypes.object.isRequired
+};
 
-var Avatar = React.createClass({
-	propTypes: {
-		author: React.PropTypes.object.isRequired	
-	},
+class Avatar extends React.Component {
 	render() {
 		return (
 			<img
@@ -101,8 +105,12 @@ var Avatar = React.createClass({
 				className="commentPhoto"
 			/>
 		);
-	},
+	}
+
 	getPhotoUrl(author) {
 		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
 	}
-});
+}
+Avatar.propTypes = {
+	author: PropTypes.object.isRequired
+};
