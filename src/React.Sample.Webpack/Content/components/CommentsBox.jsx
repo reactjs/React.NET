@@ -32,6 +32,7 @@ class CommentsBox extends React.Component {
 		var url = evt.target.href;
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
+		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.onload = () => {
 			var data = JSON.parse(xhr.responseText);
 			this.setState({
