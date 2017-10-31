@@ -9,6 +9,7 @@
 
 using System.Diagnostics;
 using System.Web;
+using System.Web.Caching;
 using System.Web.Hosting;
 using React.TinyIoC;
 
@@ -47,7 +48,7 @@ namespace React.Web
 			}
 			else
 			{
-				container.Register<ICache, AspNetCache>().AsPerRequestSingleton();	
+				container.Register<ICache, AspNetCache>().AsPerRequestSingleton();
 			}
 
 			// Wrappers for built-in objects
@@ -55,6 +56,7 @@ namespace React.Web
 			container.Register<HttpServerUtilityBase>((c, o) => c.Resolve<HttpContextBase>().Server);
 			container.Register<HttpRequestBase>((c, o) => c.Resolve<HttpContextBase>().Request);
 			container.Register<HttpResponseBase>((c, o) => c.Resolve<HttpContextBase>().Response);
+			container.Register<Cache>((c, o) => HttpRuntime.Cache);
 		}
 
 		/// <summary>

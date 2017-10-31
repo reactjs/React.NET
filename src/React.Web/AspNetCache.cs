@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Caching;
 
 namespace React.Web
@@ -28,10 +27,10 @@ namespace React.Web
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AspNetCache"/> class.
 		/// </summary>
-		/// <param name="context">The HTTP context</param>
-		public AspNetCache(HttpContextBase context)
+		/// <param name="cache">The Web application cache</param>
+		public AspNetCache(Cache cache)
 		{
-			_cache = context.Cache;
+			_cache = cache;
 		}
 
 		/// <summary>
@@ -62,8 +61,9 @@ namespace React.Web
 		/// will be cleared automatically
 		/// </param>
 		public void Set<T>(
-			string key, T data, 
-			TimeSpan slidingExpiration, 
+			string key,
+			T data,
+			TimeSpan slidingExpiration,
 			IEnumerable<string> cacheDependencyFiles = null
 		)
 		{
