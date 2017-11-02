@@ -164,7 +164,7 @@ namespace React
 		public virtual string RenderJavaScript()
 		{
 			return string.Format(
-				"ReactDOM.render({0}, document.getElementById({1}))",
+				"ReactDOM.hydrate({0}, document.getElementById({1}))",
 				GetComponentInitialiser(),
 				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
 			);

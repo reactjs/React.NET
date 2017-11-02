@@ -11,17 +11,18 @@
 </head>
 <body>
 	<p>
-		This is an example of ReactJS.NET's server-side rendering. The initial state of this 
+		This is an example of ReactJS.NET's server-side rendering. The initial state of this
 		comments box is rendered server-side, and additional data is loaded via AJAX and rendered
 		client-side.
 	</p>
-	
+
 	<!-- Render the component server-side, passing initial props -->
 	@Html.React("CommentsBox", new { initialComments = Model.Comments })
-		
+
 	<!-- Load all required scripts (React + the site's scripts) -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.0.0/umd/react.development.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.0.0/umd/react-dom.development.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
 	@Bundles.RenderScripts()
 	<!-- Render the code to initialise the component -->
 	@Html.ReactInitJavaScript()

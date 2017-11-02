@@ -89,7 +89,7 @@ namespace React.Router
 		public override string RenderJavaScript()
 		{
 			return string.Format(
-				"ReactDOM.render({0}, document.getElementById({1}))",
+				"ReactDOM.hydrate({0}, document.getElementById({1}))",
 				base.GetComponentInitialiser(),
 				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
 			);

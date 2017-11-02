@@ -3,26 +3,26 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
 var Comment = require('./Comment');
 var React = require('react');
 
-var CommentsBox = React.createClass({
-	propTypes: {
-		initialComments: React.PropTypes.array.isRequired
-	},
-	getInitialState() {
-		return {
+class CommentsBox extends React.Component {
+	static propTypes = {
+		initialComments: PropTypes.array.isRequired
+	};
+
+	state = {
 			comments: this.props.initialComments,
 			page: 1,
 			hasMore: true,
 			loadingMore: false
 		};
-	},
-	loadMoreClicked(evt) {
+
+	loadMoreClicked = (evt) => {
 		var nextPage = this.state.page + 1;
 		this.setState({
 			page: nextPage,
@@ -32,6 +32,7 @@ var CommentsBox = React.createClass({
 		var url = evt.target.href;
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
+		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.onload = () => {
 			var data = JSON.parse(xhr.responseText);
 			this.setState({
@@ -42,8 +43,9 @@ var CommentsBox = React.createClass({
 		};
 		xhr.send();
 		evt.preventDefault();
-	},
-	render() {
+	};
+
+		render() {
 		var commentNodes = this.state.comments.map(comment =>
 			<Comment author={comment.Author}>{comment.Text}</Comment>
 		);
@@ -57,8 +59,9 @@ var CommentsBox = React.createClass({
 				{this.renderMoreLink()}
 			</div>
 		);
-	},
-	renderMoreLink() {
+	}
+
+	renderMoreLink = () => {
 		if (this.state.loadingMore) {
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
@@ -70,7 +73,7 @@ var CommentsBox = React.createClass({
 		} else {
 			return <em>No more comments</em>;
 		}
-	}
-});
+	};
+}
 
 module.exports = CommentsBox;

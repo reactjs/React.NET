@@ -3,17 +3,18 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
 var Avatar = require('./Avatar');
 var React = require('react');
 
-var Comment = React.createClass({
-	propTypes: {
-		author: React.PropTypes.object.isRequired
-	},
+class Comment extends React.Component {
+	static propTypes = {
+		author: PropTypes.object.isRequired
+	};
+
 	render() {
 		return (
 			<li>
@@ -23,6 +24,6 @@ var Comment = React.createClass({
 			</li>
 		);
 	}
-});
+}
 
 module.exports = Comment;
