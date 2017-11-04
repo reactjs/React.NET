@@ -206,6 +206,20 @@ namespace React
 		}
 
 		/// <summary>
+		/// Gets or sets the name of the preferred JavaScript engine.
+		/// </summary>
+		public string PreferredEngineName { get; set; }
+		/// <summary>
+		/// Sets the name of the preferred JavaScript engine.
+		/// </summary>
+		/// <param name="preferredEngineName">Name of a preferred JavaScript engine.</param>
+		public IReactSiteConfiguration SetPreferredEngineName(string preferredEngineName)
+		{
+			PreferredEngineName = preferredEngineName;
+			return this;
+		}
+
+		/// <summary>
 		/// Gets or sets whether the built-in version of React is loaded. If <c>false</c>, you must
 		/// provide your own version of React.
 		/// </summary>
