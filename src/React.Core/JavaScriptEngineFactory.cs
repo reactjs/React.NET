@@ -68,7 +68,7 @@ namespace React
 			_config = config;
 			_fileSystem = fileSystem;
 #pragma warning disable 618
-			_factory = GetFactory(_jsEngineSwitcher, config.AllowMsieEngine);
+			_factory = GetFactory(_jsEngineSwitcher);
 #pragma warning restore 618
 			if (_config.ReuseJavaScriptEngines)
 			{
@@ -238,9 +238,9 @@ namespace React
 		/// The first functioning JavaScript engine with the lowest priority will be used.
 		/// </summary>
 		/// <returns>Function to create JavaScript engine</returns>
-		private static Func<IJsEngine> GetFactory(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
+		private static Func<IJsEngine> GetFactory(JsEngineSwitcher jsEngineSwitcher)
 		{
-			EnsureJsEnginesRegistered(jsEngineSwitcher, allowMsie);
+			EnsureJsEnginesRegistered(jsEngineSwitcher);
 
 			string defaultEngineName = jsEngineSwitcher.DefaultEngineName;
 			if (!string.IsNullOrWhiteSpace(defaultEngineName))
@@ -264,7 +264,7 @@ namespace React
 				try
 				{
 					engine = engineFactory.CreateEngine();
-					if (EngineIsUsable(engine, allowMsie))
+					if (EngineIsUsable(engine))
 					{
 						// Success! Use this one.
 						return engineFactory.CreateEngine;
@@ -285,23 +285,6 @@ namespace React
 			}
 
 			// Epic fail, none of the engines worked. Nothing we can do now.
-			// Throw an error relevant to the engine they should be able to use.
-#if NET40
-			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
-			{
-				JavaScriptEngineUtils.EnsureEngineFunctional<V8JsEngine, ClearScriptV8InitialisationException>(
-					ex => new ClearScriptV8InitialisationException(ex)
-				);
-			}
-#endif
-#if NET40 || NETSTANDARD1_6
-			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
-			{
-				JavaScriptEngineUtils.EnsureEngineFunctional<VroomJsEngine, VroomJsInitialisationException>(
-					ex => new VroomJsInitialisationException(ex.Message)
-				);
-			}
-#endif
 			throw new ReactEngineNotFoundException();
 		}
 
@@ -309,14 +292,11 @@ namespace React
 		/// Performs a sanity check to ensure the specified engine type is usable.
 		/// </summary>
 		/// <param name="engine">Engine to test</param>
-		/// <param name="allowMsie">Whether the MSIE engine can be used</param>
-		/// <returns></returns>
-		private static bool EngineIsUsable(IJsEngine engine, bool allowMsie)
+		/// <returns>Whether the engine is usable.</returns>
+		private static bool EngineIsUsable(IJsEngine engine)
 		{
 			// Perform a sanity test to ensure this engine is usable
-			var isUsable = engine.Evaluate<int>("1 + 1") == 2;
-			var isMsie = engine is MsieJsEngine;
-			return isUsable && (!isMsie || allowMsie);
+			return engine.Evaluate<int>("1 + 1") == 2;
 		}
 
 		/// <summary>
@@ -361,33 +341,17 @@ namespace React
 		/// registers some default engines.
 		/// </summary>
 		/// <param name="jsEngineSwitcher">JavaScript Engine Switcher instance</param>
-		/// <param name="allowMsie">Whether to allow the MSIE JS engine</param>
-		private static void EnsureJsEnginesRegistered(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
+		private static void EnsureJsEnginesRegistered(JsEngineSwitcher jsEngineSwitcher)
 		{
-			if (jsEngineSwitcher.EngineFactories.Any())
+			if (!jsEngineSwitcher.EngineFactories.Any())
 			{
-				// Engines have been registered, nothing to do here!
-				return;
+				throw new ReactEngineNotFoundException(
+					"No JavaScript engines were registered! " +
+					"You'll need to configure JavaScriptEngineSwitcher in your app. See " +
+					"https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines " +
+					"for more information."
+				);
 			}
-
-			Trace.WriteLine(
-				"No JavaScript engines were registered, falling back to a default config! It is " +
-				"recommended that you configure JavaScriptEngineSwitcher in your app. See " +
-				"https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines " +
-				"for more information."
-			);
-
-#if NET40
-			jsEngineSwitcher.EngineFactories.AddV8();
-#endif
-			jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
-			if (allowMsie)
-			{
-				jsEngineSwitcher.EngineFactories.AddMsie();
-			}
-#if !NET40
-			jsEngineSwitcher.EngineFactories.AddChakraCore();
-#endif
 		}
 	}
 }

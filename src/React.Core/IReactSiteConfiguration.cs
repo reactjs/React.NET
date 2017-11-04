@@ -114,18 +114,6 @@ namespace React
 		IReactSiteConfiguration SetMaxUsagesPerEngine(int? maxUsagesPerEngine);
 
 		/// <summary>
-		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
-		/// </summary>
-		[Obsolete("This should be managed in the JavaScriptEngineSwitcher configuration instead")]
-		bool AllowMsieEngine { get; set; }
-		/// <summary>
-		/// Sets whether the MSIE engine should be used if V8 is unavailable.
-		/// </summary>
-		/// <returns></returns>
-		[Obsolete("This should be managed in the JavaScriptEngineSwitcher configuration instead")]
-		IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine);
-
-		/// <summary>
 		/// Gets or sets whether the built-in version of React is loaded. If <c>false</c>, you must
 		/// provide your own version of React.
 		/// </summary>
