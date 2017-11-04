@@ -5,12 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.Msie;
-#if NET40
-using JavaScriptEngineSwitcher.V8;
-#else
-using JavaScriptEngineSwitcher.ChakraCore;
-#endif
 using JSPool;
 using React.Exceptions;
 
