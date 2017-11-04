@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using React.AspNet;
+using System;
 
 namespace React.Sample.Mvc6
 {
@@ -32,7 +33,7 @@ namespace React.Sample.Mvc6
 		public IConfiguration Configuration { get; set; }
 
 		// This method gets called by the runtime.
-		public void ConfigureServices(IServiceCollection services)
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			// Add MVC services to the services container.
 			services.AddMvc();
@@ -41,6 +42,9 @@ namespace React.Sample.Mvc6
 
 			// Add ReactJS.NET services.
 			services.AddReact();
+
+			// Build the intermediate service provider then return it
+			return services.BuildServiceProvider();
 		}
 
 		// Configure is called after ConfigureServices is called.
