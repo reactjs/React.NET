@@ -16,6 +16,7 @@ namespace React.Sample.Mvc4
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
+				.SetPreferredEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 				.SetReuseJavaScriptEngines(true)
 				.AddScript("~/Content/Sample.jsx");
 		}
