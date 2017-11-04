@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,9 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
-using React.Exceptions;
 
 namespace React.Router
 {

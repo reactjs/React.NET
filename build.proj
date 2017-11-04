@@ -28,6 +28,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<PackageAssemblies Include="React.MSBuild" />
 		<PackageAssemblies Include="React.Owin" />
 		<PackageAssemblies Include="React.Router" />
+		<PackageAssemblies Include="React.Router.Mvc4" />
 		<PackageAssemblies Include="React.Web" />
 		<PackageAssemblies Include="React.Web.Mvc4" />
 		<PackageAssemblies Include="System.Web.Optimization.React" />

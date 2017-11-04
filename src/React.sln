@@ -68,6 +68,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.AspNet.Middleware", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Sample.CoreMvc", "React.Sample.CoreMvc\React.Sample.CoreMvc.csproj", "{305918EF-AD05-4743-9B3A-DB1CE84D467E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Router.Mvc4", "React.Router.Mvc4\React.Router.Mvc4.csproj", "{2170D912-86E9-4CE3-8DA4-E1DE8D958E63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -142,6 +144,10 @@ Global
 		{305918EF-AD05-4743-9B3A-DB1CE84D467E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{305918EF-AD05-4743-9B3A-DB1CE84D467E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{305918EF-AD05-4743-9B3A-DB1CE84D467E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2170D912-86E9-4CE3-8DA4-E1DE8D958E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2170D912-86E9-4CE3-8DA4-E1DE8D958E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2170D912-86E9-4CE3-8DA4-E1DE8D958E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2170D912-86E9-4CE3-8DA4-E1DE8D958E63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +170,7 @@ Global
 		{D076273B-C5EA-47C7-923D-523E4C5EE30D} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{7E1C3999-1982-476D-9307-12B30737B41E} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{305918EF-AD05-4743-9B3A-DB1CE84D467E} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
+		{2170D912-86E9-4CE3-8DA4-E1DE8D958E63} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DCF4A41E-C60D-4086-98A9-6F8508D7E8D0}
