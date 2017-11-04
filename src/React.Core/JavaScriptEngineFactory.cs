@@ -252,7 +252,7 @@ namespace React
 				else
 				{
 					throw new ReactEngineNotFoundException(
-						"Could not find a factory, that creates an instance of the JavaScript " +
+						"Could not find a factory that creates an instance of the JavaScript " +
 						"engine with name `" + defaultEngineName + "`.");
 				}
 			}
