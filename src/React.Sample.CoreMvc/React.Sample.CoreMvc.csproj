@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>React.Sample.Mvc6</AssemblyName>
+    <AssemblyName>React.Sample.CoreMvc</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>React.Sample.Mvc6</PackageId>
+    <PackageId>React.Sample.CoreMvc</PackageId>
     <NoWarn>1701</NoWarn>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">2.0</RuntimeFrameworkVersion>
   </PropertyGroup>

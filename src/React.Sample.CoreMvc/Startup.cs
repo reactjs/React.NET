@@ -7,18 +7,16 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using React.AspNet;
-using System;
 
-namespace React.Sample.Mvc6
+namespace React.Sample.CoreMvc
 {
 	public class Startup
 	{

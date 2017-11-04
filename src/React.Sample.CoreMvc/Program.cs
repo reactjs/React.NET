@@ -10,8 +10,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-
-namespace React.Sample.Mvc6
+namespace React.Sample.CoreMvc
 {
 	public class Program
 	{
