@@ -17,7 +17,7 @@ namespace React.Sample.Webpack
 		{
 			ReactSiteConfiguration.Configuration
 				.SetLoadBabel(false)
-				.SetPreferredEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
+				.SetDefaultEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 				.AddScriptWithoutTransform("~/build/server.bundle.js");
 		}
 	}

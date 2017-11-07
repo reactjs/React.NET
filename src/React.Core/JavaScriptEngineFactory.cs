@@ -236,24 +236,8 @@ namespace React
 		{
 			EnsureJsEnginesRegistered(jsEngineSwitcher);
 
-			// First try to use an engine specified by our config
-			if (!string.IsNullOrWhiteSpace(_config.PreferredEngineName))
-			{
-				var engineFactory = jsEngineSwitcher.EngineFactories.Get(_config.PreferredEngineName);
-				if (engineFactory != null)
-				{
-					return engineFactory.CreateEngine;
-				}
-				else
-				{
-					throw new ReactEngineNotFoundException(
-						"Could not find a factory that creates an instance of the preferred JavaScript " +
-						"engine with name `" + _config.PreferredEngineName + "`.");
-				}
-			}
-
-			// Since our config is empty, try the engine switcher's default
-			string defaultEngineName = jsEngineSwitcher.DefaultEngineName;
+			// First try the config's default
+			string defaultEngineName = _config.DefaultEngineName;
 			if (!string.IsNullOrWhiteSpace(defaultEngineName))
 			{
 				var engineFactory = jsEngineSwitcher.EngineFactories.Get(defaultEngineName);
@@ -269,7 +253,7 @@ namespace React
 				}
 			}
 
-			// Since both our config and the engine switcher don't care, just get the first working factory
+			// Since our config doesn't care, just get the first working factory
 			foreach (var engineFactory in jsEngineSwitcher.EngineFactories)
 			{
 				IJsEngine engine = null;
@@ -353,11 +337,11 @@ namespace React
 		/// registers some default engines.
 		/// </summary>
 		/// <param name="jsEngineSwitcher">JavaScript Engine Switcher instance</param>
-		private void EnsureJsEnginesRegistered(JsEngineSwitcher jsEngineSwitcher)
+		private static void EnsureJsEnginesRegistered(JsEngineSwitcher jsEngineSwitcher)
 		{
-			if (!string.IsNullOrWhiteSpace(_config.PreferredEngineName))
+			if (!string.IsNullOrWhiteSpace(jsEngineSwitcher.DefaultEngineName))
 			{
-				jsEngineSwitcher.CreateEngine(_config.PreferredEngineName);
+				jsEngineSwitcher.CreateDefaultEngine();
 			}
 
 			if (!jsEngineSwitcher.EngineFactories.Any())

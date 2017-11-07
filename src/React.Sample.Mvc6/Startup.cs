@@ -66,7 +66,7 @@ namespace React.Sample.Mvc6
 			app.UseReact(config =>
 			{
 				config
-					.SetPreferredEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
+					.SetDefaultEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 					.SetReuseJavaScriptEngines(true)
 					.AddScript("~/js/Sample.jsx")
 					.SetUseDebugReact(true);

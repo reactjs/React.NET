@@ -113,15 +113,15 @@ namespace React
 		/// </summary>
 		IReactSiteConfiguration SetMaxUsagesPerEngine(int? maxUsagesPerEngine);
 
-		/// <summary>
-		/// Gets or sets the name of the preferred JavaScript engine.
+		///<summary>
+		/// Gets or sets the name of the default JavaScript engine.
 		/// </summary>
-		string PreferredEngineName { get; set; }
+		string DefaultEngineName { get; set; }
 		/// <summary>
-		/// Sets the name of the preferred JavaScript engine.
+		/// Sets the name of the default JavaScript engine.
 		/// </summary>
-		/// <param name="preferredEngineName">Name of a preferred JavaScript engine.</param>
-		IReactSiteConfiguration SetPreferredEngineName(string preferredEngineName);
+		/// <param name="defaultEngineName">Name of a default JavaScript engine.</param>
+		IReactSiteConfiguration SetDefaultEngineName(string defaultEngineName);
 
 		/// <summary>
 		/// Gets or sets whether the built-in version of React is loaded. If <c>false</c>, you must

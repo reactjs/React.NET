@@ -18,7 +18,7 @@ namespace React.Sample.ConsoleApp
 			Initialize();
 
 			ReactSiteConfiguration.Configuration
-				.SetPreferredEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
+				.SetDefaultEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 				.SetReuseJavaScriptEngines(false)
 				.AddScript("Sample.jsx");
 

@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -205,17 +206,28 @@ namespace React
 			return this;
 		}
 
-		/// <summary>
-		/// Gets or sets the name of the preferred JavaScript engine.
+		///<summary>
+		/// Gets or sets the name of the default JsEngineSwitcher engine.
 		/// </summary>
-		public string PreferredEngineName { get; set; }
-		/// <summary>
-		/// Sets the name of the preferred JavaScript engine.
-		/// </summary>
-		/// <param name="preferredEngineName">Name of a preferred JavaScript engine.</param>
-		public IReactSiteConfiguration SetPreferredEngineName(string preferredEngineName)
+		public string DefaultEngineName
 		{
-			PreferredEngineName = preferredEngineName;
+			get
+			{
+				return JsEngineSwitcher.Instance.DefaultEngineName;
+			}
+			set
+			{
+				JsEngineSwitcher.Instance.DefaultEngineName = value;
+			}
+		}
+
+		/// <summary>
+		/// Sets the name of the default JsEngineSwitcher engine.
+		/// </summary>
+		/// <param name="defaultEngineName">Name of a default JsEngineSwitcher engine.</param>
+		public IReactSiteConfiguration SetDefaultEngineName(string defaultEngineName)
+		{
+			DefaultEngineName = defaultEngineName;
 			return this;
 		}
 
