@@ -8,7 +8,7 @@
 		<TargetFrameworks>net451</TargetFrameworks>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<AssemblyName>React.Router.Mvc4</AssemblyName>
-	  <DefineConstants>$(DefineConstants);LEGACYASPNET</DefineConstants>
+		<DefineConstants>$(DefineConstants);LEGACYASPNET</DefineConstants>
 		<AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
 		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
@@ -21,7 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-    <Compile Include="..\React.Router\*.cs" />
+		<Compile Include="..\React.Router\*.cs" />
 		<Compile Include="..\SharedAssemblyInfo.cs" />
 		<Compile Include="..\SharedAssemblyVersionInfo.cs" />
 		<Content Include="Content\**\*">
