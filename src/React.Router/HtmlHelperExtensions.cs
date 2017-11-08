@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -8,12 +8,9 @@
  */
 
 using System;
-using React.Exceptions;
-using React.TinyIoC;
 
-#if NET451
+#if LEGACYASPNET
 using System.Web;
-using System.Web.Mvc;
 using HttpResponse = System.Web.HttpResponseBase;
 using IHtmlHelper = System.Web.Mvc.HtmlHelper;
 #else

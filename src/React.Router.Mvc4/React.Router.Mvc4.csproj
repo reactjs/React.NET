@@ -5,13 +5,14 @@
 		<Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
 		<AssemblyTitle>ReactJS.NET Router</AssemblyTitle>
 		<Authors>Daniel Lo Nigro, Gunnar Már Óttarsson</Authors>
-		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net451</TargetFrameworks>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<AssemblyName>React.Router</AssemblyName>
+		<AssemblyName>React.Router.Mvc4</AssemblyName>
+		<DefineConstants>$(DefineConstants);LEGACYASPNET</DefineConstants>
 		<AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>true</SignAssembly>
 		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-		<PackageId>React.Router</PackageId>
+		<PackageId>React.Router.Mvc4</PackageId>
 		<PackageTags>asp.net;mvc;asp;javascript;js;react;facebook;reactjs;babel;router;react router</PackageTags>
 		<PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
 		<PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
@@ -20,6 +21,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="..\React.Router\*.cs" />
 		<Compile Include="..\SharedAssemblyInfo.cs" />
 		<Compile Include="..\SharedAssemblyVersionInfo.cs" />
 		<Content Include="Content\**\*">
@@ -29,8 +31,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.0.0" />
+		<Reference Include="System.Web" />
+		<Reference Include="Microsoft.CSharp" />
+		<PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.20710" />
 	</ItemGroup>
 
 	<ItemGroup>
