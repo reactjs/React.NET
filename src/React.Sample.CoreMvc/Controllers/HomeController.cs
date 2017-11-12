@@ -37,6 +37,7 @@ namespace React.Sample.CoreMvc.ViewModels
 	{
 		public IEnumerable<CommentModel> Comments { get; set; }
 		public int CommentsPerPage { get; set; }
+		public bool ThrowRenderError { get; set; }
 	}
 }
 
@@ -78,7 +79,8 @@ namespace React.Sample.CoreMvc.Controllers
 			return View(new IndexViewModel
 			{
 				Comments = _comments.Take(COMMENTS_PER_PAGE),
-				CommentsPerPage = COMMENTS_PER_PAGE
+				CommentsPerPage = COMMENTS_PER_PAGE,
+				ThrowRenderError = Request.Query.ContainsKey("throwRenderError"),
 			});
 		}
 

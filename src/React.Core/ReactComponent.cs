@@ -120,39 +120,42 @@ namespace React
 				EnsureComponentExists();
 			}
 
-			try
+			var html = string.Empty;
+			if (!renderContainerOnly)
 			{
-				var html = string.Empty;
-				if (!renderContainerOnly)
+				try
 				{
 					var reactRenderCommand = renderServerOnly
 						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
 						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
 					html = _environment.Execute<string>(reactRenderCommand);
 				}
-
-				string attributes = string.Format("id=\"{0}\"", ContainerId);
-				if (!string.IsNullOrEmpty(ContainerClass))
+				catch (JsRuntimeException ex)
 				{
-					attributes += string.Format(" class=\"{0}\"", ContainerClass);
+					if (_configuration.HandleRenderException == null) {
+						throw new ReactServerRenderingException(string.Format(
+							"Error while rendering \"{0}\" to \"{2}\": {1}",
+							ComponentName,
+							ex.Message,
+							ContainerId
+						));
+					}
+					_configuration.HandleRenderException(ex);
 				}
+			}
 
-				return string.Format(
-					"<{2} {0}>{1}</{2}>",
-					attributes,
-					html,
-					ContainerTag
-				);
-			}
-			catch (JsRuntimeException ex)
+			string attributes = string.Format("id=\"{0}\"", ContainerId);
+			if (!string.IsNullOrEmpty(ContainerClass))
 			{
-				throw new ReactServerRenderingException(string.Format(
-					"Error while rendering \"{0}\" to \"{2}\": {1}",
-					ComponentName,
-					ex.Message,
-					ContainerId
-				));
+				attributes += string.Format(" class=\"{0}\"", ContainerClass);
 			}
+
+			return string.Format(
+				"<{2} {0}>{1}</{2}>",
+				attributes,
+				html,
+				ContainerTag
+			);
 		}
 
 		/// <summary>

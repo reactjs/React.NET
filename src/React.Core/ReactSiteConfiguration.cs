@@ -10,6 +10,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace React
 {
@@ -300,5 +301,11 @@ namespace React
 			UseServerSideRendering = false;
 			return this;
 		}
+
+		/// <summary>
+		/// Handle an exception caught during server-render of a component.
+		/// If unset, unhandled exceptions will be thrown for all component renders.
+		/// </summary>
+		public Action<Exception> HandleRenderException { get; set; }
 	}
 }

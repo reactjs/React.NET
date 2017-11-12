@@ -179,5 +179,11 @@ namespace React
 		/// Disables server-side rendering. This is useful when debugging your scripts.
 		/// </summary>
 		IReactSiteConfiguration DisableServerSideRendering();
+
+		/// <summary>
+		/// Handle an exception caught during server-render of a component.
+		/// If unset, unhandled exceptions will be thrown for all component renders.
+		/// </summary>
+		Action<Exception> HandleRenderException { get; set; }
 	}
 }
