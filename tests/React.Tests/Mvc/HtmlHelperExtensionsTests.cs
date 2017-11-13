@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -13,7 +13,7 @@ using React.Web.Mvc;
 
 namespace React.Tests.Mvc
 {
-	class HtmlHelperExtensionsTests
+	public class HtmlHelperExtensionsTests
 	{
 		/// <summary>
 		/// Creates a mock <see cref="IReactEnvironment"/> and registers it with the IoC container
