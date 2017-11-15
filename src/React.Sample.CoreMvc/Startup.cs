@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,17 +7,16 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using React.AspNet;
 
-namespace React.Sample.Mvc6
+namespace React.Sample.CoreMvc
 {
 	public class Startup
 	{
@@ -32,7 +31,7 @@ namespace React.Sample.Mvc6
 		public IConfiguration Configuration { get; set; }
 
 		// This method gets called by the runtime.
-		public void ConfigureServices(IServiceCollection services)
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			// Add MVC services to the services container.
 			services.AddMvc();
@@ -41,6 +40,9 @@ namespace React.Sample.Mvc6
 
 			// Add ReactJS.NET services.
 			services.AddReact();
+
+			// Build the intermediate service provider then return it
+			return services.BuildServiceProvider();
 		}
 
 		// Configure is called after ConfigureServices is called.

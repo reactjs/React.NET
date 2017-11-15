@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-var HelloWorld = React.createClass({
+class HelloWorld extends React.Component {
 	render() {
 		return (
 			<div>
@@ -15,4 +15,4 @@ var HelloWorld = React.createClass({
 			</div>
 		);
 	}
-});
+}

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -35,7 +35,7 @@ namespace React.Sample.ConsoleApp
 			Initializer.Initialize(registration => registration.AsSingleton());
 			var container = React.AssemblyRegistration.Container;
 			// Register some components that are normally provided by the integration library
-			// (eg. React.AspNet or React.Web.Mvc6)
+			// (eg. React.AspNet or React.Web.Mvc4)
 			container.Register<ICache, NullCache>();
 			container.Register<IFileSystem, SimpleFileSystem>();
 		}
