@@ -7,10 +7,10 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using Newtonsoft.Json;
 
 namespace React
 {

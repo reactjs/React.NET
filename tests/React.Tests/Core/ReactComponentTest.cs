@@ -162,7 +162,7 @@ namespace React.Tests.Core
 			);
 		}
 
-        [Theory]
+		[Theory]
 		[InlineData("Foo", true)]
 		[InlineData("Foo.Bar", true)]
 		[InlineData("Foo.Bar.Baz", true)]
