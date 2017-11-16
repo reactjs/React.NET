@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -306,6 +306,17 @@ namespace React
 		/// Handle an exception caught during server-render of a component.
 		/// If unset, unhandled exceptions will be thrown for all component renders.
 		/// </summary>
-		public Action<Exception> HandleRenderException { get; set; }
+		public Action<Exception> ExceptionHandler { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="handler"></param>
+		/// <returns></returns>
+		public IReactSiteConfiguration SetExceptionHandler(Action<Exception> handler)
+		{
+			ExceptionHandler = handler;
+			return this;
+		}
 	}
 }

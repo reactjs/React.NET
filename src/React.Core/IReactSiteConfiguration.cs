@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -181,9 +181,17 @@ namespace React
 		IReactSiteConfiguration DisableServerSideRendering();
 
 		/// <summary>
-		/// Handle an exception caught during server-render of a component.
+		/// An exception handler which will be called if a render exception is thrown.
 		/// If unset, unhandled exceptions will be thrown for all component renders.
 		/// </summary>
-		Action<Exception> HandleRenderException { get; set; }
+		Action<Exception> ExceptionHandler { get; set; }
+
+		/// <summary>
+		/// Sets an exception handler which will be called if a render exception is thrown.
+		/// If unset, unhandled exceptions will be thrown for all component renders.
+		/// </summary>
+		/// <param name="handler"></param>
+		/// <returns></returns>
+		IReactSiteConfiguration SetExceptionHandler(Action<Exception> handler);
 	}
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -132,7 +132,7 @@ namespace React
 				}
 				catch (JsRuntimeException ex)
 				{
-					if (_configuration.HandleRenderException == null) {
+					if (_configuration.ExceptionHandler == null) {
 						throw new ReactServerRenderingException(string.Format(
 							"Error while rendering \"{0}\" to \"{2}\": {1}",
 							ComponentName,
@@ -140,7 +140,7 @@ namespace React
 							ContainerId
 						));
 					}
-					_configuration.HandleRenderException(ex);
+					_configuration.ExceptionHandler(ex);
 				}
 			}
 
