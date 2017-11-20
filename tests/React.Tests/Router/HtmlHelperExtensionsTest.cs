@@ -116,7 +116,7 @@ namespace React.Tests.Router
 			var htmlHelperMock = new HtmlHelperMocks();
 
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Never);
-			var result = HtmlHelperExtensions.ReactRouterWithContext(
+			var result = HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
@@ -137,7 +137,7 @@ namespace React.Tests.Router
 			var environment = ConfigureMockEnvironment();
 			var routerMocks = new ReactRouterMocks(config, environment);
 
-			var result = HtmlHelperExtensions.ReactRouterWithContext(
+			var result = HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
@@ -158,7 +158,7 @@ namespace React.Tests.Router
 			var environment = ConfigureMockEnvironment();
 			var routerMocks = new ReactRouterMocks(config, environment);
 
-			var result = HtmlHelperExtensions.ReactRouterWithContext(
+			var result = HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
@@ -181,7 +181,7 @@ namespace React.Tests.Router
 
 			var htmlHelperMock = new HtmlHelperMocks();
 
-			HtmlHelperExtensions.ReactRouterWithContext(
+			HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
@@ -201,7 +201,7 @@ namespace React.Tests.Router
 
 			var htmlHelperMock = new HtmlHelperMocks();
 
-			HtmlHelperExtensions.ReactRouterWithContext(
+			HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
@@ -222,7 +222,7 @@ namespace React.Tests.Router
 
 			var htmlHelperMock = new HtmlHelperMocks();
 
-			HtmlHelperExtensions.ReactRouterWithContext(
+			HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
@@ -244,7 +244,7 @@ namespace React.Tests.Router
 
 			Assert.Throws<ReactRouterException>(() =>
 			
-				HtmlHelperExtensions.ReactRouterWithContext(
+				HtmlHelperExtensions.ReactRouter(
 					htmlHelper: htmlHelperMock.htmlHelper.Object,
 					componentName: "ComponentName",
 					props: new { },
