@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using React.AspNet;
+using System.Runtime.InteropServices; // Required to work on .NET Core on Windows
+using VroomJs; // Required to work on .NET Core on Windows
 
 namespace ReactDemo
 {
@@ -53,8 +55,13 @@ namespace ReactDemo
                 app.UseExceptionHandler("/Home/Error");
             }
 
-			// Initialise ReactJS.NET. Must be before static files.
-			app.UseReact(config =>
+            // For V8 to work on .NET Core on Windows we need to ensure the assemblies are loaded.
+            // This is not required for the full .NET Framework - its presence is not an issue for running on the full framework though
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                AssemblyLoader.EnsureLoaded();
+
+            // Initialise ReactJS.NET. Must be before static files.
+            app.UseReact(config =>
 			{
 				// If you want to use server-side rendering of React components,
 				// add all the necessary JavaScript files here. This includes

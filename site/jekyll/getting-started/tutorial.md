@@ -67,6 +67,8 @@ At the top of the file, add:
 ```csharp
 using Microsoft.AspNetCore.Http;
 using React.AspNet;
+using System.Runtime.InteropServices; // Required to work on .NET Core on Windows
+using VroomJs; // Required to work on .NET Core on Windows
 ```
 
 Directly above:
@@ -92,6 +94,11 @@ app.UseStaticFiles();
 Add:
 
 ```csharp
+// For V8 to work on .NET Core on Windows we need to ensure the assemblies are loaded.
+// This is not required for the full .NET Framework - its presence is not an issue for running on the full framework though
+if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+  AssemblyLoader.EnsureLoaded();
+
 // Initialise ReactJS.NET. Must be before static files.
 app.UseReact(config =>
 {
