@@ -123,7 +123,7 @@ namespace React.Router
 
 				var executionResult = reactComponent.RenderRouterWithContext(clientOnly, serverOnly);
 
-				if (executionResult.Context?.status != null)
+				if (executionResult.Context?.status != null || executionResult.Context?.url != null)
 				{
 					// Use provided contextHandler
 					if (contextHandler != null)
