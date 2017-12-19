@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using React.Exceptions;
 using React.TinyIoC;
 
@@ -64,7 +65,8 @@ namespace React.AspNet
 			string containerId = null,
 			bool clientOnly = false,
 			bool serverOnly = false,
-			string containerClass = null
+			string containerClass = null,
+			Action<Exception, string, string> exceptionHandler = null
 		)
 		{
 			try
@@ -78,7 +80,7 @@ namespace React.AspNet
 				{
 					reactComponent.ContainerClass = containerClass;
 				}
-				var result = reactComponent.RenderHtml(clientOnly, serverOnly);
+				var result = reactComponent.RenderHtml(clientOnly, serverOnly, exceptionHandler);
 				return new HtmlString(result);
 			}
 			finally
@@ -108,7 +110,8 @@ namespace React.AspNet
 			string htmlTag = null,
 			string containerId = null,
 			bool clientOnly = false,
-			string containerClass = null
+			string containerClass = null,
+			Action<Exception, string, string> exceptionHandler = null
 		)
 		{
 			try
@@ -122,7 +125,7 @@ namespace React.AspNet
 				{
 					reactComponent.ContainerClass = containerClass;
 				}
-				var html = reactComponent.RenderHtml(clientOnly);
+				var html = reactComponent.RenderHtml(clientOnly, exceptionHandler: exceptionHandler);
 
 #if LEGACYASPNET
 				var script = new TagBuilder("script")

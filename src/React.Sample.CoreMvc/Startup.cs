@@ -71,7 +71,7 @@ namespace React.Sample.CoreMvc
 				config
 					.SetReuseJavaScriptEngines(true)
 					.AddScript("~/js/Sample.jsx")
-					.SetExceptionHandler(ex =>
+					.SetExceptionHandler((ex, name, id) =>
 					{
 						Logger.LogError("React component exception thrown!" + ex.ToString());
 					})

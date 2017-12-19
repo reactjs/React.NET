@@ -204,6 +204,7 @@ namespace React.Tests.Core
 
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			config.Setup(x => x.ExceptionHandler).Returns(() => throw new ReactServerRenderingException("test"));
 
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
 			{
@@ -223,9 +224,15 @@ namespace React.Tests.Core
 
 			Assert.True(exceptionCaught);
 
+			// Custom handler passed into render call
+			bool customHandlerInvoked = false;
+			Action<Exception, string, string> customHandler = (ex, name, id) => customHandlerInvoked = true;
+			component.RenderHtml(exceptionHandler: customHandler);
+			Assert.True(customHandlerInvoked);
+			
 			// Custom exception handler set
 			Exception caughtException = null;
-			config.Setup(x => x.ExceptionHandler).Returns(ex => caughtException = ex);
+			config.Setup(x => x.ExceptionHandler).Returns((ex, name, id) => caughtException = ex);
 
 			var result = component.RenderHtml();
 			Assert.Equal(@"<div id=""container""></div>", result);

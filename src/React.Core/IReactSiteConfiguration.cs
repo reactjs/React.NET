@@ -184,7 +184,7 @@ namespace React
 		/// An exception handler which will be called if a render exception is thrown.
 		/// If unset, unhandled exceptions will be thrown for all component renders.
 		/// </summary>
-		Action<Exception> ExceptionHandler { get; set; }
+		Action<Exception, string, string> ExceptionHandler { get; set; }
 
 		/// <summary>
 		/// Sets an exception handler which will be called if a render exception is thrown.
@@ -192,6 +192,6 @@ namespace React
 		/// </summary>
 		/// <param name="handler"></param>
 		/// <returns></returns>
-		IReactSiteConfiguration SetExceptionHandler(Action<Exception> handler);
+		IReactSiteConfiguration SetExceptionHandler(Action<Exception, string, string> handler);
 	}
 }

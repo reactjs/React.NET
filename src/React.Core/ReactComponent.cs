@@ -107,8 +107,9 @@ namespace React
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
+		/// <param name="exceptionHandler"></param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false)
+		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
 		{
 			if (!_configuration.UseServerSideRendering)
 			{
@@ -132,15 +133,12 @@ namespace React
 				}
 				catch (JsRuntimeException ex)
 				{
-					if (_configuration.ExceptionHandler == null) {
-						throw new ReactServerRenderingException(string.Format(
-							"Error while rendering \"{0}\" to \"{2}\": {1}",
-							ComponentName,
-							ex.Message,
-							ContainerId
-						));
+					if (exceptionHandler == null)
+					{
+						exceptionHandler = _configuration.ExceptionHandler;
 					}
-					_configuration.ExceptionHandler(ex);
+
+					exceptionHandler(ex, ComponentName, ContainerId);
 				}
 			}
 
