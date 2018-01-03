@@ -25,6 +25,16 @@ module.exports = {
 var Components = require('expose?Components!./components');
 ```
 
+An alternative to using expose-loader is to use the `library` property of the output configuration.
+``` javascript
+ output: {
+    path: path.join(__dirname, 'build'),
+    filename: '[name].bundle.js',
+    // This option sets the module of each entry point to a global variable with the same name
+    library: '[name]' 
+  },
+```
+
 The next step is to modify the `webpack.config.js` so that it creates a bundle from `Content/server.js`. A config similar to the following could work as a good starting point:
 
 ```javascript
