@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -107,8 +107,9 @@ namespace React
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
+		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false)
+		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
 		{
 			if (!_configuration.UseServerSideRendering)
 			{
@@ -120,39 +121,39 @@ namespace React
 				EnsureComponentExists();
 			}
 
-			try
+			var html = string.Empty;
+			if (!renderContainerOnly)
 			{
-				var html = string.Empty;
-				if (!renderContainerOnly)
+				try
 				{
 					var reactRenderCommand = renderServerOnly
 						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
 						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
 					html = _environment.Execute<string>(reactRenderCommand);
 				}
-
-				string attributes = string.Format("id=\"{0}\"", ContainerId);
-				if (!string.IsNullOrEmpty(ContainerClass))
+				catch (JsRuntimeException ex)
 				{
-					attributes += string.Format(" class=\"{0}\"", ContainerClass);
-				}
+					if (exceptionHandler == null)
+					{
+						exceptionHandler = _configuration.ExceptionHandler;
+					}
 
-				return string.Format(
-					"<{2} {0}>{1}</{2}>",
-					attributes,
-					html,
-					ContainerTag
-				);
+					exceptionHandler(ex, ComponentName, ContainerId);
+				}
 			}
-			catch (JsRuntimeException ex)
+
+			string attributes = string.Format("id=\"{0}\"", ContainerId);
+			if (!string.IsNullOrEmpty(ContainerClass))
 			{
-				throw new ReactServerRenderingException(string.Format(
-					"Error while rendering \"{0}\" to \"{2}\": {1}",
-					ComponentName,
-					ex.Message,
-					ContainerId
-				));
+				attributes += string.Format(" class=\"{0}\"", ContainerClass);
 			}
+
+			return string.Format(
+				"<{2} {0}>{1}</{2}>",
+				attributes,
+				html,
+				ContainerTag
+			);
 		}
 
 		/// <summary>
