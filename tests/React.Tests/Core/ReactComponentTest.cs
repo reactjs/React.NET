@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -120,6 +120,45 @@ namespace React.Tests.Core
 			var result = component.RenderHtml();
 
 			Assert.Equal(@"<span id=""container"">[HTML]</span>", result);
+		}
+
+		[Fact]
+		public void RenderHtmlShouldNotRenderComponentWhenContainerOnly()
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
+				.Returns("[HTML]");
+
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" },
+				ContainerTag = "span"
+			};
+			var result = component.RenderHtml(true, false);
+
+			Assert.Equal(@"<span id=""container""></span>", result);
+		}
+
+		[Fact]
+		public void RenderHtmlShouldNotWrapComponentWhenServerSideOnly()
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"))
+				.Returns("[HTML]");
+
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" },
+			};
+			var result = component.RenderHtml(false, true);
+
+			Assert.Equal(@"[HTML]", result);
 		}
 
 		[Fact]
