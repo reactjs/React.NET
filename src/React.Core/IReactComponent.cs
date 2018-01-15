@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -38,6 +38,11 @@ namespace React
 		/// Gets or sets the HTML class for the container of this component
 		/// </summary>
 		string ContainerClass { get; set; }
+
+		/// <summary>
+		/// Get or sets if this components only should be rendered server side
+		/// </summary>
+		bool ServerOnly { get; set; }
 
 		/// <summary>
 		/// Renders the HTML for this component. This will execute the component server-side and
