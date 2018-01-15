@@ -135,6 +135,11 @@ namespace React
 						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
 						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
 					html = _environment.Execute<string>(reactRenderCommand);
+
+					if (renderServerOnly)
+					{
+						return html;
+					}
 				}
 				catch (JsRuntimeException ex)
 				{
