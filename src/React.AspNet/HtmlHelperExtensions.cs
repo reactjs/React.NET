@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -72,7 +72,7 @@ namespace React.AspNet
 		{
 			try
 			{
-				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
+				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly, serverOnly);
 				if (!string.IsNullOrEmpty(htmlTag))
 				{
 					reactComponent.ContainerTag = htmlTag;

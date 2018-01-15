@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -287,8 +287,9 @@ namespace React
 		/// <param name="props">Props to use</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
+		/// <param name="serverOnly">True if this component only should be rendered server-side. Defaults to false.</param>
 		/// <returns>The component</returns>
-		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false)
+		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false, bool serverOnly = false)
 		{
 			if (!clientOnly)
 			{
@@ -297,7 +298,8 @@ namespace React
 
 			var component = new ReactComponent(this, _config, componentName, containerId)
 			{
-				Props = props
+				Props = props,
+				ServerOnly = serverOnly
 			};
 			_components.Add(component);
 			return component;
@@ -339,8 +341,11 @@ namespace React
 			
 			foreach (var component in _components)
 			{
-				fullScript.Append(component.RenderJavaScript());
-				fullScript.AppendLine(";");
+				if(!component.ServerOnly)
+				{
+					fullScript.Append(component.RenderJavaScript());
+					fullScript.AppendLine(";");
+				}
 			}
 
 			return fullScript.ToString();
