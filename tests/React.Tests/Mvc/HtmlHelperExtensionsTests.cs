@@ -36,7 +36,7 @@ namespace React.Tests.Mvc
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
-				new {},
+				new { },
 				null,
 				false,
 				false
@@ -89,7 +89,7 @@ namespace React.Tests.Mvc
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
-				new {},
+				new { },
 				null,
 				true,
 				false
@@ -107,7 +107,8 @@ namespace React.Tests.Mvc
 		}
 
 		[Fact]
-		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue() {
+		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue()
+		{
 			var component = new Mock<IReactComponent>();
 			component.Setup(x => x.RenderHtml(false, true, null)).Returns("HTML");
 			var environment = ConfigureMockEnvironment();
