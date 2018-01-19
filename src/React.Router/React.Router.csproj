@@ -22,10 +22,6 @@
 	<ItemGroup>
 		<Compile Include="..\SharedAssemblyInfo.cs" />
 		<Compile Include="..\SharedAssemblyVersionInfo.cs" />
-		<Content Include="Content\**\*">
-			<Pack>true</Pack>
-			<PackagePath>content\</PackagePath>
-		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
