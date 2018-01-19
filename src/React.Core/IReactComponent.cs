@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -6,6 +6,8 @@
  *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
+
+using System;
 
 namespace React
 {
@@ -45,8 +47,9 @@ namespace React
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
+		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>HTML</returns>
-		string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false);
+		string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise this component client-side. This will

@@ -20,15 +20,16 @@ namespace React.Sample.CoreMvc
 {
 	public class Startup
 	{
-		public Startup(IHostingEnvironment env)
+		public Startup(IHostingEnvironment env, ILogger<Startup> logger)
 		{
 			// Setup configuration sources.
 			var builder = new ConfigurationBuilder().AddEnvironmentVariables();
-
+			Logger = logger;
 			Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; set; }
+		public ILogger<Startup> Logger { get; set; }
 
 		// This method gets called by the runtime.
 		public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -70,6 +71,10 @@ namespace React.Sample.CoreMvc
 				config
 					.SetReuseJavaScriptEngines(true)
 					.AddScript("~/js/Sample.jsx")
+					.SetExceptionHandler((ex, name, id) =>
+					{
+						Logger.LogError("React component exception thrown!" + ex.ToString());
+					})
 					.SetUseDebugReact(true);
 			});
 

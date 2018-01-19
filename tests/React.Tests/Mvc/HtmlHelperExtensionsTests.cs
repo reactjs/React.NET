@@ -8,8 +8,8 @@
  */
 
 using Moq;
-using Xunit;
 using React.Web.Mvc;
+using Xunit;
 
 namespace React.Tests.Mvc
 {
@@ -31,7 +31,7 @@ namespace React.Tests.Mvc
 		public void ReactWithInitShouldReturnHtmlAndScript()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(false, false)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(false, false, null)).Returns("HTML");
 			component.Setup(x => x.RenderJavaScript()).Returns("JS");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
@@ -57,7 +57,7 @@ namespace React.Tests.Mvc
 		public void EngineIsReturnedToPoolAfterRender()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(true, true, null)).Returns("HTML");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
@@ -75,7 +75,7 @@ namespace React.Tests.Mvc
 				clientOnly: true,
 				serverOnly: true
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true), null), Times.Once);
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
 
@@ -83,7 +83,7 @@ namespace React.Tests.Mvc
 		public void ReactWithClientOnlyTrueShouldCallRenderHtmlWithTrue()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(true, true, null)).Returns("HTML");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
@@ -100,13 +100,13 @@ namespace React.Tests.Mvc
 				clientOnly: true,
 				serverOnly: true
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true), null), Times.Once);
 		}
 
 		[Fact]
 		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue() {
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(true, true)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(true, true, null)).Returns("HTML");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
@@ -123,7 +123,7 @@ namespace React.Tests.Mvc
 				clientOnly: true,
 				serverOnly: true
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true)), Times.Once);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true), null), Times.Once);
 		}
 	}
 }

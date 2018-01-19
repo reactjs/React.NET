@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,14 +7,12 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.Web;
+using System.Web.Mvc;
 using Moq;
-using Xunit;
-using React.Exceptions;
 using React.Router;
 using React.Tests.Core;
-using System.Web;
-using JavaScriptEngineSwitcher.Core;
-using System.Web.Mvc;
+using Xunit;
 
 namespace React.Tests.Router
 {
@@ -229,6 +227,26 @@ namespace React.Tests.Router
 				path: "/"
 			);
 			htmlHelperMock.httpResponse.Verify(x => x.RedirectPermanent(It.IsAny<string>()));
+		}
+
+		[Fact]
+		public void ShouldRedirectWithJustUrl()
+		{
+			var mocks = ConfigureMockReactEnvironment();
+			ConfigureMockConfiguration();
+
+			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
+						.Returns(@"{ url: ""/foo"" }");
+
+			var htmlHelperMock = new HtmlHelperMocks();
+
+			HtmlHelperExtensions.ReactRouterWithContext(
+				htmlHelper: htmlHelperMock.htmlHelper.Object,
+				componentName: "ComponentName",
+				props: new { },
+				path: "/"
+			);
+			htmlHelperMock.httpResponse.Verify(x => x.Redirect(It.IsAny<string>()));
 		}
 
 		[Fact]

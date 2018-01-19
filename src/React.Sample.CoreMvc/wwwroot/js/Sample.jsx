@@ -9,7 +9,8 @@
 
 class CommentsBox extends React.Component {
 	static propTypes = {
-		initialComments: PropTypes.array.isRequired
+		initialComments: PropTypes.array.isRequired,
+		throwRenderError: PropTypes.bool,
 	};
 
 	state = {
@@ -53,6 +54,9 @@ class CommentsBox extends React.Component {
 					{commentNodes}
 				</ol>
 				{this.renderMoreLink()}
+				<ErrorBoundary>
+					<ExceptionDemo throwRenderError={this.props.throwRenderError} />
+				</ErrorBoundary>
 			</div>
 		);
 	}
@@ -106,5 +110,48 @@ class Avatar extends React.Component {
 	}
 	getPhotoUrl(author) {
 		return 'https://avatars.githubusercontent.com/' + author.githubUsername + '?s=50';
+	}
+}
+
+class ErrorBoundary extends React.Component {
+	static propTypes = {
+		children: PropTypes.node.isRequired,
+	};
+
+	state = {};
+
+	componentDidCatch() {
+		this.setState({ hasCaughtException: true });
+	}
+
+	render() {
+		return this.state.hasCaughtException ? (
+			<div>An error occurred. Please reload.</div>
+		) : this.props.children;
+	}
+}
+
+class ExceptionDemo extends React.Component {
+	static propTypes = {
+		throwRenderError: PropTypes.bool,
+	}
+
+	state = {
+		throwRenderError: this.props.throwRenderError,
+	};
+
+	onClick = () => {
+		window.history.replaceState(null, null, window.location + '?throwRenderError');
+		this.setState({ throwRenderError: true });
+	}
+
+	render() {
+		return (
+			<div>
+				<button onClick={this.onClick}>
+					{this.state.throwRenderError ? this.state.testObject.one.two : ''}Throw exception
+				</button>
+			</div>
+		);
 	}
 }

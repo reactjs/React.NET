@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -179,5 +179,19 @@ namespace React
 		/// Disables server-side rendering. This is useful when debugging your scripts.
 		/// </summary>
 		IReactSiteConfiguration DisableServerSideRendering();
+
+		/// <summary>
+		/// An exception handler which will be called if a render exception is thrown.
+		/// If unset, unhandled exceptions will be thrown for all component renders.
+		/// </summary>
+		Action<Exception, string, string> ExceptionHandler { get; set; }
+
+		/// <summary>
+		/// Sets an exception handler which will be called if a render exception is thrown.
+		/// If unset, unhandled exceptions will be thrown for all component renders.
+		/// </summary>
+		/// <param name="handler"></param>
+		/// <returns></returns>
+		IReactSiteConfiguration SetExceptionHandler(Action<Exception, string, string> handler);
 	}
 }

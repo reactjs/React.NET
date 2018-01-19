@@ -22,7 +22,7 @@ module.exports = {
 
 // All JavaScript in here will be loaded server-side
 // Expose components globally so ReactJS.NET can use them
-var Components = require('expose?Components!./components');
+var Components = require('expose-loader?Components!./components');
 ```
 
 The next step is to modify the `webpack.config.js` so that it creates a bundle from `Content/server.js`. A config similar to the following could work as a good starting point:

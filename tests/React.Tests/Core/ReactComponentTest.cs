@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,9 +7,11 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
+using JavaScriptEngineSwitcher.Core;
 using Moq;
-using Xunit;
 using React.Exceptions;
+using Xunit;
 
 namespace React.Tests.Core
 {
@@ -160,7 +162,7 @@ namespace React.Tests.Core
 			);
 		}
 
-        [Theory]
+		[Theory]
 		[InlineData("Foo", true)]
 		[InlineData("Foo.Bar", true)]
 		[InlineData("Foo.Bar.Baz", true)]
@@ -192,5 +194,49 @@ namespace React.Tests.Core
 			Assert.StartsWith("react_", component.ContainerId);
 		}
 
+		[Fact]
+		public void ExceptionThrownIsHandled()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
+				.Throws(new JsRuntimeException("'undefined' is not an object"));
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			config.Setup(x => x.ExceptionHandler).Returns(() => throw new ReactServerRenderingException("test"));
+
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" }
+			};
+
+			// Default behavior
+			bool exceptionCaught = false;
+			try
+			{
+				component.RenderHtml();
+			}
+			catch (ReactServerRenderingException)
+			{
+				exceptionCaught = true;
+			}
+
+			Assert.True(exceptionCaught);
+
+			// Custom handler passed into render call
+			bool customHandlerInvoked = false;
+			Action<Exception, string, string> customHandler = (ex, name, id) => customHandlerInvoked = true;
+			component.RenderHtml(exceptionHandler: customHandler);
+			Assert.True(customHandlerInvoked);
+			
+			// Custom exception handler set
+			Exception caughtException = null;
+			config.Setup(x => x.ExceptionHandler).Returns((ex, name, id) => caughtException = ex);
+
+			var result = component.RenderHtml();
+			Assert.Equal(@"<div id=""container""></div>", result);
+			Assert.NotNull(caughtException);
+		}
 	}
 }
