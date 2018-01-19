@@ -31,6 +31,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Content\Views\web.config.transform" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="System.Web" />
 		<Reference Include="Microsoft.CSharp" />
 		<PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.20710" />
@@ -38,6 +42,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\React.Core\React.Core.csproj" />
+		<ProjectReference Include="..\React.Web.Mvc4\React.Web.Mvc4.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
