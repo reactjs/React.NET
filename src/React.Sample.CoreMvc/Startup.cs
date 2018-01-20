@@ -69,6 +69,7 @@ namespace React.Sample.CoreMvc
 			app.UseReact(config =>
 			{
 				config
+					.SetDefaultEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 					.SetReuseJavaScriptEngines(true)
 					.AddScript("~/js/Sample.jsx")
 					.SetExceptionHandler((ex, name, id) =>

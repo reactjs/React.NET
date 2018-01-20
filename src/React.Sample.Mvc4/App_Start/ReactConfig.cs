@@ -7,6 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using JavaScriptEngineSwitcher.Core;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Mvc4.ReactConfig), "Configure")]
 
 namespace React.Sample.Mvc4
@@ -16,6 +18,7 @@ namespace React.Sample.Mvc4
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
+				.SetDefaultEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 				.SetReuseJavaScriptEngines(true)
 				.AddScript("~/Content/Sample.jsx");
 		}

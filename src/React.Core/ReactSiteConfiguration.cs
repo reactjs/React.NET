@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using React.Exceptions;
 
@@ -37,7 +38,6 @@ namespace React
 		{
 			BabelConfig = new BabelConfig();
 			ReuseJavaScriptEngines = true;
-			AllowMsieEngine = true;
 			LoadBabel = true;
 			LoadReact = true;
 			JsonSerializerSettings = new JsonSerializerSettings
@@ -215,18 +215,28 @@ namespace React
 			return this;
 		}
 
-		/// <summary>
-		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
+		///<summary>
+		/// Gets or sets the name of the default JsEngineSwitcher engine.
 		/// </summary>
-		public bool AllowMsieEngine { get; set; }
+		public string DefaultEngineName
+		{
+			get
+			{
+				return JsEngineSwitcher.Instance.DefaultEngineName;
+			}
+			set
+			{
+				JsEngineSwitcher.Instance.DefaultEngineName = value;
+			}
+		}
 
 		/// <summary>
-		/// Sets whether the MSIE engine should be used if V8 is unavailable.
+		/// Sets the name of the default JsEngineSwitcher engine.
 		/// </summary>
-		/// <returns></returns>
-		public IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine)
+		/// <param name="defaultEngineName">Name of a default JsEngineSwitcher engine.</param>
+		public IReactSiteConfiguration SetDefaultEngineName(string defaultEngineName)
 		{
-			AllowMsieEngine = allowMsieEngine;
+			DefaultEngineName = defaultEngineName;
 			return this;
 		}
 

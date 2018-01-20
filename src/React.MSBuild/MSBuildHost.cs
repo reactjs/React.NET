@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -9,7 +9,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Reflection;
+using JavaScriptEngineSwitcher.Core;
 
 namespace React.MSBuild
 {
@@ -38,6 +38,8 @@ namespace React.MSBuild
 		private static bool Initialize()
 		{
 			AssemblyBindingRedirect.Enable();
+			JsEngineSwitcher.Instance.EngineFactories.Add(new JavaScriptEngineSwitcher.Msie.MsieJsEngineFactory());
+			JsEngineSwitcher.Instance.DefaultEngineName = JavaScriptEngineSwitcher.Msie.MsieJsEngine.EngineName;
 
 			// All "per-request" registrations should be singletons in MSBuild, since there's no
 			// such thing as a "request"
