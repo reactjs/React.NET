@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,10 +7,12 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using JavaScriptEngineSwitcher.Core;
-using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using JavaScriptEngineSwitcher.Core;
+using Newtonsoft.Json;
+using React.Exceptions;
 
 namespace React
 {
@@ -44,6 +46,13 @@ namespace React
 			};
 			UseDebugReact = false;
 			UseServerSideRendering = true;
+			ExceptionHandler = (Exception ex, string ComponentName, string ContainerId) => 
+				throw new ReactServerRenderingException(string.Format(
+					"Error while rendering \"{0}\" to \"{2}\": {1}",
+					ComponentName,
+					ex.Message,
+					ContainerId
+				));
 		}
 
 		/// <summary>
@@ -308,6 +317,23 @@ namespace React
 		public IReactSiteConfiguration DisableServerSideRendering()
 		{
 			UseServerSideRendering = false;
+			return this;
+		}
+
+		/// <summary>
+		/// Handle an exception caught during server-render of a component.
+		/// If unset, unhandled exceptions will be thrown for all component renders.
+		/// </summary>
+		public Action<Exception, string, string> ExceptionHandler { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="handler"></param>
+		/// <returns></returns>
+		public IReactSiteConfiguration SetExceptionHandler(Action<Exception, string, string> handler)
+		{
+			ExceptionHandler = handler;
 			return this;
 		}
 	}

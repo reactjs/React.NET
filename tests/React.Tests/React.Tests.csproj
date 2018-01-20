@@ -18,16 +18,16 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\React.Core\React.Core.csproj" />
     <ProjectReference Include="..\..\src\React.Owin\React.Owin.csproj" />
-    <ProjectReference Include="..\..\src\React.Router\React.Router.csproj" />
+    <ProjectReference Include="..\..\src\React.Router.Mvc4\React.Router.Mvc4.csproj" />
     <ProjectReference Include="..\..\src\React.Web.Mvc4\React.Web.Mvc4.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Moq" Version="4.5.30" />
-    <PackageReference Include="xunit" Version="2.3.0-beta1-build3642" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-	<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta1-build3642" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+	<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">

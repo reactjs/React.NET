@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -13,12 +13,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using React.Sample.Mvc6.Models;
-using React.Sample.Mvc6.ViewModels;
+using React.Sample.CoreMvc.Models;
+using React.Sample.CoreMvc.ViewModels;
 
-namespace React.Sample.Mvc6.Models
+namespace React.Sample.CoreMvc.Models
 {
 	public class AuthorModel
 	{
@@ -33,16 +31,17 @@ namespace React.Sample.Mvc6.Models
 	}
 }
 
-namespace React.Sample.Mvc6.ViewModels
+namespace React.Sample.CoreMvc.ViewModels
 {
 	public class IndexViewModel
 	{
 		public IEnumerable<CommentModel> Comments { get; set; }
 		public int CommentsPerPage { get; set; }
+		public bool ThrowRenderError { get; set; }
 	}
 }
 
-namespace React.Sample.Mvc6.Controllers
+namespace React.Sample.CoreMvc.Controllers
 {
 	public class HomeController : Controller
 	{
@@ -80,7 +79,8 @@ namespace React.Sample.Mvc6.Controllers
 			return View(new IndexViewModel
 			{
 				Comments = _comments.Take(COMMENTS_PER_PAGE),
-				CommentsPerPage = COMMENTS_PER_PAGE
+				CommentsPerPage = COMMENTS_PER_PAGE,
+				ThrowRenderError = Request.Query.ContainsKey("throwRenderError"),
 			});
 		}
 

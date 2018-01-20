@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -15,7 +15,7 @@ namespace React.Router
 	/// <summary>
 	/// React Router Exception
 	/// </summary>
-#if NET451
+#if LEGACYASPNET
 	[Serializable]
 #endif
 	public class ReactRouterException : Exception
@@ -38,7 +38,7 @@ namespace React.Router
 			: base(message, innerException) { }
 
 
-#if NET451
+#if LEGACYASPNET
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>

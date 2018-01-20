@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,32 +7,32 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using React.AspNet;
 
-namespace React.Sample.Mvc6
+namespace React.Sample.CoreMvc
 {
 	public class Startup
 	{
-		public Startup(IHostingEnvironment env)
+		public Startup(IHostingEnvironment env, ILogger<Startup> logger)
 		{
 			// Setup configuration sources.
 			var builder = new ConfigurationBuilder().AddEnvironmentVariables();
-
+			Logger = logger;
 			Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; set; }
+		public ILogger<Startup> Logger { get; set; }
 
 		// This method gets called by the runtime.
-		public void ConfigureServices(IServiceCollection services)
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			// Add MVC services to the services container.
 			services.AddMvc();
@@ -41,6 +41,9 @@ namespace React.Sample.Mvc6
 
 			// Add ReactJS.NET services.
 			services.AddReact();
+
+			// Build the intermediate service provider then return it
+			return services.BuildServiceProvider();
 		}
 
 		// Configure is called after ConfigureServices is called.
@@ -69,6 +72,10 @@ namespace React.Sample.Mvc6
 					.SetDefaultEngineName(JavaScriptEngineSwitcher.V8.V8JsEngine.EngineName)
 					.SetReuseJavaScriptEngines(true)
 					.AddScript("~/js/Sample.jsx")
+					.SetExceptionHandler((ex, name, id) =>
+					{
+						Logger.LogError("React component exception thrown!" + ex.ToString());
+					})
 					.SetUseDebugReact(true);
 			});
 

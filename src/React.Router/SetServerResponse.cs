@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#if NET451
+#if LEGACYASPNET
 using HttpResponse = System.Web.HttpResponseBase;
 #else
 using HttpResponse = Microsoft.AspNetCore.Http.HttpResponse;
@@ -36,7 +36,7 @@ namespace React.Router
 		/// <param name="Response">The response object to use.</param>
 		public static void ModifyResponse(RoutingContext context, HttpResponse Response)
 		{
-			var statusCode = context.status.Value;
+			var statusCode = context.status ?? 302;
 
 			// 300-399
 			if (statusCode >= 300 && statusCode < 400)
@@ -45,7 +45,7 @@ namespace React.Router
 				{
 					if (statusCode == 301)
 					{
-#if NET451
+#if LEGACYASPNET
 						Response.RedirectPermanent(context.url);
 #else
 						Response.Redirect(context.url, true);

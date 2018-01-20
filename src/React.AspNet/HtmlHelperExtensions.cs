@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using React.Exceptions;
 using React.TinyIoC;
 
@@ -55,6 +56,7 @@ namespace React.AspNet
 		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <param name="serverOnly">Skip rendering React specific data-attributes during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
+		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
@@ -64,7 +66,8 @@ namespace React.AspNet
 			string containerId = null,
 			bool clientOnly = false,
 			bool serverOnly = false,
-			string containerClass = null
+			string containerClass = null,
+			Action<Exception, string, string> exceptionHandler = null
 		)
 		{
 			try
@@ -78,7 +81,7 @@ namespace React.AspNet
 				{
 					reactComponent.ContainerClass = containerClass;
 				}
-				var result = reactComponent.RenderHtml(clientOnly, serverOnly);
+				var result = reactComponent.RenderHtml(clientOnly, serverOnly, exceptionHandler);
 				return new HtmlString(result);
 			}
 			finally
@@ -100,6 +103,7 @@ namespace React.AspNet
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
+		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
@@ -108,7 +112,8 @@ namespace React.AspNet
 			string htmlTag = null,
 			string containerId = null,
 			bool clientOnly = false,
-			string containerClass = null
+			string containerClass = null,
+			Action<Exception, string, string> exceptionHandler = null
 		)
 		{
 			try
@@ -122,7 +127,7 @@ namespace React.AspNet
 				{
 					reactComponent.ContainerClass = containerClass;
 				}
-				var html = reactComponent.RenderHtml(clientOnly);
+				var html = reactComponent.RenderHtml(clientOnly, exceptionHandler: exceptionHandler);
 
 #if LEGACYASPNET
 				var script = new TagBuilder("script")

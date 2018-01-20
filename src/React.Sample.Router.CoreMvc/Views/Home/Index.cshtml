@@ -1,0 +1,15 @@
+@using React.AspNet
+@using React.Router
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>React Router Sample</title>
+	<meta charset="utf-8" />
+</head>
+<body>
+	@Html.ReactRouterWithContext("RootComponent", new { })
+	<script src="/components-bundle.generated.js"></script>
+	@Html.ReactInitJavaScript()
+</body>
+</html>
