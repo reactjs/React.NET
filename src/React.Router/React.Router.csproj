@@ -30,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\React.AspNet\React.AspNet.csproj" />
 		<ProjectReference Include="..\React.Core\React.Core.csproj" />
 	</ItemGroup>
 
