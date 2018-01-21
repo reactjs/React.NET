@@ -8,8 +8,8 @@
  */
 
 using Moq;
-using React.Web.Mvc;
 using Xunit;
+using React.Web.Mvc;
 
 namespace React.Tests.Mvc
 {
@@ -36,8 +36,9 @@ namespace React.Tests.Mvc
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
-				new {},
+				new { },
 				null,
+				false,
 				false
 			)).Returns(component.Object);
 
@@ -63,7 +64,8 @@ namespace React.Tests.Mvc
 				"ComponentName",
 				new { },
 				null,
-				true
+				true,
+				false
 			)).Returns(component.Object);
 
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Never);
@@ -73,9 +75,9 @@ namespace React.Tests.Mvc
 				props: new { },
 				htmlTag: "span",
 				clientOnly: true,
-				serverOnly: true
+				serverOnly: false
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true), null), Times.Once);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
 
@@ -87,9 +89,10 @@ namespace React.Tests.Mvc
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
-				new {},
+				new { },
 				null,
-				true
+				true,
+				false
 			)).Returns(component.Object);
 
 			var result = HtmlHelperExtensions.React(
@@ -98,20 +101,22 @@ namespace React.Tests.Mvc
 				props: new { },
 				htmlTag: "span",
 				clientOnly: true,
-				serverOnly: true
+				serverOnly: false
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true), null), Times.Once);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
 		}
 
 		[Fact]
-		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue() {
+		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue()
+		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(true, true, null)).Returns("HTML");
+			component.Setup(x => x.RenderHtml(false, true, null)).Returns("HTML");
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
 				"ComponentName",
 				new { },
 				null,
+				false,
 				true
 			)).Returns(component.Object);
 
@@ -120,10 +125,10 @@ namespace React.Tests.Mvc
 				componentName: "ComponentName",
 				props: new { },
 				htmlTag: "span",
-				clientOnly: true,
+				clientOnly: false,
 				serverOnly: true
 			);
-			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == true), null), Times.Once);
+			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), null), Times.Once);
 		}
 	}
 }

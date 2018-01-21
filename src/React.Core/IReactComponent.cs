@@ -42,6 +42,11 @@ namespace React
 		string ContainerClass { get; set; }
 
 		/// <summary>
+		/// Get or sets if this components only should be rendered server side
+		/// </summary>
+		bool ServerOnly { get; set; }
+
+		/// <summary>
 		/// Renders the HTML for this component. This will execute the component server-side and
 		/// return the rendered HTML.
 		/// </summary>

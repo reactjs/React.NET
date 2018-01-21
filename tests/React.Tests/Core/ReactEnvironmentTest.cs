@@ -137,6 +137,17 @@ namespace React.Tests.Core
 			Assert.Equal(";\r\n", environment.GetInitJavaScript());
 		}
 
+		[Fact]
+		public void ServerSideOnlyComponentRendersNoJavaScript()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			environment.CreateComponent("HelloWorld", new { name = "Daniel" }, serverOnly: true);
+
+			Assert.Equal(string.Empty, environment.GetInitJavaScript());
+		}
+
 		public class Mocks
 		{
 			public Mock<PooledJsEngine> Engine { get; private set; }

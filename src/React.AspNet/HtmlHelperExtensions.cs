@@ -54,7 +54,7 @@ namespace React.AspNet
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
-		/// <param name="serverOnly">Skip rendering React specific data-attributes during server side rendering. Defaults to <c>false</c></param>
+		/// <param name="serverOnly">Skip rendering React specific data-attributes, container and client-side initialisation during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>The component's HTML</returns>
@@ -72,7 +72,7 @@ namespace React.AspNet
 		{
 			try
 			{
-				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
+				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly, serverOnly);
 				if (!string.IsNullOrEmpty(htmlTag))
 				{
 					reactComponent.ContainerTag = htmlTag;
