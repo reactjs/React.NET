@@ -326,5 +326,23 @@ namespace React
 			ExceptionHandler = handler;
 			return this;
 		}
+
+		/// <summary>
+		/// A provider that returns a nonce to be used on any script tags on the page. 
+		/// This value must match the nonce used in the Content Security Policy header on the response.
+		/// </summary>
+		public Func<string> ScriptNonceProvider { get; set; }
+
+		/// <summary>
+		/// Sets a provider that returns a nonce to be used on any script tags on the page. 
+		/// This value must match the nonce used in the Content Security Policy header on the response.
+		/// </summary>
+		/// <param name="provider"></param>
+		/// <returns></returns>
+		public IReactSiteConfiguration SetScriptNonceProvider(Func<string> provider)
+		{
+			ScriptNonceProvider = provider;
+			return this;
+		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -8,8 +8,6 @@
  */
 
 using System;
-using React.Exceptions;
-using React.TinyIoC;
 
 #if LEGACYASPNET
 using System.Web;
@@ -129,16 +127,7 @@ namespace React.AspNet
 				}
 				var html = reactComponent.RenderHtml(clientOnly, exceptionHandler: exceptionHandler);
 
-#if LEGACYASPNET
-				var script = new TagBuilder("script")
-				{
-					InnerHtml = reactComponent.RenderJavaScript()
-				};
-#else
-			var script = new TagBuilder("script");
-			script.InnerHtml.AppendHtml(reactComponent.RenderJavaScript());
-#endif
-				return new HtmlString(html + System.Environment.NewLine + script.ToString());
+				return new HtmlString(html + System.Environment.NewLine + GetScriptTag(reactComponent.RenderJavaScript()).ToString());
 			}
 			finally
 			{
@@ -155,23 +144,40 @@ namespace React.AspNet
 		{
 			try
 			{
-				var script = Environment.GetInitJavaScript(clientOnly);
-#if LEGACYASPNET
-				var tag = new TagBuilder("script")
-				{
-					InnerHtml = script
-				};
-				return new HtmlString(tag.ToString());
-#else
-			var tag = new TagBuilder("script");
-			tag.InnerHtml.AppendHtml(script);
-			return tag;
-#endif
+				return GetScriptTag(Environment.GetInitJavaScript(clientOnly));
 			}
 			finally
 			{
 				Environment.ReturnEngineToPool();
 			}
+		}
+
+		private static IHtmlString GetScriptTag(string script)
+		{
+#if LEGACYASPNET
+			var tag = new TagBuilder("script")
+			{
+				InnerHtml = script,
+			};
+
+			if (Environment.Configuration.ScriptNonceProvider != null)
+			{
+				string nonce = Environment.Configuration.ScriptNonceProvider();
+				tag.Attributes.Add("nonce", nonce );
+			}
+
+			return new HtmlString(tag.ToString());
+#else
+			var tag = new TagBuilder("script");
+			tag.InnerHtml.AppendHtml(script);
+
+			if (Environment.Configuration.ScriptNonceProvider != null)
+			{
+				tag.Attributes.Add("nonce", Environment.Configuration.ScriptNonceProvider());
+			}
+
+			return tag;
+#endif
 		}
 	}
 }
