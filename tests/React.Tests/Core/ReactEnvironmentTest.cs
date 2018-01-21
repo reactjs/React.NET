@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -135,6 +135,17 @@ namespace React.Tests.Core
 
 			// A single nameless component was successfully added!
 			Assert.Equal(";\r\n", environment.GetInitJavaScript());
+		}
+
+		[Fact]
+		public void ServerSideOnlyComponentRendersNoJavaScript()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			environment.CreateComponent("HelloWorld", new { name = "Daniel" }, serverOnly: true);
+
+			Assert.Equal(string.Empty, environment.GetInitJavaScript());
 		}
 
 		public class Mocks

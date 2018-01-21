@@ -69,6 +69,11 @@ namespace React
 		public string ContainerClass { get; set; }
 
 		/// <summary>
+		/// Get or sets if this components only should be rendered server side
+		/// </summary>
+		public bool ServerOnly { get; set; }
+
+		/// <summary>
 		/// Gets or sets the props for this component
 		/// </summary>
 		public object Props
@@ -130,6 +135,11 @@ namespace React
 						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
 						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
 					html = _environment.Execute<string>(reactRenderCommand);
+
+					if (renderServerOnly)
+					{
+						return html;
+					}
 				}
 				catch (JsRuntimeException ex)
 				{
