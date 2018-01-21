@@ -22,10 +22,6 @@
 	<ItemGroup>
 		<Compile Include="..\SharedAssemblyInfo.cs" />
 		<Compile Include="..\SharedAssemblyVersionInfo.cs" />
-		<Content Include="Content\**\*">
-			<Pack>true</Pack>
-			<PackagePath>content\</PackagePath>
-		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\React.AspNet\React.AspNet.csproj" />
 		<ProjectReference Include="..\React.Core\React.Core.csproj" />
 	</ItemGroup>
 
