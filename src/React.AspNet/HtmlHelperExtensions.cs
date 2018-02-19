@@ -163,7 +163,7 @@ namespace React.AspNet
 			if (Environment.Configuration.ScriptNonceProvider != null)
 			{
 				string nonce = Environment.Configuration.ScriptNonceProvider();
-				tag.Attributes.Add("nonce", nonce );
+				tag.Attributes.Add("nonce", nonce);
 			}
 
 			return new HtmlString(tag.ToString());
