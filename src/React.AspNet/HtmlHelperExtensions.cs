@@ -8,12 +8,14 @@
  */
 
 using System;
+using System.IO;
 
 #if LEGACYASPNET
 using System.Web;
 using System.Web.Mvc;
 using IHtmlHelper = System.Web.Mvc.HtmlHelper;
 #else
+using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using IHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 using Microsoft.AspNetCore.Html;
@@ -127,7 +129,7 @@ namespace React.AspNet
 				}
 				var html = reactComponent.RenderHtml(clientOnly, exceptionHandler: exceptionHandler);
 
-				return new HtmlString(html + System.Environment.NewLine + GetScriptTag(reactComponent.RenderJavaScript()).ToString());
+				return new HtmlString(html + System.Environment.NewLine + RenderToString(GetScriptTag(reactComponent.RenderJavaScript())));
 			}
 			finally
 			{
@@ -162,8 +164,7 @@ namespace React.AspNet
 
 			if (Environment.Configuration.ScriptNonceProvider != null)
 			{
-				string nonce = Environment.Configuration.ScriptNonceProvider();
-				tag.Attributes.Add("nonce", nonce);
+				tag.Attributes.Add("nonce", Environment.Configuration.ScriptNonceProvider());
 			}
 
 			return new HtmlString(tag.ToString());
@@ -177,6 +178,20 @@ namespace React.AspNet
 			}
 
 			return tag;
+#endif
+		}
+
+		// In ASP.NET Core, you can no longer call `.ToString` on `IHtmlString`
+		private static string RenderToString(IHtmlString source)
+		{
+#if LEGACYASPNET
+			return source.ToString();
+#else
+			using (var writer = new StringWriter())
+			{
+				source.WriteTo(writer, HtmlEncoder.Default);
+				return writer.ToString();
+			}
 #endif
 		}
 	}
