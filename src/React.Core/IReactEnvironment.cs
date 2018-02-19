@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,7 +7,6 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
 
 namespace React
 {
@@ -110,5 +109,10 @@ namespace React
 		/// Returns the currently held JS engine to the pool. (no-op if engine pooling is disabled)
 		/// </summary>
 		void ReturnEngineToPool();
+
+		/// <summary>
+		/// Gets the site-wide configuration.
+		/// </summary>
+		IReactSiteConfiguration Configuration { get; }
 	}
 }

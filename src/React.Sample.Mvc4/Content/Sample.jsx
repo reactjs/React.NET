@@ -1,4 +1,4 @@
-﻿/**
+/**
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -9,8 +9,8 @@
 
 class CommentsBox extends React.Component {
 	static propTypes = {
-		initialComments: React.PropTypes.array.isRequired,
-		page: React.PropTypes.number
+		initialComments: PropTypes.array.isRequired,
+		page: PropTypes.number
 	};
 
 		state = {
@@ -76,7 +76,7 @@ class CommentsBox extends React.Component {
 
 class Comment extends React.Component {
 	static propTypes = {
-		author: React.PropTypes.object.isRequired
+		author: PropTypes.object.isRequired
 	};
 
 	render() {
@@ -92,7 +92,7 @@ class Comment extends React.Component {
 
 class Avatar extends React.Component {
 	static propTypes = {
-		author: React.PropTypes.object.isRequired
+		author: PropTypes.object.isRequired
 	};
 
 	render() {

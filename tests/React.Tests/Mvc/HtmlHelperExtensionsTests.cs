@@ -7,9 +7,11 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
+using System.Security.Cryptography;
 using Moq;
-using Xunit;
 using React.Web.Mvc;
+using Xunit;
 
 namespace React.Tests.Mvc
 {
@@ -20,9 +22,10 @@ namespace React.Tests.Mvc
 		/// This is only required because <see cref="HtmlHelperExtensions"/> can not be
 		/// injected :(
 		/// </summary>
-		private Mock<IReactEnvironment> ConfigureMockEnvironment()
+		private Mock<IReactEnvironment> ConfigureMockEnvironment(IReactSiteConfiguration configuration = null)
 		{
 			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Configuration).Returns(configuration ?? new ReactSiteConfiguration());
 			AssemblyRegistration.Container.Register(environment.Object);
 			return environment;
 		}
@@ -50,6 +53,61 @@ namespace React.Tests.Mvc
 			);
 			Assert.Equal(
 				"HTML" + System.Environment.NewLine + "<script>JS</script>",
+				result.ToString()
+			);
+		}
+
+		[Fact]
+		public void ScriptNonceIsReturned()
+		{
+			string nonce;
+			using (var random = new RNGCryptoServiceProvider())
+			{
+				byte[] nonceBytes = new byte[16];
+				random.GetBytes(nonceBytes);
+				nonce = Convert.ToBase64String(nonceBytes);
+			}
+
+			var component = new Mock<IReactComponent>();
+			component.Setup(x => x.RenderHtml(false, false, null)).Returns("HTML");
+			component.Setup(x => x.RenderJavaScript()).Returns("JS");
+
+			var config = new Mock<IReactSiteConfiguration>();
+
+			var environment = ConfigureMockEnvironment(config.Object);
+
+			environment.Setup(x => x.Configuration).Returns(config.Object);
+			environment.Setup(x => x.CreateComponent(
+				"ComponentName",
+				new { },
+				null,
+				false,
+				false
+			)).Returns(component.Object);
+
+			// without nonce
+			var result = HtmlHelperExtensions.ReactWithInit(
+				htmlHelper: null,
+				componentName: "ComponentName",
+				props: new { },
+				htmlTag: "span"
+			);
+			Assert.Equal(
+				"HTML" + System.Environment.NewLine + "<script>JS</script>",
+				result.ToString()
+			);
+
+			config.Setup(x => x.ScriptNonceProvider).Returns(() => nonce);
+
+			// with nonce
+			result = HtmlHelperExtensions.ReactWithInit(
+				htmlHelper: null,
+				componentName: "ComponentName",
+				props: new { },
+				htmlTag: "span"
+			);
+			Assert.Equal(
+				"HTML" + System.Environment.NewLine + "<script nonce=\"" + nonce + "\">JS</script>",
 				result.ToString()
 			);
 		}

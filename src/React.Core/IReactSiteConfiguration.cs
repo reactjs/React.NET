@@ -8,8 +8,8 @@
  */
 
 using System;
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace React
 {
@@ -193,5 +193,19 @@ namespace React
 		/// <param name="handler"></param>
 		/// <returns></returns>
 		IReactSiteConfiguration SetExceptionHandler(Action<Exception, string, string> handler);
+
+		/// <summary>
+		/// A provider that returns a nonce to be used on any script tags on the page. 
+		/// This value must match the nonce used in the Content Security Policy header on the response.
+		/// </summary>
+		Func<string> ScriptNonceProvider { get; set; }
+
+		/// <summary>
+		/// Sets a provider that returns a nonce to be used on any script tags on the page. 
+		/// This value must match the nonce used in the Content Security Policy header on the response.
+		/// </summary>
+		/// <param name="provider"></param>
+		/// <returns></returns>
+		IReactSiteConfiguration SetScriptNonceProvider(Func<string> provider);
 	}
 }
