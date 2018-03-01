@@ -69,7 +69,7 @@ namespace React.Router
 		{
 			return string.Format(
 				@"React.createElement
-					({0}, Object.assign({1}, {{ path: '{2}', context: context }}))",
+					({0}, Object.assign({1}, {{ location: '{2}', context: context }}))",
 				ComponentName,
 				_serializedProps,
 				_path
