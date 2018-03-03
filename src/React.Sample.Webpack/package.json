@@ -17,5 +17,8 @@
     "babel-preset-stage-0": "~6.5.0",
     "expose-loader": "^0.7.1",
     "webpack": "^1.12.9"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1"
   }
 }
