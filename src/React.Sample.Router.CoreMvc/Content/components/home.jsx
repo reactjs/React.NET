@@ -68,7 +68,7 @@ export default class HomeComponent extends Component {
 
 		if (typeof window === 'undefined') {
 			return (
-				<StaticRouter context={this.props.context} location={this.props.path}>
+				<StaticRouter context={this.props.context} location={this.props.location}>
 					{app}
 				</StaticRouter>
 			);
