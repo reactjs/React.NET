@@ -9,6 +9,7 @@
 
 var Avatar = require('./Avatar');
 var React = require('react');
+var PropTypes = require('prop-types');
 
 class Comment extends React.Component {
 	static propTypes = {

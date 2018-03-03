@@ -9,6 +9,7 @@
 
 var Comment = require('./Comment');
 var React = require('react');
+var PropTypes = require('prop-types');
 
 class CommentsBox extends React.Component {
 	static propTypes = {
