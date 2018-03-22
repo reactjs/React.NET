@@ -207,5 +207,16 @@ namespace React
 		/// <param name="provider"></param>
 		/// <returns></returns>
 		IReactSiteConfiguration SetScriptNonceProvider(Func<string> provider);
+
+		/// <summary>
+		/// Get or set boolean that specifies whether the component should be checked to ensure that it exists.
+		/// </summary>
+		bool ComponentExistsChecks { get; set; }
+
+		/// <summary>
+		/// Sets whether the component should be checked to ensure that it exists.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration SetComponentExistsChecks(bool componentExistsChecks);
 	}
 }

@@ -22,9 +22,8 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.UseServerSideRendering).Returns(true);
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container");
+			var config = new ReactSiteConfiguration();
+			var component = new ReactComponent(environment.Object, config, "Foo", "container");
 
 			Assert.Throws<ReactInvalidComponentException>(() =>
 			{
