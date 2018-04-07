@@ -252,11 +252,9 @@ namespace React
 		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
 		protected void WriteSerializedProps(TextWriter writer)
 		{
-			//TODO: cache
 			using (var jsonWriter = new JsonTextWriter(writer))
 			{
 				jsonWriter.CloseOutput = false;
-				jsonWriter.AutoCompleteOnClose = false;
 
 				var jsonSerializer = JsonSerializer.Create(_configuration.JsonSerializerSettings);
 				jsonSerializer.Serialize(jsonWriter, Props);
