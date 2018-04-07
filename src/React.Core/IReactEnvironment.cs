@@ -8,6 +8,8 @@
  */
 
 
+using System.IO;
+
 namespace React
 {
 	/// <summary>
@@ -99,6 +101,15 @@ namespace React
 		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <returns>JavaScript for all components</returns>
 		string GetInitJavaScript(bool clientOnly = false);
+
+		/// <summary>
+		/// Renders the JavaScript required to initialise all components client-side. This will 
+		/// attach event handlers to the server-rendered HTML.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
+		/// <returns>JavaScript for all components</returns>
+		void GetInitJavaScript(TextWriter writer, bool clientOnly = false);
 
 		/// <summary>
 		/// Gets the JSX Transformer for this environment.

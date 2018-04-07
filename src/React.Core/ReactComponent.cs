@@ -8,7 +8,10 @@
  */
 
 using System;
+using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
@@ -21,6 +24,11 @@ namespace React
 	/// </summary>
 	public class ReactComponent : IReactComponent
 	{
+		private static readonly ConcurrentDictionary<string, bool> _componentNameValidCache = new ConcurrentDictionary<string, bool>();
+
+		[ThreadStatic]
+		private static StringWriter _sharedStringWriter;
+		
 		/// <summary>
 		/// Regular expression used to validate JavaScript identifiers. Used to ensure component
 		/// names are valid.
@@ -37,16 +45,6 @@ namespace React
 		/// Global site configuration
 		/// </summary>
 		protected readonly IReactSiteConfiguration _configuration;
-
-		/// <summary>
-		/// Raw props for this component
-		/// </summary>
-		protected object _props;
-
-		/// <summary>
-		/// JSON serialized props for this component
-		/// </summary>
-		protected string _serializedProps;
 
 		/// <summary>
 		/// Gets or sets the name of the component
@@ -76,18 +74,7 @@ namespace React
 		/// <summary>
 		/// Gets or sets the props for this component
 		/// </summary>
-		public object Props
-		{
-			get { return _props; }
-			set
-			{
-				_props = value;
-				_serializedProps = JsonConvert.SerializeObject(
-					value,
-					_configuration.JsonSerializerSettings
-				);
-			}
-		}
+		public object Props { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReactComponent"/> class.
@@ -102,7 +89,7 @@ namespace React
 			_environment = environment;
 			_configuration = configuration;
 			ComponentName = componentName;
-			ContainerId = string.IsNullOrEmpty(containerId) ? GenerateId() : containerId;
+			ContainerId = string.IsNullOrEmpty(containerId) ? ReactIdGenerator.Generate() : containerId;
 			ContainerTag = "div";
 		}
 
@@ -114,14 +101,30 @@ namespace React
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
+		public string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
+		{
+			var writer = new StringWriter();
+			RenderHtml(writer, renderContainerOnly, renderServerOnly, exceptionHandler);
+			return writer.ToString();
+		}
+
+		/// <summary>
+		/// Renders the HTML for this component. This will execute the component server-side and
+		/// return the rendered HTML.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
+		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
+		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <returns>HTML</returns>
+		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
 		{
 			if (!_configuration.UseServerSideRendering)
 			{
 				renderContainerOnly = true;
 			}
 
-			if (!renderContainerOnly)
+			if (_configuration.ComponentExistsChecks && !renderContainerOnly)
 			{
 				EnsureComponentExists();
 			}
@@ -129,16 +132,30 @@ namespace React
 			var html = string.Empty;
 			if (!renderContainerOnly)
 			{
+				var stringWriter = _sharedStringWriter;
+				if (stringWriter != null)
+				{
+					stringWriter.GetStringBuilder().Clear();
+				}
+				else
+				{
+					_sharedStringWriter = 
+						stringWriter = 
+						new StringWriter(new StringBuilder(512));
+				}
+				
 				try
 				{
-					var reactRenderCommand = renderServerOnly
-						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
-						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
-					html = _environment.Execute<string>(reactRenderCommand);
+					stringWriter.Write(renderServerOnly ? "ReactDOMServer.renderToStaticMarkup(" : "ReactDOMServer.renderToString(");
+					WriteComponentInitialiser(stringWriter);
+					stringWriter.Write(')');
+
+					html = _environment.Execute<string>(stringWriter.ToString());
 
 					if (renderServerOnly)
 					{
-						return html;
+						writer.Write(html);
+						return;
 					}
 				}
 				catch (JsRuntimeException ex)
@@ -151,19 +168,24 @@ namespace React
 					exceptionHandler(ex, ComponentName, ContainerId);
 				}
 			}
-
-			string attributes = string.Format("id=\"{0}\"", ContainerId);
+			
+			writer.Write('<');
+			writer.Write(ContainerTag);
+			writer.Write(" id=\"");
+			writer.Write(ContainerId);
+			writer.Write('"');
 			if (!string.IsNullOrEmpty(ContainerClass))
 			{
-				attributes += string.Format(" class=\"{0}\"", ContainerClass);
+				writer.Write(" class=\"");
+				writer.Write(ContainerClass);
+				writer.Write('"');
 			}
-
-			return string.Format(
-				"<{2} {0}>{1}</{2}>",
-				attributes,
-				html,
-				ContainerTag
-			);
+			
+			writer.Write('>');
+			writer.Write(html);
+			writer.Write("</");
+			writer.Write(ContainerTag);
+			writer.Write('>');
 		}
 
 		/// <summary>
@@ -172,13 +194,26 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		public virtual string RenderJavaScript()
+		public string RenderJavaScript()
 		{
-			return string.Format(
-				"ReactDOM.hydrate({0}, document.getElementById({1}))",
-				GetComponentInitialiser(),
-				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
-			);
+			var writer = new StringWriter();
+			RenderJavaScript(writer);
+			return writer.ToString();
+		}
+		
+		/// <summary>
+		/// Renders the JavaScript required to initialise this component client-side. This will
+		/// initialise the React component, which includes attach event handlers to the
+		/// server-rendered HTML.
+		/// </summary>
+		/// <returns>JavaScript</returns>
+		public virtual void RenderJavaScript(TextWriter writer)
+		{
+			writer.Write("ReactDOM.hydrate(");
+			WriteComponentInitialiser(writer);
+			writer.Write(", document.getElementById(\"");
+			writer.Write(ContainerId);
+			writer.Write("\"))");
 		}
 
 		/// <summary>
@@ -187,10 +222,7 @@ namespace React
 		protected virtual void EnsureComponentExists()
 		{
 			// This is safe as componentName was validated via EnsureComponentNameValid()
-			var componentExists = _environment.Execute<bool>(string.Format(
-				"typeof {0} !== 'undefined'",
-				ComponentName
-			));
+			var componentExists = _environment.Execute<bool>($"typeof {ComponentName} !== 'undefined'");
 			if (!componentExists)
 			{
 				throw new ReactInvalidComponentException(string.Format(
@@ -204,14 +236,29 @@ namespace React
 		/// <summary>
 		/// Gets the JavaScript code to initialise the component
 		/// </summary>
-		/// <returns>JavaScript for component initialisation</returns>
-		protected virtual string GetComponentInitialiser()
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		protected virtual void WriteComponentInitialiser(TextWriter writer)
 		{
-			return string.Format(
-				"React.createElement({0}, {1})",
-				ComponentName,
-				_serializedProps
-			);
+			writer.Write("React.createElement(");
+			writer.Write(ComponentName);
+			writer.Write(", ");
+			WriteSerializedProps(writer);
+			writer.Write(')');
+		}
+
+		/// <summary>
+		/// Write serialized Props to writer
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		protected void WriteSerializedProps(TextWriter writer)
+		{
+			using (var jsonWriter = new JsonTextWriter(writer))
+			{
+				jsonWriter.CloseOutput = false;
+
+				var jsonSerializer = JsonSerializer.Create(_configuration.JsonSerializerSettings);
+				jsonSerializer.Serialize(jsonWriter, Props);
+			}
 		}
 
 		/// <summary>
@@ -220,23 +267,11 @@ namespace React
 		/// <param name="componentName"></param>
 		internal static void EnsureComponentNameValid(string componentName)
 		{
-			var isValid = componentName.Split('.').All(segment => _identifierRegex.IsMatch(segment));
+			var isValid = _componentNameValidCache.GetOrAdd(componentName, compName => compName.Split('.').All(segment => _identifierRegex.IsMatch(segment)));
 			if (!isValid)
 			{
-				throw new ReactInvalidComponentException(string.Format(
-					"Invalid component name '{0}'",
-					componentName
-				));
+				throw new ReactInvalidComponentException($"Invalid component name '{componentName}'");
 			}
-		}
-
-		/// <summary>
-		/// Generates a unique identifier for this component, if one was not passed in.
-		/// </summary>
-		/// <returns></returns>
-		private static string GenerateId()
-		{
-			return "react_" + Guid.NewGuid().ToShortGuid();
 		}
 	}
 }

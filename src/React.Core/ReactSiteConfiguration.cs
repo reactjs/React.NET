@@ -53,6 +53,7 @@ namespace React
 					ex.Message,
 					ContainerId
 				));
+			ComponentExistsChecks = true;
 		}
 
 		/// <summary>
@@ -342,6 +343,21 @@ namespace React
 		public IReactSiteConfiguration SetScriptNonceProvider(Func<string> provider)
 		{
 			ScriptNonceProvider = provider;
+			return this;
+		}
+
+		/// <summary>
+		/// Get or set boolean that specifies whether the component should be checked to ensure that it exists.
+		/// </summary>
+		public bool ComponentExistsChecks { get; set; }
+
+		/// <summary>
+		/// Sets whether the component should be checked to ensure that it exists.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		public IReactSiteConfiguration SetComponentExistsChecks(bool componentExistsChecks)
+		{
+			ComponentExistsChecks = componentExistsChecks;
 			return this;
 		}
 	}
