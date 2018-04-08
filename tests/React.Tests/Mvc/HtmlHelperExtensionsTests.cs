@@ -50,7 +50,7 @@ namespace React.Tests.Mvc
 				componentName: "ComponentName",
 				props: new { },
 				htmlTag: "span"
-			);
+			).ToHtmlString();
 			Assert.Equal(
 				"HTML" + System.Environment.NewLine + "<script>JS</script>",
 				result.ToString()
@@ -91,7 +91,7 @@ namespace React.Tests.Mvc
 				componentName: "ComponentName",
 				props: new { },
 				htmlTag: "span"
-			);
+			).ToHtmlString();
 			Assert.Equal(
 				"HTML" + System.Environment.NewLine + "<script>JS</script>",
 				result.ToString()
@@ -105,7 +105,7 @@ namespace React.Tests.Mvc
 				componentName: "ComponentName",
 				props: new { },
 				htmlTag: "span"
-			);
+			).ToHtmlString();
 			Assert.Equal(
 				"HTML" + System.Environment.NewLine + "<script nonce=\"" + nonce + "\">JS</script>",
 				result.ToString()
@@ -134,7 +134,7 @@ namespace React.Tests.Mvc
 				htmlTag: "span",
 				clientOnly: true,
 				serverOnly: false
-			);
+			).ToHtmlString();
 			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
@@ -160,7 +160,7 @@ namespace React.Tests.Mvc
 				htmlTag: "span",
 				clientOnly: true,
 				serverOnly: false
-			);
+			).ToHtmlString();
 			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
 		}
 
@@ -185,7 +185,7 @@ namespace React.Tests.Mvc
 				htmlTag: "span",
 				clientOnly: false,
 				serverOnly: true
-			);
+			).ToHtmlString();
 			component.Verify(x => x.RenderHtml(It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), null), Times.Once);
 		}
 	}

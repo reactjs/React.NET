@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs;..\React.AspNet\HtmlHelperExtensions.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs;..\React.AspNet\HtmlHelperExtensions.cs;..\React.AspNet\ActionHtmlString.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
     <Content Include="Content\**\*">
       <Pack>true</Pack>
