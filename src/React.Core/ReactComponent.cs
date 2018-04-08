@@ -22,7 +22,7 @@ namespace React
 	/// </summary>
 	public class ReactComponent : IReactComponent
 	{
-		private static readonly ConcurrentDictionary<string, bool> _componentNameValidCache = new ConcurrentDictionary<string, bool>();
+		private static readonly ConcurrentDictionary<string, bool> _componentNameValidCache = new ConcurrentDictionary<string, bool>(StringComparer.Ordinal);
 
 		/// <summary>
 		/// Regular expression used to validate JavaScript identifiers. Used to ensure component
