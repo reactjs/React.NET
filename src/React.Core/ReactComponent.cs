@@ -102,7 +102,7 @@ namespace React
 			_environment = environment;
 			_configuration = configuration;
 			ComponentName = componentName;
-			ContainerId = string.IsNullOrEmpty(containerId) ? GenerateId() : containerId;
+			ContainerId = string.IsNullOrEmpty(containerId) ? ReactIdGenerator.Generate() : containerId;
 			ContainerTag = "div";
 		}
 
@@ -228,15 +228,6 @@ namespace React
 					componentName
 				));
 			}
-		}
-
-		/// <summary>
-		/// Generates a unique identifier for this component, if one was not passed in.
-		/// </summary>
-		/// <returns></returns>
-		private static string GenerateId()
-		{
-			return "react_" + Guid.NewGuid().ToShortGuid();
 		}
 	}
 }
