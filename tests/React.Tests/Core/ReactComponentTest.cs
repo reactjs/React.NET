@@ -24,7 +24,38 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			config.Setup(x => x.ComponentExistsChecks).Returns(true);
 			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container");
+
+			Assert.Throws<ReactInvalidComponentException>(() =>
+			{
+				component.RenderHtml();
+			});
+		}
+
+
+		[Fact]
+		public void RenderHtmlShouldNotThrowExceptionIfComponentExistsCheckDisabled()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			config.Setup(x => x.ComponentExistsChecks).Returns(false);
+			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container");
+
+			var ex = Record.Exception(() => component.RenderHtml());
+
+			Assert.Null(ex);
+		}
+
+		[Fact]
+		public void RenderHtmlShouldThrowExceptionIfComponentDoesNotExistByDefualt()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
+			var config = new ReactSiteConfiguration();
+			var component = new ReactComponent(environment.Object, config, "Foo", "container");
 
 			Assert.Throws<ReactInvalidComponentException>(() =>
 			{

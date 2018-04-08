@@ -124,7 +124,7 @@ namespace React
 				renderContainerOnly = true;
 			}
 
-			if (!renderContainerOnly)
+			if (_configuration.ComponentExistsChecks && !renderContainerOnly)
 			{
 				EnsureComponentExists();
 			}
