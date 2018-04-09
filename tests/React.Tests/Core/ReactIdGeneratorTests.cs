@@ -17,7 +17,9 @@ namespace React.Tests.Core
 		[Fact]
 		public void GuidShouldHaveFixedRange()
 		{
-			var shortGuid = ReactIdGenerator.Generate();
+			var generator = new ReactIdGenerator();
+
+			var shortGuid = generator.Generate();
 
 			Assert.Equal(19, shortGuid.Length);
 		}
@@ -25,7 +27,9 @@ namespace React.Tests.Core
 		[Fact]
 		public void ShouldStartsWithReact()
 		{
-			var shortGuid = ReactIdGenerator.Generate();
+			var generator = new ReactIdGenerator();
+
+			var shortGuid = generator.Generate();
 
 			Assert.StartsWith("react_", shortGuid);
 		}
@@ -33,8 +37,10 @@ namespace React.Tests.Core
 		[Fact]
 		public void TwoGuidsShouldNotEqual()
 		{
-			var shortGuid1 = ReactIdGenerator.Generate();
-			var shortGuid2 = ReactIdGenerator.Generate();
+			var generator = new ReactIdGenerator();
+
+			var shortGuid1 = generator.Generate();
+			var shortGuid2 = generator.Generate();
 
 			Assert.NotEqual(shortGuid1, shortGuid2);
 		}

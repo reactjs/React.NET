@@ -94,15 +94,16 @@ namespace React
 		/// </summary>
 		/// <param name="environment">The environment.</param>
 		/// <param name="configuration">Site-wide configuration.</param>
+		/// <param name="reactIdGenerator">React Id generator.</param>
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="containerId">The ID of the container DIV for this component</param>
-		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, string componentName, string containerId)
+		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, IReactIdGenerator reactIdGenerator, string componentName, string containerId)
 		{
 			EnsureComponentNameValid(componentName);
 			_environment = environment;
 			_configuration = configuration;
 			ComponentName = componentName;
-			ContainerId = string.IsNullOrEmpty(containerId) ? ReactIdGenerator.Generate() : containerId;
+			ContainerId = string.IsNullOrEmpty(containerId) ? reactIdGenerator.Generate() : containerId;
 			ContainerTag = "div";
 		}
 

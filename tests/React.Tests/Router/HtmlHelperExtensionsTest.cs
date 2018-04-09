@@ -46,6 +46,13 @@ namespace React.Tests.Router
 			return config;
 		}
 
+		private Mock<IReactIdGenerator> ConfigureReactIdGenerator()
+		{
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			AssemblyRegistration.Container.Register(reactIdGenerator.Object);
+			return reactIdGenerator;
+		}
+
 		/// <summary>
 		/// Mock an html helper with a mocked response object.
 		/// Used when testing for server response modification.
@@ -76,18 +83,22 @@ namespace React.Tests.Router
 			public Mock<IReactSiteConfiguration> config;
 			public Mock<IReactEnvironment> environment;
 			public Mock<ReactRouterComponent> component;
+			public Mock<IReactIdGenerator> reactIdGenerator;
 
 			public ReactRouterMocks(
 				Mock<IReactSiteConfiguration> conf,
-				Mock<IReactEnvironment> env
+				Mock<IReactEnvironment> env,
+				Mock<IReactIdGenerator> idGenerator
 			)
 			{
 				config = conf;
 				environment = env;
+				reactIdGenerator = idGenerator;
 
 				component = new Mock<ReactRouterComponent>(
 					environment.Object,
 					config.Object,
+					reactIdGenerator.Object,
 					"ComponentName",
 					"",
 					"/"
@@ -110,7 +121,8 @@ namespace React.Tests.Router
 		{
 			var config = ConfigureMockConfiguration();
 			var environment = ConfigureMockEnvironment();
-			var routerMocks = new ReactRouterMocks(config, environment);
+			var reactIdGenerator = ConfigureReactIdGenerator();
+			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator);
 			var htmlHelperMock = new HtmlHelperMocks();
 
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Never);
@@ -133,7 +145,8 @@ namespace React.Tests.Router
 
 			var htmlHelperMock = new HtmlHelperMocks();
 			var environment = ConfigureMockEnvironment();
-			var routerMocks = new ReactRouterMocks(config, environment);
+			var reactIdGenerator = ConfigureReactIdGenerator();
+			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator);
 
 			var result = HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
@@ -154,7 +167,8 @@ namespace React.Tests.Router
 
 			var htmlHelperMock = new HtmlHelperMocks();
 			var environment = ConfigureMockEnvironment();
-			var routerMocks = new ReactRouterMocks(config, environment);
+			var reactIdGenerator = ConfigureReactIdGenerator();
+			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator);
 
 			var result = HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
@@ -173,6 +187,7 @@ namespace React.Tests.Router
 		{
 			var mocks = ConfigureMockReactEnvironment();
 			ConfigureMockConfiguration();
+			ConfigureReactIdGenerator();
 
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns("{ status: 200 }");
@@ -193,6 +208,7 @@ namespace React.Tests.Router
 		{
 			var mocks = ConfigureMockReactEnvironment();
 			ConfigureMockConfiguration();
+			ConfigureReactIdGenerator();
 
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns("{ status: 200 }");
@@ -214,6 +230,7 @@ namespace React.Tests.Router
 		{
 			var mocks = ConfigureMockReactEnvironment();
 			ConfigureMockConfiguration();
+			ConfigureReactIdGenerator();
 
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns(@"{ status: 301, url: ""/foo"" }");
@@ -234,6 +251,7 @@ namespace React.Tests.Router
 		{
 			var mocks = ConfigureMockReactEnvironment();
 			ConfigureMockConfiguration();
+			ConfigureReactIdGenerator();
 
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns(@"{ url: ""/foo"" }");
@@ -254,6 +272,7 @@ namespace React.Tests.Router
 		{
 			var mocks = ConfigureMockReactEnvironment();
 			ConfigureMockConfiguration();
+			ConfigureReactIdGenerator();
 
 			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
 						.Returns("{ status: 301 }");

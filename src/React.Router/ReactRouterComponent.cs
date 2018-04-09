@@ -26,16 +26,18 @@ namespace React.Router
 		/// </summary>
 		/// <param name="environment">The environment.</param>
 		/// <param name="configuration">Site-wide configuration.</param>
+		/// <param name="reactIdGenerator">React Id generator.</param>
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="containerId">The ID of the container DIV for this component</param>
 		/// <param name="path">F.x. from Request.Path. Used by React Static Router to determine context and routing.</param>
 		public ReactRouterComponent(
 			IReactEnvironment environment,
 			IReactSiteConfiguration configuration,
+			IReactIdGenerator reactIdGenerator,
 			string componentName,
 			string containerId,
 			string path
-		) : base(environment, configuration, componentName, containerId)
+		) : base(environment, configuration, reactIdGenerator, componentName, containerId)
 		{
 			_path = path;
 		}

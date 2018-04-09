@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -37,6 +37,7 @@ namespace React
 			container.Register<IFileCacheHash, FileCacheHash>().AsPerRequestSingleton();
 			container.Register<JsEngineSwitcher>((c, o) => JsEngineSwitcher.Instance);
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsSingleton();
+			container.Register<IReactIdGenerator, ReactIdGenerator>().AsSingleton();
 
 			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
 		}

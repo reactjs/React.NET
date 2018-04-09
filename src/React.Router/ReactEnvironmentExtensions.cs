@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -35,11 +35,10 @@ namespace React.Router
 			bool clientOnly = false
 		)
 		{
-			var config = AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>();
-
 			var component = new ReactRouterComponent(
-				env, 
-				config, 
+				env,
+				AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>(), 
+				AssemblyRegistration.Container.Resolve<IReactIdGenerator>(),
 				componentName, 
 				containerId, 
 				path

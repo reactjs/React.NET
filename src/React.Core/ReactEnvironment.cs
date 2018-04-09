@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -55,6 +55,10 @@ namespace React
 		/// Hash algorithm for file-based cache
 		/// </summary>
 		protected readonly IFileCacheHash _fileCacheHash;
+		/// <summary>
+		/// React Id generator
+		/// </summary>
+		private readonly IReactIdGenerator _reactIdGenerator;
 
 		/// <summary>
 		/// JSX Transformer instance for this environment
@@ -120,12 +124,14 @@ namespace React
 		/// <param name="cache">The cache to use for JSX compilation</param>
 		/// <param name="fileSystem">File system wrapper</param>
 		/// <param name="fileCacheHash">Hash algorithm for file-based cache</param>
+		/// <param name="reactIdGenerator">React ID generator</param>
 		public ReactEnvironment(
 			IJavaScriptEngineFactory engineFactory,
 			IReactSiteConfiguration config,
 			ICache cache,
 			IFileSystem fileSystem,
-			IFileCacheHash fileCacheHash
+			IFileCacheHash fileCacheHash,
+			IReactIdGenerator reactIdGenerator
 		)
 		{
 			_engineFactory = engineFactory;
@@ -133,6 +139,7 @@ namespace React
 			_cache = cache;
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
+			_reactIdGenerator = reactIdGenerator;
 			_babelTransformer = new Lazy<IBabel>(() => 
 				new Babel(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
@@ -294,7 +301,7 @@ namespace React
 				EnsureUserScriptsLoaded();
 			}
 
-			var component = new ReactComponent(this, _config, componentName, containerId)
+			var component = new ReactComponent(this, _config, _reactIdGenerator, componentName, containerId)
 			{
 				Props = props,
 				ServerOnly = serverOnly
