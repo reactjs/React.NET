@@ -46,7 +46,7 @@ namespace React
 
 			var id = Interlocked.Increment(ref _random);
 
-			// from 6 because  "react_".Length == 6, _encode32Chars.Length == 31 (base32), 
+			// from 6 because  "react_".Length == 6, _encode32Chars.Length == 32 (base32), 
 			// base32 characters are 5 bits in length and from long (64 bits) we can get 13 symbols
 			chars[6] = _encode32Chars[(int)(id >> 60) & 31];
 			chars[7] = _encode32Chars[(int)(id >> 55) & 31];
