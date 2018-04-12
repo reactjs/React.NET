@@ -81,7 +81,7 @@ namespace React.AspNet
 						reactComponent.ContainerClass = containerClass;
 					}
 
-					writer.Write(reactComponent.RenderHtml(clientOnly, serverOnly, exceptionHandler));
+					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler);
 				}
 				finally
 				{
@@ -131,9 +131,9 @@ namespace React.AspNet
 						reactComponent.ContainerClass = containerClass;
 					}
 
-					writer.Write(reactComponent.RenderHtml(clientOnly, exceptionHandler: exceptionHandler));
+					reactComponent.RenderHtml(writer, clientOnly, exceptionHandler: exceptionHandler);
 					writer.WriteLine();
-					WriteScriptTag(writer, bodyWriter => bodyWriter.Write(reactComponent.RenderJavaScript()));
+					WriteScriptTag(writer, bodyWriter => reactComponent.RenderJavaScript(bodyWriter));
 				}
 				finally
 				{
@@ -153,7 +153,7 @@ namespace React.AspNet
 			{
 				try
 				{
-					WriteScriptTag(writer, bodyWriter => bodyWriter.Write(Environment.GetInitJavaScript(clientOnly)));
+					WriteScriptTag(writer, bodyWriter => Environment.GetInitJavaScript(bodyWriter, clientOnly));
 				}
 				finally
 				{

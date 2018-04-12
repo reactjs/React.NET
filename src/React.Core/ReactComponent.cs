@@ -9,7 +9,9 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
@@ -23,6 +25,9 @@ namespace React
 	public class ReactComponent : IReactComponent
 	{
 		private static readonly ConcurrentDictionary<string, bool> _componentNameValidCache = new ConcurrentDictionary<string, bool>(StringComparer.Ordinal);
+
+		[ThreadStatic]
+		private static StringWriter _sharedStringWriter;
 
 		/// <summary>
 		/// Regular expression used to validate JavaScript identifiers. Used to ensure component
@@ -87,8 +92,7 @@ namespace React
 				_props = value;
 				_serializedProps = JsonConvert.SerializeObject(
 					value,
-					_configuration.JsonSerializerSettings
-				);
+					_configuration.JsonSerializerSettings);
 			}
 		}
 
@@ -120,6 +124,24 @@ namespace React
 		/// <returns>HTML</returns>
 		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
 		{
+			using (var writer = new StringWriter())
+			{
+				RenderHtml(writer, renderContainerOnly, renderServerOnly, exceptionHandler);
+				return writer.ToString();
+			}
+		}
+
+		/// <summary>
+		/// Renders the HTML for this component. This will execute the component server-side and
+		/// return the rendered HTML.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
+		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
+		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <returns>HTML</returns>
+		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
+		{
 			if (!_configuration.UseServerSideRendering)
 			{
 				renderContainerOnly = true;
@@ -133,16 +155,28 @@ namespace React
 			var html = string.Empty;
 			if (!renderContainerOnly)
 			{
+				var stringWriter = _sharedStringWriter;
+				if (stringWriter != null)
+				{
+					stringWriter.GetStringBuilder().Clear();
+				}
+				else
+				{
+					_sharedStringWriter = stringWriter = new StringWriter(new StringBuilder(_serializedProps.Length + 128));
+				}
+
 				try
 				{
-					var reactRenderCommand = renderServerOnly
-						? string.Format("ReactDOMServer.renderToStaticMarkup({0})", GetComponentInitialiser())
-						: string.Format("ReactDOMServer.renderToString({0})", GetComponentInitialiser());
-					html = _environment.Execute<string>(reactRenderCommand);
+					stringWriter.Write(renderServerOnly ? "ReactDOMServer.renderToStaticMarkup(" : "ReactDOMServer.renderToString(");
+					WriteComponentInitialiser(stringWriter);
+					stringWriter.Write(')');
+
+					html = _environment.Execute<string>(stringWriter.ToString());
 
 					if (renderServerOnly)
 					{
-						return html;
+						writer.Write(html);
+						return;
 					}
 				}
 				catch (JsRuntimeException ex)
@@ -156,18 +190,23 @@ namespace React
 				}
 			}
 
-			string attributes = string.Format("id=\"{0}\"", ContainerId);
+			writer.Write('<');
+			writer.Write(ContainerTag);
+			writer.Write(" id=\"");
+			writer.Write(ContainerId);
+			writer.Write('"');
 			if (!string.IsNullOrEmpty(ContainerClass))
 			{
-				attributes += string.Format(" class=\"{0}\"", ContainerClass);
+				writer.Write(" class=\"");
+				writer.Write(ContainerClass);
+				writer.Write('"');
 			}
 
-			return string.Format(
-				"<{2} {0}>{1}</{2}>",
-				attributes,
-				html,
-				ContainerTag
-			);
+			writer.Write('>');
+			writer.Write(html);
+			writer.Write("</");
+			writer.Write(ContainerTag);
+			writer.Write('>');
 		}
 
 		/// <summary>
@@ -178,11 +217,27 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual string RenderJavaScript()
 		{
-			return string.Format(
-				"ReactDOM.hydrate({0}, document.getElementById({1}))",
-				GetComponentInitialiser(),
-				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
-			);
+			using (var writer = new StringWriter())
+			{
+				RenderJavaScript(writer);
+				return writer.ToString();
+			}
+		}
+
+		/// <summary>
+		/// Renders the JavaScript required to initialise this component client-side. This will
+		/// initialise the React component, which includes attach event handlers to the
+		/// server-rendered HTML.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		/// <returns>JavaScript</returns>
+		public virtual void RenderJavaScript(TextWriter writer)
+		{
+			writer.Write("ReactDOM.hydrate(");
+			WriteComponentInitialiser(writer);
+			writer.Write(", document.getElementById(\"");
+			writer.Write(ContainerId);
+			writer.Write("\"))");
 		}
 
 		/// <summary>
@@ -208,14 +263,14 @@ namespace React
 		/// <summary>
 		/// Gets the JavaScript code to initialise the component
 		/// </summary>
-		/// <returns>JavaScript for component initialisation</returns>
-		protected virtual string GetComponentInitialiser()
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		protected virtual void WriteComponentInitialiser(TextWriter writer)
 		{
-			return string.Format(
-				"React.createElement({0}, {1})",
-				ComponentName,
-				_serializedProps
-			);
+			writer.Write("React.createElement(");
+			writer.Write(ComponentName);
+			writer.Write(", ");
+			writer.Write(_serializedProps);
+			writer.Write(')');
 		}
 
 		/// <summary>

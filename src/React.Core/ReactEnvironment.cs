@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -335,25 +336,37 @@ namespace React
 		/// <returns>JavaScript for all components</returns>
 		public virtual string GetInitJavaScript(bool clientOnly = false)
 		{
-			var fullScript = new StringBuilder();
-			
+			using (var writer = new StringWriter())
+			{
+				GetInitJavaScript(writer, clientOnly);
+				return writer.ToString();
+			}
+		}
+
+		/// <summary>
+		/// Renders the JavaScript required to initialise all components client-side. This will 
+		/// attach event handlers to the server-rendered HTML.
+		/// </summary>
+		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
+		/// <returns>JavaScript for all components</returns>
+		public virtual void GetInitJavaScript(TextWriter writer, bool clientOnly = false)
+		{
 			// Propagate any server-side console.log calls to corresponding client-side calls.
 			if (!clientOnly)
 			{
 				var consoleCalls = Execute<string>("console.getCalls()");
-				fullScript.Append(consoleCalls);
+				writer.Write(consoleCalls);
 			}
-			
+
 			foreach (var component in _components)
 			{
 				if (!component.ServerOnly)
 				{
-					fullScript.Append(component.RenderJavaScript());
-					fullScript.AppendLine(";");
+					component.RenderJavaScript(writer);
+					writer.WriteLine(';');
 				}
 			}
-
-			return fullScript.ToString();
 		}
 
 		/// <summary>
