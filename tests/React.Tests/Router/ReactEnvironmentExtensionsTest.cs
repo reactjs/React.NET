@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -24,6 +24,8 @@ namespace React.Tests.Router
 			AssemblyRegistration.Container.Register(environment.Object);
 			var config = new Mock<IReactSiteConfiguration>();
 			AssemblyRegistration.Container.Register(config.Object);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			AssemblyRegistration.Container.Register(reactIdGenerator.Object);
 
 			var component = ReactEnvironmentExtensions.CreateRouterComponent(
 				environment.Object,

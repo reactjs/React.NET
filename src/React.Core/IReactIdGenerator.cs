@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2016-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,18 +7,14 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
-using Xunit;
-
-namespace React.Tests.Core
+namespace React
 {
-	public class GuidExtensionsTests
+	public interface IReactIdGenerator
 	{
-		[Fact]
-		public void ToShortGuid()
-		{
-			var guid = Guid.Parse("c027191d-3785-485d-9fd7-5e0b376bd547");
-			Assert.Equal("HRknwIU3XUif114LN2vVRw", guid.ToShortGuid());
-		}
+		/// <summary>
+		/// Returns a short react identifier starts with "react_".
+		/// </summary>
+		/// <returns></returns>
+		string Generate();
 	}
 }

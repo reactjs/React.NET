@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -22,8 +22,9 @@ namespace React.Tests.Router
 		{
 			var environment = new Mock<IReactEnvironment>();
 			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactRouterComponent(environment.Object, config.Object, "Foo", "container", "/bar")
+			var component = new ReactRouterComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container", "/bar")
 			{
 				Props = new { hello = "World" }
 			};

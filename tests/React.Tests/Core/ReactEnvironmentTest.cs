@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -83,29 +83,17 @@ namespace React.Tests.Core
 		}
 
 		[Fact]
-		public void GeneratesContainerIdIfNotProvided()
-		{
-			var mocks = new Mocks();
-			var environment = mocks.CreateReactEnvironment();
-			mocks.Config.Setup(x => x.Scripts).Returns(new List<string>());
-
-			var component1 = environment.CreateComponent("ComponentName", new { });
-			var component2 = environment.CreateComponent("ComponentName", new { });
-			Assert.StartsWith("react_", component1.ContainerId);
-			Assert.StartsWith("react_", component2.ContainerId);
-		}
-
-		[Fact]
 		public void UsesProvidedContainerId()
 		{
 			var mocks = new Mocks();
 			var environment = mocks.CreateReactEnvironment();
 			mocks.Config.Setup(x => x.Scripts).Returns(new List<string>());
+			mocks.ReactIdGenerator.Setup(x => x.Generate()).Returns("react_customId");
 
 			var component1 = environment.CreateComponent("ComponentName", new { }, "foo");
 			var component2 = environment.CreateComponent("ComponentName", new { });
 			Assert.Equal("foo", component1.ContainerId);
-			Assert.StartsWith("react_", component2.ContainerId);
+			Assert.Equal("react_customId", component2.ContainerId);
 		}
 
 		[Fact]
@@ -156,6 +144,7 @@ namespace React.Tests.Core
 			public Mock<ICache> Cache { get; private set; }
 			public Mock<IFileSystem> FileSystem { get; private set; }
 			public Mock<IFileCacheHash> FileCacheHash { get; private set; }
+			public Mock<IReactIdGenerator> ReactIdGenerator { get; private set; }
 			public Mocks()
 			{
 				Engine = new Mock<PooledJsEngine>();
@@ -164,6 +153,7 @@ namespace React.Tests.Core
 				Cache = new Mock<ICache>();
 				FileSystem = new Mock<IFileSystem>();
 				FileCacheHash = new Mock<IFileCacheHash>();
+				ReactIdGenerator = new Mock<IReactIdGenerator>();
 
 				EngineFactory.Setup(x => x.GetEngine()).Returns(Engine.Object);
 				EngineFactory.Setup(x => x.GetEngineForCurrentThread()).Returns(Engine.Object);
@@ -177,7 +167,8 @@ namespace React.Tests.Core
 					Config.Object,
 					Cache.Object,
 					FileSystem.Object,
-					FileCacheHash.Object
+					FileCacheHash.Object,
+					ReactIdGenerator.Object
 				);
 			}
 			

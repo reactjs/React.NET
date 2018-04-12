@@ -24,7 +24,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container");
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container");
 
 			Assert.Throws<ReactInvalidComponentException>(() =>
 			{
@@ -39,8 +41,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -58,8 +61,9 @@ namespace React.Tests.Core
 				.Returns("[HTML]");
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -76,8 +80,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<string>(@"React.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
 			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -94,8 +99,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -113,8 +119,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" },
 				ContainerTag = "span"
@@ -133,8 +140,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" },
 				ContainerTag = "span"
@@ -153,8 +161,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToStaticMarkup(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" },
 			};
@@ -173,7 +182,9 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" },
 				ContainerClass="test-class"
@@ -188,8 +199,9 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
@@ -228,9 +240,11 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			reactIdGenerator.Setup(x => x.Generate()).Returns("customReactId");
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", null);
-			Assert.StartsWith("react_", component.ContainerId);
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", null);
+			Assert.Equal("customReactId", component.ContainerId);
 		}
 
 		[Fact]
@@ -245,7 +259,9 @@ namespace React.Tests.Core
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.ExceptionHandler).Returns(() => throw new ReactServerRenderingException("test"));
 
-			var component = new ReactComponent(environment.Object, config.Object, "Foo", "container")
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" }
 			};
