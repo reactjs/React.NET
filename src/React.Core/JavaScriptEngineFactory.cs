@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +11,7 @@ using JavaScriptEngineSwitcher.V8;
 #else
 using JavaScriptEngineSwitcher.ChakraCore;
 #endif
+using JavaScriptEngineSwitcher.Vroom;
 using JSPool;
 using React.Exceptions;
 
@@ -379,7 +380,7 @@ namespace React
 #if NET40
 			jsEngineSwitcher.EngineFactories.AddV8();
 #endif
-			jsEngineSwitcher.EngineFactories.Add(new VroomJsEngine.Factory());
+			jsEngineSwitcher.EngineFactories.AddVroom();
 			if (allowMsie)
 			{
 				jsEngineSwitcher.EngineFactories.AddMsie();
