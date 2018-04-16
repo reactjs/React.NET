@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>ReactJS and Babel tools for .NET. Important: This package does not do much on its own; you probably want an integration package (like React.Web.Mvc4) as well. Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</Description>
@@ -35,14 +35,15 @@
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="2.4.8" />
     <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="2.4.9" />
     <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="2.4.9" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Vroom" Version="2.4.0" />
     <PackageReference Include="JSPool" Version="3.0.1" />
     <PackageReference Include="MsieJavaScriptEngine" Version="2.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="VroomJs" Version="1.2.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="2.4.2" />
-    <PackageReference Include="VroomJs" Version="1.2.3" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,7 +51,6 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
-    <PackageReference Include="VroomJs" Version="1.2.3" />
   </ItemGroup>
 
 </Project>
