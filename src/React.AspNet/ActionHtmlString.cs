@@ -11,6 +11,7 @@ using System;
 using System.IO;
 
 #if LEGACYASPNET
+using System.Text;
 using System.Web;
 #else
 using System.Text.Encodings.Web;
@@ -40,13 +41,26 @@ namespace React.AspNet
 		}
 
 #if LEGACYASPNET
+		[ThreadStatic]
+		private static StringWriter _sharedStringWriter;
+
 		/// <summary>Returns an HTML-encoded string.</summary>
 		/// <returns>An HTML-encoded string.</returns>
 		public string ToHtmlString()
 		{
-			var sw = new StringWriter();
-			_textWriter(sw);
-			return sw.ToString();
+			var stringWriter = _sharedStringWriter;
+			if (stringWriter != null)
+			{
+				stringWriter.GetStringBuilder().Clear();
+			}
+			else
+			{
+				_sharedStringWriter = stringWriter = new StringWriter(new StringBuilder(128));
+			}
+
+			_textWriter(stringWriter);
+
+			return stringWriter.ToString();
 		}
 #else
 		/// <summary>

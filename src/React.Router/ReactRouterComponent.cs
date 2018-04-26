@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.IO;
 using Newtonsoft.Json;
 
 namespace React.Router
@@ -67,15 +68,15 @@ namespace React.Router
 		/// Gets the JavaScript code to initialise the component
 		/// </summary>
 		/// <returns>JavaScript for component initialisation</returns>
-		protected override string GetComponentInitialiser()
+		protected override void WriteComponentInitialiser(TextWriter writer)
 		{
-			return string.Format(
-				@"React.createElement
-					({0}, Object.assign({1}, {{ location: '{2}', context: context }}))",
-				ComponentName,
-				_serializedProps,
-				_path
-			);
+			writer.Write("React.createElement(");
+			writer.Write(ComponentName);
+			writer.Write(", Object.assign(");
+			writer.Write(_serializedProps);
+			writer.Write(", { location: '");
+			writer.Write(_path);
+			writer.Write("', context: context }))");
 		}
 
 		/// <summary>
@@ -86,13 +87,13 @@ namespace React.Router
 		/// Client side React Router does not need context nor explicit path parameter.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		public override string RenderJavaScript()
+		public override void RenderJavaScript(TextWriter writer)
 		{
-			return string.Format(
-				"ReactDOM.hydrate({0}, document.getElementById({1}))",
-				base.GetComponentInitialiser(),
-				JsonConvert.SerializeObject(ContainerId, _configuration.JsonSerializerSettings) // SerializeObject accepts null settings
-			);
+			writer.Write("ReactDOM.hydrate(");
+			base.WriteComponentInitialiser(writer);
+			writer.Write(", document.getElementById(\"");
+			writer.Write(ContainerId);
+			writer.Write("\"))");
 		}
 	}
 }
