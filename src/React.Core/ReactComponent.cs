@@ -233,7 +233,7 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual void RenderJavaScript(TextWriter writer)
 		{
-			writer.Write("ReactDOM.hydrate(");
+			ClientOnly ? writer.Write("ReactDOM.render(") : writer.Write("ReactDOM.hydrate(");
 			WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);
