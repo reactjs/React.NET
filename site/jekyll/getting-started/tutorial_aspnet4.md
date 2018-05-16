@@ -94,7 +94,7 @@ React is all about modular, composable components. For our comment box example, 
   - CommentForm
 ```
 
-Let's build the `CommentBox` component, which is just displays a simple `<div>`. Add this code to `Tutorial.jsx`:
+Let's build the `CommentBox` component, which just displays a simple `<div>`. Add this code to `Tutorial.jsx`:
 
 ```javascript
 class CommentBox extends React.Component {
@@ -146,7 +146,7 @@ Its use is optional but we've found JSX syntax easier to use than plain JavaScri
 
 #### What's going on
 
-We are defining a new JavaScript class that extends from the React.Component class. In our class, we will define some properties and some methods to build from what React.Component already gives us. The most important of our methods is called `render` which returns a tree of React components that will eventually render to HTML.
+We are defining a new JavaScript class that extends from the React.Component class. In our class, we will define some properties and some methods to build from what React.Component already gives us. The most important of these methods is called `render` which returns a tree of React components that will eventually render to HTML.
 
 The `<div>` tags are not actual DOM nodes; they are instantiations of React `div` components. You can think of these as markers or pieces of data that React knows how to handle. React is **safe**. We are not generating HTML strings so XSS protection is the default.
 
@@ -472,7 +472,7 @@ This component is different from the prior components because it will have to re
 
 ### Reactive state
 
-So far, based on its props, each component has rendered itself once. `props` are immutable: they are passed from the parent and are "owned" by the parent. To implement interactions, we introduce a mutable **state** to the component. `this.state` is private to the component and can be changed by calling `this.setState()` and passing an object that represents changes in state. When the state updates, the component re-renders itself.
+So far, based on its props, each component has rendered itself once. `props` are immutable: they are passed from the parent and are "owned" by the parent. To implement interactions, we introduce mutable **state** to the component. `this.state` is private to the component and can be changed by calling `this.setState()` and passing an object that represents changes in state. When the state updates, the component re-renders itself.
 
 `render()` methods are written declaratively as functions of `this.props` and `this.state`. The framework guarantees the UI is always consistent with the inputs.
 
@@ -617,16 +617,16 @@ class CommentForm extends React.Component {
 
 #### Controlled components
 
-With the traditional DOM, `input` elements are rendered and the browser manages their state (its rendered value). As a result, the state of the actual DOM will differ from that of the component. This is not ideal as the state of the view will differ from that of the component. In React, components should always represent the state of the view and not only at the point of initialization.
+With the traditional DOM, `input` elements are rendered and the browser manages the state (its rendered value). As a result, the state of the actual DOM will differ from that of the component. This is not ideal as the state of the view will differ from that of the component. In React, components should always represent the state of the view and not only at the point of initialization.
 
 Hence, we will be using `this.state` to save the user's input as it is entered. We define an initial `state` with two properties `author` and `text` and set them to be empty strings. In our `<input>` elements, we set the `value` prop to reflect the `state` of the component and attach `onChange` handlers to them. These `<input>` elements with a `value` set are called controlled components. Read more about controlled components on the [Forms article](https://reactjs.org/docs/forms.html#controlled-components).
 
 ```javascript{2-13,16-28}
 class CommentForm extends React.Component {
   constructor(props) {
-	  super(props);
+    super(props);
     this.state = {author: '', text: ''};
-		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+    this.handleAuthorChange = this.handleAuthorChange.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
   }
   handleAuthorChange(e) {
@@ -670,11 +670,11 @@ Let's make the form interactive. When the user submits the form, we should clear
 ```javascript{7,15-24,27}
 class CommentForm extends React.Component {
   constructor(props) {
-	  super(props);
+    super(props);
     this.state = {author: '', text: ''};
-		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+    this.handleAuthorChange = this.handleAuthorChange.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleAuthorChange(e) {
     this.setState({author: e.target.value});
@@ -682,7 +682,7 @@ class CommentForm extends React.Component {
   handleTextChange(e) {
     this.setState({text: e.target.value});
   }
-	handleSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault();
     const author = this.state.author.trim();
     const text = this.state.text.trim();
@@ -720,14 +720,14 @@ We attach an `onSubmit` handler to the form that clears the form fields when the
 
 When a user submits a comment, we will need to refresh the list of comments to include the new one. It makes sense to do all of this logic in `CommentBox` since `CommentBox` owns the state that represents the list of comments.
 
-We need to pass data from the child component back up to its parent. We do this in our parent's `render` method by passing a new callback (`handleCommentSubmit`) into the child and binding it to the child's `onCommentSubmit` event. Whenever the event is triggered, the callback will be invoked:
+We need to pass data from the child component back up to its parent. We do this in our parent's `render` method by passing a new callback (`handleCommentSubmit`) into the child, binding it to the child's `onCommentSubmit` event. Whenever the event is triggered, the callback will be invoked:
 
 ```javascript{5,16-18,28}
 class CommentBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [] };
-		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
   }
   loadCommentsFromServer() {
     const xhr = new XMLHttpRequest();
@@ -738,7 +738,7 @@ class CommentBox extends React.Component {
     };
     xhr.send();
   }
-	handleCommentSubmit(comment) {
+  handleCommentSubmit(comment) {
     // TODO: submit to the server and refresh the list
   }
   componentDidMount() {
@@ -762,11 +762,11 @@ Now that `CommentBox` has made the callback available to `CommentForm` via the `
 ```javascript{22}
 class CommentForm extends React.Component {
   constructor(props) {
-	  super(props);
+    super(props);
     this.state = {author: '', text: ''};
-		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+    this.handleAuthorChange = this.handleAuthorChange.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleAuthorChange(e) {
     this.setState({author: e.target.value});
@@ -774,7 +774,7 @@ class CommentForm extends React.Component {
   handleTextChange(e) {
     this.setState({text: e.target.value});
   }
-	handleSubmit(e) {
+  handleSubmit(e) {
     e.preventDefault();
     const author = this.state.author.trim();
     const text = this.state.text.trim();
@@ -813,7 +813,7 @@ class CommentBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = { data: [] };
-		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
   }
   loadCommentsFromServer() {
     const xhr = new XMLHttpRequest();
@@ -824,7 +824,7 @@ class CommentBox extends React.Component {
     };
     xhr.send();
   }
-	handleCommentSubmit(comment) {
+  handleCommentSubmit(comment) {
     const data = new FormData();
     data.append('Author', comment.Author);
     data.append('Text', comment.Text);
@@ -1104,14 +1104,14 @@ namespace ReactDemo
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
-				.AddScript("~/Scripts/remarkable.min.js")
+				.AddScript("~/js/remarkable.min.js")
 				.AddScript("~/Scripts/Tutorial.jsx");
 		}
 	}
 }
 ```
 
-Note that we need a copy of Remarkable in order to load it for server-side rendering. In a production app you'd probably use Bower or npm for this, but for our tutorial you can just [download the file from CDNJS](https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js) and save it into `~/Scripts`.
+Note that we need a copy of Remarkable in order to load it for server-side rendering. In a production app you'd probably use Bower or npm for this, but for our tutorial you can just [download the file from CDNJS](https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js) and save it into `~/js`.
 
 That's it! Now if you build and refresh your application, you should notice that the comments box is rendered immediately rather than having a slight delay. If you view the source of the page, you will see the initial comments directly in the HTML itself:
 
