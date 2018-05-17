@@ -663,6 +663,8 @@ React attaches event handlers to components using a camelCase naming convention.
 
 You'll notice that we are explicitly binding our event handlers to `this` in the constructor. While older techniques, like `React.createClass(...)`, featured automatic binding, we are using ES6 classes to define our components. React components declared as ES6 classes don't automatically bind `this` to the instance, so we have to explicitly use `.bind(this)`.
 
+For components with many event handlers, this explicit binding approach can get tedious. It's also easy to forget to declare your bindings which can cause some baffling bugs. React does offer two other techniques for ensuring your event handlers are bound properly to your component. Check out the [Handling Events](https://reactjs.org/docs/handling-events.html) documentation on the React website for more information.
+
 #### Submitting the form
 
 Let's make the form interactive. When the user submits the form, we should clear it, submit a request to the server, and refresh the list of comments. To start, let's listen for the form's submit event and clear it.
