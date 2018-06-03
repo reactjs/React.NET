@@ -18,8 +18,8 @@ Features
    * [MSBuild](http://reactjs.net/guides/msbuild.html)
  * [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
    to make your initial render super-fast (experimental!)
- * [Runs on Linux](http://reactjs.net/guides/mono.html) via Mono and V8
- * Supports both ASP.NET 4.0/4.5 and ASP.NET Core 1.0
+ * [Runs on Windows, OS X and Linux](http://reactjs.net/guides/chakracore.html) via .NET Core and ChakraCore
+ * Supports both ASP.NET 4.0/4.5 and ASP.NET Core
 
 Quick Start
 ===========
