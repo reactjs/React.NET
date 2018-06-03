@@ -67,3 +67,5 @@ Finally, add this to `Views\_ViewImports.cshtml` (or create it if it doesn't exi
 ```
 
 Once ReactJS.NET has been configured, you will be able to use [on-the-fly JSX to JavaScript compilation](/getting-started/usage.html) and [server-side rendering](/guides/server-side-rendering.html).
+
+If you need support for non-Windows platforms, please see the [ChakraCore guide](/guides/chakracore.html).
