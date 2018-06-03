@@ -1,6 +1,6 @@
 using System;
+using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.Msie;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +15,9 @@ namespace React.Sample.Router.CoreMvc
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
+
+			JsEngineSwitcher.Instance.EngineFactories.Add(new ChakraCoreJsEngineFactory());
+			JsEngineSwitcher.Instance.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 		}
 
 		public IConfiguration Configuration { get; }
