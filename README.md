@@ -26,19 +26,19 @@ Quick Start
 Install the package
 ```
 Install-Package React.Web.Mvc4 # For ASP.NET MVC 4 or 5
-Install-Package React.AspNet   # For ASP.NET Core MVC 1.0
+Install-Package React.AspNet   # For ASP.NET Core MVC
 ```
 
 Create JSX files
 ```javascript
 // /Scripts/HelloWorld.jsx
-var HelloWorld = React.createClass({
-    render: function () {
+class HelloWorld extends React.Component {
+    render() {
         return (
             <div>Hello {this.props.name}</div>
         );
     }
-});
+};
 ```
 
 Reference the JSX files from your HTML
