@@ -105,7 +105,7 @@ namespace React
 		/// <param name="reactIdGenerator">React Id generator.</param>
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="containerId">The ID of the container DIV for this component</param>
-		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, IReactIdGenerator reactIdGenerator, string componentName, string containerId, boolean clientOnly)
+		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, IReactIdGenerator reactIdGenerator, string componentName, string containerId)
 		{
 			EnsureComponentNameValid(componentName);
 			_environment = environment;
