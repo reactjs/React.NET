@@ -228,7 +228,7 @@ namespace React.Tests.Core
 			var result = component.RenderJavaScript();
 
 			Assert.Equal(
-				@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
+				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
 		}
