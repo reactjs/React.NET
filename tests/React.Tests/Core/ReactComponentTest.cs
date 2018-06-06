@@ -221,8 +221,9 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, clientOnly, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
+				ClientOnly = true;
 				Props = new { hello = "World" }
 			};
 			var result = component.RenderJavaScript();
@@ -241,8 +242,9 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, clientOnly, "Foo", "container")
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
+				ClientOnly = false;
 				Props = new { hello = "World" }
 			};
 			var result = component.RenderJavaScript();
