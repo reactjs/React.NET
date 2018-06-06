@@ -217,13 +217,12 @@ namespace React.Tests.Core
 		public void RenderJavaScriptShouldCallRenderComponentWithReactDOMRender()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			var clientOnly = true;
 			var config = new Mock<IReactSiteConfiguration>();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
-				ClientOnly = true;
+				ClientOnly = true,
 				Props = new { hello = "World" }
 			};
 			var result = component.RenderJavaScript();
@@ -238,13 +237,12 @@ namespace React.Tests.Core
 		public void RenderJavaScriptShouldCallRenderComponentwithReactDOMHydrate()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			var clientOnly = false;
 			var config = new Mock<IReactSiteConfiguration>();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
-				ClientOnly = false;
+				ClientOnly = false,
 				Props = new { hello = "World" }
 			};
 			var result = component.RenderJavaScript();
