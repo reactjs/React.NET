@@ -95,6 +95,7 @@ namespace React
 					_configuration.JsonSerializerSettings);
 			}
 		}
+		public bool ClientOnly { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReactComponent"/> class.
@@ -104,7 +105,7 @@ namespace React
 		/// <param name="reactIdGenerator">React Id generator.</param>
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="containerId">The ID of the container DIV for this component</param>
-		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, IReactIdGenerator reactIdGenerator, string componentName, string containerId)
+		public ReactComponent(IReactEnvironment environment, IReactSiteConfiguration configuration, IReactIdGenerator reactIdGenerator, string componentName, string containerId, boolean clientOnly)
 		{
 			EnsureComponentNameValid(componentName);
 			_environment = environment;
@@ -233,7 +234,7 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual void RenderJavaScript(TextWriter writer)
 		{
-			ClientOnly ? writer.Write("ReactDOM.render(") : writer.Write("ReactDOM.hydrate(");
+			writer.Write(ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
 			WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);

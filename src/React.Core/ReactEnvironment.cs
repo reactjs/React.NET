@@ -302,7 +302,7 @@ namespace React
 				EnsureUserScriptsLoaded();
 			}
 
-			var component = new ReactComponent(this, _config, _reactIdGenerator, clientOnly, componentName, containerId)
+			var component = new ReactComponent(this, _config, _reactIdGenerator, componentName, containerId)
 			{
 				ClientOnly = clientOnly,
 				Props = props,
