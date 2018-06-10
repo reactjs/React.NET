@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore" Version="2.4.18" />
+    <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="2.4.0" />
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.linux-x64" Version="2.4.17" />
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.osx-x64" Version="2.4.17" />
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.win-x64" Version="2.4.17" />

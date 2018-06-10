@@ -1,6 +1,6 @@
 using System;
 using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,9 +15,6 @@ namespace React.Sample.Router.CoreMvc
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-
-			JsEngineSwitcher.Instance.EngineFactories.Add(new ChakraCoreJsEngineFactory());
-			JsEngineSwitcher.Instance.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 		}
 
 		public IConfiguration Configuration { get; }
@@ -26,6 +23,10 @@ namespace React.Sample.Router.CoreMvc
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services.AddMvc();
+
+			services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+				.AddChakraCore();
+
 			services.AddReact();
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +26,6 @@ namespace ReactDemo
 				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
 				.AddEnvironmentVariables();
 			Configuration = builder.Build();
-
-			JsEngineSwitcher.Instance.EngineFactories.Add(new ChakraCoreJsEngineFactory());
-			JsEngineSwitcher.Instance.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 		}
 
 		public IConfigurationRoot Configuration { get; }
@@ -36,6 +33,9 @@ namespace ReactDemo
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+				.AddChakraCore();
+
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddReact();
 			// Add framework services.

@@ -7,7 +7,7 @@ ReactJS.NET supports running on non-Windows platforms via both Mono and .NET Cor
 
 Add `React.AspNet` as a dependency to your .NET Core project. Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.CoreMvc) or the [documentation](https://reactjs.net/getting-started/aspnetcore.html) if you need more details on that.
 
-Next, install the `JavascriptEngineSwitcher.ChakraCore` NuGet package. Depending on the platform(s) you want to support, also install one or more of these NuGet packages:
+Next, install the `JavascriptEngineSwitcher.ChakraCore` and `JavaScriptEngineSwitcher.Extensions.MsDependencyInjection` NuGet packages. Depending on the platform(s) you want to support, also install one or more of these NuGet packages:
 
 - Windows: `JavaScriptEngineSwitcher.ChakraCore.Native.win-x64`. The VC++ 2017 runtime is also required.
 - OS X: ``JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64`
@@ -17,13 +17,20 @@ In `Startup.cs`, set ChakraCore as the default Javascript engine.
 
 ```csharp
 using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 
-public Startup(IHostingEnvironment env)
+public void ConfigureServices(IServiceCollection services)
 {
-	JsEngineSwitcher.Instance.EngineFactories.Add(new ChakraCoreJsEngineFactory());
-	JsEngineSwitcher.Instance.DefaultEngineName = ChakraCoreJsEngine.EngineName;
+	services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+		.AddChakraCore();
+
+	// existing services below:
+	services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+	services.AddReact();
+	services.AddMvc();
 }
 ```
 
 You're done! Server-side rendering and JSX compilation should now be working properly.
+
+For more information about registering Javascript engines, check out the [JavascriptEngineSwitcher documentation](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines).

@@ -9,7 +9,7 @@
 
 using System;
 using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,9 +28,6 @@ namespace React.Sample.CoreMvc
 			var builder = new ConfigurationBuilder().AddEnvironmentVariables();
 			Logger = logger;
 			Configuration = builder.Build();
-
-			JsEngineSwitcher.Instance.EngineFactories.Add(new ChakraCoreJsEngineFactory());
-			JsEngineSwitcher.Instance.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 		}
 
 		public IConfiguration Configuration { get; set; }
@@ -41,6 +38,9 @@ namespace React.Sample.CoreMvc
 		{
 			// Add MVC services to the services container.
 			services.AddMvc();
+
+			services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+				.AddChakraCore();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
