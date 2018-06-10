@@ -18,27 +18,27 @@ Features
    * [MSBuild](http://reactjs.net/guides/msbuild.html)
  * [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
    to make your initial render super-fast (experimental!)
- * [Runs on Linux](http://reactjs.net/guides/mono.html) via Mono and V8
- * Supports both ASP.NET 4.0/4.5 and ASP.NET Core 1.0
+ * [Runs on Windows, OS X and Linux](http://reactjs.net/guides/chakracore.html) via .NET Core and ChakraCore
+ * Supports both ASP.NET 4.0/4.5 and ASP.NET Core
 
 Quick Start
 ===========
 Install the package
 ```
 Install-Package React.Web.Mvc4 # For ASP.NET MVC 4 or 5
-Install-Package React.AspNet   # For ASP.NET Core MVC 1.0
+Install-Package React.AspNet   # For ASP.NET Core MVC
 ```
 
 Create JSX files
 ```javascript
 // /Scripts/HelloWorld.jsx
-var HelloWorld = React.createClass({
-    render: function () {
+class HelloWorld extends React.Component {
+    render() {
         return (
             <div>Hello {this.props.name}</div>
         );
     }
-});
+};
 ```
 
 Reference the JSX files from your HTML

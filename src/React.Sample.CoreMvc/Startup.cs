@@ -8,6 +8,8 @@
  */
 
 using System;
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -36,6 +38,9 @@ namespace React.Sample.CoreMvc
 		{
 			// Add MVC services to the services container.
 			services.AddMvc();
+
+			services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+				.AddChakraCore();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
