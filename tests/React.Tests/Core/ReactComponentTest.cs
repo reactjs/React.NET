@@ -213,6 +213,46 @@ namespace React.Tests.Core
 			);
 		}
 
+		[Fact]
+		public void RenderJavaScriptShouldCallRenderComponentWithReactDOMRender()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = true,
+				Props = new { hello = "World" }
+			};
+			var result = component.RenderJavaScript();
+
+			Assert.Equal(
+				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
+				result
+			);
+		}
+
+		[Fact]
+		public void RenderJavaScriptShouldCallRenderComponentwithReactDOMHydrate()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = false,
+				Props = new { hello = "World" }
+			};
+			var result = component.RenderJavaScript();
+
+			Assert.Equal(
+				@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
+				result
+			);
+		}
+
 		[Theory]
 		[InlineData("Foo", true)]
 		[InlineData("Foo.Bar", true)]
@@ -284,7 +324,7 @@ namespace React.Tests.Core
 			Action<Exception, string, string> customHandler = (ex, name, id) => customHandlerInvoked = true;
 			component.RenderHtml(exceptionHandler: customHandler);
 			Assert.True(customHandlerInvoked);
-			
+
 			// Custom exception handler set
 			Exception caughtException = null;
 			config.Setup(x => x.ExceptionHandler).Returns((ex, name, id) => caughtException = ex);

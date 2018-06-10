@@ -95,6 +95,7 @@ namespace React
 					_configuration.JsonSerializerSettings);
 			}
 		}
+		public bool ClientOnly { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReactComponent"/> class.
@@ -233,7 +234,7 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual void RenderJavaScript(TextWriter writer)
 		{
-			writer.Write("ReactDOM.hydrate(");
+			writer.Write(ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
 			WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);

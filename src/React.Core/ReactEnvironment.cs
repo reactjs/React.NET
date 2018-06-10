@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -22,7 +22,7 @@ using React.TinyIoC;
 namespace React
 {
 	/// <summary>
-	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is 
+	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is
 	/// not shared.
 	/// </summary>
 	public class ReactEnvironment : IReactEnvironment, IDisposable
@@ -70,7 +70,7 @@ namespace React
 		/// </summary>
 		protected readonly Lazy<string> _version = new Lazy<string>(GetVersion);
 		/// <summary>
-		/// Contains an engine acquired from a pool of engines. Only used if 
+		/// Contains an engine acquired from a pool of engines. Only used if
 		/// <see cref="IReactSiteConfiguration.ReuseJavaScriptEngines"/> is enabled.
 		/// </summary>
 		protected Lazy<PooledJsEngine> _engineFromPool;
@@ -141,7 +141,7 @@ namespace React
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
 			_reactIdGenerator = reactIdGenerator;
-			_babelTransformer = new Lazy<IBabel>(() => 
+			_babelTransformer = new Lazy<IBabel>(() =>
 				new Babel(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
 			_engineFromPool = new Lazy<PooledJsEngine>(() => _engineFactory.GetEngine());
@@ -304,6 +304,7 @@ namespace React
 
 			var component = new ReactComponent(this, _config, _reactIdGenerator, componentName, containerId)
 			{
+				ClientOnly = clientOnly,
 				Props = props,
 				ServerOnly = serverOnly
 			};
@@ -329,7 +330,7 @@ namespace React
 		}
 
 		/// <summary>
-		/// Renders the JavaScript required to initialise all components client-side. This will 
+		/// Renders the JavaScript required to initialise all components client-side. This will
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
@@ -344,7 +345,7 @@ namespace React
 		}
 
 		/// <summary>
-		/// Renders the JavaScript required to initialise all components client-side. This will 
+		/// Renders the JavaScript required to initialise all components client-side. This will
 		/// attach event handlers to the server-rendered HTML.
 		/// </summary>
 		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
@@ -371,12 +372,12 @@ namespace React
 
 		/// <summary>
 		/// Attempts to execute the provided JavaScript code using a non-pooled JavaScript engine (ie.
-		/// creates a new JS engine per-thread). This is because Babel uses a LOT of memory, so we 
+		/// creates a new JS engine per-thread). This is because Babel uses a LOT of memory, so we
 		/// should completely dispose any engines that have loaded Babel in order to conserve memory.
-		/// 
+		///
 		/// If an exception is thrown, retries the execution using a new thread (and hence a new engine)
 		/// with a larger maximum stack size.
-		/// This is required because JSXTransformer uses a huge stack which ends up being larger 
+		/// This is required because JSXTransformer uses a huge stack which ends up being larger
 		/// than what ASP.NET allows by default (256 KB).
 		/// </summary>
 		/// <typeparam name="T">Type to return from JavaScript call</typeparam>
@@ -396,7 +397,7 @@ namespace React
 
 			catch (Exception)
 			{
-				// Assume the exception MAY be an "out of stack space" error. Try running the code 
+				// Assume the exception MAY be an "out of stack space" error. Try running the code
 				// in a different thread with larger stack. If the same exception occurs, we know
 				// it wasn't a stack space issue.
 				T result = default(T);
