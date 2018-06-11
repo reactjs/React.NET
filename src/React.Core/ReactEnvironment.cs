@@ -221,14 +221,7 @@ namespace React
 		/// <param name="code">JavaScript to execute</param>
 		public virtual void Execute(string code)
 		{
-			try
-			{
-				Engine.Execute(code);
-			}
-			catch (JsRuntimeException ex)
-			{
-				throw WrapJavaScriptRuntimeException(ex);
-			}
+			Engine.Execute(code);
 		}
 
 		/// <summary>
@@ -239,14 +232,7 @@ namespace React
 		/// <returns>Result of the JavaScript code</returns>
 		public virtual T Execute<T>(string code)
 		{
-			try
-			{
-				return Engine.Evaluate<T>(code);
-			}
-			catch (JsRuntimeException ex)
-			{
-				throw WrapJavaScriptRuntimeException(ex);
-			}
+			return Engine.Evaluate<T>(code);
 		}
 
 		/// <summary>
@@ -258,14 +244,7 @@ namespace React
 		/// <returns>Result of the JavaScript code</returns>
 		public virtual T Execute<T>(string function, params object[] args)
 		{
-			try
-			{
-				return Engine.CallFunctionReturningJson<T>(function, args);
-			}
-			catch (JsRuntimeException ex)
-			{
-				throw WrapJavaScriptRuntimeException(ex);
-			}
+			return Engine.CallFunctionReturningJson<T>(function, args);
 		}
 
 		/// <summary>
@@ -275,14 +254,7 @@ namespace React
 		/// <returns><c>true</c> if the variable exists; <c>false</c> otherwise</returns>
 		public virtual bool HasVariable(string name)
 		{
-			try
-			{
-				return Engine.HasVariable(name);
-			}
-			catch (JsRuntimeException ex)
-			{
-				throw WrapJavaScriptRuntimeException(ex);
-			}
+			return Engine.HasVariable(name);
 		}
 
 		/// <summary>
@@ -389,7 +361,7 @@ namespace React
 			var engine = _engineFactory.GetEngineForCurrentThread();
 			EnsureBabelLoaded(engine);
 
-#if NET40
+#if NET40 || NET45
 			try
 			{
 				return engine.CallFunctionReturningJson<T>(function, args);
@@ -473,30 +445,6 @@ namespace React
 				_engineFromPool.Value.Dispose();
 				_engineFromPool = new Lazy<PooledJsEngine>(() => _engineFactory.GetEngine());
 			}
-		}
-
-		/// <summary>
-		/// Updates the Message of a <see cref="JsRuntimeException"/> to be more useful, containing
-		/// the line and column numbers.
-		/// </summary>
-		/// <param name="ex">Original exception</param>
-		/// <returns>New exception</returns>
-		protected virtual JsRuntimeException WrapJavaScriptRuntimeException(JsRuntimeException ex)
-		{
-			return new JsRuntimeException(string.Format(
-				"{0}\r\nLine: {1}\r\nColumn:{2}",
-				ex.Message,
-				ex.LineNumber,
-				ex.ColumnNumber
-			), ex.EngineName, ex.EngineVersion)
-			{
-				ErrorCode = ex.ErrorCode,
-				Category = ex.Category,
-				LineNumber = ex.LineNumber,
-				ColumnNumber = ex.ColumnNumber,
-				SourceFragment = ex.SourceFragment,
-				Source = ex.Source,
-			};
 		}
 
 		/// <summary>

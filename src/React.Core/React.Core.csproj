@@ -5,7 +5,7 @@
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET Core</AssemblyTitle>
     <Authors>Daniel Lo Nigro</Authors>
-    <TargetFrameworks>net40;netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>net40;net45;netstandard1.6</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>React.Core</AssemblyName>
     <AssemblyOriginatorKeyFile>../key.snk</AssemblyOriginatorKeyFile>
@@ -16,7 +16,7 @@
     <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
     <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,21 +32,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="2.4.8" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="2.4.9" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="2.4.9" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Vroom" Version="2.4.0" />
-    <PackageReference Include="JSPool" Version="3.0.1" />
-    <PackageReference Include="MsieJavaScriptEngine" Version="2.2.2" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-beta5" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="3.0.0-beta4" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.0.0-beta5" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Vroom" Version="3.0.0-beta4" />
+    <PackageReference Include="JSPool" Version="3.1.0-beta1" />
+    <PackageReference Include="MsieJavaScriptEngine" Version="3.0.0-beta4" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="VroomJs" Version="1.2.3" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="2.4.2" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.0.0-beta4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">

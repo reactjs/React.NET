@@ -33,8 +33,8 @@ namespace React.Tests.Benchmarks
 				Initializer.Initialize(registration => registration.AsSingleton());
 				AssemblyRegistration.Container.Register<ICache, NullCache>();
 				AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
-				JsEngineSwitcher.Instance.EngineFactories.Add(new ChakraCoreJsEngineFactory());
-				JsEngineSwitcher.Instance.DefaultEngineName = ChakraCoreJsEngine.EngineName;
+				JsEngineSwitcher.Current.EngineFactories.Add(new ChakraCoreJsEngineFactory());
+				JsEngineSwitcher.Current.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 
 				ReactSiteConfiguration.Configuration
 					.SetReuseJavaScriptEngines(false)

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Reflection;
 using RegisterOptions = React.TinyIoC.TinyIoCContainer.RegisterOptions;
 
-#if !NET40
+#if !NET40 && !NET45
 using Microsoft.Extensions.DependencyModel;
 #endif
 
@@ -55,7 +55,7 @@ namespace React
 		private static void InitializeIoC(Func<RegisterOptions, RegisterOptions> requestLifetimeRegistration)
 		{
 			TinyIoCExtensions.AsRequestLifetime = requestLifetimeRegistration;
-#if NET40
+#if NET40 || NET45
 			var types = AppDomain.CurrentDomain.GetAssemblies()
 				// Only bother checking React assemblies
 				.Where(IsReactAssembly)

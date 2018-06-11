@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -19,9 +19,6 @@ namespace React.Tests.Core
 {
 	public class JavaScriptEngineFactoryTest
 	{
-		private static object _engineSwitcherSynchronizer = new object();
-
-
 		private JavaScriptEngineFactory CreateBasicFactory()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
@@ -46,18 +43,12 @@ namespace React.Tests.Core
 			engineFactory.Setup(x => x.EngineName).Returns("MockEngine");
 			engineFactory.Setup(x => x.CreateEngine()).Returns(innerEngineFactory);
 
-			// JsEngineSwitcher is a singleton :(
-			lock (_engineSwitcherSynchronizer)
-			{
-				var engineSwitcher = JsEngineSwitcher.Instance;
-				engineSwitcher.DefaultEngineName = string.Empty;
+			var engineSwitcher = new JsEngineSwitcher(
+				new JsEngineFactoryCollection { engineFactory.Object },
+				string.Empty
+			);
 
-				var engineFactories = engineSwitcher.EngineFactories;
-				engineFactories.Clear();
-				engineFactories.Add(engineFactory.Object);
-
-				return new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
-			}
+			return new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
 		}
 
 		[Fact]
@@ -225,24 +216,17 @@ namespace React.Tests.Core
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var fileSystem = new Mock<IFileSystem>();
+			var engineSwitcher = new JsEngineSwitcher(
+				new JsEngineFactoryCollection
+				{
+					someEngineFactory.Object,
+					defaultEngineFactory.Object,
+					someOtherEngineFactory.Object
+				},
+				defaultEngineName
+			);
 
-			JavaScriptEngineFactory factory;
-
-			// JsEngineSwitcher is a singleton :(
-			lock (_engineSwitcherSynchronizer)
-			{
-				var engineSwitcher = JsEngineSwitcher.Instance;
-				engineSwitcher.DefaultEngineName = defaultEngineName;
-
-				var engineFactories = engineSwitcher.EngineFactories;
-				engineFactories.Clear();
-				engineFactories.Add(someEngineFactory.Object);
-				engineFactories.Add(defaultEngineFactory.Object);
-				engineFactories.Add(someOtherEngineFactory.Object);
-
-				factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
-			}
-
+			var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
 			var engine = factory.GetEngineForCurrentThread();
 
 			Assert.Equal(defaultEngineName, engine.Name);
@@ -278,23 +262,19 @@ namespace React.Tests.Core
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var fileSystem = new Mock<IFileSystem>();
-
-			// JsEngineSwitcher is a singleton :(
-			lock (_engineSwitcherSynchronizer)
-			{
-				var engineSwitcher = JsEngineSwitcher.Instance;
-				engineSwitcher.DefaultEngineName = defaultEngineName;
-
-				var engineFactories = engineSwitcher.EngineFactories;
-				engineFactories.Clear();
-				engineFactories.Add(someEngineFactory.Object);
-				engineFactories.Add(someOtherEngineFactory.Object);
-
-				Assert.Throws<ReactEngineNotFoundException>(() =>
+			var engineSwitcher = new JsEngineSwitcher(
+				new JsEngineFactoryCollection
 				{
-					var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
-				});
-			}
+					someEngineFactory.Object,
+					someOtherEngineFactory.Object
+				},
+				defaultEngineName
+			);
+
+			Assert.Throws<ReactEngineNotFoundException>(() =>
+			{
+				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+			});
 		}
 	}
 }
