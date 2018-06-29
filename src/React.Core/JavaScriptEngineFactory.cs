@@ -135,7 +135,7 @@ namespace React
 			}
 
 			LoadUserScripts(engine);
-			if (!_config.LoadReact)
+			if (!_config.LoadReact && _scriptLoadException == null)
 			{
 				// We expect to user to have loaded their own version of React in the scripts that
 				// were loaded above, let's ensure that's the case. 
