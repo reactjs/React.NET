@@ -3,12 +3,12 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
 var global = global || {};
-var React, ReactDOM, ReactDOMServer;
+var React, ReactDOM, ReactDOMServer, setTimeout, clearTimeout;
 
 // Basic console shim. Caches all calls to console methods.
 function MockConsole() {
@@ -66,6 +66,20 @@ function ReactNET_initReact() {
 	}
 	// :'(
 	return false;
+}
+
+setTimeout = setTimeout || global.setTimeout;
+if (setTimeout === undefined) {
+	setTimeout = function() {
+		throw new Error('setTimeout is not supported in server-rendered Javascript.');
+	}
+}
+
+clearTimeout = clearTimeout || global.clearTimeout;
+if (clearTimeout === undefined) {
+	clearTimeout = function() {
+		throw new Error('clearTimeout is not supported in server-rendered Javascript.');
+	}
 }
 
 /**
