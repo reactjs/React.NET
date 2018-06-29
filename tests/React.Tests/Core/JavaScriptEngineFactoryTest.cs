@@ -156,6 +156,28 @@ namespace React.Tests.Core
 		}
 
 		[Fact]
+		public void ShouldThrowScriptErrorIfReactFails()
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> {"foo.js"});
+			config.Setup(x => x.LoadReact).Returns(false);
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString("foo.js")).Returns("FAIL PLZ");
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+			jsEngine.Setup(x => x.Execute("FAIL PLZ")).Throws(new JsRuntimeException("Fail")
+			{
+				LineNumber = 42,
+				ColumnNumber = 911,
+			});
+			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+
+			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
+			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
+		}
+
+		[Fact]
 		public void ShouldCatchErrorsWhileLoadingScripts()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
