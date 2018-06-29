@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -15,7 +15,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when React has not been initialised correctly.
 	/// </summary>
-#if NET40
+#if !NETSTANDARD1_6
 	[Serializable]
 #endif
 	public class ReactNotInitialisedException : ReactException
@@ -34,7 +34,7 @@ namespace React.Exceptions
 		public ReactNotInitialisedException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if NET40
+#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>

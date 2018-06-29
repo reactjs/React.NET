@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -15,7 +15,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when Babel is required but has not been loaded.
 	/// </summary>
-#if NET40
+#if !NETSTANDARD1_6
 	[Serializable]
 #endif
 	public class BabelNotLoadedException : ReactException
@@ -25,7 +25,7 @@ namespace React.Exceptions
 		/// </summary>
 		public BabelNotLoadedException() : base(GetMessage()) { }
 
-#if NET40
+#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>

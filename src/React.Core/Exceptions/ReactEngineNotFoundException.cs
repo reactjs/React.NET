@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -15,7 +15,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when no valid JavaScript engine is found.
 	/// </summary>
-#if NET40
+#if !NETSTANDARD1_6
 	[Serializable]
 #endif
 	public class ReactEngineNotFoundException : ReactException
@@ -31,7 +31,7 @@ namespace React.Exceptions
 		/// <param name="message">The message that describes the error.</param>
 		public ReactEngineNotFoundException(string message) : base(message) { }
 
-#if NET40
+#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>

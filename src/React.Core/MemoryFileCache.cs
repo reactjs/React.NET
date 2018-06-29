@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#if NET40
+#if NET40 || NET45
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Msie;
-#if NET40
+#if NET45
 using JavaScriptEngineSwitcher.V8;
 #else
 using JavaScriptEngineSwitcher.ChakraCore;
@@ -37,7 +37,7 @@ namespace React
 		/// <summary>
 		/// The JavaScript Engine Switcher instance used by ReactJS.NET
 		/// </summary>
-		protected readonly JsEngineSwitcher _jsEngineSwitcher;
+		protected readonly IJsEngineSwitcher _jsEngineSwitcher;
 		/// <summary>
 		/// Contains all current JavaScript engine instances. One per thread, keyed on thread ID.
 		/// </summary>
@@ -60,7 +60,7 @@ namespace React
 		/// Initializes a new instance of the <see cref="JavaScriptEngineFactory"/> class.
 		/// </summary>
 		public JavaScriptEngineFactory(
-			JsEngineSwitcher jsEngineSwitcher,
+			IJsEngineSwitcher jsEngineSwitcher,
 			IReactSiteConfiguration config,
 			IFileSystem fileSystem
 		)
@@ -238,7 +238,7 @@ namespace React
 		/// The first functioning JavaScript engine with the lowest priority will be used.
 		/// </summary>
 		/// <returns>Function to create JavaScript engine</returns>
-		private static Func<IJsEngine> GetFactory(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
+		private static Func<IJsEngine> GetFactory(IJsEngineSwitcher jsEngineSwitcher, bool allowMsie)
 		{
 			EnsureJsEnginesRegistered(jsEngineSwitcher, allowMsie);
 
@@ -286,22 +286,22 @@ namespace React
 
 			// Epic fail, none of the engines worked. Nothing we can do now.
 			// Throw an error relevant to the engine they should be able to use.
-#if NET40
+#if NET45
 			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
 			{
 				JavaScriptEngineUtils.EnsureEngineFunctional<V8JsEngine, ClearScriptV8InitialisationException>(
 					ex => new ClearScriptV8InitialisationException(ex)
 				);
 			}
+
 #endif
-#if NET40 || NETSTANDARD1_6
 			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
 			{
 				JavaScriptEngineUtils.EnsureEngineFunctional<VroomJsEngine, VroomJsInitialisationException>(
 					ex => new VroomJsInitialisationException(ex.Message)
 				);
 			}
-#endif
+
 			throw new ReactEngineNotFoundException();
 		}
 
@@ -362,7 +362,7 @@ namespace React
 		/// </summary>
 		/// <param name="jsEngineSwitcher">JavaScript Engine Switcher instance</param>
 		/// <param name="allowMsie">Whether to allow the MSIE JS engine</param>
-		private static void EnsureJsEnginesRegistered(JsEngineSwitcher jsEngineSwitcher, bool allowMsie)
+		private static void EnsureJsEnginesRegistered(IJsEngineSwitcher jsEngineSwitcher, bool allowMsie)
 		{
 			if (jsEngineSwitcher.EngineFactories.Any())
 			{
@@ -377,7 +377,7 @@ namespace React
 				"for more information."
 			);
 
-#if NET40
+#if NET45
 			jsEngineSwitcher.EngineFactories.AddV8();
 #endif
 			jsEngineSwitcher.EngineFactories.AddVroom();
@@ -385,7 +385,7 @@ namespace React
 			{
 				jsEngineSwitcher.EngineFactories.AddMsie();
 			}
-#if !NET40
+#if !NET45
 			jsEngineSwitcher.EngineFactories.AddChakraCore();
 #endif
 		}

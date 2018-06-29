@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -15,7 +15,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Base class for all ReactJS.NET exceptions
 	/// </summary>
-#if NET40
+#if !NETSTANDARD1_6
 	[Serializable]
 #endif
 	public class ReactException : Exception
@@ -37,7 +37,7 @@ namespace React.Exceptions
 		public ReactException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if NET40
+#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>

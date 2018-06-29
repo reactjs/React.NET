@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -15,7 +15,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when the ClearScript V8 JavaScript engine fails to initialise
 	/// </summary>
-#if NET40
+#if !NETSTANDARD1_6
 	[Serializable]
 #endif
 	public class ClearScriptV8InitialisationException : ReactException
@@ -26,7 +26,7 @@ namespace React.Exceptions
 		public ClearScriptV8InitialisationException(Exception innerException) :
 			base(GetMessage(innerException), innerException) { }
 
-#if NET40
+#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
