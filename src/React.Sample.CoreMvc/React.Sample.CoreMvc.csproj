@@ -20,11 +20,11 @@
     <ProjectReference Include="..\React.AspNet\React.AspNet.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore" Version="3.0.0-beta5" />
-    <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.0.0-beta4" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.linux-x64" Version="3.0.0-beta3" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.osx-x64" Version="3.0.0-beta3" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.win-x64" Version="3.0.0-beta3" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore" Version="3.0.0-beta7" />
+    <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.0.0-beta6" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.linux-x64" Version="3.0.0-beta7" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.osx-x64" Version="3.0.0-beta7" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.native.win-x64" Version="3.0.0-beta7" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.0.0" PrivateAssets="All" />
