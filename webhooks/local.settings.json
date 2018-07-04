@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
+
+    "GitHubOwner": "Daniel15",
+    "GitHubRepo": "React.NET",
+    "GitHubBotUser": "DanBuild",
+    "GitHubToken": "CHANGEME",
+    "NetlifySite": "reactnet-test"
+  }
+}
