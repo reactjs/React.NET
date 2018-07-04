@@ -6,6 +6,8 @@ author: Daniel Lo Nigro
 *Cross-posted from [the official React blog](http://facebook.github.io/react/blog/2014/04/04/reactnet.html).*
 ____
 
+test
+
 Today we're happy to announce the initial release of
 [ReactJS.NET](http://reactjs.net/), which makes it easier to use React and JSX
 in .NET applications, focusing specifically on ASP.NET MVC web applications.
