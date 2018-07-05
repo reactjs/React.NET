@@ -1,0 +1,29 @@
+[build]
+  base = "site/jekyll"
+  publish = "site/jekyll/_site"
+  command = "bundle exec jekyll build"
+
+# Shortcuts
+[[redirects]]
+  from = "/download"
+  to = "/getting-started/download.html"
+  status = 302
+
+[[redirects]]
+  from = "/docs"
+  to = "/getting-started/download.html"
+  status = 302
+  
+# Old documentation URLs
+[[redirects]]
+  from = "/getting-started/aspnet5.html"
+  to = "/getting-started/aspnetcore.html"
+  
+# Old package URLs
+[[redirects]]
+  from = "/packages/*"
+  to = "https://ci.appveyor.com/nuget/reactjs.net/:splat"
+
+[[redirects]]
+  from = "/dev/packages/*"
+  to = "https://ci.appveyor.com/nuget/reactjs.net/:splat"
