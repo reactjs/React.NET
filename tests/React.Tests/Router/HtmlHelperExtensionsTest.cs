@@ -6,6 +6,7 @@
  *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
+#if NET452
 
 using System.Web;
 using System.Web.Mvc;
@@ -291,3 +292,4 @@ namespace React.Tests.Router
 		}
 	}
 }
+#endif

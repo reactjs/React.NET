@@ -29,6 +29,7 @@ namespace React.Tests.Core
 			environment.ExecuteWithBabel<int>("foo");
 			mocks.Engine.Verify(x => x.CallFunction<int>("foo"), Times.Exactly(1));
 		}
+#if NET452 || NETCOREAPP2_0
 
 		[Fact]
 		public void ExecuteWithBabelWithNewThread()
@@ -53,6 +54,7 @@ namespace React.Tests.Core
 				"Inner engine should be disposed"
 			);
 		}
+#endif
 
 		[Fact]
 		public void ExecuteWithBabelShouldBubbleExceptions()
