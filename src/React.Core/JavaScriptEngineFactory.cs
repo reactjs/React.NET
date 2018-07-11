@@ -180,13 +180,14 @@ namespace React
 		/// <param name="engine">Engine to check</param>
 		private static void EnsureReactLoaded(IJsEngine engine)
 		{
-			var result = engine.CallFunction<bool>("ReactNET_initReact");
-			if (!result)
+			var result = engine.CallFunction<string[]>("ReactNET_initReact");
+			if (result.Length != 0)
 			{
 				throw new ReactNotInitialisedException(
-					"React has not been loaded correctly. Please expose your version of React as global " +
-					"variables named 'React', 'ReactDOM' and 'ReactDOMServer', or enable the " +
-					"'LoadReact' configuration option to use the built-in version of React."
+					$"React has not been loaded correctly: missing ({result.Join(", ")})." +
+					"Please expose your version of React as global variables named " +
+					"'React', 'ReactDOM' and 'ReactDOMServer', or enable the 'LoadReact'" +
+					"configuration option to use the built-in version of React."
 				);
 			}
 		}

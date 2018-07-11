@@ -125,7 +125,7 @@ namespace React.Tests.Core
 		{
 			var jsEngine = new Mock<IJsEngine>();
 			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-			jsEngine.Setup(x => x.CallFunction<bool>("ReactNET_initReact")).Returns(true);
+			jsEngine.Setup(x => x.CallFunction<string[]>("ReactNET_initReact")).Returns(new string[] { });
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(false);
@@ -134,7 +134,7 @@ namespace React.Tests.Core
 
 			factory.GetEngineForCurrentThread();
 
-			jsEngine.Verify(x => x.CallFunction<bool>("ReactNET_initReact"));
+			jsEngine.Verify(x => x.CallFunction<string[]>("ReactNET_initReact"));
 		}
 
 		[Fact]
@@ -142,7 +142,7 @@ namespace React.Tests.Core
 		{
 			var jsEngine = new Mock<IJsEngine>();
 			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-			jsEngine.Setup(x => x.CallFunction<bool>("ReactNET_initReact")).Returns(false);
+			jsEngine.Setup(x => x.CallFunction<string[]>("ReactNET_initReact")).Returns(new string[] { "React" });
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(false);
