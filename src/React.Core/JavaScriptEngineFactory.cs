@@ -185,7 +185,7 @@ namespace React
 			{
 				throw new ReactNotInitialisedException(
 					"React has not been loaded correctly. Please expose your version of React as global " +
-					"variables named 'React', 'ReactDOM' and 'ReactDOMServer', or enable the " +
+					"variables named 'React', 'ReactDOM', and 'ReactDOMServer', or enable the " +
 					"'LoadReact' configuration option to use the built-in version of React."
 				);
 			}
