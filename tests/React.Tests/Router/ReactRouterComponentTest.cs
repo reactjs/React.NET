@@ -6,6 +6,7 @@
  *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
+#if NET452 || NETCOREAPP2_0
 
 using Moq;
 using Xunit;
@@ -37,3 +38,4 @@ namespace React.Tests.Router
 		}
 	}
 }
+#endif

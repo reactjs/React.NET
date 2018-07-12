@@ -4,7 +4,7 @@
     <Copyright>Copyright 2014-Present Facebook, Inc</Copyright>
     <AssemblyTitle>ReactJS.NET Console Sample</AssemblyTitle>
     <Authors>Daniel Lo Nigro</Authors>
-    <TargetFrameworks>net40;netcoreapp1.1</TargetFrameworks>
+    <TargetFrameworks>net40;netcoreapp1.1;netcoreapp2.0</TargetFrameworks>
     <AssemblyName>React.Sample.ConsoleApp</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>React.Sample.ConsoleApp</PackageId>
