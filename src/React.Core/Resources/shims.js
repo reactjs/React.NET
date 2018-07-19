@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -46,26 +46,37 @@ if (!Object.freeze) {
 /**
  * Finds a user-supplied version of React and ensures it's exposed globally.
  *
- * @return {bool}
+ * @return {string[]} Which globals are missing, if any.
  */
 function ReactNET_initReact() {
-	if (
-		typeof React !== 'undefined' &&
-		typeof ReactDOM !== 'undefined' &&
-		typeof ReactDOMServer !== 'undefined'
-	) {
-		// React is already a global, woohoo
-		return true;
+	var missing = [];
+
+	if (typeof React === 'undefined') {
+		if (global.React) {
+			React = global.React;
+		} else {
+			missing.push('React');
+		}
 	}
 
-	if (global.React && global.ReactDOM && global.ReactDOMServer) {
-		React = global.React;
-		ReactDOM = global.ReactDOM;
-		ReactDOMServer = global.ReactDOMServer;
-		return true;
+	if (typeof ReactDOM === 'undefined') {
+		if (global.ReactDOM) {
+			ReactDOM = global.ReactDOM;
+		} else {
+			missing.push('ReactDOM');
+		}
 	}
-	// :'(
-	return false;
+
+	if (typeof ReactDOMServer === 'undefined') {
+		if (global.ReactDOMServer) {
+			ReactDOMServer = global.ReactDOMServer;
+		}
+		else {
+			missing.push('ReactDOMServer');
+		}
+	}
+
+	return missing;
 }
 
 setTimeout = setTimeout || global.setTimeout;
