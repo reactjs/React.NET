@@ -9,11 +9,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
-using Xunit;
 using React.Exceptions;
+using Xunit;
 
 namespace React.Tests.Core
 {
@@ -153,6 +154,24 @@ namespace React.Tests.Core
 			{
 				factory.GetEngineForCurrentThread();
 			});
+		}
+
+		[Fact]
+		public void FileLockExceptionShouldBeWrapped()
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "foo.js" });
+			config.Setup(x => x.LoadReact).Returns(false);
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString("foo.js")).Throws(new IOException("File was locked"));
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+			jsEngine.Setup(x => x.Execute("Test"));
+			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+
+			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
+			Assert.Equal("File was locked", ex.Message);
 		}
 
 		[Fact]
