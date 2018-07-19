@@ -95,6 +95,9 @@ namespace React
 					_configuration.JsonSerializerSettings);
 			}
 		}
+		/// <summary>
+		/// Get or sets if this components only should be rendered client side
+		/// </summary>
 		public bool ClientOnly { get; set; }
 
 		/// <summary>

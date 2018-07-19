@@ -9,6 +9,9 @@
 
 namespace React
 {
+	/// <summary>
+	/// Fast component ID generator
+	/// </summary>
 	public interface IReactIdGenerator
 	{
 		/// <summary>
