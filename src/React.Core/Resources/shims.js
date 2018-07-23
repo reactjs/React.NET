@@ -46,7 +46,7 @@ if (!Object.freeze) {
 /**
  * Finds a user-supplied version of React and ensures it's exposed globally.
  *
- * @return {string[]} Which globals are missing, if any.
+ * @return {string} Comma-separated list of missing globals.
  */
 function ReactNET_initReact() {
 	var missing = [];
@@ -76,7 +76,7 @@ function ReactNET_initReact() {
 		}
 	}
 
-	return missing;
+	return missing.join(',');
 }
 
 setTimeout = setTimeout || global.setTimeout;
