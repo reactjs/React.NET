@@ -9,11 +9,11 @@ using Xunit;
 
 namespace React.Tests.Integration
 {
-    public class ServerRenderTests
-    {
-        [Fact]
-        public void RendersSuccessfullyWithBundledReact()
-        {
+	public class ServerRenderTests
+	{
+		[Fact]
+		public void RendersSuccessfullyWithBundledReact()
+		{
 			Initializer.Initialize(registration => registration.AsSingleton());
 			AssemblyRegistration.Container.Register<ICache, NullCache>();
 			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
@@ -27,11 +27,11 @@ namespace React.Tests.Integration
 			var stringWriter = new StringWriter(new StringBuilder(128));
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
-        }
+		}
 
 		[Fact]
-        public void RendersSuccessfullyWithExternalReact()
-        {
+		public void RendersSuccessfullyWithExternalReact()
+		{
 			Initializer.Initialize(registration => registration.AsSingleton());
 			AssemblyRegistration.Container.Register<ICache, NullCache>();
 			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
@@ -47,6 +47,6 @@ namespace React.Tests.Integration
 			var stringWriter = new StringWriter(new StringBuilder(128));
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
-        }
-    }
+		}
+	}
 }
