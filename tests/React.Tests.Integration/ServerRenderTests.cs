@@ -26,7 +26,7 @@ namespace React.Tests.Integration
 
 			var stringWriter = new StringWriter(new StringBuilder(128));
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
-			Assert.Equal("<div>Hello Tester!</div>THIS SHOULD FAIL", stringWriter.ToString());
+			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
         }
     }
 }
