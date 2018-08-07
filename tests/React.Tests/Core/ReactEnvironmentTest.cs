@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -41,15 +41,15 @@ namespace React.Tests.Core
 			mocks.Engine.Setup(x => x.CallFunction<int>("foo"))
 				.Callback(() => mocks.Engine.Setup(x => x.CallFunction<int>("foo")))
 				.Throws(new Exception("Out of stack space"));
-				
+
 			environment.ExecuteWithBabel<int>("foo");
 			mocks.EngineFactory.Verify(
-				x => x.GetEngineForCurrentThread(), 
+				x => x.GetEngineForCurrentThread(),
 				Times.Exactly(2),
 				"Two engines should be created (initial thread and new thread)"
 			);
 			mocks.EngineFactory.Verify(
-				x => x.DisposeEngineForCurrentThread(), 
+				x => x.DisposeEngineForCurrentThread(),
 				Times.Exactly(1),
 				"Inner engine should be disposed"
 			);
@@ -124,7 +124,7 @@ namespace React.Tests.Core
 			environment.CreateComponent(component.Object);
 
 			// A single nameless component was successfully added!
-			Assert.Equal(";\r\n", environment.GetInitJavaScript());
+			Assert.Equal(";" + Environment.NewLine, environment.GetInitJavaScript());
 		}
 
 		[Fact]
@@ -173,7 +173,7 @@ namespace React.Tests.Core
 					ReactIdGenerator.Object
 				);
 			}
-			
+
 			public Mock<ReactEnvironment> CreateMockedReactEnvironment()
 			{
 				return new Mock<ReactEnvironment>(

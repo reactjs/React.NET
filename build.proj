@@ -17,7 +17,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
 		<PackageOutputDir>$(MSBuildProjectDirectory)\output</PackageOutputDir>
 		<BuildType Condition="'$(BuildType)' == ''">Dev</BuildType>
-		
+
 		<SolutionFile>src\React.sln</SolutionFile>
 	</PropertyGroup>
 	<ItemGroup>
@@ -83,9 +83,9 @@ of patent rights can be found in the PATENTS file in the same directory.
 	</Target>
 
 	<Target Name="Clean" BeforeTargets="Build">
-		<!-- 
+		<!--
 			ASP.NET Core projects don't delete generated .nupkg files when cleaned or rebuilt, so we need to
-			do it here. See https://github.com/aspnet/XRE/issues/1301 
+			do it here. See https://github.com/aspnet/XRE/issues/1301
 		-->
 		<DeleteTree Directories="src/artifacts" />
 		<DeleteTree Directories="src/%(PackageAssemblies.Identity)/bin" />
@@ -101,6 +101,10 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="dotnet test --configuration Release --no-build tests/React.Tests/React.Tests.csproj"
+		/>
+		<Exec
+			WorkingDirectory="$(MSBuildProjectDirectory)"
+			Command="dotnet test --configuration Release --no-build tests/React.Tests.Integration/React.Tests.Integration.csproj"
 		/>
 	</Target>
 
