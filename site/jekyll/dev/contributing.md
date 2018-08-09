@@ -15,6 +15,8 @@ We actively welcome your pull requests on the
 5. Make sure your code lints.
 6. If you haven't already, complete the Contributor License Agreement ("CLA").
 
+If you don't have Visual Studio 2017, get the [community edition](https://visualstudio.microsoft.com/downloads/) (it's free!)
+
 Contributor License Agreement ("CLA")
 -------------------------------------
 In order to accept your pull request, we need you to submit a CLA. You only need
