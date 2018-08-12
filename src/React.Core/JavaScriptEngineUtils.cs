@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.Core.Helpers;
 using Newtonsoft.Json;
@@ -21,21 +20,6 @@ namespace React
 	/// </summary>
 	public static class JavaScriptEngineUtils
 	{
-		/// <summary>
-		/// Determines if the current environment supports the VroomJs engine.
-		/// </summary>
-		/// <returns><c>true</c> if VroomJs is supported</returns>
-		public static bool EnvironmentSupportsVroomJs()
-		{
-#if NET40
-			return Environment.OSVersion.Platform == PlatformID.Unix;
-#else
-			return
-				RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
-				RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-#endif
-		}
-
 		/// <summary>
 		/// Determines if the current environment supports the ClearScript V8 engine
 		/// </summary>

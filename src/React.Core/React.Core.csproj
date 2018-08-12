@@ -32,24 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-beta7" />
     <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="3.0.0-beta4" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.0.0-beta5" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Vroom" Version="3.0.0-beta4" />
     <PackageReference Include="JSPool" Version="4.0.0-beta1" />
-    <PackageReference Include="MsieJavaScriptEngine" Version="3.0.0-beta4" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="VroomJs" Version="1.2.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'net45' ">
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.0.0-beta4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
