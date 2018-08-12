@@ -4,7 +4,7 @@ pygments: true
 permalink: /:year/:month/:title.html
 paginate: 5
 paginate_path: /blog/page:num.html
-url: http://reactjs.net
+url: https://reactjs.net
 doc-sections:
  - id: getting-started
    title: Getting Started
