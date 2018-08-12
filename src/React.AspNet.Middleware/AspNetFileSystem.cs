@@ -1,9 +1,9 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 namespace React.AspNet
 {
 	/// <summary>
-	/// Handles file system functionality, such as reading files. Maps all paths from 
+	/// Handles file system functionality, such as reading files. Maps all paths from
 	/// application-relative (~/...) to full paths using ASP.NET's MapPath method.
 	/// </summary>
 	public class AspNetFileSystem : FileSystemBase
@@ -36,12 +36,13 @@ namespace React.AspNet
 		/// <returns>Full path of the file</returns>
 		public override string MapPath(string relativePath)
 		{
-            if (relativePath.StartsWith(_hostingEnv.WebRootPath))
-            {
-                return relativePath;
-            }
-            relativePath = relativePath.TrimStart('~').TrimStart('/');
-            return Path.Combine(_hostingEnv.WebRootPath, relativePath);
+			if (relativePath.StartsWith(_hostingEnv.WebRootPath))
+			{
+				return relativePath;
+			}
+			relativePath = relativePath.TrimStart('~').TrimStart('/');
+
+			return Path.GetFullPath(Path.Combine(_hostingEnv.WebRootPath, relativePath));
 		}
 	}
 }
