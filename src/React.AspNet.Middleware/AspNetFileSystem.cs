@@ -8,7 +8,6 @@
  */
 
 using System.IO;
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Hosting;
 
 namespace React.AspNet
@@ -41,15 +40,9 @@ namespace React.AspNet
 			{
 				return relativePath;
 			}
-
 			relativePath = relativePath.TrimStart('~').TrimStart('/');
 
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-			{
-				relativePath = relativePath.Replace("/", "\\");
-			}
-
-			return Path.Combine(_hostingEnv.WebRootPath, relativePath);
+			return Path.GetFullPath(Path.Combine(_hostingEnv.WebRootPath, relativePath));
 		}
 	}
 }
