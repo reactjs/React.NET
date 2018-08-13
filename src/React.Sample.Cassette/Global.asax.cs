@@ -10,8 +10,6 @@
 using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
-using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.V8;
 using React.Sample.Mvc4;
 
 namespace React.Sample.Cassette
@@ -22,9 +20,6 @@ namespace React.Sample.Cassette
 	{
 		protected void Application_Start()
 		{
-			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
-			JsEngineSwitcher.Current.EngineFactories.AddV8();
-
 			Initializer.Initialize(registration => registration.AsSingleton());
 			var container = React.AssemblyRegistration.Container;
 

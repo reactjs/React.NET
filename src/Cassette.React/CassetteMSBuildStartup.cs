@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,8 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
-using System.Diagnostics;
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Msie;
 using React;
 
 namespace Cassette.React
@@ -30,6 +30,9 @@ namespace Cassette.React
 			{
 				return;
 			}
+
+			JsEngineSwitcher.Current.DefaultEngineName = MsieJsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddMsie();
 
 			// All "per-request" registrations should be singletons in MSBuild, since there's no
 			// such thing as a "request"
