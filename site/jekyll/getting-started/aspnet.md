@@ -11,14 +11,15 @@ ReactJS.NET requires Visual Studio 2015 and MVC 4 or 5.
 Install the `React.Web.Mvc4` package through NuGet. You will also need to install a JS engine to use (either V8 or ChakraCore are recommended). See the [JSEngineSwitcher docs](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines) for more information.
 
 To use V8, add the following packages:
+
 ```
 JavaScriptEngineSwitcher.V8
 JavaScriptEngineSwitcher.V8.Native.win-x64
 ```
 
 `ReactConfig.cs` will be automatically generated for you. Update it to register a JS engine and your JSX files:
-```cs
 
+```cs
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.V8;
 
@@ -41,11 +42,13 @@ namespace React.Sample.Mvc4
 ```
 
 Reference JSX files directly in script tags:
+
 ```html
 <script src="~/Content/Sample.jsx"></script>
 ```
 
 You're done! You can now call `Html.React` from within Razor files:
+
 ```
 @Html.React("Sample", new { initialComments = Model.Comments, page = Model.Page })
 ```

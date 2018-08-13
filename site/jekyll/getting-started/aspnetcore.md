@@ -75,11 +75,13 @@ Finally, add this to `Views\_ViewImports.cshtml` (or create it if it doesn't exi
 ```
 
 Reference JSX files directly in script tags:
+
 ```html
 <script src="~/Content/Sample.jsx"></script>
 ```
 
 You're done! You can now call `Html.React` from within Razor files:
+
 ```
 @Html.React("Sample", new { initialComments = Model.Comments, page = Model.Page })
 ```
