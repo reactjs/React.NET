@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -7,8 +7,11 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.V8;
 using React.Sample.Mvc4;
 
 namespace React.Sample.Cassette
@@ -19,10 +22,32 @@ namespace React.Sample.Cassette
 	{
 		protected void Application_Start()
 		{
+			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddV8();
+
+			Initializer.Initialize(registration => registration.AsSingleton());
+			var container = React.AssemblyRegistration.Container;
+
+			container.Register<ICache, NullCache>();
+			container.Register<IFileSystem, AspNetFileSystem>();
+			var foo = ReactEnvironment.GetCurrentOrThrow;
 			AreaRegistration.RegisterAllAreas();
 
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
+		}
+
+		private class AspNetFileSystem : FileSystemBase
+		{
+			/// <summary>
+			/// Converts a path from an application relative path (~/...) to a full filesystem path
+			/// </summary>
+			/// <param name="relativePath">App-relative path of the file</param>
+			/// <returns>Full path of the file</returns>
+			public override string MapPath(string relativePath)
+			{
+				return HostingEnvironment.MapPath(relativePath);
+			}
 		}
 	}
 }

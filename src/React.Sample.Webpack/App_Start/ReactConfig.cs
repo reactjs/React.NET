@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2015, Facebook, Inc.
  *  All rights reserved.
  *
@@ -6,6 +6,9 @@
  *  LICENSE file in the root directory of this source tree. An additional grant 
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
+
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.V8;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Webpack.ReactConfig), "Configure")]
 
@@ -18,6 +21,9 @@ namespace React.Sample.Webpack
 			ReactSiteConfiguration.Configuration
 				.SetLoadBabel(false)
 				.AddScriptWithoutTransform("~/build/server.bundle.js");
+
+			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddV8();
 		}
 	}
 }
