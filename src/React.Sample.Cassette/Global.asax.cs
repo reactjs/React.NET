@@ -25,7 +25,7 @@ namespace React.Sample.Cassette
 
 			container.Register<ICache, NullCache>();
 			container.Register<IFileSystem, AspNetFileSystem>();
-			var foo = ReactEnvironment.GetCurrentOrThrow;
+
 			AreaRegistration.RegisterAllAreas();
 
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
