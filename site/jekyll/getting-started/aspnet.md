@@ -19,7 +19,7 @@ JavaScriptEngineSwitcher.V8.Native.win-x64
 
 `ReactConfig.cs` will be automatically generated for you. Update it to register a JS engine and your JSX files:
 
-```cs
+```csharp
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.V8;
 
