@@ -48,11 +48,11 @@ id: home
 
 ```javascript
 // /Scripts/HelloWorld.jsx
-var HelloWorld = React.createClass({
+class HelloWorld extends React.Component {
   render: function() {
     return <div>Hello world!</div>;
   }
-});
+}
 ```
 ```html
 <!-- Reference it from HTML -->

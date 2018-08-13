@@ -3,6 +3,8 @@ layout: docs
 title: Webpack
 ---
 
+This guide is for Webpack 1. To see the latest example for how to use webpack, check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack).
+
 [Webpack](http://webpack.github.io/docs/what-is-webpack.html) is a popular module bundling system built on top of Node.js. It can handle not only combination and minification of JavaScript and CSS files, but also other assets such as image files (spriting) through the use of plugins. Webpack can be used as an alternative to Cassette or ASP.NET Combination and Minification. This guide assumes you have already [installed Webpack](http://webpack.github.io/docs/installation.html).
 
 In order to use Webpack with ReactJS.NET's server-side rendering, it is suggested that you create a separate bundle ("[entry point](http://webpack.github.io/docs/multiple-entry-points.html)") containing *only* the code required to perform server-side rendering. Any components you would like to render server-side must be exposed globally so that ReactJS.NET can access them. This can be done through the [Webpack expose loader](https://github.com/webpack/expose-loader):

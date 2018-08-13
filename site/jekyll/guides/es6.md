@@ -28,14 +28,14 @@ var OldAndBusted = React.createClass({
 });
 
 // The new way
-var NewHotness = React.createClass({
+class NewHotness extends React.Component {
   render() {
     // ...
   },
   doStuff() {
     // ...
   }
-});
+};
 ```
 
 * **[Classes](http://wiki.ecmascript.org/doku.php?id=strawman:maximally_minimal_classes)** &mdash; Similar to the class systems included in JavaScript frameworks such as Prototype and MooTools, but will (eventually) be native to JavaScript

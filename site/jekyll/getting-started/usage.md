@@ -7,13 +7,13 @@ Once installed, create your React components as usual.
 
 ```javascript
 // /Scripts/HelloWorld.jsx
-var HelloWorld = React.createClass({
-	render: function () {
+class HelloWorld extends React.Component {
+	render() {
 		return (
 			<div>Hello {this.props.name}</div>
 		);
 	}
-});
+}
 ```
 
 On-the-Fly JSX to JavaScript Compilation
