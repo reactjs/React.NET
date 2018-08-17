@@ -63,7 +63,10 @@ namespace React.AspNet
 			bool clientOnly = false,
 			bool serverOnly = false,
 			string containerClass = null,
-			Action<Exception, string, string> exceptionHandler = null
+			Action<Exception, string, string> exceptionHandler = null,
+			Action<Func<string, string>> preRender = null,
+			Func<string, string> transformRender = null,
+			Action<Func<string, string>> postRender = null
 		)
 		{
 			return new ActionHtmlString(writer =>
@@ -81,7 +84,7 @@ namespace React.AspNet
 						reactComponent.ContainerClass = containerClass;
 					}
 
-					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler);
+					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler, preRender, transformRender, postRender);
 				}
 				finally
 				{

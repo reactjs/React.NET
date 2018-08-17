@@ -7,6 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+using System;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -49,13 +50,30 @@ namespace React.Router
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering. Does not make sense in this context but included for consistency</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <returns>Object containing HTML in string format and the React Router context object</returns>
-		public virtual ExecutionResult RenderRouterWithContext(bool renderContainerOnly = false, bool renderServerOnly = false)
+		public virtual ExecutionResult RenderRouterWithContext(
+			bool renderContainerOnly = false,
+			bool renderServerOnly = false,
+			Action<Func<string, string>> preRender = null,
+			Func<string, string> transformRender = null,
+			Action<Func<string, string>> postRender = null
+		)
 		{
-			_environment.Execute("var context = {};");
+			string contextString = "";
 
-			var html = RenderHtml(renderContainerOnly, renderServerOnly);
-
-			var contextString = _environment.Execute<string>("JSON.stringify(context);");
+			var html = RenderHtml(
+				renderContainerOnly,
+				renderServerOnly,
+				preRender: executeJs =>
+				{
+					executeJs("var context = {};");
+					preRender?.Invoke(executeJs);
+				},
+				transformRender: transformRender,
+				postRender: executeJs =>
+				{
+					contextString = executeJs("JSON.stringify(context);");
+					postRender?.Invoke(executeJs);
+				});
 
 			return new ExecutionResult
 			{

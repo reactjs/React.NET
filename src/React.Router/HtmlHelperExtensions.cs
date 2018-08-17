@@ -95,7 +95,10 @@ namespace React.Router
 			bool clientOnly = false,
 			bool serverOnly = false,
 			string containerClass = null,
-			Action<HttpResponse, RoutingContext> contextHandler = null
+			Action<HttpResponse, RoutingContext> contextHandler = null,
+			Action<Func<string, string>> preRender = null,
+			Func<string, string> transformRender = null,
+			Action<Func<string, string>> postRender = null
 		)
 		{
 			try
@@ -121,7 +124,7 @@ namespace React.Router
 					reactComponent.ContainerClass = containerClass;
 				}
 
-				var executionResult = reactComponent.RenderRouterWithContext(clientOnly, serverOnly);
+				var executionResult = reactComponent.RenderRouterWithContext(clientOnly, serverOnly, preRender, transformRender, postRender);
 
 				if (executionResult.Context?.status != null || executionResult.Context?.url != null)
 				{
