@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -9,6 +9,8 @@
 
 using System.Diagnostics;
 using System.IO;
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.Msie;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -45,6 +47,9 @@ namespace React.MSBuild
 			var config = React.AssemblyRegistration.Container.Resolve<IReactSiteConfiguration>();
 			config
 				.SetReuseJavaScriptEngines(false);
+
+			JsEngineSwitcher.Current.DefaultEngineName = MsieJsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddMsie();
 
 			_environment = ReactEnvironment.Current;
 

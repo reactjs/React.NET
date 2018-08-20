@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
+ *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
@@ -8,22 +8,22 @@
  */
 
 using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.V8;
+using JavaScriptEngineSwitcher.Msie;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Webpack.ReactConfig), "Configure")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Mvc4.ReactConfig), "Configure")]
 
-namespace React.Sample.Webpack
+namespace React.Sample.Mvc4
 {
 	public static class ReactConfig
 	{
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
-				.SetLoadBabel(false)
-				.AddScriptWithoutTransform("~/build/server.bundle.js");
+				.SetReuseJavaScriptEngines(true)
+				.AddScript("~/Content/Sample.jsx");
 
-			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
-			JsEngineSwitcher.Current.EngineFactories.AddV8();
+			JsEngineSwitcher.Current.DefaultEngineName = MsieJsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddMsie();
 		}
 	}
 }

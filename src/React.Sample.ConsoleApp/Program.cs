@@ -8,6 +8,8 @@
  */
 
 using System;
+using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Core;
 
 namespace React.Sample.ConsoleApp
 {
@@ -20,6 +22,9 @@ namespace React.Sample.ConsoleApp
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
 				.AddScript("Sample.jsx");
+
+			JsEngineSwitcher.Current.DefaultEngineName = ChakraCoreJsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddChakraCore();
 
 			var environment = ReactEnvironment.Current;
 			var component = environment.CreateComponent("HelloWorld", new { name = "Daniel" });

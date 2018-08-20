@@ -35,7 +35,7 @@ namespace React.Tests.Core
 		}
 
 		private JavaScriptEngineFactory CreateFactory(
-			Mock<IReactSiteConfiguration> config, 
+			Mock<IReactSiteConfiguration> config,
 			Mock<IFileSystem> fileSystem,
 			Func<IJsEngine> innerEngineFactory
 		)
@@ -58,7 +58,7 @@ namespace React.Tests.Core
 			var factory = CreateBasicFactory();
 			var engine1 = factory.GetEngineForCurrentThread();
 			var engine2 = factory.GetEngineForCurrentThread();
-			
+
 			Assert.Equal(engine1, engine2);
 			factory.DisposeEngineForCurrentThread();
 		}
@@ -316,6 +316,56 @@ namespace React.Tests.Core
 			{
 				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
 			});
+		}
+
+		[Fact]
+		public void ShouldThrowIfNoEnginesRegistered()
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			var fileSystem = new Mock<IFileSystem>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var engineSwitcher = new JsEngineSwitcher(
+				new JsEngineFactoryCollection(),
+				string.Empty
+			);
+
+			var caughtException = Assert.Throws<ReactException>(() =>
+			{
+				new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+			});
+			Assert.Contains("No JS engines were registered", caughtException.Message);
+		}
+
+		[Fact]
+		public void ShouldThrowIfJsEngineFails()
+		{
+			const string defaultEngineName = "DefaultEngine";
+
+			var defaultEngineFactory = new Mock<IJsEngineFactory>();
+			defaultEngineFactory.Setup(x => x.EngineName).Returns(defaultEngineName);
+			defaultEngineFactory.Setup(x => x.CreateEngine()).Throws(new JsEngineLoadException("This is a custom JS engine load error."));
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var fileSystem = new Mock<IFileSystem>();
+			var engineSwitcher = new JsEngineSwitcher(
+				new JsEngineFactoryCollection
+				{
+					defaultEngineFactory.Object,
+				},
+				string.Empty
+			);
+
+			var caughtException = Assert.Throws<ReactEngineNotFoundException>(() =>
+			{
+				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+				factory.GetEngineForCurrentThread();
+			});
+			Assert.Contains("This is a custom JS engine load error", caughtException.Message);
 		}
 	}
 }

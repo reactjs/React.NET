@@ -64,9 +64,6 @@
     <Reference Include="JavaScriptEngineSwitcher.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <HintPath>..\packages\JavaScriptEngineSwitcher.Core.3.0.0-beta4\lib\net45\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
-    <Reference Include="JavaScriptEngineSwitcher.Msie, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.3.0.0-beta5\lib\net45\JavaScriptEngineSwitcher.Msie.dll</HintPath>
-    </Reference>
     <Reference Include="JavaScriptEngineSwitcher.V8, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
       <HintPath>..\packages\JavaScriptEngineSwitcher.V8.3.0.0-beta4\lib\net45\JavaScriptEngineSwitcher.V8.dll</HintPath>
     </Reference>

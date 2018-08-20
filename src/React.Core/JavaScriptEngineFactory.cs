@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
-using JavaScriptEngineSwitcher.Msie;
-#if NET45
-using JavaScriptEngineSwitcher.V8;
-#else
-using JavaScriptEngineSwitcher.ChakraCore;
-#endif
-using JavaScriptEngineSwitcher.Vroom;
 using JSPool;
 using React.Exceptions;
 
@@ -42,7 +36,7 @@ namespace React
 		/// <summary>
 		/// Contains all current JavaScript engine instances. One per thread, keyed on thread ID.
 		/// </summary>
-		protected readonly ConcurrentDictionary<int, IJsEngine> _engines 
+		protected readonly ConcurrentDictionary<int, IJsEngine> _engines
 			= new ConcurrentDictionary<int, IJsEngine>();
 		/// <summary>
 		/// Pool of JavaScript engines to use
@@ -70,7 +64,7 @@ namespace React
 			_config = config;
 			_fileSystem = fileSystem;
 #pragma warning disable 618
-			_factory = GetFactory(_jsEngineSwitcher, config.AllowMsieEngine);
+			_factory = GetFactory(_jsEngineSwitcher);
 #pragma warning restore 618
 			if (_config.ReuseJavaScriptEngines)
 			{
@@ -128,9 +122,9 @@ namespace React
 			if (_config.LoadReact)
 			{
 				engine.ExecuteResource(
-					_config.UseDebugReact 
-						? "React.Core.Resources.react.generated.js" 
-						: "React.Core.Resources.react.generated.min.js", 
+					_config.UseDebugReact
+						? "React.Core.Resources.react.generated.js"
+						: "React.Core.Resources.react.generated.min.js",
 					thisAssembly
 				);
 			}
@@ -139,13 +133,13 @@ namespace React
 			if (!_config.LoadReact && _scriptLoadException == null)
 			{
 				// We expect to user to have loaded their own version of React in the scripts that
-				// were loaded above, let's ensure that's the case. 
+				// were loaded above, let's ensure that's the case.
 				EnsureReactLoaded(engine);
 			}
 		}
 
 		/// <summary>
-		/// Loads any user-provided scripts. Only scripts that don't need JSX transformation can 
+		/// Loads any user-provided scripts. Only scripts that don't need JSX transformation can
 		/// run immediately here. JSX files are loaded in ReactEnvironment.
 		/// </summary>
 		/// <param name="engine">Engine to load scripts into</param>
@@ -200,7 +194,7 @@ namespace React
 		}
 
 		/// <summary>
-		/// Gets the JavaScript engine for the current thread. It is recommended to use 
+		/// Gets the JavaScript engine for the current thread. It is recommended to use
 		/// <see cref="GetEngine"/> instead, which will pool/reuse engines.
 		/// </summary>
 		/// <returns>The JavaScript engine</returns>
@@ -226,7 +220,7 @@ namespace React
 			{
 				if (engine != null)
 				{
-					engine.Dispose();	
+					engine.Dispose();
 				}
 			}
 		}
@@ -246,10 +240,8 @@ namespace React
 		/// The first functioning JavaScript engine with the lowest priority will be used.
 		/// </summary>
 		/// <returns>Function to create JavaScript engine</returns>
-		private static Func<IJsEngine> GetFactory(IJsEngineSwitcher jsEngineSwitcher, bool allowMsie)
+		private static Func<IJsEngine> GetFactory(IJsEngineSwitcher jsEngineSwitcher)
 		{
-			EnsureJsEnginesRegistered(jsEngineSwitcher, allowMsie);
-
 			string defaultEngineName = jsEngineSwitcher.DefaultEngineName;
 			if (!string.IsNullOrWhiteSpace(defaultEngineName))
 			{
@@ -266,22 +258,33 @@ namespace React
 				}
 			}
 
+			if (jsEngineSwitcher.EngineFactories.Count() == 0)
+			{
+				throw new ReactException("No JS engines were registered. Visit https://reactjs.net/docs for more information.");
+			}
+
+			var exceptionMessages = new List<string>();
 			foreach (var engineFactory in jsEngineSwitcher.EngineFactories)
 			{
 				IJsEngine engine = null;
 				try
 				{
 					engine = engineFactory.CreateEngine();
-					if (EngineIsUsable(engine, allowMsie))
+					if (EngineIsUsable(engine))
 					{
 						// Success! Use this one.
 						return engineFactory.CreateEngine;
 					}
 				}
+				catch (JsEngineLoadException ex)
+				{
+					Trace.WriteLine(string.Format("Error initialising {0}: {1}", engineFactory, ex.Message));
+					exceptionMessages.Add(ex.Message);
+				}
 				catch (Exception ex)
 				{
-					// This engine threw an exception, try the next one
 					Trace.WriteLine(string.Format("Error initialising {0}: {1}", engineFactory, ex));
+					exceptionMessages.Add(ex.ToString());
 				}
 				finally
 				{
@@ -292,39 +295,18 @@ namespace React
 				}
 			}
 
-			// Epic fail, none of the engines worked. Nothing we can do now.
-			// Throw an error relevant to the engine they should be able to use.
-#if NET45
-			if (JavaScriptEngineUtils.EnvironmentSupportsClearScript())
-			{
-				JavaScriptEngineUtils.EnsureEngineFunctional<V8JsEngine, ClearScriptV8InitialisationException>(
-					ex => new ClearScriptV8InitialisationException(ex)
-				);
-			}
-
-#endif
-			if (JavaScriptEngineUtils.EnvironmentSupportsVroomJs())
-			{
-				JavaScriptEngineUtils.EnsureEngineFunctional<VroomJsEngine, VroomJsInitialisationException>(
-					ex => new VroomJsInitialisationException(ex.Message)
-				);
-			}
-
-			throw new ReactEngineNotFoundException();
+			throw new ReactEngineNotFoundException("There was an error initializing the registered JS engines. " + string.Join(Environment.NewLine, exceptionMessages));
 		}
 
 		/// <summary>
 		/// Performs a sanity check to ensure the specified engine type is usable.
 		/// </summary>
 		/// <param name="engine">Engine to test</param>
-		/// <param name="allowMsie">Whether the MSIE engine can be used</param>
 		/// <returns></returns>
-		private static bool EngineIsUsable(IJsEngine engine, bool allowMsie)
+		private static bool EngineIsUsable(IJsEngine engine)
 		{
 			// Perform a sanity test to ensure this engine is usable
-			var isUsable = engine.Evaluate<int>("1 + 1") == 2;
-			var isMsie = engine is MsieJsEngine;
-			return isUsable && (!isMsie || allowMsie);
+			return engine.Evaluate<int>("1 + 1") == 2;
 		}
 
 		/// <summary>
@@ -362,40 +344,6 @@ namespace React
 				// This means an exception occurred while loading the script (eg. syntax error in the file)
 				throw _scriptLoadException;
 			}
-		}
-
-		/// <summary>
-		/// Ensures that some engines have been registered with JavaScriptEngineSwitcher. IF not,
-		/// registers some default engines.
-		/// </summary>
-		/// <param name="jsEngineSwitcher">JavaScript Engine Switcher instance</param>
-		/// <param name="allowMsie">Whether to allow the MSIE JS engine</param>
-		private static void EnsureJsEnginesRegistered(IJsEngineSwitcher jsEngineSwitcher, bool allowMsie)
-		{
-			if (jsEngineSwitcher.EngineFactories.Any())
-			{
-				// Engines have been registered, nothing to do here!
-				return;
-			}
-
-			Trace.WriteLine(
-				"No JavaScript engines were registered, falling back to a default config! It is " +
-				"recommended that you configure JavaScriptEngineSwitcher in your app. See " +
-				"https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines " +
-				"for more information."
-			);
-
-#if NET45
-			jsEngineSwitcher.EngineFactories.AddV8();
-#endif
-			jsEngineSwitcher.EngineFactories.AddVroom();
-			if (allowMsie)
-			{
-				jsEngineSwitcher.EngineFactories.AddMsie();
-			}
-#if !NET45
-			jsEngineSwitcher.EngineFactories.AddChakraCore();
-#endif
 		}
 	}
 }

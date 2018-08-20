@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  Copyright (c) 2014-Present, Facebook, Inc.
  *  All rights reserved.
  *
@@ -8,7 +8,8 @@
  */
 
 using System;
-
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.V8;
 using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.StaticFiles;
 
@@ -46,6 +47,9 @@ namespace React.Sample.Owin
 			var contentFileSystem = new PhysicalFileSystem("Content");
 			app.UseBabel(new BabelFileOptions() { StaticFileOptions = new StaticFileOptions() { FileSystem = contentFileSystem }});
 			app.UseFileServer(new FileServerOptions() { FileSystem = contentFileSystem });
+
+			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddV8();
 
 			app.Use<CommentsMiddleware>();
 		}

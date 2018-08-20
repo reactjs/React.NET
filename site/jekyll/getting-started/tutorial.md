@@ -201,15 +201,15 @@ If you see this, congratulations! You've just built your first React component. 
 The first thing you'll notice is the XML-ish syntax in your JavaScript. We have a simple precompiler that translates the syntactic sugar to this plain JavaScript:
 
 ```javascript
-var CommentBox = React.createClass({displayName: 'CommentBox',
-  render: function() {
+class CommentBox extends React.Component {
+  render() {
     return (
       React.createElement('div', {className: "commentBox"},
         "Hello, world! I am a CommentBox."
       )
     );
   }
-});
+};
 
 ReactDOM.render(
   React.createElement(CommentBox, null),
