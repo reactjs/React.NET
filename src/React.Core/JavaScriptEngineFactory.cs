@@ -276,9 +276,13 @@ namespace React
 						return engineFactory.CreateEngine;
 					}
 				}
+				catch (JsEngineLoadException ex)
+				{
+					Trace.WriteLine(string.Format("Error initialising {0}: {1}", engineFactory, ex.Message));
+					exceptionMessages.Add(ex.Message);
+				}
 				catch (Exception ex)
 				{
-					// This engine threw an exception, try the next one
 					Trace.WriteLine(string.Format("Error initialising {0}: {1}", engineFactory, ex));
 					exceptionMessages.Add(ex.ToString());
 				}
