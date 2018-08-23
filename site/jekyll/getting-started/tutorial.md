@@ -374,9 +374,9 @@ So far we've been inserting the comments directly in the source code. Instead, l
 
 ```javascript
 const data = [
-  { id: 1, author: "Daniel Lo Nigro", text: "Hello ReactJS.NET World!" },
-  { id: 2, author: "Pete Hunt", text: "This is one comment" },
-  { id: 3, author: "Jordan Walke", text: "This is *another* comment" }
+  { Id: 1, Author: "Daniel Lo Nigro", Text: "Hello ReactJS.NET World!" },
+  { Id: 2, Author: "Pete Hunt", Text: "This is one comment" },
+  { Id: 3, Author: "Jordan Walke", Text: "This is *another* comment" }
 ];
 ```
 
