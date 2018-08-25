@@ -1,15 +1,10 @@
 @using React.AspNet
 @using React.Router
 
-<!DOCTYPE html>
-<html>
-<head>
-	<title>React Router Sample</title>
-	<meta charset="utf-8" />
-</head>
-<body>
-	@Html.ReactRouterWithContext("RootComponent", new { })
+@{
+    Layout = "_Layout";
+}
+
+@Html.ReactRouter("RootComponent", new { }, preRender: x => x("var serverStyleSheet = new Styled.ServerStyleSheet();"), transformRender: (component) => $"serverStyleSheet.collectStyles({component})", postRender: x => ViewBag.ServerStyles = x("serverStyleSheet.getStyleTags()"))
 	<script src="/components-bundle.generated.js"></script>
 	@Html.ReactInitJavaScript()
-</body>
-</html>
