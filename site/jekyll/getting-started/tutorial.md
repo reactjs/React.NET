@@ -866,8 +866,8 @@ class CommentBox extends React.Component {
   }
   handleCommentSubmit(comment) {
     const data = new FormData();
-    data.append('author', comment.author);
-    data.append('text', comment.text);
+    data.append('author', comment.Author);
+    data.append('text', comment.Text);
 
     const xhr = new XMLHttpRequest();
     xhr.open('post', this.props.submitUrl, true);
