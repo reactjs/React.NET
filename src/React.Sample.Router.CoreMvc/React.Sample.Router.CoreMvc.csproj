@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
@@ -6,10 +6,10 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="3.0.0-beta7" />
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.linux-x64" Version="3.0.0-beta7" />
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.osx-x64" Version="3.0.0-beta7" />
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.win-x64" Version="3.0.0-beta7" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="3.0.0-beta9" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.Native.linux-x64" Version="3.0.0-beta9" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.Native.osx-x64" Version="3.0.0-beta9" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.0.0-beta9" />
     <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.0.0-beta6" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />

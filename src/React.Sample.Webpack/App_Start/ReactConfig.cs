@@ -19,6 +19,7 @@ namespace React.Sample.Webpack
 		public static void Configure()
 		{
 			ReactSiteConfiguration.Configuration
+				.SetAllowJavaScriptPrecompilation(true)
 				.SetLoadBabel(false)
 				.AddScriptWithoutTransform("~/build/server.bundle.js");
 

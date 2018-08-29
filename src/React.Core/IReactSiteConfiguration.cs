@@ -114,6 +114,18 @@ namespace React
 		IReactSiteConfiguration SetMaxUsagesPerEngine(int? maxUsagesPerEngine);
 
 		/// <summary>
+		/// Gets or sets whether to allow the JavaScript pre-compilation (accelerates the
+		/// initialization of JavaScript engines).
+		/// </summary>
+		bool AllowJavaScriptPrecompilation { get; set; }
+		/// <summary>
+		/// Sets whether to allow the JavaScript pre-compilation (accelerates the initialization of
+		/// JavaScript engines).
+		/// </summary>
+		/// <returns></returns>
+		IReactSiteConfiguration SetAllowJavaScriptPrecompilation(bool allowJavaScriptPrecompilation);
+
+		/// <summary>
 		/// Gets or sets whether the built-in version of React is loaded. If <c>false</c>, you must
 		/// provide your own version of React.
 		/// </summary>

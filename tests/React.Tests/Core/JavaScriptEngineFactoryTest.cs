@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
@@ -25,8 +26,9 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(true);
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
-			return CreateFactory(config, fileSystem, () =>
+			return CreateFactory(config, cache, fileSystem, () =>
 			{
 				var mockJsEngine = new Mock<IJsEngine>();
 				mockJsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
@@ -36,7 +38,18 @@ namespace React.Tests.Core
 
 		private JavaScriptEngineFactory CreateFactory(
 			Mock<IReactSiteConfiguration> config,
+			Mock<ICache> cache,
 			Mock<IFileSystem> fileSystem,
+			Func<IJsEngine> innerEngineFactory
+		)
+		{
+			return CreateFactory(config.Object, cache.Object, fileSystem.Object, innerEngineFactory);
+		}
+
+		private JavaScriptEngineFactory CreateFactory(
+			IReactSiteConfiguration config,
+			ICache cache,
+			IFileSystem fileSystem,
 			Func<IJsEngine> innerEngineFactory
 		)
 		{
@@ -49,7 +62,7 @@ namespace React.Tests.Core
 				string.Empty
 			);
 
-			return new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+			return new JavaScriptEngineFactory(engineSwitcher, config, cache, fileSystem);
 		}
 
 		[Fact]
@@ -101,24 +114,232 @@ namespace React.Tests.Core
 		}
 
 		[Fact]
-		public void ShouldLoadFilesThatDoNotRequireTransform()
+		public void ShouldLoadResourcesWithoutPrecompilation()
+		{
+			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(false);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.ExecuteResource("React.Core.Resources.shims.js", reactCoreAssembly));
+			jsEngine.Verify(x => x.ExecuteResource("React.Core.Resources.react.generated.min.js", reactCoreAssembly));
+		}
+
+		[Fact]
+		public void ShouldLoadResourcesWithPrecompilationAndWithoutCache()
+		{
+			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new NullCache();
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			var factory = CreateFactory(config.Object, cache, fileSystem.Object, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.ExecuteResource("React.Core.Resources.shims.js", reactCoreAssembly));
+			jsEngine.Verify(x => x.ExecuteResource("React.Core.Resources.react.generated.min.js", reactCoreAssembly));
+		}
+
+		[Fact]
+		public void ShouldLoadResourcesWithPrecompilationAndEmptyCache()
+		{
+			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
+			var shimsPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+			var reactPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+			jsEngine
+				.Setup(x => x.PrecompileResource("React.Core.Resources.shims.js", reactCoreAssembly))
+				.Returns(shimsPrecompiledScript);
+			jsEngine
+				.Setup(x => x.PrecompileResource("React.Core.Resources.react.generated.min.js", reactCoreAssembly))
+				.Returns(reactPrecompiledScript);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.Execute(shimsPrecompiledScript));
+			jsEngine.Verify(x => x.Execute(reactPrecompiledScript));
+		}
+
+		[Fact]
+		public void ShouldLoadResourcesWithPrecompilationAndNotEmptyCache()
 		{
 			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var shimsPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+			var reactPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+
+			var cache = new Mock<ICache>();
+			cache
+				.Setup(x => x.Get<IPrecompiledScript>("PRECOMPILED_JS_RESOURCE_React.Core.Resources.shims.js", null))
+				.Returns(shimsPrecompiledScript);
+			cache
+				.Setup(x => x.Get<IPrecompiledScript>("PRECOMPILED_JS_RESOURCE_React.Core.Resources.react.generated.min.js", null))
+				.Returns(reactPrecompiledScript);
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.Execute(shimsPrecompiledScript));
+			jsEngine.Verify(x => x.Execute(reactPrecompiledScript));
+		}
+
+		[Fact]
+		public void ShouldLoadFilesThatDoNotRequireTransformWithoutPrecompilation()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
 			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
 
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(false);
 			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
 
 			var fileSystem = new Mock<IFileSystem>();
 			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
 
-			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			factory.GetEngineForCurrentThread();
 
-			jsEngine.Verify(x => x.Execute("CONTENTS_First.js"));
-			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js"));
+			jsEngine.Verify(x => x.Execute("CONTENTS_First.js", "First.js"));
+			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js", "Second.js"));
+		}
+
+		[Fact]
+		public void ShouldLoadFilesThatDoNotRequireTransformWithPrecompilationAndWithoutCache()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new NullCache();
+
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
+
+			var factory = CreateFactory(config.Object, cache, fileSystem.Object, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.Execute("CONTENTS_First.js", "First.js"));
+			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js", "Second.js"));
+		}
+
+		[Fact]
+		public void ShouldLoadFilesThatDoNotRequireTransformWithPrecompilationAndEmptyCache()
+		{
+			var firstPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+			var secondPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+			jsEngine.Setup(x => x.Precompile("CONTENTS_First.js", "First.js")).Returns(firstPrecompiledScript);
+			jsEngine.Setup(x => x.Precompile("CONTENTS_Second.js", "Second.js")).Returns(secondPrecompiledScript);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
+
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.Execute(firstPrecompiledScript));
+			jsEngine.Verify(x => x.Execute(secondPrecompiledScript));
+		}
+
+		[Fact]
+		public void ShouldLoadFilesThatDoNotRequireTransformWithPrecompilationAndNotEmptyCache()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var firstPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+			var secondPrecompiledScript = new Mock<IPrecompiledScript>().Object;
+
+			var cache = new Mock<ICache>();
+			cache
+				.Setup(x => x.Get<IPrecompiledScript>("PRECOMPILED_JS_FILE_First.js", null))
+				.Returns(firstPrecompiledScript);
+			cache
+				.Setup(x => x.Get<IPrecompiledScript>("PRECOMPILED_JS_FILE_Second.js", null))
+				.Returns(secondPrecompiledScript);
+
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.Execute(firstPrecompiledScript));
+			jsEngine.Verify(x => x.Execute(secondPrecompiledScript));
 		}
 
 		[Fact]
@@ -130,8 +351,9 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(false);
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
-			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			factory.GetEngineForCurrentThread();
 
@@ -147,8 +369,9 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(false);
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
-			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			Assert.Throws<ReactNotInitialisedException>(() =>
 			{
@@ -162,13 +385,14 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "foo.js" });
 			config.Setup(x => x.LoadReact).Returns(false);
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			fileSystem.Setup(x => x.ReadAsString("foo.js")).Throws(new IOException("File was locked"));
 
 			var jsEngine = new Mock<IJsEngine>();
 			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
 			jsEngine.Setup(x => x.Execute("Test"));
-			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
 			Assert.Equal("File was locked", ex.Message);
@@ -180,17 +404,18 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> {"foo.js"});
 			config.Setup(x => x.LoadReact).Returns(false);
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			fileSystem.Setup(x => x.ReadAsString("foo.js")).Returns("FAIL PLZ");
 
 			var jsEngine = new Mock<IJsEngine>();
 			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-			jsEngine.Setup(x => x.Execute("FAIL PLZ")).Throws(new JsRuntimeException("Fail")
+			jsEngine.Setup(x => x.Execute("FAIL PLZ", "foo.js")).Throws(new JsRuntimeException("Fail")
 			{
 				LineNumber = 42,
 				ColumnNumber = 911,
 			});
-			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
 			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
@@ -202,17 +427,18 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> {"foo.js"});
 			config.Setup(x => x.LoadReact).Returns(true);
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			fileSystem.Setup(x => x.ReadAsString("foo.js")).Returns("FAIL PLZ");
 
 			var jsEngine = new Mock<IJsEngine>();
 			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-			jsEngine.Setup(x => x.Execute("FAIL PLZ")).Throws(new JsRuntimeException("Fail")
+			jsEngine.Setup(x => x.Execute("FAIL PLZ", "foo.js")).Throws(new JsRuntimeException("Fail")
 			{
 				LineNumber = 42,
 				ColumnNumber = 911,
 			});
-			var factory = CreateFactory(config, fileSystem, () => jsEngine.Object);
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
 			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
@@ -256,6 +482,7 @@ namespace React.Tests.Core
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(true);
 
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			var engineSwitcher = new JsEngineSwitcher(
 				new JsEngineFactoryCollection
@@ -267,7 +494,8 @@ namespace React.Tests.Core
 				defaultEngineName
 			);
 
-			var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+			var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, cache.Object,
+				fileSystem.Object);
 			var engine = factory.GetEngineForCurrentThread();
 
 			Assert.Equal(defaultEngineName, engine.Name);
@@ -302,6 +530,7 @@ namespace React.Tests.Core
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(true);
 
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			var engineSwitcher = new JsEngineSwitcher(
 				new JsEngineFactoryCollection
@@ -314,7 +543,8 @@ namespace React.Tests.Core
 
 			Assert.Throws<ReactEngineNotFoundException>(() =>
 			{
-				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, cache.Object,
+					fileSystem.Object);
 			});
 		}
 
@@ -322,6 +552,7 @@ namespace React.Tests.Core
 		public void ShouldThrowIfNoEnginesRegistered()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
+			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(true);
@@ -333,7 +564,7 @@ namespace React.Tests.Core
 
 			var caughtException = Assert.Throws<ReactException>(() =>
 			{
-				new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+				new JavaScriptEngineFactory(engineSwitcher, config.Object, cache.Object, fileSystem.Object);
 			});
 			Assert.Contains("No JS engines were registered", caughtException.Message);
 		}
@@ -347,6 +578,7 @@ namespace React.Tests.Core
 			defaultEngineFactory.Setup(x => x.EngineName).Returns(defaultEngineName);
 			defaultEngineFactory.Setup(x => x.CreateEngine()).Throws(new JsEngineLoadException("This is a custom JS engine load error."));
 
+			var cache = new Mock<ICache>();
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string>());
 			config.Setup(x => x.LoadReact).Returns(true);
@@ -362,7 +594,8 @@ namespace React.Tests.Core
 
 			var caughtException = Assert.Throws<ReactEngineNotFoundException>(() =>
 			{
-				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, fileSystem.Object);
+				var factory = new JavaScriptEngineFactory(engineSwitcher, config.Object, cache.Object,
+					fileSystem.Object);
 				factory.GetEngineForCurrentThread();
 			});
 			Assert.Contains("This is a custom JS engine load error", caughtException.Message);
