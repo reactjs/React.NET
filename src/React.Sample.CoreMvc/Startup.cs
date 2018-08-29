@@ -75,6 +75,7 @@ namespace React.Sample.CoreMvc
 			{
 				config
 					.SetReuseJavaScriptEngines(true)
+					.SetAllowJavaScriptPrecompilation(true)
 					.AddScript("~/js/Sample.jsx")
 					.SetExceptionHandler((ex, name, id) =>
 					{

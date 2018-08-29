@@ -37,7 +37,7 @@ namespace React
 		{
 			BabelConfig = new BabelConfig();
 			ReuseJavaScriptEngines = true;
-			AllowMsieEngine = true;
+			AllowJavaScriptPrecompilation = false;
 			LoadBabel = true;
 			LoadReact = true;
 			JsonSerializerSettings = new JsonSerializerSettings
@@ -216,17 +216,19 @@ namespace React
 		}
 
 		/// <summary>
-		/// Gets or sets whether the MSIE engine should be used if V8 is unavailable.
+		/// Gets or sets whether to allow the JavaScript pre-compilation (accelerates the
+		/// initialization of JavaScript engines).
 		/// </summary>
-		public bool AllowMsieEngine { get; set; }
+		public bool AllowJavaScriptPrecompilation { get; set; }
 
 		/// <summary>
-		/// Sets whether the MSIE engine should be used if V8 is unavailable.
+		/// Sets whether to allow the JavaScript pre-compilation (accelerates the initialization of
+		/// JavaScript engines).
 		/// </summary>
 		/// <returns></returns>
-		public IReactSiteConfiguration SetAllowMsieEngine(bool allowMsieEngine)
+		public IReactSiteConfiguration SetAllowJavaScriptPrecompilation(bool allowJavaScriptPrecompilation)
 		{
-			AllowMsieEngine = allowMsieEngine;
+			AllowJavaScriptPrecompilation = allowJavaScriptPrecompilation;
 			return this;
 		}
 

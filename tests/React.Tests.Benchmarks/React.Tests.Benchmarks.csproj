@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="benchmarkdotnet" Version="0.10.14" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-beta7" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.0.0-beta7" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-beta9" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.0.0-beta9" />
   </ItemGroup>
 
   <ItemGroup>
