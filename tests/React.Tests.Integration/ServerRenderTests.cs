@@ -16,45 +16,41 @@ namespace React.Tests.Integration
 			JsEngineSwitcher.Current.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 		}
 
-		[Fact]
-		public void RendersSuccessfullyWithBundledReact()
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void RendersSuccessfullyWithBundledReact(bool withPrecompilation)
 		{
-			AssemblyRegistration.Container.Register<ICache, NullCache>();
-			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
-
-			ReactSiteConfiguration.Configuration
-				.SetReuseJavaScriptEngines(false)
-				.SetAllowJavaScriptPrecompilation(false)
-				.AddScript("Sample.jsx");
-
-			var stringWriter = new StringWriter(new StringBuilder(128));
-			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
-			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
-		}
 #if NET461
-
-		[Fact]
-		public void RendersSuccessfullyWithBundledReactAndPrecompilation()
-		{
 			AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
 			AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
+#else
+			AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
+			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
+#endif
 
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
-				.SetAllowJavaScriptPrecompilation(true)
+				.SetAllowJavaScriptPrecompilation(withPrecompilation)
 				.AddScript("Sample.jsx");
 
 			var stringWriter = new StringWriter(new StringBuilder(128));
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
 		}
-#endif
 
-		[Fact]
-		public void RendersSuccessfullyWithExternalReact()
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void RendersSuccessfullyWithExternalReact(bool withPrecompilation)
 		{
-			AssemblyRegistration.Container.Register<ICache, NullCache>();
+#if NET461
+			AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
+			AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
+#else
+			AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
 			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
+#endif
 
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
@@ -67,26 +63,6 @@ namespace React.Tests.Integration
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
 		}
-#if NET461
-
-		[Fact]
-		public void RendersSuccessfullyWithExternalReactAndPrecompilation()
-		{
-			AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
-			AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
-
-			ReactSiteConfiguration.Configuration
-				.SetReuseJavaScriptEngines(false)
-				.SetAllowJavaScriptPrecompilation(true)
-				.SetLoadReact(false)
-				.AddScriptWithoutTransform("react.generated.js")
-				.AddScript("Sample.jsx");
-
-			var stringWriter = new StringWriter(new StringBuilder(128));
-			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
-			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
-		}
-#endif
 
 		public void Dispose()
 		{
