@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace React.Tests.Benchmarks
+namespace React.Tests.Common
 {
 	/// <summary>
 	/// Memory cache implementation for React.ICache. Uses IMemoryCache from .NET Core.
@@ -30,8 +30,7 @@ namespace React.Tests.Benchmarks
 		/// <param name="hostingEnv">The ASP.NET hosting environment.</param>
 		public MemoryFileCacheCore()
 		{
-
-			_cache = new Microsoft.Extensions.Caching.Memory.MemoryCache(new MemoryCacheOptions());
+			_cache = new MemoryCache(new MemoryCacheOptions());
 		}
 
 		/// <summary>

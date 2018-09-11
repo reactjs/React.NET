@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
@@ -9,13 +9,13 @@
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.osx-x64" Version="3.0.0-beta9" />
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.win-x86" Version="3.0.0-beta9" />
     <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.win-x64" Version="3.0.0-beta9" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\React.Core\React.Core.csproj" />
+    <ProjectReference Include="..\..\tests\React.Tests.Common\React.Tests.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Sample.jsx">

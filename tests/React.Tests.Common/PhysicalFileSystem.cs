@@ -1,8 +1,7 @@
-#if NET461
 using System;
 using System.IO;
 
-namespace React.Tests.Integration
+namespace React.Tests.Common
 {
 	public class PhysicalFileSystem : FileSystemBase
 	{
@@ -26,8 +25,7 @@ namespace React.Tests.Integration
 				return relativePath;
 			}
 
-			return Path.Combine(_baseDirPath, relativePath);
+			return Path.GetFullPath(Path.Combine(_baseDirPath, relativePath));
 		}
 	}
 }
-#endif

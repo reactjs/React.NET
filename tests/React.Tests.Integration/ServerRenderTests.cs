@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
+using React.Tests.Common;
 using Xunit;
 
 namespace React.Tests.Integration
@@ -12,6 +13,13 @@ namespace React.Tests.Integration
 		public ServerRenderTests()
 		{
 			Initializer.Initialize(registration => registration.AsSingleton());
+#if NET461
+			AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
+#else
+			AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
+#endif
+			AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
+
 			JsEngineSwitcher.Current.EngineFactories.Add(new ChakraCoreJsEngineFactory());
 			JsEngineSwitcher.Current.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 		}
@@ -21,14 +29,6 @@ namespace React.Tests.Integration
 		[InlineData(true)]
 		public void RendersSuccessfullyWithBundledReact(bool withPrecompilation)
 		{
-#if NET461
-			AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
-			AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
-#else
-			AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
-			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
-#endif
-
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
 				.SetAllowJavaScriptPrecompilation(withPrecompilation)
@@ -44,14 +44,6 @@ namespace React.Tests.Integration
 		[InlineData(true)]
 		public void RendersSuccessfullyWithExternalReact(bool withPrecompilation)
 		{
-#if NET461
-			AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
-			AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
-#else
-			AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
-			AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
-#endif
-
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
 				.SetAllowJavaScriptPrecompilation(withPrecompilation)
