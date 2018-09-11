@@ -54,7 +54,7 @@ namespace React.Tests.Integration
 
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
-				.SetAllowJavaScriptPrecompilation(false)
+				.SetAllowJavaScriptPrecompilation(withPrecompilation)
 				.SetLoadReact(false)
 				.AddScriptWithoutTransform("react.generated.js")
 				.AddScript("Sample.jsx");
