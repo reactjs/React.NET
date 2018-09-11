@@ -4,7 +4,9 @@ using BenchmarkDotNet.Running;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json.Linq;
+#if NET461
 using React.Web.Mvc;
+#endif
 
 namespace React.Tests.Benchmarks
 {
@@ -31,7 +33,11 @@ namespace React.Tests.Benchmarks
 				PopulateTestData();
 
 				Initializer.Initialize(registration => registration.AsSingleton());
-				AssemblyRegistration.Container.Register<ICache, NullCache>();
+#if NET461
+				AssemblyRegistration.Container.Register<ICache, MemoryFileCache>();
+#else
+				AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
+#endif
 				AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
 				JsEngineSwitcher.Current.EngineFactories.Add(new ChakraCoreJsEngineFactory());
 				JsEngineSwitcher.Current.DefaultEngineName = ChakraCoreJsEngine.EngineName;
@@ -41,15 +47,22 @@ namespace React.Tests.Benchmarks
 					.AddScript("Sample.jsx");
 			}
 
+#if NET461
+
 			[Benchmark]
 			public void HtmlHelperExtensions_React()
 			{
 				AssertContains("Hello Tester!", HtmlHelperExtensions.React(null, "HelloWorld", _testData, serverOnly: true).ToHtmlString());
 			}
+#endif
 
 			[Benchmark]
-			public void Environment_CreateComponent()
+			[Arguments(false)]
+			[Arguments(true)]
+			public void Environment_CreateComponent(bool withPrecompilation)
 			{
+				ReactSiteConfiguration.Configuration.SetAllowJavaScriptPrecompilation(withPrecompilation);
+
 				var component = ReactEnvironment.Current.CreateComponent("HelloWorld", _testData, serverOnly: true);
 				AssertContains("Hello Tester!", component.RenderHtml(renderServerOnly: true));
 				ReactEnvironment.Current.ReturnEngineToPool();
