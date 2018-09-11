@@ -4,6 +4,7 @@ using BenchmarkDotNet.Running;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json.Linq;
+using React.Tests.Common;
 #if NET461
 using React.Web.Mvc;
 #endif
@@ -11,7 +12,7 @@ using React.Web.Mvc;
 namespace React.Tests.Benchmarks
 {
 	public static class Program
-    {
+	{
 		public static void Main(string[] args)
 		{
 			var summary = BenchmarkRunner.Run<ComponentRenderBenchmarks>();
@@ -38,7 +39,8 @@ namespace React.Tests.Benchmarks
 #else
 				AssemblyRegistration.Container.Register<ICache, MemoryFileCacheCore>();
 #endif
-				AssemblyRegistration.Container.Register<IFileSystem, SimpleFileSystem>();
+				AssemblyRegistration.Container.Register<IFileSystem, PhysicalFileSystem>();
+
 				JsEngineSwitcher.Current.EngineFactories.Add(new ChakraCoreJsEngineFactory());
 				JsEngineSwitcher.Current.DefaultEngineName = ChakraCoreJsEngine.EngineName;
 
@@ -78,5 +80,5 @@ namespace React.Tests.Benchmarks
 				throw new InvalidOperationException($"Strings were not equal. {expected} {actual}");
 			}
 		}
-    }
+	}
 }

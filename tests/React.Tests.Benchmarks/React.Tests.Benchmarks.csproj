@@ -2,27 +2,27 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-	  <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="benchmarkdotnet" Version="0.10.14" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-beta9" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.0.0-beta9" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64" Version="3.0.0-beta9" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.0.0" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.linux-x64" Version="3.0.0-beta9" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.osx-x64" Version="3.0.0-beta9" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.win-x86" Version="3.0.0-beta9" />
+    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.win-x64" Version="3.0.0-beta9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\React.Core\React.Core.csproj" />
+    <ProjectReference Include="..\..\tests\React.Tests.Common\React.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <ProjectReference Include="..\..\src\React.Web.Mvc4\React.Web.Mvc4.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="System.Web" />
+
+    <ProjectReference Include="..\..\src\React.Web.Mvc4\React.Web.Mvc4.csproj" />
   </ItemGroup>
 
   <ItemGroup>
