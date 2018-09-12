@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\React.Core\React.Core.csproj" />
-    <ProjectReference Include="..\..\tests\React.Tests.Common\React.Tests.Common.csproj" />
+    <ProjectReference Include="..\React.Tests.Common\React.Tests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
