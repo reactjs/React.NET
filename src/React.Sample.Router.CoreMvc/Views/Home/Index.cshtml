@@ -1,10 +1,10 @@
 @using React.AspNet
 @using React.Router
+@using React.RenderFunctions
 
 @{
-    Layout = "_Layout";
+	Layout = "_Layout";
 }
-
-@Html.ReactRouter("RootComponent", new { }, preRender: x => x("var serverStyleSheet = new Styled.ServerStyleSheet();"), transformRender: (component) => $"serverStyleSheet.collectStyles({component})", postRender: x => ViewBag.ServerStyles = x("serverStyleSheet.getStyleTags()"))
-	<script src="/components-bundle.generated.js"></script>
-	@Html.ReactInitJavaScript()
+@Html.ReactRouter("RootComponent", new { }, renderFunctions: new StyledComponentsFunctions(onPostRender: styles => ViewBag.ServerStyles = styles))
+<script src="/components-bundle.generated.js"></script>
+@Html.ReactInitJavaScript()

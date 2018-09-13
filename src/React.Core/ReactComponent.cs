@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using JavaScriptEngineSwitcher.Core;
 using Newtonsoft.Json;
 using React.Exceptions;
+using React.RenderFunctions;
 
 namespace React
 {
@@ -126,9 +127,9 @@ namespace React
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, Action<Func<string, string>> preRender = null, Func<string, string> transformRender = null, Action<Func<string, string>> postRender = null)
+		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, IRenderFunctions renderFunctions = null)
 		{
-			return GetStringFromWriter(renderHtmlWriter => RenderHtml(renderHtmlWriter, renderContainerOnly, renderServerOnly, exceptionHandler, preRender, transformRender, postRender));
+			return GetStringFromWriter(renderHtmlWriter => RenderHtml(renderHtmlWriter, renderContainerOnly, renderServerOnly, exceptionHandler, renderFunctions));
 		}
 
 		/// <summary>
@@ -140,7 +141,7 @@ namespace React
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <returns>HTML</returns>
-		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, Action<Func<string, string>> preRender = null, Func<string, string> transformRender = null, Action<Func<string, string>> postRender = null)
+		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, IRenderFunctions renderFunctions = null)
 		{
 			if (!_configuration.UseServerSideRendering)
 			{
@@ -168,9 +169,9 @@ namespace React
 				try
 				{
 					stringWriter.Write(renderServerOnly ? "ReactDOMServer.renderToStaticMarkup(" : "ReactDOMServer.renderToString(");
-					if (transformRender != null)
+					if (renderFunctions != null)
 					{
-						stringWriter.Write(transformRender(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
+						stringWriter.Write(renderFunctions.TransformRender(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
 					}
 					else
 					{
@@ -178,11 +179,11 @@ namespace React
 					}
 					stringWriter.Write(')');
 
-					preRender?.Invoke(x => _environment.Execute<string>(x));
+					renderFunctions?.PreRender(x => _environment.Execute<string>(x));
 
 					html = _environment.Execute<string>(stringWriter.ToString());
 
-					postRender?.Invoke(x => _environment.Execute<string>(x));
+					renderFunctions?.PostRender(x => _environment.Execute<string>(x));
 
 					if (renderServerOnly)
 					{

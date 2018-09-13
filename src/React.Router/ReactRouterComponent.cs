@@ -7,9 +7,9 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-using System;
 using System.IO;
 using Newtonsoft.Json;
+using React.RenderFunctions;
 
 namespace React.Router
 {
@@ -53,9 +53,7 @@ namespace React.Router
 		public virtual ExecutionResult RenderRouterWithContext(
 			bool renderContainerOnly = false,
 			bool renderServerOnly = false,
-			Action<Func<string, string>> preRender = null,
-			Func<string, string> transformRender = null,
-			Action<Func<string, string>> postRender = null
+			IRenderFunctions renderFunctions = null
 		)
 		{
 			string contextString = "";
@@ -63,17 +61,10 @@ namespace React.Router
 			var html = RenderHtml(
 				renderContainerOnly,
 				renderServerOnly,
-				preRender: executeJs =>
+				renderFunctions: new ReactRouterFunctions(renderFunctions: renderFunctions, onPostRender: returnedContextString =>
 				{
-					executeJs("var context = {};");
-					preRender?.Invoke(executeJs);
-				},
-				transformRender: transformRender,
-				postRender: executeJs =>
-				{
-					contextString = executeJs("JSON.stringify(context);");
-					postRender?.Invoke(executeJs);
-				});
+					contextString = returnedContextString;
+				}));
 
 			return new ExecutionResult
 			{

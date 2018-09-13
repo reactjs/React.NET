@@ -106,7 +106,7 @@ namespace React.Tests.Router
 				);
 				var execResult = new Mock<ExecutionResult>();
 
-				component.Setup(x => x.RenderRouterWithContext(It.IsAny<bool>(), It.IsAny<bool>()))
+				component.Setup(x => x.RenderRouterWithContext(It.IsAny<bool>(), It.IsAny<bool>(), null))
 					.Returns(execResult.Object);
 				environment.Setup(x => x.CreateComponent(
 					It.IsAny<IReactComponent>(),
@@ -158,7 +158,7 @@ namespace React.Tests.Router
 				clientOnly: true,
 				serverOnly: false
 			);
-			routerMocks.component.Verify(x => x.RenderRouterWithContext(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false)), Times.Once);
+			routerMocks.component.Verify(x => x.RenderRouterWithContext(It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
 		}
 
 		[Fact]
@@ -180,7 +180,7 @@ namespace React.Tests.Router
 				clientOnly: false,
 				serverOnly: true
 			);
-			routerMocks.component.Verify(x => x.RenderRouterWithContext(It.Is<bool>(y => y == false), It.Is<bool>(z => z == true)), Times.Once);
+			routerMocks.component.Verify(x => x.RenderRouterWithContext(It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), null), Times.Once);
 		}
 
 		[Fact]
@@ -281,7 +281,7 @@ namespace React.Tests.Router
 			var htmlHelperMock = new HtmlHelperMocks();
 
 			Assert.Throws<ReactRouterException>(() =>
-			
+
 				HtmlHelperExtensions.ReactRouter(
 					htmlHelper: htmlHelperMock.htmlHelper.Object,
 					componentName: "ComponentName",
