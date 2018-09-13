@@ -259,7 +259,7 @@ namespace React.Tests.Router
 
 			var htmlHelperMock = new HtmlHelperMocks();
 
-			HtmlHelperExtensions.ReactRouterWithContext(
+			HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,
 				componentName: "ComponentName",
 				props: new { },
