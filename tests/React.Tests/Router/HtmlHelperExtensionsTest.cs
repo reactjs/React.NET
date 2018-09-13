@@ -28,6 +28,8 @@ namespace React.Tests.Router
 		{
 			var mocks = new ReactEnvironmentTest.Mocks();
 
+			mocks.Engine.Setup(x => x.Evaluate<bool>("typeof ComponentName !== 'undefined'")).Returns(true);
+
 			var environment = mocks.CreateReactEnvironment();
 			AssemblyRegistration.Container.Register<IReactEnvironment>(environment);
 			return mocks;
@@ -43,6 +45,7 @@ namespace React.Tests.Router
 		private Mock<IReactSiteConfiguration> ConfigureMockConfiguration()
 		{
 			var config = new Mock<IReactSiteConfiguration>();
+			config.SetupGet(x => x.UseServerSideRendering).Returns(true);
 			AssemblyRegistration.Container.Register(config.Object);
 			return config;
 		}
