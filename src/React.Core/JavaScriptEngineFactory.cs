@@ -146,7 +146,7 @@ namespace React
 		}
 
 		/// <summary>
-		/// Loads a code from embedded JavaScript resource into the engine.
+		/// Loads code from embedded JavaScript resource into the engine.
 		/// </summary>
 		/// <param name="engine">Engine to load a code from embedded JavaScript resource</param>
 		/// <param name="resourceName">The case-sensitive resource name</param>
