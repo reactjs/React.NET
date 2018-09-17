@@ -17,7 +17,7 @@ using Microsoft.Extensions.Caching.Memory;
 namespace React.Tests.Common
 {
 	/// <summary>
-	/// Memory cache implementation for React.ICache. Uses IMemoryCache from .NET Core.
+	/// For unit tests / benchmarking only! Some cache evicting logic has been stripped out.
 	/// </summary>
 	public class MemoryFileCacheCore : ICache
 	{
