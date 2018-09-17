@@ -21,6 +21,9 @@
     <Content Include="Sample.jsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+	<Content Include="Sample.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\src\React.Core\Resources\react.generated.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

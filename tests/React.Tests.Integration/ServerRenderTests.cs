@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
 using React.Tests.Common;
@@ -37,6 +39,7 @@ namespace React.Tests.Integration
 			var stringWriter = new StringWriter(new StringBuilder(128));
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
+			ReactEnvironment.Current.ReturnEngineToPool();
 		}
 
 		[Theory]
@@ -54,6 +57,38 @@ namespace React.Tests.Integration
 			var stringWriter = new StringWriter(new StringBuilder(128));
 			ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 			Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
+			ReactEnvironment.Current.ReturnEngineToPool();
+		}
+
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void RendersPrecompiledScript(bool withPrecompilation)
+		{
+			ReactSiteConfiguration.Configuration
+				.SetReuseJavaScriptEngines(true)
+				.SetStartEngines(2)
+				.SetMaxEngines(2)
+				.SetMaxUsagesPerEngine(2)
+				.SetAllowJavaScriptPrecompilation(withPrecompilation)
+				.AddScriptWithoutTransform("Sample.js");
+
+			for (int i = 0; i < 20; i++)
+			{
+				var stringWriter = new StringWriter(new StringBuilder(128));
+				ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
+				Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
+				ReactEnvironment.Current.ReturnEngineToPool();
+			}
+		}
+
+		[Fact]
+		public void TestMemoryFileCache()
+		{
+			var cache = new MemoryFileCacheCore();
+			var testObject = new { a = 1 };
+			cache.Set("testkey", testObject, TimeSpan.FromMinutes(1));
+			Assert.Equal(cache.Get<object>("testkey"), testObject);
 		}
 
 		public void Dispose()
