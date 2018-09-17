@@ -82,6 +82,7 @@ namespace React.Tests.Integration
 			}
 		}
 
+#if !NET461
 		[Fact]
 		public void TestMemoryFileCache()
 		{
@@ -90,6 +91,7 @@ namespace React.Tests.Integration
 			cache.Set("testkey", testObject, TimeSpan.FromMinutes(1));
 			Assert.Equal(cache.Get<object>("testkey"), testObject);
 		}
+#endif
 
 		public void Dispose()
 		{
