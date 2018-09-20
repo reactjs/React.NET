@@ -8,7 +8,7 @@
     <AssemblyName>React.Sample.Owin</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>React.Sample.Owin</PackageId>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.0.0-beta9" />
-    <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.0.0-beta9" />
+    <PackageReference Include="JavaScriptEngineSwitcher.V8" Version="3.0.0-rc1" />
+    <PackageReference Include="JavaScriptEngineSwitcher.V8.Native.win-x64" Version="3.0.0-rc1" />
     <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Diagnostics" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.FileSystems" Version="3.0.1" />
