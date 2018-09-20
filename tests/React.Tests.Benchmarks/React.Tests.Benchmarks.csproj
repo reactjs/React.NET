@@ -7,11 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.10.14" />
-    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-beta9" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.linux-x64" Version="3.0.0-beta9" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.osx-x64" Version="3.0.0-beta9" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.win-x86" Version="3.0.0-beta9" />
-    <PackageReference Include="JavascriptEngineSwitcher.Chakracore.Native.win-x64" Version="3.0.0-beta9" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.0.0-rc1" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.linux-x64" Version="3.0.0-rc1" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64" Version="3.0.0-rc1" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x86" Version="3.0.0-rc1" />
+    <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.0.0-rc1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
     <None Update="Sample.jsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-	<None Update="Sample.js">
+    <None Update="Sample.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
