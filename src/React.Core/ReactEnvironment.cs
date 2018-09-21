@@ -198,16 +198,16 @@ namespace React
 
 			foreach (var file in _config.Scripts)
 			{
-				var contents = Babel.TransformFile(file);
 				try
 				{
 					if (_config.AllowJavaScriptPrecompilation
-						&& Engine.TryExecuteWithPrecompilation(_cache, _fileSystem, contents, file))
+						&& Engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file, Babel.TransformFile))
 					{
 						// Do nothing.
 					}
 					else
 					{
+						var contents = Babel.TransformFile(file);
 						Engine.Execute(contents, file);
 					}
 				}

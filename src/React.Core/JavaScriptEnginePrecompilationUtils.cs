@@ -25,53 +25,16 @@ namespace React
 		private readonly static TimeSpan PRECOMPILED_JS_CACHE_ENTRY_SLIDING_EXPIRATION = TimeSpan.FromMinutes(30);
 
 		/// <summary>
-		/// Tries to execute a code with pre-compilation.
-		/// </summary>
-		/// <param name="engine">Engine to execute code with pre-compilation</param>
-		/// <param name="cache">Cache used for storing the pre-compiled scripts</param>
-		/// <param name="fileSystem">File system wrapper</param>
-		/// <param name="code">JavaScript code</param>
-		/// <param name="path">Path to the file on which the executable code depends (required
-		/// for cache management).</param>
-		/// <returns>true if can perform a script pre-compilation; otherwise, false.</returns>
-		public static bool TryExecuteWithPrecompilation(this IJsEngine engine, ICache cache, IFileSystem fileSystem,
-			string code, string path)
-		{
-			if (!CheckPrecompilationAvailability(engine, cache))
-			{
-				return false;
-			}
-
-			var cacheKey = string.Format(PRECOMPILED_JS_FILE_CACHE_KEY, path);
-			var precompiledScript = cache.Get<IPrecompiledScript>(cacheKey);
-
-			if (precompiledScript == null)
-			{
-				precompiledScript = engine.Precompile(code, path);
-				var fullPath = fileSystem.MapPath(path);
-				cache.Set(
-					cacheKey,
-					precompiledScript,
-					slidingExpiration: PRECOMPILED_JS_CACHE_ENTRY_SLIDING_EXPIRATION,
-					cacheDependencyFiles: new[] { fullPath }
-				);
-			}
-
-			engine.Execute(precompiledScript);
-
-			return true;
-		}
-
-		/// <summary>
 		/// Tries to execute a code from JavaScript file with pre-compilation.
 		/// </summary>
 		/// <param name="engine">Engine to execute code from JavaScript file with pre-compilation</param>
 		/// <param name="cache">Cache used for storing the pre-compiled scripts</param>
 		/// <param name="fileSystem">File system wrapper</param>
 		/// <param name="path">Path to the JavaScript file</param>
+		/// <param name="scriptLoader">Delegate that loads a code from specified JavaScript file</param>
 		/// <returns>true if can perform a script pre-compilation; otherwise, false.</returns>
 		public static bool TryExecuteFileWithPrecompilation(this IJsEngine engine, ICache cache,
-			IFileSystem fileSystem, string path)
+			IFileSystem fileSystem, string path, Func<string, string> scriptLoader = null)
 		{
 			if (!CheckPrecompilationAvailability(engine, cache))
 			{
@@ -83,7 +46,7 @@ namespace React
 
 			if (precompiledScript == null)
 			{
-				var contents = fileSystem.ReadAsString(path);
+				var contents = scriptLoader != null ? scriptLoader(path) : fileSystem.ReadAsString(path);
 				precompiledScript = engine.Precompile(contents, path);
 				var fullPath = fileSystem.MapPath(path);
 				cache.Set(
