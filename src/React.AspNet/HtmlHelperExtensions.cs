@@ -9,7 +9,6 @@
 
 using System;
 using System.IO;
-using React.RenderFunctions;
 
 #if LEGACYASPNET
 using System.Web;
@@ -66,7 +65,7 @@ namespace React.AspNet
 			bool serverOnly = false,
 			string containerClass = null,
 			Action<Exception, string, string> exceptionHandler = null,
-			IRenderFunctions renderFunctions = null
+			RenderFunctions renderFunctions = null
 		)
 		{
 			return new ActionHtmlString(writer =>

@@ -8,7 +8,6 @@
  */
 
 using System;
-using React.RenderFunctions;
 
 #if LEGACYASPNET
 using System.Web;
@@ -98,7 +97,7 @@ namespace React.Router
 			bool serverOnly = false,
 			string containerClass = null,
 			Action<HttpResponse, RoutingContext> contextHandler = null,
-			IRenderFunctions renderFunctions = null
+			RenderFunctions renderFunctions = null
 		)
 		{
 			try

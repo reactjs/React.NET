@@ -9,7 +9,6 @@
 
 using System.IO;
 using Newtonsoft.Json;
-using React.RenderFunctions;
 
 namespace React.Router
 {
@@ -54,7 +53,7 @@ namespace React.Router
 		public virtual ExecutionResult RenderRouterWithContext(
 			bool renderContainerOnly = false,
 			bool renderServerOnly = false,
-			IRenderFunctions renderFunctions = null
+			RenderFunctions renderFunctions = null
 		)
 		{
 			string contextString = "";
