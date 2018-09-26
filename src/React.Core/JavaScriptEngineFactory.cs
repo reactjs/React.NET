@@ -22,6 +22,10 @@ namespace React
 		/// </summary>
 		protected readonly IReactSiteConfiguration _config;
 		/// <summary>
+		/// Cache used for storing the pre-compiled scripts
+		/// </summary>
+		protected readonly ICache _cache;
+		/// <summary>
 		/// File system wrapper
 		/// </summary>
 		protected readonly IFileSystem _fileSystem;
@@ -57,11 +61,13 @@ namespace React
 		public JavaScriptEngineFactory(
 			IJsEngineSwitcher jsEngineSwitcher,
 			IReactSiteConfiguration config,
+			ICache cache,
 			IFileSystem fileSystem
 		)
 		{
 			_jsEngineSwitcher = jsEngineSwitcher;
 			_config = config;
+			_cache = cache;
 			_fileSystem = fileSystem;
 #pragma warning disable 618
 			_factory = GetFactory(_jsEngineSwitcher);
@@ -118,10 +124,11 @@ namespace React
 #else
 			var thisAssembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
 #endif
-			engine.ExecuteResource("React.Core.Resources.shims.js", thisAssembly);
+			LoadResource(engine, "React.Core.Resources.shims.js", thisAssembly);
 			if (_config.LoadReact)
 			{
-				engine.ExecuteResource(
+				LoadResource(
+					engine,
 					_config.UseDebugReact
 						? "React.Core.Resources.react.generated.js"
 						: "React.Core.Resources.react.generated.min.js",
@@ -139,6 +146,25 @@ namespace React
 		}
 
 		/// <summary>
+		/// Loads code from embedded JavaScript resource into the engine.
+		/// </summary>
+		/// <param name="engine">Engine to load a code from embedded JavaScript resource</param>
+		/// <param name="resourceName">The case-sensitive resource name</param>
+		/// <param name="assembly">The assembly, which contains the embedded resource</param>
+		private void LoadResource(IJsEngine engine, string resourceName, Assembly assembly)
+		{
+			if (_config.AllowJavaScriptPrecompilation
+				&& engine.TryExecuteResourceWithPrecompilation(_cache, resourceName, assembly))
+			{
+				// Do nothing.
+			}
+			else
+			{
+				engine.ExecuteResource(resourceName, assembly);
+			}
+		}
+
+		/// <summary>
 		/// Loads any user-provided scripts. Only scripts that don't need JSX transformation can
 		/// run immediately here. JSX files are loaded in ReactEnvironment.
 		/// </summary>
@@ -149,10 +175,17 @@ namespace React
 			{
 				try
 				{
-					var contents = _fileSystem.ReadAsString(file);
-					engine.Execute(contents);
+					if (_config.AllowJavaScriptPrecompilation
+						&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
+					{
+						// Do nothing.
+					}
+					else
+					{
+						engine.ExecuteFile(_fileSystem, file);
+					}
 				}
-				catch (JsRuntimeException ex)
+				catch (JsScriptException ex)
 				{
 					// We can't simply rethrow the exception here, as it's possible this is running
 					// on a background thread (ie. as a response to a file changing). If we did

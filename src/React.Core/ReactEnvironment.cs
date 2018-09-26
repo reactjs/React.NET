@@ -198,12 +198,20 @@ namespace React
 
 			foreach (var file in _config.Scripts)
 			{
-				var contents = Babel.TransformFile(file);
 				try
 				{
-					Execute(contents);
+					if (_config.AllowJavaScriptPrecompilation
+						&& Engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file, Babel.TransformFile))
+					{
+						// Do nothing.
+					}
+					else
+					{
+						var contents = Babel.TransformFile(file);
+						Engine.Execute(contents, file);
+					}
 				}
-				catch (JsRuntimeException ex)
+				catch (JsScriptException ex)
 				{
 					throw new ReactScriptLoadException(string.Format(
 						"Error while loading \"{0}\": {1}",
@@ -474,7 +482,17 @@ namespace React
 #else
 				var assembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
 #endif
-				engine.ExecuteResource("React.Core.Resources.babel.generated.min.js", assembly);
+				const string resourceName = "React.Core.Resources.babel.generated.min.js";
+
+				if (_config.AllowJavaScriptPrecompilation
+					&& engine.TryExecuteResourceWithPrecompilation(_cache, resourceName, assembly))
+				{
+					// Do nothing.
+				}
+				else
+				{
+					engine.ExecuteResource(resourceName, assembly);
+				}
 			}
 		}
 	}

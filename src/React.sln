@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
@@ -72,9 +71,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Router.Mvc4", "React.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Sample.Router.CoreMvc", "React.Sample.Router.CoreMvc\React.Sample.Router.CoreMvc.csproj", "{5BFA69C8-2E66-4112-AC30-CE31503F4175}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests.Benchmarks", "..\tests\React.Tests.Benchmarks\React.Tests.Benchmarks.csproj", "{083462CB-2FC0-4508-A7ED-4B77B44C3E23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Tests.Benchmarks", "..\tests\React.Tests.Benchmarks\React.Tests.Benchmarks.csproj", "{083462CB-2FC0-4508-A7ED-4B77B44C3E23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests.Integration", "..\tests\React.Tests.Integration\React.Tests.Integration.csproj", "{5EBC5EA6-7234-40E0-A07B-75D01385FAD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Tests.Integration", "..\tests\React.Tests.Integration\React.Tests.Integration.csproj", "{5EBC5EA6-7234-40E0-A07B-75D01385FAD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Tests.Common", "..\tests\React.Tests.Common\React.Tests.Common.csproj", "{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,6 +167,10 @@ Global
 		{5EBC5EA6-7234-40E0-A07B-75D01385FAD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EBC5EA6-7234-40E0-A07B-75D01385FAD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EBC5EA6-7234-40E0-A07B-75D01385FAD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +196,8 @@ Global
 		{2170D912-86E9-4CE3-8DA4-E1DE8D958E63} = {681C45FB-103C-48BC-B992-20C5B6B78F92}
 		{5BFA69C8-2E66-4112-AC30-CE31503F4175} = {A51CE5B6-294F-4D39-B32B-BF08DAF9B40B}
 		{083462CB-2FC0-4508-A7ED-4B77B44C3E23} = {F567B25C-E869-4C93-9C96-077761250F87}
+		{5EBC5EA6-7234-40E0-A07B-75D01385FAD2} = {F567B25C-E869-4C93-9C96-077761250F87}
+		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19} = {F567B25C-E869-4C93-9C96-077761250F87}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DCF4A41E-C60D-4086-98A9-6F8508D7E8D0}

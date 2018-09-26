@@ -62,6 +62,18 @@ namespace React
 		}
 
 		/// <summary>
+		/// Executes a code from JavaScript file.
+		/// </summary>
+		/// <param name="engine">Engine to execute code from JavaScript file</param>
+		/// <param name="fileSystem">File system wrapper</param>
+		/// <param name="path">Path to the JavaScript file</param>
+		public static void ExecuteFile(this IJsEngine engine, IFileSystem fileSystem, string path)
+		{
+			var contents = fileSystem.ReadAsString(path);
+			engine.Execute(contents, path);
+		}
+
+		/// <summary>
 		/// Calls a JavaScript function using the specified engine. If <typeparamref name="T"/> is
 		/// not a scalar type, the function is assumed to return a string of JSON that can be 
 		/// parsed as that type.
