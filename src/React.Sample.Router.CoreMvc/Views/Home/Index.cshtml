@@ -1,9 +1,14 @@
+@using React
 @using React.AspNet
 @using React.Router
 
 @{
 	Layout = "_Layout";
+	var styledComponentsFunctions = new StyledComponentsFunctions();
 }
-@Html.ReactRouter("RootComponent", new { }, renderFunctions: new StyledComponentsFunctions(onPostRender: styles => ViewBag.ServerStyles = styles))
+@Html.ReactRouter("RootComponent", new { }, renderFunctions: styledComponentsFunctions)
+@{
+	ViewBag.ServerStyles = styledComponentsFunctions.RenderedStyles;
+}
 <script src="/components-bundle.generated.js"></script>
 @Html.ReactInitJavaScript()
