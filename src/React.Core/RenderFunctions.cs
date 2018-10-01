@@ -71,7 +71,7 @@ namespace React
 		public string TransformRender(string componentToRender)
 		{
 			return m_renderFunctions == null
-				? componentToRender
+				? TransformRenderCore(componentToRender)
 				: m_renderFunctions.TransformRender(TransformRenderCore(componentToRender));
 		}
 
