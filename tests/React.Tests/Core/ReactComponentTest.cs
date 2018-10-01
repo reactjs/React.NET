@@ -333,5 +333,81 @@ namespace React.Tests.Core
 			Assert.Equal(@"<div id=""container""></div>", result);
 			Assert.NotNull(caughtException);
 		}
-	}
+
+		[Fact]
+		public void RenderFunctionsCalled()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(wrap(React.createElement(Foo, {""hello"":""World""})))"))
+				.Returns("[HTML]");
+
+			environment.Setup(x => x.Execute<string>(@"prerender();"))
+				.Returns("prerender-result");
+
+			environment.Setup(x => x.Execute<string>(@"postrender();"))
+				.Returns("postrender-result");
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" }
+			};
+			var renderFunctions = new TestRenderFunctions();
+			var result = component.RenderHtml(renderFunctions: renderFunctions);
+
+			Assert.Equal(@"<div id=""container"">[HTML]</div>", result);
+			Assert.Equal(@"prerender-result", renderFunctions.PreRenderResult);
+			Assert.Equal(@"postrender-result", renderFunctions.PostRenderResult);
+		}
+
+		[Fact]
+		public void ChainedRenderFunctionsCalled()
+		{
+			var renderFunctions = new TestRenderFunctions();
+			var chainedRenderFunctions = new TestRenderFunctions(renderFunctions);
+
+			chainedRenderFunctions.PreRender(a => "prerender-result");
+
+			Assert.Equal("prerender-result", renderFunctions.PreRenderResult);
+			Assert.Equal("prerender-result", chainedRenderFunctions.PreRenderResult);
+
+			string transformed = chainedRenderFunctions.TransformRender("React.createElement('div', null)");
+			Assert.Equal("wrap(wrap(React.createElement('div', null)))", transformed);
+
+			chainedRenderFunctions.PostRender(a => "postrender-result");
+
+			Assert.Equal("postrender-result", renderFunctions.PostRenderResult);
+			Assert.Equal("postrender-result", chainedRenderFunctions.PostRenderResult);
+		}
+
+        private sealed class TestRenderFunctions : RenderFunctions
+        {
+            public TestRenderFunctions(RenderFunctions renderFunctions = null)
+				: base(renderFunctions)
+            {				
+            }
+
+			public string PreRenderResult { get; private set; }
+			public string PostRenderResult { get; private set; }
+
+			protected override void PreRenderCore(Func<string, string> executeJs)
+			{
+				PreRenderResult = executeJs("prerender();");
+			}
+
+			protected override string TransformRenderCore(string componentToRender)
+			{
+				return $"wrap({componentToRender})";
+			}
+
+			protected override void PostRenderCore(Func<string, string> executeJs)
+			{
+				PostRenderResult = executeJs("postrender();");
+			}
+        }
+    }
 }
