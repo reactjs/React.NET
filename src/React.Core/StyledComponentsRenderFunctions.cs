@@ -7,18 +7,19 @@ namespace React
 	/// </summary>
 	public class StyledComponentsFunctions : RenderFunctions
 	{
-		private Action<string> _onPostRender;
-
 		/// <summary>
 		///
 		/// </summary>
 		/// <param name="renderFunctions"></param>
-		/// <param name="onPostRender"></param>
-		public StyledComponentsFunctions(RenderFunctions renderFunctions = null, Action<string> onPostRender = null)
+		public StyledComponentsFunctions(RenderFunctions renderFunctions = null)
 			: base(renderFunctions)
 		{
-			_onPostRender = onPostRender;
 		}
+		
+		/// <summary>
+		/// A HTML style tag containing the rendered styles
+		/// </summary>
+		public string RenderedStyles { get; private set; }
 
 		/// <summary>
 		///
@@ -45,7 +46,7 @@ namespace React
 		/// <param name="executeJs"></param>
 		protected override void PostRenderCore(Func<string, string> executeJs)
 		{
-			_onPostRender(executeJs("serverStyleSheet.getStyleTags()"));
+			RenderedStyles = executeJs("serverStyleSheet.getStyleTags()");
 		}
 	}
 }

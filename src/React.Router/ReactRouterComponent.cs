@@ -58,18 +58,18 @@ namespace React.Router
 		{
 			string contextString = "";
 
+			var reactRouterFunctions = new ReactRouterFunctions(renderFunctions: renderFunctions);
+
 			var html = RenderHtml(
 				renderContainerOnly,
 				renderServerOnly,
-				renderFunctions: new ReactRouterFunctions(renderFunctions: renderFunctions, onPostRender: returnedContextString =>
-				{
-					contextString = returnedContextString;
-				}));
+				renderFunctions: reactRouterFunctions
+			);
 
 			return new ExecutionResult
 			{
 				RenderResult = html,
-				Context = JsonConvert.DeserializeObject<RoutingContext>(contextString),
+				Context = JsonConvert.DeserializeObject<RoutingContext>(reactRouterFunctions.ReactRouterContext),
 			};
 		}
 

@@ -7,18 +7,19 @@ namespace React.Router
 	/// </summary>
 	public class ReactRouterFunctions : RenderFunctions
 	{
-		private Action<string> _onPostRender;
-
 		/// <summary>
 		///
 		/// </summary>
 		/// <param name="renderFunctions"></param>
-		/// <param name="onPostRender"></param>
-		public ReactRouterFunctions(RenderFunctions renderFunctions = null, Action<string> onPostRender = null)
+		public ReactRouterFunctions(RenderFunctions renderFunctions = null)
 			: base(renderFunctions)
 		{
-			_onPostRender = onPostRender;
 		}
+
+		/// <summary>
+		/// The returned react router context, as a JSON string
+		/// </summary>
+		public string ReactRouterContext { get; private set; }
 
 		/// <summary>
 		///
@@ -35,7 +36,7 @@ namespace React.Router
 		/// <param name="executeJs"></param>
 		protected override void PostRenderCore(Func<string, string> executeJs)
 		{
-			_onPostRender(executeJs("JSON.stringify(context);"));
+			ReactRouterContext = executeJs("JSON.stringify(context);");	
 		}
 	}
 }
