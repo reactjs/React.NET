@@ -15,7 +15,7 @@ namespace React
 		/// The functions within the provided RenderFunctions will be called *after* this instance's.
 		/// Supports null as an argument.
 		/// </summary>
-		/// <param name="renderFunctions">The functions to call</param>
+		/// <param name="renderFunctions">The chained render functions to call</param>
 		protected RenderFunctions(RenderFunctions renderFunctions)
 		{
 			m_renderFunctions = renderFunctions;

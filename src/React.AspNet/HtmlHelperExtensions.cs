@@ -53,7 +53,7 @@ namespace React.AspNet
 		/// <param name="serverOnly">Skip rendering React specific data-attributes, container and client-side initialisation during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
-		/// <param name="renderFunctions"></param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
