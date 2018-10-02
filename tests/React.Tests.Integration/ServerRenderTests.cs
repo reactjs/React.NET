@@ -103,5 +103,15 @@ namespace React.Tests.Integration
 			AssemblyRegistration.Container.Unregister<ICache>();
 			AssemblyRegistration.Container.Unregister<IFileSystem>();
 		}
+
+		[Fact]
+		public void BabelTransformsJSX()
+		{
+			Assert.Equal(@"React.createElement(
+  ""div"",
+  null,
+  ""Hello""
+);", ReactEnvironment.Current.Babel.Transform("<div>Hello</div>"));
+		}
 	}
 }

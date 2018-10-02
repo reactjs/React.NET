@@ -84,6 +84,7 @@ namespace React.Router
 		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
 		/// <param name="serverOnly">Skip rendering React specific data-attributes during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns><see cref="IHtmlString"/> containing the rendered markup for provided React Router component</returns>
 		public static IHtmlString ReactRouter<T>(
 			this IHtmlHelper htmlHelper,
@@ -95,7 +96,8 @@ namespace React.Router
 			bool clientOnly = false,
 			bool serverOnly = false,
 			string containerClass = null,
-			Action<HttpResponse, RoutingContext> contextHandler = null
+			Action<HttpResponse, RoutingContext> contextHandler = null,
+			RenderFunctions renderFunctions = null
 		)
 		{
 			try
@@ -121,7 +123,7 @@ namespace React.Router
 					reactComponent.ContainerClass = containerClass;
 				}
 
-				var executionResult = reactComponent.RenderRouterWithContext(clientOnly, serverOnly);
+				var executionResult = reactComponent.RenderRouterWithContext(clientOnly, serverOnly, renderFunctions);
 
 				if (executionResult.Context?.status != null || executionResult.Context?.url != null)
 				{
