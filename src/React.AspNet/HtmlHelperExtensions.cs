@@ -53,6 +53,7 @@ namespace React.AspNet
 		/// <param name="serverOnly">Skip rendering React specific data-attributes, container and client-side initialisation during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString React<T>(
 			this IHtmlHelper htmlHelper,
@@ -63,7 +64,8 @@ namespace React.AspNet
 			bool clientOnly = false,
 			bool serverOnly = false,
 			string containerClass = null,
-			Action<Exception, string, string> exceptionHandler = null
+			Action<Exception, string, string> exceptionHandler = null,
+			RenderFunctions renderFunctions = null
 		)
 		{
 			return new ActionHtmlString(writer =>
@@ -81,7 +83,7 @@ namespace React.AspNet
 						reactComponent.ContainerClass = containerClass;
 					}
 
-					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler);
+					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler, renderFunctions);
 				}
 				finally
 				{

@@ -125,14 +125,11 @@ namespace React
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
+		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, RenderFunctions renderFunctions = null)
 		{
-			using (var writer = new StringWriter())
-			{
-				RenderHtml(writer, renderContainerOnly, renderServerOnly, exceptionHandler);
-				return writer.ToString();
-			}
+			return GetStringFromWriter(renderHtmlWriter => RenderHtml(renderHtmlWriter, renderContainerOnly, renderServerOnly, exceptionHandler, renderFunctions));
 		}
 
 		/// <summary>
@@ -143,8 +140,9 @@ namespace React
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>HTML</returns>
-		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null)
+		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, RenderFunctions renderFunctions = null)
 		{
 			if (!_configuration.UseServerSideRendering)
 			{
@@ -172,10 +170,21 @@ namespace React
 				try
 				{
 					stringWriter.Write(renderServerOnly ? "ReactDOMServer.renderToStaticMarkup(" : "ReactDOMServer.renderToString(");
-					WriteComponentInitialiser(stringWriter);
+					if (renderFunctions != null)
+					{
+						stringWriter.Write(renderFunctions.TransformRender(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
+					}
+					else
+					{
+						WriteComponentInitialiser(stringWriter);
+					}
 					stringWriter.Write(')');
 
+					renderFunctions?.PreRender(x => _environment.Execute<string>(x));
+
 					html = _environment.Execute<string>(stringWriter.ToString());
+
+					renderFunctions?.PostRender(x => _environment.Execute<string>(x));
 
 					if (renderServerOnly)
 					{
@@ -221,11 +230,7 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual string RenderJavaScript()
 		{
-			using (var writer = new StringWriter())
-			{
-				RenderJavaScript(writer);
-				return writer.ToString();
-			}
+			return GetStringFromWriter(renderJsWriter => RenderJavaScript(renderJsWriter));
 		}
 
 		/// <summary>
@@ -287,6 +292,15 @@ namespace React
 			if (!isValid)
 			{
 				throw new ReactInvalidComponentException($"Invalid component name '{componentName}'");
+			}
+		}
+
+		private string GetStringFromWriter(Action<TextWriter> fnWithTextWriter)
+		{
+			using (var textWriter = new StringWriter())
+			{
+				fnWithTextWriter(textWriter);
+				return textWriter.ToString();
 			}
 		}
 	}

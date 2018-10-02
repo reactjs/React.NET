@@ -1,15 +1,14 @@
+@using React
 @using React.AspNet
 @using React.Router
 
-<!DOCTYPE html>
-<html>
-<head>
-	<title>React Router Sample</title>
-	<meta charset="utf-8" />
-</head>
-<body>
-	@Html.ReactRouterWithContext("RootComponent", new { })
-	<script src="/components-bundle.generated.js"></script>
-	@Html.ReactInitJavaScript()
-</body>
-</html>
+@{
+	Layout = "_Layout";
+	var styledComponentsFunctions = new StyledComponentsFunctions();
+}
+@Html.ReactRouter("RootComponent", new { }, renderFunctions: styledComponentsFunctions)
+@{
+	ViewBag.ServerStyles = styledComponentsFunctions.RenderedStyles;
+}
+<script src="/components-bundle.generated.js"></script>
+@Html.ReactInitJavaScript()

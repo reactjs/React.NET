@@ -37,8 +37,8 @@ namespace React.Tests.Mvc
 		{
 			var component = new Mock<IReactComponent>();
 
-			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null))
-				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler) => writer.Write("HTML"));
+			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null, null))
+				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler, RenderFunctions renderFunctions) => writer.Write("HTML"));
 
 			component.Setup(x => x.RenderJavaScript(It.IsAny<TextWriter>())).Callback((TextWriter writer) => writer.Write("JS"));
 
@@ -76,8 +76,8 @@ namespace React.Tests.Mvc
 			}
 
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null))
-				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler) => writer.Write("HTML")).Verifiable();
+			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null, null))
+				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandle, RenderFunctions renderFunctionsr) => writer.Write("HTML")).Verifiable();
 
 			component.Setup(x => x.RenderJavaScript(It.IsAny<TextWriter>())).Callback((TextWriter writer) => writer.Write("JS")).Verifiable();
 
@@ -127,8 +127,8 @@ namespace React.Tests.Mvc
 		public void EngineIsReturnedToPoolAfterRender()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null))
-				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler) => writer.Write("HTML")).Verifiable();
+			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null, null))
+				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler, RenderFunctions renderFunctions) => writer.Write("HTML")).Verifiable();
 
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
@@ -149,7 +149,7 @@ namespace React.Tests.Mvc
 				serverOnly: false
 			).ToHtmlString();
 
-			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
+			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null, null), Times.Once);
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Once);
 		}
 
@@ -157,8 +157,8 @@ namespace React.Tests.Mvc
 		public void ReactWithClientOnlyTrueShouldCallRenderHtmlWithTrue()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null))
-				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler) => writer.Write("HTML")).Verifiable();
+			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null, null))
+				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler, RenderFunctions renderFunctions) => writer.Write("HTML")).Verifiable();
 
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
@@ -178,15 +178,15 @@ namespace React.Tests.Mvc
 				serverOnly: false
 			).ToHtmlString();
 
-			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null), Times.Once);
+			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == true), It.Is<bool>(z => z == false), null, null), Times.Once);
 		}
 
 		[Fact]
 		public void ReactWithServerOnlyTrueShouldCallRenderHtmlWithTrue()
 		{
 			var component = new Mock<IReactComponent>();
-			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null))
-				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler) => writer.Write("HTML")).Verifiable();
+			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), false, false, null, null))
+				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler, RenderFunctions renderFunctions) => writer.Write("HTML")).Verifiable();
 
 			var environment = ConfigureMockEnvironment();
 			environment.Setup(x => x.CreateComponent(
@@ -206,7 +206,7 @@ namespace React.Tests.Mvc
 				serverOnly: true
 			).ToHtmlString();
 
-			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), null), Times.Once);
+			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), null, null), Times.Once);
 		}
 	}
 }

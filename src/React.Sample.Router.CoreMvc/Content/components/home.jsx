@@ -7,6 +7,13 @@ import {
 	StaticRouter,
 	Redirect
 } from 'react-router-dom';
+import styled from 'styled-components';
+
+const BlueTitle = styled.h1`
+	color: lightslategray;
+	font-family: Helvetica, 'sans-serif';
+	text-shadow: 0 0 5px lightgreen;
+`;
 
 class Navbar extends Component {
 	render() {
@@ -28,7 +35,7 @@ class Navbar extends Component {
 
 class HomePage extends Component {
 	render() {
-		return <h1>Home</h1>;
+		return <BlueTitle>Home</BlueTitle>;
 	}
 }
 

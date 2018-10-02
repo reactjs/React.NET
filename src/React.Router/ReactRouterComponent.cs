@@ -48,19 +48,26 @@ namespace React.Router
 		/// </summary>
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering. Does not make sense in this context but included for consistency</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>Object containing HTML in string format and the React Router context object</returns>
-		public virtual ExecutionResult RenderRouterWithContext(bool renderContainerOnly = false, bool renderServerOnly = false)
+		public virtual ExecutionResult RenderRouterWithContext(
+			bool renderContainerOnly = false,
+			bool renderServerOnly = false,
+			RenderFunctions renderFunctions = null
+		)
 		{
-			_environment.Execute("var context = {};");
+			var reactRouterFunctions = new ReactRouterFunctions(renderFunctions: renderFunctions);
 
-			var html = RenderHtml(renderContainerOnly, renderServerOnly);
-
-			var contextString = _environment.Execute<string>("JSON.stringify(context);");
+			var html = RenderHtml(
+				renderContainerOnly,
+				renderServerOnly,
+				renderFunctions: reactRouterFunctions
+			);
 
 			return new ExecutionResult
 			{
 				RenderResult = html,
-				Context = JsonConvert.DeserializeObject<RoutingContext>(contextString),
+				Context = JsonConvert.DeserializeObject<RoutingContext>(reactRouterFunctions.ReactRouterContext),
 			};
 		}
 

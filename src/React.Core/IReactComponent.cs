@@ -54,8 +54,9 @@ namespace React
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>HTML</returns>
-		string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null);
+		string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, RenderFunctions renderFunctions = null);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise this component client-side. This will
@@ -73,8 +74,9 @@ namespace React
 		/// <param name="renderContainerOnly">Only renders component container. Used for client-side only rendering.</param>
 		/// <param name="renderServerOnly">Only renders the common HTML mark up and not any React specific data attributes. Used for server-side only rendering.</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>HTML</returns>
-		void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null);
+		void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, RenderFunctions renderFunctions = null);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise this component client-side. This will
