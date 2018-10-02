@@ -56,8 +56,6 @@ namespace React.Router
 			RenderFunctions renderFunctions = null
 		)
 		{
-			string contextString = "";
-
 			var reactRouterFunctions = new ReactRouterFunctions(renderFunctions: renderFunctions);
 
 			var html = RenderHtml(
