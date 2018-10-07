@@ -7,13 +7,9 @@ import {
 	StaticRouter,
 	Redirect
 } from 'react-router-dom';
-import styled from 'styled-components';
 
-const BlueTitle = styled.h1`
-	color: lightslategray;
-	font-family: Helvetica, 'sans-serif';
-	text-shadow: 0 0 5px lightgreen;
-`;
+import { StyledComponentsDemo } from './styled-components.jsx';
+import { ReactJssDemo } from './react-jss.jsx';
 
 class Navbar extends Component {
 	render() {
@@ -23,10 +19,10 @@ class Navbar extends Component {
 					<Link to="/">Home</Link>
 				</li>
 				<li>
-					<Link to="/about">About</Link>
+					<Link to="/styled-components">Styled Components Demo</Link>
 				</li>
 				<li>
-					<Link to="/contact">Contact</Link>
+					<Link to="/react-jss">React-JSS Demo</Link>
 				</li>
 			</ul>
 		);
@@ -35,19 +31,7 @@ class Navbar extends Component {
 
 class HomePage extends Component {
 	render() {
-		return <BlueTitle>Home</BlueTitle>;
-	}
-}
-
-class AboutPage extends Component {
-	render() {
-		return <h1>About</h1>;
-	}
-}
-
-class ContactPage extends Component {
-	render() {
-		return <h1>Contact</h1>;
+		return <div>React.NET is 🔥🔥</div>
 	}
 }
 
@@ -59,8 +43,8 @@ export default class HomeComponent extends Component {
 				<Switch>
 					<Route exact path="/" render={() => <Redirect to="/home" />} />
 					<Route path="/home" component={HomePage} />
-					<Route path="/about" component={AboutPage} />
-					<Route path="/contact" component={ContactPage} />
+					<Route path="/styled-components" component={StyledComponentsDemo} />
+					<Route path="/react-jss" component={ReactJssDemo} />
 					<Route
 						path="*"
 						component={({ staticContext }) => {
