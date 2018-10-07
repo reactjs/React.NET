@@ -3,16 +3,26 @@ import injectSheet from 'react-jss';
 
 const styles = {
     demoTitle: {
-        color: 'lightslategray',
+        color: '#222',
         fontFamily: 'Helvetica, sans-serif',
-        textShadow: '0 0 5px lightblue',
+        textShadow: '0 0 5px lightgray',
+        lineHeight: '2',
+        '& a': {
+            transition: 'color 0.2s ease',
+            color: 'palevioletred',
+            'text-decoration': 'none',
+
+            '&:hover': {
+                color: '#888'
+            }
+        }
     }
 };
 
 const DemoTitle = ({ classes, children }) => (
     <h1 className={classes.demoTitle}>
-        Hello from React-JSS!
-    </h1>
+        Hello from <a href="https://github.com/cssinjs/react-jss">React-JSS</a>!
+    </h1 >
 );
 
 const WithInjectedSheet = injectSheet(styles)(DemoTitle);

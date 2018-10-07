@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 
 import { StyledComponentsDemo } from './styled-components.jsx';
+import { EmotionDemo } from './emotion.jsx';
 import { ReactJssDemo } from './react-jss.jsx';
 
 class Navbar extends Component {
@@ -24,6 +25,9 @@ class Navbar extends Component {
 				<li>
 					<Link to="/react-jss">React-JSS Demo</Link>
 				</li>
+				<li>
+					<Link to="/emotion">Emotion Demo</Link>
+				</li>
 			</ul>
 		);
 	}
@@ -31,7 +35,7 @@ class Navbar extends Component {
 
 class HomePage extends Component {
 	render() {
-		return <div>React.NET is 🔥🔥</div>
+		return <h1 style={{ lineHeight: '2', color: '#222', fontFamily: 'Helvetica, sans-serif', textShadow: '0 0 5px lightgray' }}>React.NET is 🔥🔥</h1>
 	}
 }
 
@@ -45,6 +49,7 @@ export default class HomeComponent extends Component {
 					<Route path="/home" component={HomePage} />
 					<Route path="/styled-components" component={StyledComponentsDemo} />
 					<Route path="/react-jss" component={ReactJssDemo} />
+					<Route path="/emotion" component={EmotionDemo} />
 					<Route
 						path="*"
 						component={({ staticContext }) => {
