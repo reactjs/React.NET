@@ -1,9 +1,10 @@
 using System;
 
-namespace React
+namespace React.StylesheetHelpers
 {
 	/// <summary>
-	/// Render functions for styled components
+	/// Render functions for styled components. https://github.com/styled-components/styled-components
+	/// Requires `styled-components` to be exposed globally as `Styled`
 	/// </summary>
 	public class StyledComponentsFunctions : RenderFunctions
 	{
@@ -33,11 +34,11 @@ namespace React
 		}
 
 		/// <summary>
-		/// Implementation of TransformRender
+		/// Implementation of WrapComponent
 		/// </summary>
 		/// <param name="componentToRender"></param>
 		/// <returns></returns>
-		protected override string TransformRenderCore(string componentToRender)
+		protected override string WrapComponentCore(string componentToRender)
 		{
 			return ($"serverStyleSheet.collectStyles({componentToRender})");
 		}
