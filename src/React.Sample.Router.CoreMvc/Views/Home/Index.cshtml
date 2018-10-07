@@ -4,7 +4,7 @@
 
 @{
 	Layout = "_Layout";
-	var styledComponentsFunctions = new StyledComponentsFunctions(emotionFunctions);
+	var styledComponentsFunctions = new StyledComponentsFunctions();
 	var reactJssFunctions = new ReactJssFunctions(styledComponentsFunctions);
 }
 @Html.ReactRouter("RootComponent", new { }, renderFunctions: reactJssFunctions)

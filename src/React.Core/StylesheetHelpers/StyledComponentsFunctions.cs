@@ -1,6 +1,6 @@
 using System;
 
-namespace React
+namespace React.StylesheetHelpers
 {
 	/// <summary>
 	/// Render functions for styled components. https://github.com/styled-components/styled-components
