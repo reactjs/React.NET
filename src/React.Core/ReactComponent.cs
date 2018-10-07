@@ -172,7 +172,7 @@ namespace React
 					stringWriter.Write(renderServerOnly ? "ReactDOMServer.renderToStaticMarkup(" : "ReactDOMServer.renderToString(");
 					if (renderFunctions != null)
 					{
-						stringWriter.Write(renderFunctions.TransformRender(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
+						stringWriter.Write(renderFunctions.WrapComponent(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
 					}
 					else
 					{
@@ -180,11 +180,16 @@ namespace React
 					}
 					stringWriter.Write(')');
 
-					renderFunctions?.PreRender(x => _environment.Execute<string>(x));
-
-					html = _environment.Execute<string>(stringWriter.ToString());
-
-					renderFunctions?.PostRender(x => _environment.Execute<string>(x));
+					if (renderFunctions != null)
+					{
+						renderFunctions.PreRender(x => _environment.Execute<string>(x));
+						html = _environment.Execute<string>(renderFunctions.TransformRenderedHtml(stringWriter.ToString()));
+						renderFunctions.PostRender(x => _environment.Execute<string>(x));
+					}
+					else
+					{
+						html = _environment.Execute<string>(stringWriter.ToString());
+					}
 
 					if (renderServerOnly)
 					{

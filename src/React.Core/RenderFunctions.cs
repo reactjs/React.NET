@@ -30,14 +30,21 @@ namespace React
 		}
 
 		/// <summary>
-		/// Implementation of TransformRender
+		/// Implementation of WrapComponent
 		/// </summary>
 		/// <param name="componentToRender"></param>
 		/// <returns></returns>
-		protected virtual string TransformRenderCore(string componentToRender)
+		protected virtual string WrapComponentCore(string componentToRender)
 		{
 			return componentToRender;
 		}
+
+		/// <summary>
+		/// Implementation of TransformRenderedHtml
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
+		protected virtual string TransformRenderedHtmlCore(string input) => input;
 
 		/// <summary>
 		/// Implementation of PostRender
@@ -68,11 +75,25 @@ namespace React
 		/// </summary>
 		/// <param name="componentToRender">The Javascript expression to wrap</param>
 		/// <returns>A wrapped expression</returns>
-		public string TransformRender(string componentToRender)
+		public string WrapComponent(string componentToRender)
 		{
 			return m_renderFunctions == null
-				? TransformRenderCore(componentToRender)
-				: m_renderFunctions.TransformRender(TransformRenderCore(componentToRender));
+				? WrapComponentCore(componentToRender)
+				: m_renderFunctions.WrapComponent(WrapComponentCore(componentToRender));
+		}
+
+
+		/// <summary>
+		/// Transforms the compiled rendered component HTML
+		/// This is useful for libraries like emotion which take rendered component HTML and output the transformed HTML plus additional style tags
+		/// </summary>
+		/// <param name="input">The component HTML</param>
+		/// <returns>A wrapped expression</returns>
+		public string TransformRenderedHtml(string input)
+		{
+			return m_renderFunctions == null
+				? TransformRenderedHtmlCore(input)
+				: m_renderFunctions.TransformRenderedHtml(TransformRenderedHtmlCore(input));
 		}
 
 
