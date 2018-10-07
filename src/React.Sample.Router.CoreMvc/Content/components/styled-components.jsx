@@ -1,12 +1,4 @@
 import React from 'react';
-import {
-	Link,
-	BrowserRouter,
-	Route,
-	Switch,
-	StaticRouter,
-	Redirect
-} from 'react-router-dom';
 import styled from 'styled-components';
 
 const BlueTitle = styled.h1`
