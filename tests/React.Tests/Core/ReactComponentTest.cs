@@ -375,7 +375,7 @@ namespace React.Tests.Core
 			Assert.Equal("prerender-result", renderFunctions.PreRenderResult);
 			Assert.Equal("prerender-result", chainedRenderFunctions.PreRenderResult);
 
-			string transformed = chainedRenderFunctions.TransformRender("React.createElement('div', null)");
+			string transformed = chainedRenderFunctions.WrapComponent("React.createElement('div', null)");
 			Assert.Equal("wrap(wrap(React.createElement('div', null)))", transformed);
 
 			chainedRenderFunctions.PostRender(a => "postrender-result");
@@ -399,7 +399,7 @@ namespace React.Tests.Core
 				PreRenderResult = executeJs("prerender();");
 			}
 
-			protected override string TransformRenderCore(string componentToRender)
+			protected override string WrapComponentCore(string componentToRender)
 			{
 				return $"wrap({componentToRender})";
 			}
