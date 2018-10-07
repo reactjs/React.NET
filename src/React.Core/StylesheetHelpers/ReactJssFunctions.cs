@@ -34,11 +34,11 @@ namespace React.StylesheetHelpers
 		}
 
 		/// <summary>
-		/// Implementation of TransformRender
+		/// Implementation of WrapComponent
 		/// </summary>
 		/// <param name="componentToRender"></param>
 		/// <returns></returns>
-		protected override string TransformRenderCore(string componentToRender)
+		protected override string WrapComponentCore(string componentToRender)
 		{
 			return ($"React.createElement(ReactJss.JssProvider, reactJssProps, ({componentToRender}))");
 		}

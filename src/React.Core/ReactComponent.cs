@@ -172,7 +172,7 @@ namespace React
 					stringWriter.Write(renderServerOnly ? "ReactDOMServer.renderToStaticMarkup(" : "ReactDOMServer.renderToString(");
 					if (renderFunctions != null)
 					{
-						stringWriter.Write(renderFunctions.TransformRender(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
+						stringWriter.Write(renderFunctions.WrapComponent(GetStringFromWriter(componentInitWriter => WriteComponentInitialiser(componentInitWriter))));
 					}
 					else
 					{

@@ -30,11 +30,11 @@ namespace React
 		}
 
 		/// <summary>
-		/// Implementation of TransformRender
+		/// Implementation of WrapComponent
 		/// </summary>
 		/// <param name="componentToRender"></param>
 		/// <returns></returns>
-		protected virtual string TransformRenderCore(string componentToRender)
+		protected virtual string WrapComponentCore(string componentToRender)
 		{
 			return componentToRender;
 		}
@@ -68,11 +68,11 @@ namespace React
 		/// </summary>
 		/// <param name="componentToRender">The Javascript expression to wrap</param>
 		/// <returns>A wrapped expression</returns>
-		public string TransformRender(string componentToRender)
+		public string WrapComponent(string componentToRender)
 		{
 			return m_renderFunctions == null
-				? TransformRenderCore(componentToRender)
-				: m_renderFunctions.TransformRender(TransformRenderCore(componentToRender));
+				? WrapComponentCore(componentToRender)
+				: m_renderFunctions.WrapComponent(WrapComponentCore(componentToRender));
 		}
 
 
