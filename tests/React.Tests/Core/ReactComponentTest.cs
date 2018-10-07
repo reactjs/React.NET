@@ -339,7 +339,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(wrap(React.createElement(Foo, {""hello"":""World""})))"))
+			environment.Setup(x => x.Execute<string>(@"outerWrap(ReactDOMServer.renderToString(wrap(React.createElement(Foo, {""hello"":""World""}))))"))
 				.Returns("[HTML]");
 
 			environment.Setup(x => x.Execute<string>(@"prerender();"))
@@ -375,8 +375,11 @@ namespace React.Tests.Core
 			Assert.Equal("prerender-result", renderFunctions.PreRenderResult);
 			Assert.Equal("prerender-result", chainedRenderFunctions.PreRenderResult);
 
-			string transformed = chainedRenderFunctions.WrapComponent("React.createElement('div', null)");
-			Assert.Equal("wrap(wrap(React.createElement('div', null)))", transformed);
+			string wrapComponentResult = chainedRenderFunctions.WrapComponent("React.createElement('div', null)");
+			Assert.Equal("wrap(wrap(React.createElement('div', null)))", wrapComponentResult);
+
+			Assert.Equal("outerWrap(input)", renderFunctions.TransformRenderedHtml("input"));
+			Assert.Equal("outerWrap(outerWrap(input))", chainedRenderFunctions.TransformRenderedHtml("input"));
 
 			chainedRenderFunctions.PostRender(a => "postrender-result");
 
@@ -402,6 +405,11 @@ namespace React.Tests.Core
 			protected override string WrapComponentCore(string componentToRender)
 			{
 				return $"wrap({componentToRender})";
+			}
+
+			protected override string TransformRenderedHtmlCore(string input)
+			{
+				return $"outerWrap({input})";
 			}
 
 			protected override void PostRenderCore(Func<string, string> executeJs)
