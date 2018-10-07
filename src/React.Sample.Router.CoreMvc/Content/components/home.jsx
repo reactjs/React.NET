@@ -5,7 +5,7 @@ import {
 	Route,
 	Switch,
 	StaticRouter,
-	Redirect
+	Redirect,
 } from 'react-router-dom';
 
 import { StyledComponentsDemo } from './styled-components.jsx';
@@ -35,7 +35,18 @@ class Navbar extends Component {
 
 class HomePage extends Component {
 	render() {
-		return <h1 style={{ lineHeight: '2', color: '#222', fontFamily: 'Helvetica, sans-serif', textShadow: '0 0 5px lightgray' }}>React.NET is 🔥🔥</h1>
+		return (
+			<h1
+				style={{
+					lineHeight: '2',
+					color: '#222',
+					fontFamily: 'Helvetica, sans-serif',
+					textShadow: '0 0 5px lightgray',
+				}}
+			>
+				React.NET is 🔥🔥
+			</h1>
+		);
 	}
 }
 
@@ -45,9 +56,16 @@ export default class HomeComponent extends Component {
 			<div>
 				<Navbar />
 				<Switch>
-					<Route exact path="/" render={() => <Redirect to="/home" />} />
+					<Route
+						exact
+						path="/"
+						render={() => <Redirect to="/home" />}
+					/>
 					<Route path="/home" component={HomePage} />
-					<Route path="/styled-components" component={StyledComponentsDemo} />
+					<Route
+						path="/styled-components"
+						component={StyledComponentsDemo}
+					/>
 					<Route path="/react-jss" component={ReactJssDemo} />
 					<Route path="/emotion" component={EmotionDemo} />
 					<Route
@@ -64,7 +82,10 @@ export default class HomeComponent extends Component {
 
 		if (typeof window === 'undefined') {
 			return (
-				<StaticRouter context={this.props.context} location={this.props.location}>
+				<StaticRouter
+					context={this.props.context}
+					location={this.props.location}
+				>
 					{app}
 				</StaticRouter>
 			);

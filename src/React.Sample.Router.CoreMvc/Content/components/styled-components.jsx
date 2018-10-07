@@ -19,5 +19,13 @@ const BlueTitle = styled.h1`
 `;
 
 export function StyledComponentsDemo() {
-	return <BlueTitle>Hello from <a href="https://github.com/styled-components/styled-components">styled-components</a>!</BlueTitle>;
+	return (
+		<BlueTitle>
+			Hello from{' '}
+			<a href="https://github.com/styled-components/styled-components">
+				styled-components
+			</a>
+			!
+		</BlueTitle>
+	);
 }
