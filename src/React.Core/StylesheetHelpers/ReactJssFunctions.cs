@@ -1,9 +1,10 @@
 using System;
 
-namespace React
+namespace React.StylesheetHelpers
 {
 	/// <summary>
-	/// Render functions for React-JSS
+	/// Render functions for React-JSS. https://github.com/cssinjs/react-jss
+	/// Requires `react-jss` to be exposed globally as `ReactJss`
 	/// </summary>
 	public class ReactJssFunctions : RenderFunctions
 	{

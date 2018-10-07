@@ -1,15 +1,15 @@
-@using React
 @using React.AspNet
 @using React.Router
+@using React.StylesheetHelpers
 
 @{
 	Layout = "_Layout";
-	var styledComponentsFunctions = new StyledComponentsFunctions();
+	var styledComponentsFunctions = new StyledComponentsFunctions(emotionFunctions);
 	var reactJssFunctions = new ReactJssFunctions(styledComponentsFunctions);
 }
 @Html.ReactRouter("RootComponent", new { }, renderFunctions: reactJssFunctions)
 @{
-	ViewBag.ServerStyles = styledComponentsFunctions.RenderedStyles + reactJssFunctions.RenderedStyles;;
+	ViewBag.ServerStyles = styledComponentsFunctions.RenderedStyles + reactJssFunctions.RenderedStyles;
 }
 <script src="/components-bundle.generated.js"></script>
 @Html.ReactInitJavaScript()
