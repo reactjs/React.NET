@@ -6,23 +6,23 @@ layout: docs
 
 > Note:
 >
-> This tutorial is for Visual Studio 2015 and ASP.NET Core MVC. If you're still using ASP.NET 4 and ASP.NET MVC 5, you can [follow the ASP.NET 4 tutorial instead](/getting-started/tutorial_aspnet4.html)
+> This tutorial is for Visual Studio 2015 and ASP.NET Core MVC. If you're still using ASP.NET 4 and ASP.NET MVC 5, you can [follow the ASP.NET 4 tutorial instead](/getting-started/tutorial_aspnet4.html).
 
-This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](https://reactjs.org/tutorial/tutorial.html) but has been modified specifically for ReactJS.NET.
+This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React components to it. We will start from scratch and end with a fully functional website. The following instructions assume you have basic knowledge of ASP.NET MVC and Visual Studio. This tutorial is based off the [original React tutorial](https://reactjs.org/tutorial/tutorial.html) and has been modified specifically for ReactJS.NET.
 
-We'll be building a simple, but realistic comments box that you can drop into a blog, a basic version of the realtime comments offered by Disqus, LiveFyre or Facebook comments.
+We'll be building a simple but realistic comments box that you can drop into any ASP.NET MVC website. This component is perfect for a blog, being a basic version of the realtime comments offered by Disqus, LiveFyre or the Facebook Comments Plugin.
 
 We'll provide:
 
 * A view of all of the comments
 * A form to submit a comment
-* Simple server-side in-memory storage for comments
+* Simple server-side, in-memory storage for comments
 
-It'll also have a few neat features:
+We'll also develop a few neat features:
 
 * **Optimistic commenting:** comments appear in the list before they're saved on the server so it feels fast.
 * **Live updates:** other users' comments are popped into the comment view in real time.
-* **Markdown formatting:** users can use Markdown to format their text.
+* **Markdown formatting:** users can format their comment using Markdown.
 
 ## Want to skip all this and just see the source?
 
@@ -43,11 +43,11 @@ Start by creating a new ASP.NET Core MVC project:
 3. In the "New ASP.NET Core Web Application" dialog, select the Web Application template. Also, click "Change Authentication" and select "No Authentication"
    [<img src="/img/tutorial/new_webapp_600.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />](/img/tutorial/new_webapp.png)
 
-Note: We are using .NET Framework in this tutorial, but you can instead use .NET Core if you want to be able to run your site on Linux or Mac OS. Currently .NET Core is missing some of the functionality provided by .NET Framework, so it is recommended to use .NET Framework unless you have a reason to use .NET Core specifically (eg. cross-platform support).
+Note: We are using .NET Framework in this tutorial, but you can instead use .NET Core if you want to be able to run your site on Linux or Mac OS. Currently .NET Core is missing some of the functionality provided by .NET Framework, so it is recommended to use .NET Framework unless you have a reason to use .NET Core specifically.
 
 ### Remove example content
 
-The default Web Application template includes some example content that we don't need. Delete the following files:
+The default Web Application template includes some example content that we don't need. You may want to delete the following files:
 
  - `Controllers\HomeController.cs`
  - `Views\Home` and `Views\Shared` folders
@@ -56,11 +56,17 @@ The default Web Application template includes some example content that we don't
 
 ### Install ReactJS.NET
 
-We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages". Click the "Browse" tab, search for "React.AspNet", and install the **React.AspNet** package.
+We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET.
+
+1. Right-click on the "ReactDemo" project in the Solution Explorer
+1. Select "Manage NuGet Packages"
+1. Click the "Browse" tab
+1. Search for "React.AspNet"
+1. Install the **React.AspNet** package
 
 [<img src="/img/tutorial/nuget_core_650.png" alt="Screenshot: Install NuGet Packages" width="650" />](/img/tutorial/nuget_core.png)
 
-We also need to modify the `Startup.cs` file to initialize ReactJS.NET. You can learn more about this on the [Getting Started on ASP.NET Core](/getting-started/aspnetcore.html) page. Open `Startup.cs` and perform the following changes:
+We need to modify the `Startup.cs` file to initialize ReactJS.NET. You can learn more about this on the [Getting Started on ASP.NET Core](/getting-started/aspnetcore.html) page. Open `Startup.cs` and perform the following changes:
 
 At the top of the file, add:
 
@@ -69,30 +75,17 @@ using Microsoft.AspNetCore.Http;
 using React.AspNet;
 ```
 
-Directly above:
+In the `ConfigureServices()` function, add the following code:
 
-```csharp
-// Add framework services.
+```csharp{1-2}
+services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+services.AddReact();
 services.AddMvc();
 ```
 
-Add:
+In the `Configure()` function, add the following code:
 
 ```csharp
-services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-services.AddReact();
-```
-
-Directly **above**:
-
-```csharp
-app.UseStaticFiles();
-```
-
-Add:
-
-```csharp
-// Initialise ReactJS.NET. Must be before static files.
 app.UseReact(config =>
 {
   // If you want to use server-side rendering of React components,
@@ -111,6 +104,7 @@ app.UseReact(config =>
   //  .SetLoadBabel(false)
   //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
 });
+app.UseStaticFiles();
 ```
 
 Finally, add this to `Views\_ViewImports.cshtml`:
@@ -127,7 +121,8 @@ Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover crea
 3. Select .NET Core → ASP.NET → MVC Controller Class
 4. Name the file `HomeController.cs`
 
-Once the controller has been created, we also need to create a view
+Once the controller has been created, we also need to create a view:
+
 1. Right-click on the Views folder, click "New Folder", and create a "Home" folder
 2. Right-click on the Views\Home folder and select Add → New Item
 3. Select .NET Core → ASP.NET → MVC View Page
@@ -147,14 +142,20 @@ Replace the contents of the new view file with the following:
 	<div id="content"></div>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
-<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
+	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
 </body>
 </html>
 ```
 
 *Note: In a real ASP.NET MVC site, you'd use a layout. However, to keep this tutorial simple, we will keep all HTML in the one view file.*
 
-We also need to create the referenced JavaScript file (`tutorial.jsx`). Right-click on `wwwroot\js` and select Add → New Item. Select .NET Core → Client-side → JavaScript File, enter "tutorial.jsx" as the file name, and click "Add".
+We also need to create the referenced JavaScript file (`tutorial.jsx`).
+
+1. Right-click on `wwwroot\js`
+1. Select Add → New Item
+1. Select .NET Core → Client-side → JavaScript File
+1. Enter "tutorial.jsx" as the file name
+1. Click "Add".
 
 For the remainder of this tutorial, we'll be writing our JavaScript code in this file.
 
@@ -188,7 +189,7 @@ ReactDOM.render(
 );
 ```
 
-Note that native HTML element names start with a lowercase letter, while custom React class names begin with an uppercase letter.
+Note that native HTML element names start with a lowercase letter (`<div>`) while custom React class names begin with an uppercase letter (`<CommentBox />`).
 
 At this point, run your application by clicking the "Play" button in Visual Studio. If successful, your default browser should start and you should see "Hello, world! I am a CommentBox."
 
