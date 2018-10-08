@@ -85,7 +85,7 @@ services.AddMvc();
 
 In the `Configure()` function, add the following code:
 
-```csharp
+```csharp{1-18}
 app.UseReact(config =>
 {
   // If you want to use server-side rendering of React components,
