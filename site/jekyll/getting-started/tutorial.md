@@ -93,8 +93,8 @@ app.UseReact(config =>
   // your components as well as all of their dependencies.
   // See http://reactjs.net/ for more information. Example:
   //config
-  //  .AddScript("~/Scripts/First.jsx")
-  //  .AddScript("~/Scripts/Second.jsx");
+  //  .AddScript("~/js/First.jsx")
+  //  .AddScript("~/js/Second.jsx");
 
   // If you use an external build too (for example, Babel, Webpack,
   // Browserify or Gulp), you can improve performance by disabling
@@ -102,7 +102,7 @@ app.UseReact(config =>
   // scripts. Example:
   //config
   //  .SetLoadBabel(false)
-  //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
+  //  .AddScriptWithoutTransform("~/js/bundle.server.js");
 });
 app.UseStaticFiles();
 ```
@@ -142,7 +142,7 @@ Replace the contents of the new view file with the following:
 	<div id="content"></div>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
-	<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
+	<script src="@Url.Content("~/js/Tutorial.jsx")"></script>
 </body>
 </html>
 ```
