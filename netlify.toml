@@ -11,7 +11,7 @@
 
 [[redirects]]
   from = "/docs"
-  to = "/getting-started/download.html"
+  to = "/getting-started/aspnetcore.html"
   status = 302
 
 # Old documentation URLs
