@@ -1,7 +1,13 @@
 ---
 layout: docs
-title: MSBuild
+title: MSBuild (ASP.NET 4.x)
 ---
+
+> **Note:**
+>
+> This guide applies only to ASP.NET 4.x
+
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
 
 ReactJS.NET includes an MSBuild task for compiling JSX into JavaScript. This is
 handy to improve the start time of your application, especially if you have a
@@ -20,8 +26,7 @@ you like:
 </Target>
 ```
 
-To get started easily, you can install the [React.MSBuild]
-(https://www.nuget.org/packages/React.MSBuild/) NuGet package which will
+To get started easily, you can install the [React.MSBuild](https://www.nuget.org/packages/React.MSBuild/) NuGet package which will
 automatically modify your web application's `.csproj` file to reference the task
 and run it after every site compilation. To customise the process (for example,
 to only compile the JSX files for release builds), modify the `TransformBabel`

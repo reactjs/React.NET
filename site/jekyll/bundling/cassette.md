@@ -1,7 +1,13 @@
 ---
 layout: docs
-title: Cassette
+title: Cassette (ASP.NET 4.x)
 ---
+
+> **Note:**
+>
+> This guide applies only to ASP.NET 4.x
+
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Cassette).
 
 [Cassette](http://getcassette.net/) is an asset bundling library for ASP.NET.
 You can learn more on [its website at getcassette.net](http://getcassette.net/).
@@ -45,8 +51,7 @@ render from your view using Cassette:
 See the [React.Samples.Cassette](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Cassette)
 project for an example.
 
-Precompilation
-==============
+# Precompilation
 
 Cassette supports using an MSBuild task to minify and combine your assets before
 deployment. This makes the start time of your application a lot quicker. Refer

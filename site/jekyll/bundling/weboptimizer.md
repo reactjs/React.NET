@@ -1,7 +1,13 @@
 ---
 layout: docs
-title: ASP.NET Bundling and Minification
+title: Bundling and Minification (ASP.NET 4.x)
 ---
+
+> **Note:**
+>
+> This guide applies only to ASP.NET 4.x
+
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
 
 ReactJS.NET supports the use of Microsoft's
 [ASP.NET Bundling and Minification](http://www.asp.net/mvc/tutorials/mvc-4/bundling-and-minification)
