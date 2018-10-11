@@ -10,7 +10,6 @@ src/React.Sample.Webpack/build
 *.generated.js
 *.generated.js.map
 *.generated.min.js
-src/React.Sample.CoreMvc/wwwroot/js/Sample.js
 *.lock.json
 .vs/
 results/

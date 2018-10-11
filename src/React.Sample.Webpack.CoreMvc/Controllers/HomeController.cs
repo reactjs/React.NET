@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace React.Sample.Router.CoreMvc.Controllers
+namespace React.Sample.Webpack.CoreMvc.Controllers
 {
 	public class HomeController : Controller
 	{

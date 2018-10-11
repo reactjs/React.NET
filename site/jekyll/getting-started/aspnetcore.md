@@ -8,7 +8,7 @@ This guide covers enabling server-side rendering and Babel compilation. Getting 
 
 ReactJS.NET requires Visual Studio 2015 and ASP.NET Core RTM (final release). It is recommended to use .NET Framework, but ReactJS.NET also works with .NET Core.
 
-Install the `React.AspNet` package through NuGet.  You will also need to install a JS engine to use (either V8 or ChakraCore are recommended). See the [JSEngineSwitcher docs](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines) for more information. After these packages are installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator).
+Install the `React.AspNet` package through NuGet. You will also need to install a JS engine to use (either V8 or ChakraCore are recommended). See the [JSEngineSwitcher docs](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines) for more information. After these packages are installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator).
 
 At the top of Startup.cs, add:
 
@@ -36,7 +36,6 @@ services.AddReact();
 services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
   .AddChakraCore();
 ```
-
 
 Directly **above**:
 
@@ -88,4 +87,4 @@ You're done! You can now call `Html.React` from within Razor files:
 
 If you need support for non-Windows platforms, please see the [ChakraCore guide](/guides/chakracore.html).
 
-Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.CoreMvc) for a working demo.
+Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc) for a working demo.

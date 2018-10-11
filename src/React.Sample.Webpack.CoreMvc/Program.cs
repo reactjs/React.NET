@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace React.Sample.Router.CoreMvc
+namespace React.Sample.Webpack.CoreMvc
 {
 	public class Program
 	{
