@@ -3,6 +3,7 @@ layout: default
 title: React integration for ASP.NET MVC
 id: home
 ---
+
 <div class="hero">
   <div class="wrap">
     <div class="text"><strong>ReactJS.NET</strong></div>
@@ -54,10 +55,12 @@ class HelloWorld extends React.Component {
   }
 }
 ```
+
 ```html
 <!-- Reference it from HTML -->
 <script src="@Url.Content("~/Scripts/HelloWorld.jsx")"></script>
 ```
+
 </div>
       </div>
       <div class="example">
@@ -89,10 +92,12 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
     "~/Scripts/ajax.js",
 ));
 ```
+
 ```html
 <!-- In your view -->
 @Scripts.Render("~/bundles/main")
 ```
+
 </div>
       </div>
       <div class="example">
@@ -118,6 +123,7 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
 @Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```
+
 </div>
       </div>
     </div>

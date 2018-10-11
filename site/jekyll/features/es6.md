@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: ES6+ Features (Babel)
+title: Babel compilation (ES6+)
 ---
 
 You can compile with Babel via [webpack](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc) or [on-the-fly JSX compliation](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4). Check out the linked sample projects if you'd like to see a working example.
