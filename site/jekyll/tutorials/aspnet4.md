@@ -1,12 +1,12 @@
 ---
 id: tutorial
-title: Tutorial (ASP.NET MVC 5)
+title: Tutorial (ASP.NET 4.x)
 layout: docs
 ---
 
 > Note:
 >
-> This tutorial is for Visual Studio 2013 and ASP.NET MVC 4. If you like, you can [see the tutorial for ASP.NET Core instead](/getting-started/tutorial.html)
+> This tutorial is for Visual Studio 2013 and ASP.NET MVC 4. If you like, you can [see the tutorial for ASP.NET Core instead](/tutorials/aspnetcore.html
 
 This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](https://reactjs.org/tutorial/tutorial.html) but has been modified specifically for ReactJS.NET.
 
@@ -14,15 +14,15 @@ We'll be building a simple, but realistic, comments box that you can drop into a
 
 We'll provide:
 
-* A view of all of the comments
-* A form to submit a comment
-* Simple server-side in-memory storage for comments
+-   A view of all of the comments
+-   A form to submit a comment
+-   Simple server-side in-memory storage for comments
 
 It'll also have a few neat features:
 
-* **Optimistic updates:** comments appear in the list before they're saved on the server so it feels fast.
-* **Live updates:** other users' comments are popped into the comment view in real time.
-* **Markdown formatting:** users can use Markdown to format their text.
+-   **Optimistic updates:** comments appear in the list before they're saved on the server so it feels fast.
+-   **Live updates:** other users' comments are popped into the comment view in real time.
+-   **Markdown formatting:** users can use Markdown to format their text.
 
 ## Getting started
 
@@ -51,13 +51,13 @@ Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover crea
 
 Right-click on the Controllers folder and click Add → Controller. Name the controller "HomeController" and select "Empty MVC Controller" as the template. Once the controller has been created, right-click on `return View()` and click "Add View". Enter the following details:
 
- - View name: Index
- - View Engine: Razor (CSHTML)
- - Create a strongly-typed view: Unticked
- - Create as a partial view: Unticked
- - Use a layout or master page: Unticked
+-   View name: Index
+-   View Engine: Razor (CSHTML)
+-   Create a strongly-typed view: Unticked
+-   Create as a partial view: Unticked
+-   Use a layout or master page: Unticked
 
-*Note: In a real ASP.NET MVC site, you'd use a layout. However, to keep this tutorial simple, we will keep all HTML in the one view file.*
+_Note: In a real ASP.NET MVC site, you'd use a layout. However, to keep this tutorial simple, we will keep all HTML in the one view file._
 
 Replace the contents of the new view file with the following:
 
@@ -98,19 +98,14 @@ Let's build the `CommentBox` component, which just displays a simple `<div>`. Ad
 
 ```javascript
 class CommentBox extends React.Component {
-  render() {
-    return (
-      <div className="commentBox">
-        Hello, world! I am a CommentBox.
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="commentBox">Hello, world! I am a CommentBox.</div>
+		);
+	}
 }
 
-ReactDOM.render(
-  <CommentBox />,
-  document.getElementById('content')
-);
+ReactDOM.render(<CommentBox />, document.getElementById('content'));
 ```
 
 Note that native HTML element names start with a lowercase letter, while custom React class names begin with an uppercase letter.
@@ -127,18 +122,18 @@ The first thing you'll notice is the XML-ish syntax in your JavaScript. We have 
 
 ```javascript
 class CommentBox extends React.Component {
-  render() {
-    return (
-      React.createElement('div', {className: "commentBox"},
-        "Hello, world! I am a CommentBox."
-      )
-    );
-  }
-};
+	render() {
+		return React.createElement(
+			'div',
+			{ className: 'commentBox' },
+			'Hello, world! I am a CommentBox.',
+		);
+	}
+}
 
 ReactDOM.render(
-  React.createElement(CommentBox, null),
-  document.getElementById('content')
+	React.createElement(CommentBox, null),
+	document.getElementById('content'),
 );
 ```
 
@@ -162,23 +157,19 @@ Let's build skeletons for `CommentList` and `CommentForm` which will, again, be 
 
 ```javascript
 class CommentList extends React.Component {
-  render() {
-    return (
-      <div className="commentList">
-        Hello, world! I am a CommentList.
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="commentList">Hello, world! I am a CommentList.</div>
+		);
+	}
 }
 
 class CommentForm extends React.Component {
-  render() {
-    return (
-      <div className="commentForm">
-        Hello, world! I am a CommentForm.
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="commentForm">Hello, world! I am a CommentForm.</div>
+		);
+	}
 }
 ```
 
@@ -186,15 +177,15 @@ Next, update the `CommentBox` component to use these new components:
 
 ```javascript{5-7}
 class CommentBox extends React.Component {
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList />
-        <CommentForm />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList />
+				<CommentForm />
+			</div>
+		);
+	}
 }
 ```
 
@@ -206,16 +197,14 @@ Let's create the `Comment` component, which will depend on data passed in from o
 
 ```javascript
 class Comment extends React.Component {
-  render() {
-    return (
-      <div className="comment">
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
-        {this.props.children}
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="comment">
+				<h2 className="commentAuthor">{this.props.author}</h2>
+				{this.props.children}
+			</div>
+		);
+	}
 }
 ```
 
@@ -227,19 +216,23 @@ Now that we have defined the `Comment` component, we will want to pass it the au
 
 ```javascript{5-7}
 class CommentList extends React.Component {
-  render() {
-    return (
-      <div className="commentList">
-        <Comment author="Daniel Lo Nigro">Hello ReactJS.NET World!</Comment>
-        <Comment author="Pete Hunt">This is one comment</Comment>
-        <Comment author="Jordan Walke">This is *another* comment</Comment>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="commentList">
+				<Comment author="Daniel Lo Nigro">
+					Hello ReactJS.NET World!
+				</Comment>
+				<Comment author="Pete Hunt">This is one comment</Comment>
+				<Comment author="Jordan Walke">
+					This is *another* comment
+				</Comment>
+			</div>
+		);
+	}
 }
 ```
 
-Note that we have passed some data from the parent `CommentList` component to the child `Comment` components. For example, we passed *Daniel Lo Nigro* (via the `author` attribute) and *Hello ReactJS.NET World* (via an XML-like child node) to the first `Comment`. As noted above, the `Comment` component will access these 'properties' through `this.props.author`, and `this.props.children`.
+Note that we have passed some data from the parent `CommentList` component to the child `Comment` components. For example, we passed _Daniel Lo Nigro_ (via the `author` attribute) and _Hello ReactJS.NET World_ (via an XML-like child node) to the first `Comment`. As noted above, the `Comment` component will access these 'properties' through `this.props.author`, and `this.props.children`.
 
 ### Adding Markdown
 
@@ -249,17 +242,15 @@ In this tutorial we use a third-party library called [remarkable](https://github
 
 ```javascript{3,9}
 class Comment extends React.Component {
-  render() {
-    const md = new Remarkable();
-    return (
-      <div className="comment">
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
-        {md.render(this.props.children.toString())}
-      </div>
-    );
-  }
+	render() {
+		const md = new Remarkable();
+		return (
+			<div className="comment">
+				<h2 className="commentAuthor">{this.props.author}</h2>
+				{md.render(this.props.children.toString())}
+			</div>
+		);
+	}
 }
 ```
 
@@ -271,21 +262,19 @@ That's React protecting you from an [XSS attack](https://en.wikipedia.org/wiki/C
 
 ```javascript{2-6,13}
 class Comment extends React.Component {
-  rawMarkup() {
-    const md = new Remarkable();
-    const rawMarkup = md.render(this.props.children.toString());
-    return { __html: rawMarkup };
-  }
-  render() {
-    return (
-      <div className="comment">
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
-        <span dangerouslySetInnerHTML={this.rawMarkup()} />
-      </div>
-    );
-  }
+	rawMarkup() {
+		const md = new Remarkable();
+		const rawMarkup = md.render(this.props.children.toString());
+		return { __html: rawMarkup };
+	}
+	render() {
+		return (
+			<div className="comment">
+				<h2 className="commentAuthor">{this.props.author}</h2>
+				<span dangerouslySetInnerHTML={this.rawMarkup()} />
+			</div>
+		);
+	}
 }
 ```
 
@@ -299,9 +288,9 @@ So far we've been inserting the comments directly in the source code. Instead, l
 
 ```javascript
 const data = [
-  { Id: 1, Author: "Daniel Lo Nigro", Text: "Hello ReactJS.NET World!" },
-  { Id: 2, Author: "Pete Hunt", Text: "This is one comment" },
-  { Id: 3, Author: "Jordan Walke", Text: "This is *another* comment" }
+	{ Id: 1, Author: 'Daniel Lo Nigro', Text: 'Hello ReactJS.NET World!' },
+	{ Id: 2, Author: 'Pete Hunt', Text: 'This is one comment' },
+	{ Id: 3, Author: 'Jordan Walke', Text: 'This is *another* comment' },
 ];
 ```
 
@@ -309,39 +298,32 @@ We need to get this data into `CommentList` in a modular way. Modify `CommentBox
 
 ```javascript{6,14}
 class CommentBox extends React.Component {
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.props.data} />
-        <CommentForm />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.props.data} />
+				<CommentForm />
+			</div>
+		);
+	}
 }
 
-ReactDOM.render(
-  <CommentBox data={data} />,
-  document.getElementById('content')
-);
+ReactDOM.render(<CommentBox data={data} />, document.getElementById('content'));
 ```
 
 Now that the data is available in the `CommentList`, let's render the comments dynamically:
 
 ```javascript{3-7,10}
 class CommentList extends React.Component {
-  render() {
-    const commentNodes = this.props.data.map(comment => (
-      <Comment author={comment.Author} key={comment.Id}>
-        {comment.Text}
-      </Comment>
-    ));
-    return (
-      <div className="commentList">
-        {commentNodes}
-      </div>
-    );
-  }
+	render() {
+		const commentNodes = this.props.data.map(comment => (
+			<Comment author={comment.Author} key={comment.Id}>
+				{comment.Text}
+			</Comment>
+		));
+		return <div className="commentList">{commentNodes}</div>;
+	}
 }
 ```
 
@@ -461,8 +443,8 @@ Now that we have a data source, we can replace the hard-coded data with the dyna
 
 ```javascript{2}
 ReactDOM.render(
-  <CommentBox url="/comments" />,
-  document.getElementById('content')
+	<CommentBox url="/comments" />,
+	document.getElementById('content'),
 );
 ```
 
@@ -480,19 +462,19 @@ When the server fetches data, we will be changing the comment data we have. Let'
 
 ```javascript{2-5,10}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {data: []};
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm />
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { data: [] };
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm />
+			</div>
+		);
+	}
 }
 ```
 
@@ -504,68 +486,71 @@ When the component is first created, we want to GET some JSON from the server an
 
 ```javascript{6-14}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {data: []};
-  }
-  componentWillMount() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', this.props.url, true);
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-      this.setState({ data: data });
-    };
-    xhr.send();
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm />
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { data: [] };
+	}
+	componentWillMount() {
+		const xhr = new XMLHttpRequest();
+		xhr.open('get', this.props.url, true);
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			this.setState({ data: data });
+		};
+		xhr.send();
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm />
+			</div>
+		);
+	}
 }
 ```
 
-Below, we're using `componentDidMount()`, a method called automatically by React *after* a component is rendered for the first time. By moving the XMLHttpRequest call from `componentWillMount()`, which is executed only once *before* rendering, to a function called `loadCommentsFromServer()`, we can then call it multiple times from `componentDidMount()` at a set interval to check for any updates to the comments.
+Below, we're using `componentDidMount()`, a method called automatically by React _after_ a component is rendered for the first time. By moving the XMLHttpRequest call from `componentWillMount()`, which is executed only once _before_ rendering, to a function called `loadCommentsFromServer()`, we can then call it multiple times from `componentDidMount()` at a set interval to check for any updates to the comments.
 
 The key to these dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
 
 ```javascript{6,15-18,31}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-  }
-  loadCommentsFromServer() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', this.props.url, true);
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-      this.setState({ data: data });
-    };
-    xhr.send();
-  }
-  componentDidMount() {
-    this.loadCommentsFromServer();
-    window.setInterval(() => this.loadCommentsFromServer(), this.props.pollInterval);
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm />
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { data: [] };
+	}
+	loadCommentsFromServer() {
+		const xhr = new XMLHttpRequest();
+		xhr.open('get', this.props.url, true);
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			this.setState({ data: data });
+		};
+		xhr.send();
+	}
+	componentDidMount() {
+		this.loadCommentsFromServer();
+		window.setInterval(
+			() => this.loadCommentsFromServer(),
+			this.props.pollInterval,
+		);
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm />
+			</div>
+		);
+	}
 }
 
 ReactDOM.render(
-  <CommentBox url="/comments" pollInterval={2000} />,
-  document.getElementById('content')
+	<CommentBox url="/comments" pollInterval={2000} />,
+	document.getElementById('content'),
 );
 ```
 
@@ -594,7 +579,6 @@ routes.MapRoute(
 	url: "comments/new",
 	defaults: new { controller = "Home", action = "AddComment" }
 );
-
 ```
 
 #### The Form
@@ -603,15 +587,15 @@ Now it's time to build the form. Our `CommentForm` component should ask the user
 
 ```javascript{4-8}
 class CommentForm extends React.Component {
-  render() {
-    return (
-      <form className="commentForm">
-        <input type="text" placeholder="Your name" />
-        <input type="text" placeholder="Say something..." />
-        <input type="submit" value="Post" />
-      </form>
-    );
-  }
+	render() {
+		return (
+			<form className="commentForm">
+				<input type="text" placeholder="Your name" />
+				<input type="text" placeholder="Say something..." />
+				<input type="submit" value="Post" />
+			</form>
+		);
+	}
 }
 ```
 
@@ -623,37 +607,37 @@ Hence, we will be using `this.state` to save the user's input as it is entered. 
 
 ```javascript{2-13,16-28}
 class CommentForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {author: '', text: ''};
-    this.handleAuthorChange = this.handleAuthorChange.bind(this);
-    this.handleTextChange = this.handleTextChange.bind(this);
-  }
-  handleAuthorChange(e) {
-    this.setState({author: e.target.value});
-  }
-  handleTextChange(e) {
-    this.setState({text: e.target.value});
-  }
-  render() {
-    return (
-      <form className="commentForm">
-        <input
-          type="text"
-          placeholder="Your name"
-          value={this.state.author}
-          onChange={this.handleAuthorChange}
-        />
-        <input
-          type="text"
-          placeholder="Say something..."
-          value={this.state.text}
-          onChange={this.handleTextChange}
-        />
-        <input type="submit" value="Post" />
-      </form>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { author: '', text: '' };
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleTextChange = this.handleTextChange.bind(this);
+	}
+	handleAuthorChange(e) {
+		this.setState({ author: e.target.value });
+	}
+	handleTextChange(e) {
+		this.setState({ text: e.target.value });
+	}
+	render() {
+		return (
+			<form className="commentForm">
+				<input
+					type="text"
+					placeholder="Your name"
+					value={this.state.author}
+					onChange={this.handleAuthorChange}
+				/>
+				<input
+					type="text"
+					placeholder="Say something..."
+					value={this.state.text}
+					onChange={this.handleTextChange}
+				/>
+				<input type="submit" value="Post" />
+			</form>
+		);
+	}
 }
 ```
 
@@ -671,48 +655,48 @@ Let's make the form interactive. When the user submits the form, we should clear
 
 ```javascript{7,15-24,27}
 class CommentForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {author: '', text: ''};
-    this.handleAuthorChange = this.handleAuthorChange.bind(this);
-    this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleAuthorChange(e) {
-    this.setState({author: e.target.value});
-  }
-  handleTextChange(e) {
-    this.setState({text: e.target.value});
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    const author = this.state.author.trim();
-    const text = this.state.text.trim();
-    if (!text || !author) {
-      return;
-    }
-    // TODO: send request to the server
-    this.setState({ author: '', text: '' });
-  }
-  render() {
-    return (
-      <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          placeholder="Your name"
-          value={this.state.author}
-          onChange={this.handleAuthorChange}
-        />
-        <input
-          type="text"
-          placeholder="Say something..."
-          value={this.state.text}
-          onChange={this.handleTextChange}
-        />
-        <input type="submit" value="Post" />
-      </form>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { author: '', text: '' };
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleTextChange = this.handleTextChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	handleAuthorChange(e) {
+		this.setState({ author: e.target.value });
+	}
+	handleTextChange(e) {
+		this.setState({ text: e.target.value });
+	}
+	handleSubmit(e) {
+		e.preventDefault();
+		const author = this.state.author.trim();
+		const text = this.state.text.trim();
+		if (!text || !author) {
+			return;
+		}
+		// TODO: send request to the server
+		this.setState({ author: '', text: '' });
+	}
+	render() {
+		return (
+			<form className="commentForm" onSubmit={this.handleSubmit}>
+				<input
+					type="text"
+					placeholder="Your name"
+					value={this.state.author}
+					onChange={this.handleAuthorChange}
+				/>
+				<input
+					type="text"
+					placeholder="Say something..."
+					value={this.state.text}
+					onChange={this.handleTextChange}
+				/>
+				<input type="submit" value="Post" />
+			</form>
+		);
+	}
 }
 ```
 
@@ -726,36 +710,39 @@ We need to pass data from the child component back up to its parent. We do this 
 
 ```javascript{5,16-18,28}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
-  }
-  loadCommentsFromServer() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', this.props.url, true);
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-      this.setState({ data: data });
-    };
-    xhr.send();
-  }
-  handleCommentSubmit(comment) {
-    // TODO: submit to the server and refresh the list
-  }
-  componentDidMount() {
-    this.loadCommentsFromServer();
-    window.setInterval(() => this.loadCommentsFromServer(), this.props.pollInterval);
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-      </div>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { data: [] };
+		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+	}
+	loadCommentsFromServer() {
+		const xhr = new XMLHttpRequest();
+		xhr.open('get', this.props.url, true);
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			this.setState({ data: data });
+		};
+		xhr.send();
+	}
+	handleCommentSubmit(comment) {
+		// TODO: submit to the server and refresh the list
+	}
+	componentDidMount() {
+		this.loadCommentsFromServer();
+		window.setInterval(
+			() => this.loadCommentsFromServer(),
+			this.props.pollInterval,
+		);
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm onCommentSubmit={this.handleCommentSubmit} />
+			</div>
+		);
+	}
 }
 ```
 
@@ -763,48 +750,48 @@ Now that `CommentBox` has made the callback available to `CommentForm` via the `
 
 ```javascript{22}
 class CommentForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {author: '', text: ''};
-    this.handleAuthorChange = this.handleAuthorChange.bind(this);
-    this.handleTextChange = this.handleTextChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleAuthorChange(e) {
-    this.setState({author: e.target.value});
-  }
-  handleTextChange(e) {
-    this.setState({text: e.target.value});
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    const author = this.state.author.trim();
-    const text = this.state.text.trim();
-    if (!text || !author) {
-      return;
-    }
-    this.props.onCommentSubmit({Author: author, Text: text});
-    this.setState({ author: '', text: '' });
-  }
-  render() {
-    return (
-      <form className="commentForm" onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          placeholder="Your name"
-          value={this.state.author}
-          onChange={this.handleAuthorChange}
-        />
-        <input
-          type="text"
-          placeholder="Say something..."
-          value={this.state.text}
-          onChange={this.handleTextChange}
-        />
-        <input type="submit" value="Post" />
-      </form>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.state = { author: '', text: '' };
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleTextChange = this.handleTextChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+	handleAuthorChange(e) {
+		this.setState({ author: e.target.value });
+	}
+	handleTextChange(e) {
+		this.setState({ text: e.target.value });
+	}
+	handleSubmit(e) {
+		e.preventDefault();
+		const author = this.state.author.trim();
+		const text = this.state.text.trim();
+		if (!text || !author) {
+			return;
+		}
+		this.props.onCommentSubmit({ Author: author, Text: text });
+		this.setState({ author: '', text: '' });
+	}
+	render() {
+		return (
+			<form className="commentForm" onSubmit={this.handleSubmit}>
+				<input
+					type="text"
+					placeholder="Your name"
+					value={this.state.author}
+					onChange={this.handleAuthorChange}
+				/>
+				<input
+					type="text"
+					placeholder="Say something..."
+					value={this.state.text}
+					onChange={this.handleTextChange}
+				/>
+				<input type="submit" value="Post" />
+			</form>
+		);
+	}
 }
 ```
 
@@ -812,48 +799,55 @@ Now that the callbacks are in place, all we have to do is submit to the server a
 
 ```javascript{16-25,42}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
-  }
-  loadCommentsFromServer() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', this.props.url, true);
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-      this.setState({ data: data });
-    };
-    xhr.send();
-  }
-  handleCommentSubmit(comment) {
-    const data = new FormData();
-    data.append('Author', comment.Author);
-    data.append('Text', comment.Text);
+	constructor(props) {
+		super(props);
+		this.state = { data: [] };
+		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+	}
+	loadCommentsFromServer() {
+		const xhr = new XMLHttpRequest();
+		xhr.open('get', this.props.url, true);
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			this.setState({ data: data });
+		};
+		xhr.send();
+	}
+	handleCommentSubmit(comment) {
+		const data = new FormData();
+		data.append('Author', comment.Author);
+		data.append('Text', comment.Text);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', this.props.submitUrl, true);
-    xhr.onload = () => this.loadCommentsFromServer();
-    xhr.send(data);
-  }
-  componentDidMount() {
-    this.loadCommentsFromServer();
-    window.setInterval(() => this.loadCommentsFromServer(), this.props.pollInterval);
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-      </div>
-    );
-  }
+		const xhr = new XMLHttpRequest();
+		xhr.open('post', this.props.submitUrl, true);
+		xhr.onload = () => this.loadCommentsFromServer();
+		xhr.send(data);
+	}
+	componentDidMount() {
+		this.loadCommentsFromServer();
+		window.setInterval(
+			() => this.loadCommentsFromServer(),
+			this.props.pollInterval,
+		);
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm onCommentSubmit={this.handleCommentSubmit} />
+			</div>
+		);
+	}
 }
 
 ReactDOM.render(
-  <CommentBox url="/comments" submitUrl="/comments/new" pollInterval={2000} />,
-  document.getElementById('content')
+	<CommentBox
+		url="/comments"
+		submitUrl="/comments/new"
+		pollInterval={2000}
+	/>,
+	document.getElementById('content'),
 );
 ```
 
@@ -871,51 +865,54 @@ Our application is now feature complete but it feels slow to have to wait for th
 
 ```javascript{17-23}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [] };
-    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
-  }
-  loadCommentsFromServer() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', this.props.url, true);
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-      this.setState({ data: data });
-    };
-    xhr.send();
-  }
-  handleCommentSubmit(comment) {
-    const comments = this.state.data;
-    // Optimistically set an id on the new comment. It will be replaced by an
-    // id generated by the server. In a production application you would likely
-    // use a more robust system for ID generation.
-    comment.Id = comments.length + 1;
-    const newComments = comments.concat([comment]);
-    this.setState({data: newComments});
+	constructor(props) {
+		super(props);
+		this.state = { data: [] };
+		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+	}
+	loadCommentsFromServer() {
+		const xhr = new XMLHttpRequest();
+		xhr.open('get', this.props.url, true);
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			this.setState({ data: data });
+		};
+		xhr.send();
+	}
+	handleCommentSubmit(comment) {
+		const comments = this.state.data;
+		// Optimistically set an id on the new comment. It will be replaced by an
+		// id generated by the server. In a production application you would likely
+		// use a more robust system for ID generation.
+		comment.Id = comments.length + 1;
+		const newComments = comments.concat([comment]);
+		this.setState({ data: newComments });
 
-    const data = new FormData();
-    data.append('Author', comment.Author);
-    data.append('Text', comment.Text);
+		const data = new FormData();
+		data.append('Author', comment.Author);
+		data.append('Text', comment.Text);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', this.props.submitUrl, true);
-    xhr.onload = () => this.loadCommentsFromServer();
-    xhr.send(data);
-  }
-  componentDidMount() {
-    this.loadCommentsFromServer();
-    window.setInterval(() => this.loadCommentsFromServer(), this.props.pollInterval);
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-      </div>
-    );
-  }
+		const xhr = new XMLHttpRequest();
+		xhr.open('post', this.props.submitUrl, true);
+		xhr.onload = () => this.loadCommentsFromServer();
+		xhr.send(data);
+	}
+	componentDidMount() {
+		this.loadCommentsFromServer();
+		window.setInterval(
+			() => this.loadCommentsFromServer(),
+			this.props.pollInterval,
+		);
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm onCommentSubmit={this.handleCommentSubmit} />
+			</div>
+		);
+	}
 }
 ```
 
@@ -989,47 +986,50 @@ We need to make some modifications to `CommentBox` to support server-side render
 
 ```javascript{4,31-33}
 class CommentBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: this.props.initialData };
-    this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
-  }
-  loadCommentsFromServer() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('get', this.props.url, true);
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-      this.setState({ data: data });
-    };
-    xhr.send();
-  }
-  handleCommentSubmit(comment) {
-    const comments = this.state.data;
-    comment.Id = comments.length + 1;
-    const newComments = comments.concat([comment]);
-    this.setState({data: newComments});
+	constructor(props) {
+		super(props);
+		this.state = { data: this.props.initialData };
+		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+	}
+	loadCommentsFromServer() {
+		const xhr = new XMLHttpRequest();
+		xhr.open('get', this.props.url, true);
+		xhr.onload = () => {
+			const data = JSON.parse(xhr.responseText);
+			this.setState({ data: data });
+		};
+		xhr.send();
+	}
+	handleCommentSubmit(comment) {
+		const comments = this.state.data;
+		comment.Id = comments.length + 1;
+		const newComments = comments.concat([comment]);
+		this.setState({ data: newComments });
 
-    const data = new FormData();
-    data.append('Author', comment.Author);
-    data.append('Text', comment.Text);
+		const data = new FormData();
+		data.append('Author', comment.Author);
+		data.append('Text', comment.Text);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', this.props.submitUrl, true);
-    xhr.onload = () => this.loadCommentsFromServer();
-    xhr.send(data);
-  }
-  componentDidMount() {
-    window.setInterval(() => this.loadCommentsFromServer(), this.props.pollInterval);
-  }
-  render() {
-    return (
-      <div className="commentBox">
-        <h1>Comments</h1>
-        <CommentList data={this.state.data} />
-        <CommentForm onCommentSubmit={this.handleCommentSubmit} />
-      </div>
-    );
-  }
+		const xhr = new XMLHttpRequest();
+		xhr.open('post', this.props.submitUrl, true);
+		xhr.onload = () => this.loadCommentsFromServer();
+		xhr.send(data);
+	}
+	componentDidMount() {
+		window.setInterval(
+			() => this.loadCommentsFromServer(),
+			this.props.pollInterval,
+		);
+	}
+	render() {
+		return (
+			<div className="commentBox">
+				<h1>Comments</h1>
+				<CommentList data={this.state.data} />
+				<CommentForm onCommentSubmit={this.handleCommentSubmit} />
+			</div>
+		);
+	}
 }
 ```
 
@@ -1037,21 +1037,19 @@ We also need to update the `Comment` component to use `Remarkable` from either `
 
 ```javascript{3}
 class Comment extends React.Component {
-  rawMarkup() {
-    const md = new (global.Remarkable || window.Remarkable)();
-    const rawMarkup = md.render(this.props.children.toString());
-    return { __html: rawMarkup };
-  }
-  render() {
-    return (
-      <div className="comment">
-        <h2 className="commentAuthor">
-          {this.props.author}
-        </h2>
-        <span dangerouslySetInnerHTML={this.rawMarkup()} />
-      </div>
-    );
-  }
+	rawMarkup() {
+		const md = new (global.Remarkable || window.Remarkable)();
+		const rawMarkup = md.render(this.props.children.toString());
+		return { __html: rawMarkup };
+	}
+	render() {
+		return (
+			<div className="comment">
+				<h2 className="commentAuthor">{this.props.author}</h2>
+				<span dangerouslySetInnerHTML={this.rawMarkup()} />
+			</div>
+		);
+	}
 }
 ```
 
