@@ -19,6 +19,7 @@
   from = "/getting-started/aspnet5.html"
   to = "/getting-started/aspnetcore.html"
 
+[[redirects]]
   from = "/getting-started/tutorial.html"
   to = "/tutorials/aspnetcore.html"
 
