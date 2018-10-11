@@ -22,7 +22,7 @@ id: home
       also works in other environments). It supports both ASP.NET 4 (with MVC 4 or 5),
       and ASP.NET Core MVC. It is cross-platform and can run on Linux via Mono
       or .NET Core.
-      Take a look at [the tutorial](/tutorials/aspnetcore.html to see how
+      Take a look at [the tutorial](/tutorials/aspnetcore.html) to see how
       easy it is to get started with React and ReactJS.NET!
     </p>
     <p>

@@ -6,7 +6,7 @@ layout: docs
 
 > Note:
 >
-> This tutorial is for Visual Studio 2013 and ASP.NET MVC 4. If you like, you can [see the tutorial for ASP.NET Core instead](/tutorials/aspnetcore.html
+> This tutorial is for Visual Studio 2013 and ASP.NET MVC 4. If you like, you can [see the tutorial for ASP.NET Core instead](/tutorials/aspnetcore.html)
 
 This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](https://reactjs.org/tutorial/tutorial.html) but has been modified specifically for ReactJS.NET.
 
