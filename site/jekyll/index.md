@@ -3,6 +3,7 @@ layout: default
 title: React integration for ASP.NET MVC
 id: home
 ---
+
 <div class="hero">
   <div class="wrap">
     <div class="text"><strong>ReactJS.NET</strong></div>
@@ -21,7 +22,7 @@ id: home
       also works in other environments). It supports both ASP.NET 4 (with MVC 4 or 5),
       and ASP.NET Core MVC. It is cross-platform and can run on Linux via Mono
       or .NET Core.
-      Take a look at [the tutorial](/getting-started/tutorial.html) to see how
+      Take a look at [the tutorial](/tutorials/aspnetcore.html) to see how
       easy it is to get started with React and ReactJS.NET!
     </p>
     <p>
@@ -54,10 +55,12 @@ class HelloWorld extends React.Component {
   }
 }
 ```
+
 ```html
 <!-- Reference it from HTML -->
 <script src="@Url.Content("~/Scripts/HelloWorld.jsx")"></script>
 ```
+
 </div>
       </div>
       <div class="example">
@@ -89,10 +92,12 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
     "~/Scripts/ajax.js",
 ));
 ```
+
 ```html
 <!-- In your view -->
 @Scripts.Render("~/bundles/main")
 ```
+
 </div>
       </div>
       <div class="example">
@@ -118,6 +123,7 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
 @Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```
+
 </div>
       </div>
     </div>
@@ -126,7 +132,7 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
   <section class="home-bottom-section">
     <div class="buttons-unit">
       <a href="/getting-started/download.html" class="button">Get Started</a>
-      <a href="/getting-started/tutorial.html" class="button">Tutorial</a>
+      <a href="/tutorials/aspnetcore" class="button">Tutorial</a>
     </div>
   </section>
 </section>

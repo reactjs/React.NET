@@ -11,14 +11,18 @@
 
 [[redirects]]
   from = "/docs"
-  to = "/getting-started/download.html"
+  to = "/getting-started/aspnetcore.html"
   status = 302
-  
+
 # Old documentation URLs
 [[redirects]]
   from = "/getting-started/aspnet5.html"
   to = "/getting-started/aspnetcore.html"
-  
+
+[[redirects]]
+  from = "/getting-started/tutorial.html"
+  to = "/tutorials/aspnetcore.html"
+
 # Old package URLs
 [[redirects]]
   from = "/packages/*"

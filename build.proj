@@ -53,7 +53,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 			Command="npm install"
 		/>
 		<Exec
-			WorkingDirectory="src/React.Sample.Webpack"
+			WorkingDirectory="src/React.Sample.Webpack.CoreMvc"
 			Command="npm install"
 		/>
 	</Target>
@@ -94,7 +94,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<Target Name="Build" DependsOnTargets="RestorePackages;UpdateVersion">
 		<Exec WorkingDirectory="src/React.Core" Command="node_modules/.bin/gulp" />
 		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035,1701;Version=$(VersionString)" />
-		<Exec WorkingDirectory="src/React.Sample.Webpack" Command="node_modules/.bin/webpack" />
+		<Exec WorkingDirectory="src/React.Sample.Webpack.CoreMvc" Command="node_modules/.bin/webpack" />
 	</Target>
 
 	<Target Name="Test" DependsOnTargets="Build">

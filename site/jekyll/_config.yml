@@ -6,11 +6,17 @@ paginate: 5
 paginate_path: /blog/page:num.html
 url: https://reactjs.net
 doc-sections:
- - id: getting-started
-   title: Getting Started
- - id: guides
-   title: Guides
- - id: dev
-   title: Development
+    - id: getting-started
+      title: 'Getting Started'
+    - id: tutorials
+      title: Tutorials
+    - id: features
+      title: Features
+    - id: bundling
+      title: Bundling
+    - id: dev
+      title: Development
+
+title: Development
 assets:
- css_compressor: sass
+    css_compressor: sass
