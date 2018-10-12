@@ -1,10 +1,12 @@
 ---
 id: aspnet
 layout: docs
-title: Getting Started on ASP.NET
+title: Getting Started (ASP.NET 4.x)
 ---
 
-This guide covers enabling server-side rendering and Babel compilation. If you want a step-by-step guide on configuring a brand new site, see [the ReactJS.NET tutorial for ASP.NET](/getting-started/tutorial_aspnet4.html).
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
+
+This guide covers enabling server-side rendering and Babel compilation. If you want a step-by-step guide on configuring a brand new site, see [the ReactJS.NET tutorial for ASP.NET](/tutorials/aspnet4.html).
 
 ReactJS.NET requires Visual Studio 2015 and MVC 4 or 5.
 
