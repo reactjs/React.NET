@@ -23,8 +23,8 @@ namespace React.Sample.Mvc4
 				.SetAllowJavaScriptPrecompilation(true)
 				.AddScript("~/Content/Sample.jsx");
 
-			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
-			JsEngineSwitcher.Current.EngineFactories.AddV8();
+			JsEngineSwitcher.Instance.DefaultEngineName = V8JsEngine.EngineName;
+			JsEngineSwitcher.Instance.EngineFactories.AddV8();
 		}
 	}
 }
