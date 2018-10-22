@@ -1,13 +1,13 @@
 using System;
 using System.Text;
 
-namespace React.StylesheetHelpers
+namespace React.RenderFunctions
 {
 	/// <summary>
 	/// Render functions for Emotion. https://github.com/emotion-js/emotion
 	/// Requires `emotion-server` to be exposed globally as `EmotionServer`
 	/// </summary>
-	public class EmotionFunctions : RenderFunctions
+	public class EmotionFunctions : RenderFunctionsBase
 	{
 		/// <summary>
 		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
@@ -15,7 +15,7 @@ namespace React.StylesheetHelpers
 		/// Supports null as an argument.
 		/// </summary>
 		/// <param name="renderFunctions">The chained render functions to call</param>
-		public EmotionFunctions(RenderFunctions renderFunctions = null)
+		public EmotionFunctions(IRenderFunctions renderFunctions = null)
 			: base(renderFunctions)
 		{
 		}

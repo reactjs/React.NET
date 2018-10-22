@@ -53,7 +53,7 @@ namespace React.Router
 		public virtual ExecutionResult RenderRouterWithContext(
 			bool renderContainerOnly = false,
 			bool renderServerOnly = false,
-			RenderFunctions renderFunctions = null
+			IRenderFunctions renderFunctions = null
 		)
 		{
 			var reactRouterFunctions = new ReactRouterFunctions(renderFunctions: renderFunctions);

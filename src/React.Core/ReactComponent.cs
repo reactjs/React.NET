@@ -127,7 +127,7 @@ namespace React
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>HTML</returns>
-		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, RenderFunctions renderFunctions = null)
+		public virtual string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, IRenderFunctions renderFunctions = null)
 		{
 			return GetStringFromWriter(renderHtmlWriter => RenderHtml(renderHtmlWriter, renderContainerOnly, renderServerOnly, exceptionHandler, renderFunctions));
 		}
@@ -142,7 +142,7 @@ namespace React
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
 		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>HTML</returns>
-		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, RenderFunctions renderFunctions = null)
+		public virtual void RenderHtml(TextWriter writer, bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, IRenderFunctions renderFunctions = null)
 		{
 			if (!_configuration.UseServerSideRendering)
 			{
