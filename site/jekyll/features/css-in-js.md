@@ -19,7 +19,7 @@ require('expose-loader?Styled!styled-components');
 
 Add the render helper to the call to `Html.React`:
 
-```cshtml
+```
 @using React.AspNet
 @using React.StylesheetHelpers
 
@@ -36,7 +36,7 @@ Add the render helper to the call to `Html.React`:
 
 In your layout file, render the styles that are in the ViewBag:
 
-```cshtml
+```
 <!DOCTYPE html>
 <html>
 <head>
@@ -96,7 +96,7 @@ require('expose-loader?ReactJss!react-jss');
 
 Add the render helper to the call to `Html.React`:
 
-```cshtml
+```
 @using React.AspNet
 @using React.StylesheetHelpers
 
@@ -113,7 +113,7 @@ Add the render helper to the call to `Html.React`:
 
 In your layout file, render the styles that are in the ViewBag:
 
-```cshtml
+```
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,7 +185,7 @@ require('expose-loader?EmotionServer!emotion-server');
 
 Add the render helper to the call to `Html.React`:
 
-```cshtml
+```
 @using React.AspNet
 @using React.StylesheetHelpers
 
