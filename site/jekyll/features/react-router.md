@@ -15,7 +15,7 @@ dotnet add package React.Router
 
 Use a wildcard route in ASP.NET's route declarations:
 
-```cs
+```csharp
 app.UseMvc(routes =>
 {
 	routes.MapRoute("default", "{path?}", new { controller = "Home", action = "Index" });
