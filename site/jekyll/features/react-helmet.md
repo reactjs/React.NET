@@ -17,7 +17,7 @@ require('expose-loader?Helmet!react-helmet');
 
 Add the render helper to the call to `Html.React`:
 
-```cshtml
+```
 @using React.AspNet
 @using React.RenderFunctions
 
@@ -34,7 +34,7 @@ Add the render helper to the call to `Html.React`:
 
 In your layout file, render the helmet title that is now in the ViewBag:
 
-```cshtml
+```
 <!DOCTYPE html>
 <html>
 <head>
