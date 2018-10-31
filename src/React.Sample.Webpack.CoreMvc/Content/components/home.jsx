@@ -44,7 +44,7 @@ class HomePage extends Component {
 					textShadow: '0 0 5px lightgray',
 				}}
 			>
-				React.NET is 🔥🔥
+				ReactJS.NET is 🔥🔥
 			</h1>
 		);
 	}
