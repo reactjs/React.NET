@@ -6,3 +6,4 @@ require('expose-loader?RootComponent!./home.jsx');
 require('expose-loader?Styled!styled-components');
 require('expose-loader?ReactJss!react-jss');
 require('expose-loader?EmotionServer!emotion-server');
+require('expose-loader?Helmet!react-helmet');

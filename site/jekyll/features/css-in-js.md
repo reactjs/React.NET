@@ -21,7 +21,7 @@ Add the render helper to the call to `Html.React`:
 
 ```
 @using React.AspNet
-@using React.StylesheetHelpers
+@using React.RenderFunctions
 
 @{
 	var styledComponentsFunctions = new StyledComponentsFunctions();
@@ -98,7 +98,7 @@ Add the render helper to the call to `Html.React`:
 
 ```
 @using React.AspNet
-@using React.StylesheetHelpers
+@using React.RenderFunctions
 
 @{
 	var reactJssFunctions = new ReactJssFunctions();
@@ -187,7 +187,7 @@ Add the render helper to the call to `Html.React`:
 
 ```
 @using React.AspNet
-@using React.StylesheetHelpers
+@using React.RenderFunctions
 
 @Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: new EmotionFunctions())
 ```

@@ -6,9 +6,9 @@ namespace React
 	/// Functions to execute during a render request.
 	/// These functions will share the same Javascript context, so state can be passed around via variables.
 	/// </summary>
-	public abstract class RenderFunctions
+	public abstract class RenderFunctionsBase : IRenderFunctions
 	{
-		private readonly RenderFunctions m_renderFunctions;
+		private readonly IRenderFunctions _renderFunctions;
 
 		/// <summary>
 		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
@@ -16,9 +16,9 @@ namespace React
 		/// Supports null as an argument.
 		/// </summary>
 		/// <param name="renderFunctions">The chained render functions to call</param>
-		protected RenderFunctions(RenderFunctions renderFunctions)
+		protected RenderFunctionsBase(IRenderFunctions renderFunctions)
 		{
-			m_renderFunctions = renderFunctions;
+			_renderFunctions = renderFunctions;
 		}
 
 		/// <summary>
@@ -60,10 +60,10 @@ namespace React
 		/// This is useful for setting up variables that will be referenced after the render completes.
 		/// <param name="executeJs">The func to execute</param>
 		/// </summary>
-		public virtual void PreRender(Func<string, string> executeJs)
+		public void PreRender(Func<string, string> executeJs)
 		{
 			PreRenderCore(executeJs);
-			m_renderFunctions?.PreRender(executeJs);
+			_renderFunctions?.PreRender(executeJs);
 		}
 
 
@@ -77,9 +77,9 @@ namespace React
 		/// <returns>A wrapped expression</returns>
 		public string WrapComponent(string componentToRender)
 		{
-			return m_renderFunctions == null
+			return _renderFunctions == null
 				? WrapComponentCore(componentToRender)
-				: m_renderFunctions.WrapComponent(WrapComponentCore(componentToRender));
+				: _renderFunctions.WrapComponent(WrapComponentCore(componentToRender));
 		}
 
 
@@ -91,9 +91,9 @@ namespace React
 		/// <returns>A wrapped expression</returns>
 		public string TransformRenderedHtml(string input)
 		{
-			return m_renderFunctions == null
+			return _renderFunctions == null
 				? TransformRenderedHtmlCore(input)
-				: m_renderFunctions.TransformRenderedHtml(TransformRenderedHtmlCore(input));
+				: _renderFunctions.TransformRenderedHtml(TransformRenderedHtmlCore(input));
 		}
 
 
@@ -106,7 +106,7 @@ namespace React
 		public void PostRender(Func<string, string> executeJs)
 		{
 			PostRenderCore(executeJs);
-			m_renderFunctions?.PostRender(executeJs);
+			_renderFunctions?.PostRender(executeJs);
 		}
 	}
 }

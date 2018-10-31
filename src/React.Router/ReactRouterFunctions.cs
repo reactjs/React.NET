@@ -5,7 +5,7 @@ namespace React.Router
 	/// <summary>
 	/// Render functions for React Router
 	/// </summary>
-	public class ReactRouterFunctions : RenderFunctions
+	public class ReactRouterFunctions : RenderFunctionsBase
 	{
 		/// <summary>
 		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
@@ -13,7 +13,7 @@ namespace React.Router
 		/// Supports null as an argument.
 		/// </summary>
 		/// <param name="renderFunctions">The chained render functions to call</param>
-		public ReactRouterFunctions(RenderFunctions renderFunctions = null)
+		public ReactRouterFunctions(IRenderFunctions renderFunctions = null)
 			: base(renderFunctions)
 		{
 		}
@@ -38,7 +38,7 @@ namespace React.Router
 		/// <param name="executeJs"></param>
 		protected override void PostRenderCore(Func<string, string> executeJs)
 		{
-			ReactRouterContext = executeJs("JSON.stringify(context);");	
+			ReactRouterContext = executeJs("JSON.stringify(context);");
 		}
 	}
 }

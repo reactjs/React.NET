@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import injectSheet from 'react-jss';
+import { Helmet } from 'react-helmet';
 
 const styles = {
 	demoTitle: {
@@ -36,6 +37,13 @@ export class ReactJssDemo extends React.Component {
 	}
 
 	render() {
-		return <WithInjectedSheet />;
+		return (
+			<Fragment>
+				<Helmet>
+					<title>ReactJS.NET Demos | React-JSS</title>
+				</Helmet>
+				<WithInjectedSheet />;
+			</Fragment>
+		);
 	}
 }
