@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 
