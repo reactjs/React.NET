@@ -52,7 +52,7 @@ In your layout file, render the styles that are in the ViewBag:
 
 You're now ready to declare styles inside components:
 
-```jsx
+```
 import React from 'react';
 import styled from 'styled-components';
 
@@ -129,7 +129,7 @@ In your layout file, render the styles that are in the ViewBag:
 
 You're now ready to declare styles inside components:
 
-```jsx
+```
 import React from 'react';
 import injectSheet from 'react-jss';
 
@@ -194,7 +194,7 @@ Add the render helper to the call to `Html.React`:
 
 You're now ready to declare styles inside components:
 
-```jsx
+```
 import React from 'react';
 import styled from 'react-emotion';
 

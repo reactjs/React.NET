@@ -32,7 +32,7 @@ using React.Router;
 
 Expose the routes in the root component in your app:
 
-```jsx
+```
 import {
 	Link,
 	BrowserRouter,
