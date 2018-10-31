@@ -97,7 +97,7 @@ namespace React.Router
 			bool serverOnly = false,
 			string containerClass = null,
 			Action<HttpResponse, RoutingContext> contextHandler = null,
-			RenderFunctions renderFunctions = null
+			IRenderFunctions renderFunctions = null
 		)
 		{
 			try

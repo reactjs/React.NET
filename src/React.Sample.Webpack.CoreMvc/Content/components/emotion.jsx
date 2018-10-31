@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'react-emotion';
+import { Helmet } from 'react-helmet';
 
 const BlueTitle = styled('h1')`
 	color: #222;
@@ -20,9 +21,14 @@ const BlueTitle = styled('h1')`
 
 export function EmotionDemo() {
 	return (
-		<BlueTitle>
-			Hello from{' '}
-			<a href="https://github.com/emotion-js/emotion/">emotion</a>!
-		</BlueTitle>
+		<Fragment>
+			<Helmet>
+				<title>ReactJS.NET Demos | Emotion</title>
+			</Helmet>
+			<BlueTitle>
+				Hello from{' '}
+				<a href="https://github.com/emotion-js/emotion/">emotion</a>!
+			</BlueTitle>
+		</Fragment>
 	);
 }

@@ -1,12 +1,12 @@
 using System;
 
-namespace React.StylesheetHelpers
+namespace React.RenderFunctions
 {
 	/// <summary>
 	/// Render functions for React-JSS. https://github.com/cssinjs/react-jss
 	/// Requires `react-jss` to be exposed globally as `ReactJss`
 	/// </summary>
-	public class ReactJssFunctions : RenderFunctions
+	public class ReactJssFunctions : RenderFunctionsBase
 	{
 		/// <summary>
 		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
@@ -14,7 +14,7 @@ namespace React.StylesheetHelpers
 		/// Supports null as an argument.
 		/// </summary>
 		/// <param name="renderFunctions">The chained render functions to call</param>
-		public ReactJssFunctions(RenderFunctions renderFunctions = null)
+		public ReactJssFunctions(IRenderFunctions renderFunctions = null)
 			: base(renderFunctions)
 		{
 		}

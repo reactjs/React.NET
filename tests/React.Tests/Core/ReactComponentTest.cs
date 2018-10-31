@@ -187,7 +187,7 @@ namespace React.Tests.Core
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
 			{
 				Props = new { hello = "World" },
-				ContainerClass="test-class"
+				ContainerClass = "test-class"
 			};
 			var result = component.RenderHtml();
 
@@ -269,7 +269,7 @@ namespace React.Tests.Core
 			}
 			catch (ReactInvalidComponentException)
 			{
-				isValid =  false;
+				isValid = false;
 			}
 			Assert.Equal(expected, isValid);
 		}
@@ -387,12 +387,12 @@ namespace React.Tests.Core
 			Assert.Equal("postrender-result", chainedRenderFunctions.PostRenderResult);
 		}
 
-        private sealed class TestRenderFunctions : RenderFunctions
-        {
-            public TestRenderFunctions(RenderFunctions renderFunctions = null)
+		private sealed class TestRenderFunctions : RenderFunctionsBase
+		{
+			public TestRenderFunctions(IRenderFunctions renderFunctions = null)
 				: base(renderFunctions)
-            {				
-            }
+			{
+			}
 
 			public string PreRenderResult { get; private set; }
 			public string PostRenderResult { get; private set; }
@@ -416,6 +416,6 @@ namespace React.Tests.Core
 			{
 				PostRenderResult = executeJs("postrender();");
 			}
-        }
-    }
+		}
+	}
 }

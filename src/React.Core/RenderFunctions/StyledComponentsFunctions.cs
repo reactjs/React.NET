@@ -1,12 +1,12 @@
 using System;
 
-namespace React.StylesheetHelpers
+namespace React.RenderFunctions
 {
 	/// <summary>
 	/// Render functions for styled components. https://github.com/styled-components/styled-components
 	/// Requires `styled-components` to be exposed globally as `Styled`
 	/// </summary>
-	public class StyledComponentsFunctions : RenderFunctions
+	public class StyledComponentsFunctions : RenderFunctionsBase
 	{
 		/// <summary>
 		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
@@ -14,11 +14,11 @@ namespace React.StylesheetHelpers
 		/// Supports null as an argument.
 		/// </summary>
 		/// <param name="renderFunctions">The chained render functions to call</param>
-		public StyledComponentsFunctions(RenderFunctions renderFunctions = null)
+		public StyledComponentsFunctions(IRenderFunctions renderFunctions = null)
 			: base(renderFunctions)
 		{
 		}
-		
+
 		/// <summary>
 		/// HTML style tag containing the rendered styles
 		/// </summary>

@@ -65,7 +65,7 @@ namespace React.AspNet
 			bool serverOnly = false,
 			string containerClass = null,
 			Action<Exception, string, string> exceptionHandler = null,
-			RenderFunctions renderFunctions = null
+			IRenderFunctions renderFunctions = null
 		)
 		{
 			return new ActionHtmlString(writer =>

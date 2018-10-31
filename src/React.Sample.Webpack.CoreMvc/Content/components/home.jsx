@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import {
 	Link,
 	BrowserRouter,
@@ -7,6 +7,7 @@ import {
 	StaticRouter,
 	Redirect,
 } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { StyledComponentsDemo } from './styled-components.jsx';
 import { EmotionDemo } from './emotion.jsx';
@@ -36,16 +37,21 @@ class Navbar extends Component {
 class HomePage extends Component {
 	render() {
 		return (
-			<h1
-				style={{
-					lineHeight: '2',
-					color: '#222',
-					fontFamily: 'Helvetica, sans-serif',
-					textShadow: '0 0 5px lightgray',
-				}}
-			>
-				ReactJS.NET is 🔥🔥
-			</h1>
+			<Fragment>
+				<Helmet>
+					<title>ReactJS.NET Demos</title>
+				</Helmet>
+				<h1
+					style={{
+						lineHeight: '2',
+						color: '#222',
+						fontFamily: 'Helvetica, sans-serif',
+						textShadow: '0 0 5px lightgray',
+					}}
+				>
+					ReactJS.NET is 🔥🔥
+				</h1>
+			</Fragment>
 		);
 	}
 }
@@ -53,7 +59,7 @@ class HomePage extends Component {
 export default class HomeComponent extends Component {
 	render() {
 		const app = (
-			<div>
+			<Fragment>
 				<Navbar />
 				<Switch>
 					<Route
@@ -77,7 +83,7 @@ export default class HomeComponent extends Component {
 						}}
 					/>
 				</Switch>
-			</div>
+			</Fragment>
 		);
 
 		if (typeof window === 'undefined') {
