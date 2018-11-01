@@ -11,7 +11,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 	<PropertyGroup>
 		<Major>4</Major>
 		<Minor>0</Minor>
-		<Build>0-beta4</Build>
+		<Build>0-beta5</Build>
 		<Revision>0</Revision>
 		<DevNuGetServer>http://reactjs.net/packages/</DevNuGetServer>
 		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\tools\MSBuildTasks</MSBuildCommunityTasksPath>
