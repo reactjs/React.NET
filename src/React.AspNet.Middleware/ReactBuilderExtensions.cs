@@ -3,7 +3,7 @@
  *  All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant 
+ *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
@@ -40,12 +40,10 @@ namespace React.AspNet
 			BabelFileOptions fileOptions = null
 		)
 		{
-			EnsureServicesRegistered(app);
-
 			RegisterAspNetServices(React.AssemblyRegistration.Container, app.ApplicationServices);
 
 			Initializer.Initialize(registerOptions => AsPerRequestSingleton(
-				app.ApplicationServices.GetService<IHttpContextAccessor>(), 
+				app.ApplicationServices.GetService<IHttpContextAccessor>(),
 				registerOptions
 			));
 
@@ -77,19 +75,6 @@ namespace React.AspNet
 				new HttpContextLifetimeProvider(httpContextAccessor),
 				"per request singleton"
 			);
-		}
-
-		/// <summary>
-		/// Ensures React services have been registered in the ASP.NET dependency injection container.
-		/// </summary>
-		/// <param name="app">ASP.NET application builder</param>
-		private static void EnsureServicesRegistered(IApplicationBuilder app)
-		{
-			var registrations = app.ApplicationServices.GetService<HttpContextLifetimeProvider.PerRequestRegistrations>();
-			if (registrations == null)
-			{
-				throw new ReactNotInitialisedException("Please call services.AddReact() before app.UseReact().");
-			}
 		}
 
 		/// <summary>
