@@ -22,6 +22,38 @@
 [[redirects]]
   from = "/getting-started/tutorial.html"
   to = "/tutorials/aspnetcore.html"
+  
+[[redirects]]
+  from = "/guides/weboptimizer.html"
+  to = "/bundling/weboptimizer.html"
+
+[[redirects]]
+  from = "/guides/cassette.html"
+  to = "/bundling/cassette.html"
+  
+[[redirects]]
+  from = "/guides/webpack.html"
+  to = "/bundling/webpack.html"
+  
+[[redirects]]
+  from = "/guides/msbuild.html"
+  to = "/bundling/msbuild.html"
+  
+[[redirects]]
+  from = "/guides/server-side-rendering.html"
+  to = "/features/server-side-rendering.html"
+  
+[[redirects]]
+  from = "/guides/es6.html"
+  to = "/features/es6.html"
+  
+[[redirects]]
+  from = "/guides/react-router.html"
+  to = "/features/react-router.html"
+  
+[[redirects]]
+  from = "/guides/chakracore.html"
+  to = "/getting-started/chakracore.html"
 
 # Old package URLs
 [[redirects]]
