@@ -12,13 +12,13 @@ ReactJS.NET is a library that makes it easier to use [Babel](http://babeljs.io/)
 
 *   JSX to JavaScript compilation via popular minification/combination
     libraries:
-    -   [ASP.NET Bundling and Minification](http://reactjs.net/guides/weboptimizer.html)
-    -   [Cassette](http://reactjs.net/guides/cassette.html)
-    -   [Webpack](http://reactjs.net/guides/webpack.html)
-    -   [MSBuild](http://reactjs.net/guides/msbuild.html)
-*   [Server-side component rendering](http://reactjs.net/guides/server-side-rendering.html)
+    -   [ASP.NET Bundling and Minification](http://reactjs.net/bundling/weboptimizer.html)
+    -   [Cassette](http://reactjs.net/bundling/cassette.html)
+    -   [Webpack](http://reactjs.net/bundling/webpack.html)
+    -   [MSBuild](http://reactjs.net/bundling/msbuild.html)
+*   [Server-side component rendering](http://reactjs.net/features/server-side-rendering.html)
     to make your initial render super-fast (experimental!)
-*   [Runs on Windows, OS X and Linux](http://reactjs.net/guides/chakracore.html) via .NET Core and ChakraCore
+*   [Runs on Windows, OS X and Linux](http://reactjs.net/getting-started/chakracore.html) via .NET Core and ChakraCore
 *   Supports both ASP.NET 4.0/4.5 and ASP.NET Core
 *   Server-side style rendering with CSS-in-JS libraries
 
