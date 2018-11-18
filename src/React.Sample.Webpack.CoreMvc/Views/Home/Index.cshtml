@@ -5,11 +5,13 @@
 @{
 	Layout = "_Layout";
 	var emotionFunctions = new EmotionFunctions();
-	var styledComponentsFunctions = new StyledComponentsFunctions(emotionFunctions);
-	var reactJssFunctions = new ReactJssFunctions(styledComponentsFunctions);
-	var helmetFunctions = new ReactHelmetFunctions(reactJssFunctions);
+	var styledComponentsFunctions = new StyledComponentsFunctions();
+	var reactJssFunctions = new ReactJssFunctions();
+	var helmetFunctions = new ReactHelmetFunctions();
+
+	var chainedFunctions = new ChainedRenderFunctions(emotionFunctions, styledComponentsFunctions, reactJssFunctions, helmetFunctions);
 }
-@Html.ReactRouter("RootComponent", new { }, renderFunctions: helmetFunctions)
+@Html.ReactRouter("RootComponent", new { }, renderFunctions: chainedFunctions)
 @{
 	ViewBag.ServerStyles = styledComponentsFunctions.RenderedStyles + reactJssFunctions.RenderedStyles;
 	ViewBag.HelmetTitle = helmetFunctions.RenderedHelmet.GetValueOrDefault("title");

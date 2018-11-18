@@ -9,6 +9,8 @@ CSS-in-JS is a technique for declaring styles within components. ReactJS.NET sup
 
 Make sure ReactJS.NET is up to date. You will need at least ReactJS.NET 4.0 (which is in public beta at the time of writing).
 
+If you're using more than one CSS-in-JS library in your project, we've got you covered! Just pass mutliple server-render helper functions into `ChainedRenderFunctions`, and they will be called in the order they are passed in.
+
 ### [Styled Components](https://github.com/styled-components/styled-components)
 
 Expose styled-components as `global.Styled`:
@@ -27,7 +29,7 @@ Add the render helper to the call to `Html.React`:
 	var styledComponentsFunctions = new StyledComponentsFunctions();
 }
 
-@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: styledComponentsFunctions)
+@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: new ChainedRenderFunctions(styledComponentsFunctions))
 
 @{
 	ViewBag.ServerStyles = styledComponentsFunctions.RenderedStyles;
@@ -104,7 +106,7 @@ Add the render helper to the call to `Html.React`:
 	var reactJssFunctions = new ReactJssFunctions();
 }
 
-@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: reactJssFunctions)
+@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: new ChainedRenderFunctions(reactJssFunctions))
 
 @{
 	ViewBag.ServerStyles = reactJssFunctions.RenderedStyles;
@@ -189,7 +191,7 @@ Add the render helper to the call to `Html.React`:
 @using React.AspNet
 @using React.RenderFunctions
 
-@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: new EmotionFunctions())
+@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: new ChainedRenderFunctions(new EmotionFunctions()))
 ```
 
 You're now ready to declare styles inside components:

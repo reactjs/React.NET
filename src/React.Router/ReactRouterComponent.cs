@@ -7,6 +7,7 @@
 
 using System.IO;
 using Newtonsoft.Json;
+using React.RenderFunctions;
 
 namespace React.Router
 {
@@ -54,12 +55,12 @@ namespace React.Router
 			IRenderFunctions renderFunctions = null
 		)
 		{
-			var reactRouterFunctions = new ReactRouterFunctions(renderFunctions: renderFunctions);
+			var reactRouterFunctions = new ReactRouterFunctions();
 
 			var html = RenderHtml(
 				renderContainerOnly,
 				renderServerOnly,
-				renderFunctions: reactRouterFunctions
+				renderFunctions: new ChainedRenderFunctions(renderFunctions, reactRouterFunctions)
 			);
 
 			return new ExecutionResult
