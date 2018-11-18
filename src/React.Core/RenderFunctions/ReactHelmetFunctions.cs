@@ -24,7 +24,7 @@ namespace React.RenderFunctions
 		public override void PostRender(Func<string, string> executeJs)
 		{
 			var helmetString = executeJs(@"
-var helmetResult = Helmet.default.renderStatic();
+var helmetResult = Helmet.renderStatic();
 JSON.stringify(['base', 'bodyAttributes', 'htmlAttributes', 'link', 'meta', 'noscript', 'script', 'style', 'title']
 	.reduce((mappedResults, helmetKey) => Object.assign(mappedResults, { [helmetKey]: helmetResult[helmetKey] && helmetResult[helmetKey].toString() }), {}));");
 
