@@ -1020,9 +1020,18 @@ class CommentBox extends React.Component {
 We also need to update the `Comment` component to use `Remarkable` from either `global` or `window`, due to a bug in Remarkable:
 
 ```javascript{3}
+function createRemarkable() {
+	var remarkable =
+		'undefined' != typeof global && global.Remarkable
+			? global.Remarkable
+			: window.Remarkable;
+
+	return new remarkable();
+}
+
 class Comment extends React.Component {
 	rawMarkup() {
-		const md = new (global.Remarkable || window.Remarkable)();
+		const md = createRemarkable();
 		const rawMarkup = md.render(this.props.children.toString());
 		return { __html: rawMarkup };
 	}
