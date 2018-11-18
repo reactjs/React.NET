@@ -13,10 +13,11 @@ If you're using more than one CSS-in-JS library in your project, we've got you c
 
 ### [Styled Components](https://github.com/styled-components/styled-components)
 
-Expose styled-components as `global.Styled`:
+Expose styled-components in your server bundle:
 
 ```js
-require('expose-loader?Styled!styled-components');
+import { ServerStyleSheet } from 'styled-components';
+global.Styled = { ServerStyleSheet };
 ```
 
 Add the render helper to the call to `Html.React`:
@@ -90,10 +91,11 @@ export function StyledComponentsDemo() {
 
 ### [React-JSS](https://github.com/cssinjs/react-jss)
 
-Expose react-jss as `global.ReactJss`:
+Expose react-jss in your server bundle:
 
 ```js
-require('expose-loader?ReactJss!react-jss');
+import { JssProvider, SheetsRegistry } from 'react-jss';
+global.ReactJss = { JssProvider, SheetsRegistry };
 ```
 
 Add the render helper to the call to `Html.React`:
@@ -179,10 +181,11 @@ export class ReactJssDemo extends React.Component {
 
 Emotion's integration with ReactJS.NET only supports rendering inline styles (instead of rendering them in the document head).
 
-Expose emotion as `global.EmotionServer`:
+Expose emotion in your server bundle:
 
 ```js
-require('expose-loader?EmotionServer!emotion-server');
+import { renderStylesToString } from 'emotion-server';
+global.EmotionServer = { renderStylesToString };
 ```
 
 Add the render helper to the call to `Html.React`:
