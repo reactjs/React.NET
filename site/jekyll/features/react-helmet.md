@@ -9,10 +9,11 @@ React Helmet is a library that allows setting elements inside the `<head>` tag f
 
 Make sure ReactJS.NET is up to date. You will need at least ReactJS.NET 4.0 (which is in public beta at the time of writing).
 
-Expose React Helmet as `global.Helmet`:
+Expose React Helmet in your server bundle:
 
 ```js
-require('expose-loader?Helmet!react-helmet');
+import Helmet from 'react-helmet';
+global.Helmet = Helmet;
 ```
 
 Add the render helper to the call to `Html.React`:
