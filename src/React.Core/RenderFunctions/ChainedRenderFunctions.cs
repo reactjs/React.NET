@@ -1,4 +1,6 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 
 namespace React.RenderFunctions
@@ -9,7 +11,7 @@ namespace React.RenderFunctions
 	/// </summary>
 	public class ChainedRenderFunctions : IRenderFunctions
 	{
-		private readonly IRenderFunctions[] _chainedFunctions;
+		private readonly ReadOnlyCollection<IRenderFunctions> _chainedFunctions;
 
 		/// <summary>
 		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
@@ -17,7 +19,7 @@ namespace React.RenderFunctions
 		/// <param name="chainedFunctions">The chained render functions to call</param>
 		public ChainedRenderFunctions(params IRenderFunctions[] chainedFunctions)
 		{
-			_chainedFunctions = chainedFunctions;
+			_chainedFunctions = chainedFunctions.Where(x => x != null).ToList().AsReadOnly();
 		}
 
 		/// <summary>
