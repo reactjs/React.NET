@@ -1,9 +1,20 @@
-require('expose-loader?React!react');
-require('expose-loader?ReactDOM!react-dom');
-require('expose-loader?ReactDOMServer!react-dom/server');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 
-require('expose-loader?RootComponent!./home.jsx');
-require('expose-loader?Styled!styled-components');
-require('expose-loader?ReactJss!react-jss');
-require('expose-loader?EmotionServer!emotion-server');
-require('expose-loader?Helmet!react-helmet');
+import RootComponent from './home.jsx';
+import { ServerStyleSheet } from 'styled-components';
+import { JssProvider, SheetsRegistry } from 'react-jss';
+import { renderStylesToString } from 'emotion-server';
+import Helmet from 'react-helmet';
+
+global.React = React;
+global.ReactDOM = ReactDOM;
+global.ReactDOMServer = ReactDOMServer;
+
+global.Styled = { ServerStyleSheet };
+global.ReactJss = { JssProvider, SheetsRegistry };
+global.EmotionServer = { renderStylesToString };
+global.Helmet = Helmet;
+
+global.RootComponent = RootComponent;

@@ -9,12 +9,10 @@
   "dependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "emotion": "^9.2.12",
     "emotion-server": "^9.2.12",
-    "expose-loader": "^0.7.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-emotion": "^9.2.12",
