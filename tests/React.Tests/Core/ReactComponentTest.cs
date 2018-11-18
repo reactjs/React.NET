@@ -9,6 +9,7 @@ using System;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
 using React.Exceptions;
+using React.RenderFunctions;
 using Xunit;
 
 namespace React.Tests.Core
@@ -365,52 +366,48 @@ namespace React.Tests.Core
 		[Fact]
 		public void ChainedRenderFunctionsCalled()
 		{
-			var renderFunctions = new TestRenderFunctions();
-			var chainedRenderFunctions = new TestRenderFunctions(renderFunctions);
+			var firstInstance = new TestRenderFunctions();
+			var secondInstance = new TestRenderFunctions();
+			var chainedRenderFunctions = new ChainedRenderFunctions(firstInstance, secondInstance);
 
 			chainedRenderFunctions.PreRender(a => "prerender-result");
 
-			Assert.Equal("prerender-result", renderFunctions.PreRenderResult);
-			Assert.Equal("prerender-result", chainedRenderFunctions.PreRenderResult);
+			Assert.Equal("prerender-result", firstInstance.PreRenderResult);
+			Assert.Equal("prerender-result", secondInstance.PreRenderResult);
 
 			string wrapComponentResult = chainedRenderFunctions.WrapComponent("React.createElement('div', null)");
 			Assert.Equal("wrap(wrap(React.createElement('div', null)))", wrapComponentResult);
 
-			Assert.Equal("outerWrap(input)", renderFunctions.TransformRenderedHtml("input"));
+			Assert.Equal("outerWrap(input)", firstInstance.TransformRenderedHtml("input"));
 			Assert.Equal("outerWrap(outerWrap(input))", chainedRenderFunctions.TransformRenderedHtml("input"));
 
 			chainedRenderFunctions.PostRender(a => "postrender-result");
 
-			Assert.Equal("postrender-result", renderFunctions.PostRenderResult);
-			Assert.Equal("postrender-result", chainedRenderFunctions.PostRenderResult);
+			Assert.Equal("postrender-result", firstInstance.PostRenderResult);
+			Assert.Equal("postrender-result", secondInstance.PostRenderResult);
 		}
 
 		private sealed class TestRenderFunctions : RenderFunctionsBase
 		{
-			public TestRenderFunctions(IRenderFunctions renderFunctions = null)
-				: base(renderFunctions)
-			{
-			}
-
 			public string PreRenderResult { get; private set; }
 			public string PostRenderResult { get; private set; }
 
-			protected override void PreRenderCore(Func<string, string> executeJs)
+			public override void PreRender(Func<string, string> executeJs)
 			{
 				PreRenderResult = executeJs("prerender();");
 			}
 
-			protected override string WrapComponentCore(string componentToRender)
+			public override string WrapComponent(string componentToRender)
 			{
 				return $"wrap({componentToRender})";
 			}
 
-			protected override string TransformRenderedHtmlCore(string input)
+			public override string TransformRenderedHtml(string input)
 			{
 				return $"outerWrap({input})";
 			}
 
-			protected override void PostRenderCore(Func<string, string> executeJs)
+			public override void PostRender(Func<string, string> executeJs)
 			{
 				PostRenderResult = executeJs("postrender();");
 			}
