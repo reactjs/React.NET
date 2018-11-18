@@ -42,7 +42,7 @@ export class ReactJssDemo extends React.Component {
 				<Helmet>
 					<title>ReactJS.NET Demos | React-JSS</title>
 				</Helmet>
-				<WithInjectedSheet />;
+				<WithInjectedSheet />
 			</Fragment>
 		);
 	}

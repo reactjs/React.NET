@@ -9,17 +9,6 @@ namespace React.RenderFunctions
 	public class ReactJssFunctions : RenderFunctionsBase
 	{
 		/// <summary>
-		/// Constructor. Supports chained calls to multiple render functions by passing in a set of functions that should be called next.
-		/// The functions within the provided RenderFunctions will be called *after* this instance's.
-		/// Supports null as an argument.
-		/// </summary>
-		/// <param name="renderFunctions">The chained render functions to call</param>
-		public ReactJssFunctions(IRenderFunctions renderFunctions = null)
-			: base(renderFunctions)
-		{
-		}
-
-		/// <summary>
 		/// HTML style tag containing the rendered styles
 		/// </summary>
 		public string RenderedStyles { get; private set; }
@@ -28,7 +17,7 @@ namespace React.RenderFunctions
 		/// Implementation of PreRender
 		/// </summary>
 		/// <param name="executeJs"></param>
-		protected override void PreRenderCore(Func<string, string> executeJs)
+		public override void PreRender(Func<string, string> executeJs)
 		{
 			executeJs("var reactJssProps = { registry: new ReactJss.SheetsRegistry() };");
 		}
@@ -38,7 +27,7 @@ namespace React.RenderFunctions
 		/// </summary>
 		/// <param name="componentToRender"></param>
 		/// <returns></returns>
-		protected override string WrapComponentCore(string componentToRender)
+		public override string WrapComponent(string componentToRender)
 		{
 			return ($"React.createElement(ReactJss.JssProvider, reactJssProps, ({componentToRender}))");
 		}
@@ -47,7 +36,7 @@ namespace React.RenderFunctions
 		/// Implementation of PostRender
 		/// </summary>
 		/// <param name="executeJs"></param>
-		protected override void PostRenderCore(Func<string, string> executeJs)
+		public override void PostRender(Func<string, string> executeJs)
 		{
 			RenderedStyles = $"<style type=\"text/css\" id=\"server-side-styles\">{executeJs("reactJssProps.registry.toString()")}</style>";
 		}

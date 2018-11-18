@@ -25,7 +25,7 @@ Add the render helper to the call to `Html.React`:
 	var helmetFunctions = new ReactHelmetFunctions();
 }
 
-@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: helmetFunctions)
+@Html.React("RootComponent", new { exampleProp = "a" }, renderFunctions: new ChainedRenderFunctions(helmetFunctions))
 
 @{
 	ViewBag.HelmetTitle = helmetFunctions.RenderedHelmet.GetValueOrDefault("title");
