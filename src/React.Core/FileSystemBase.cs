@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -77,7 +77,7 @@ namespace React
 		/// <returns>File paths that match the pattern</returns>
 		public virtual IEnumerable<string> Glob(string glob)
 		{
-			var path = MapPath(Path.GetDirectoryName(glob));
+			var path = MapPath(Path.GetDirectoryName(glob).Replace(Path.DirectorySeparatorChar, '/'));
 			var searchPattern = Path.GetFileName(glob);
 			return Directory.EnumerateFiles(path, searchPattern).Select(ToRelativePath);
 		}
