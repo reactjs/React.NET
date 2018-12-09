@@ -21,7 +21,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(false);
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
@@ -38,7 +38,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
@@ -58,7 +58,7 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
@@ -78,7 +78,7 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
 			environment.Setup(x => x.Execute<string>(@"React.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Returns("[HTML]");
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
@@ -96,7 +96,7 @@ namespace React.Tests.Core
 		{
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
@@ -112,7 +112,7 @@ namespace React.Tests.Core
 		[Fact]
 		public void RenderHtmlShouldWrapComponentInCustomElement()
 		{
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
@@ -133,7 +133,7 @@ namespace React.Tests.Core
 		[Fact]
 		public void RenderHtmlShouldNotRenderComponentWhenContainerOnly()
 		{
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
@@ -154,7 +154,7 @@ namespace React.Tests.Core
 		[Fact]
 		public void RenderHtmlShouldNotWrapComponentWhenServerSideOnly()
 		{
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
@@ -174,7 +174,7 @@ namespace React.Tests.Core
 		[Fact]
 		public void RenderHtmlShouldAddClassToElement()
 		{
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var environment = new Mock<IReactEnvironment>();
 			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
@@ -197,7 +197,7 @@ namespace React.Tests.Core
 		public void RenderJavaScriptShouldCallRenderComponent()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
@@ -216,7 +216,7 @@ namespace React.Tests.Core
 		public void RenderJavaScriptShouldCallRenderComponentWithReactDOMRender()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
@@ -236,7 +236,7 @@ namespace React.Tests.Core
 		public void RenderJavaScriptShouldCallRenderComponentwithReactDOMHydrate()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
 			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
@@ -248,6 +248,27 @@ namespace React.Tests.Core
 
 			Assert.Equal(
 				@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
+				result
+			);
+		}
+
+		[Fact]
+		public void RenderJavaScriptShouldCallRenderComponentWithReactDomRenderWhenSsrDisabled()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseServerSideRendering).Returns(false);
+
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = false,
+				Props = new {hello = "World"}
+			};
+			var result = component.RenderJavaScript();
+			
+			Assert.Equal(
+				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
 		}
@@ -278,7 +299,7 @@ namespace React.Tests.Core
 		public void GeneratesContainerIdIfNotProvided()
 		{
 			var environment = new Mock<IReactEnvironment>();
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 			reactIdGenerator.Setup(x => x.Generate()).Returns("customReactId");
 
@@ -294,7 +315,7 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<string>(@"ReactDOMServer.renderToString(React.createElement(Foo, {""hello"":""World""}))"))
 				.Throws(new JsRuntimeException("'undefined' is not an object"));
 
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.ExceptionHandler).Returns(() => throw new ReactServerRenderingException("test"));
 
@@ -347,7 +368,7 @@ namespace React.Tests.Core
 			environment.Setup(x => x.Execute<string>(@"postrender();"))
 				.Returns("postrender-result");
 
-			var config = new Mock<IReactSiteConfiguration>();
+			var config = CreateDefaultConfigMock();
 			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
@@ -385,6 +406,13 @@ namespace React.Tests.Core
 
 			Assert.Equal("postrender-result", firstInstance.PostRenderResult);
 			Assert.Equal("postrender-result", secondInstance.PostRenderResult);
+		}
+		
+		private static Mock<IReactSiteConfiguration> CreateDefaultConfigMock()
+		{
+			var configMock = new Mock<IReactSiteConfiguration>();
+			configMock.SetupGet(x => x.UseServerSideRendering).Returns(true);
+			return configMock;
 		}
 
 		private sealed class TestRenderFunctions : RenderFunctionsBase
