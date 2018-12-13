@@ -171,6 +171,11 @@ namespace React
 		/// <param name="engine">Engine to load scripts into</param>
 		private void LoadUserScripts(IJsEngine engine)
 		{
+			// Do not execute user scripts if rendering is disabled.
+			if (!_config.UseServerSideRendering)
+			{
+				return;
+			}
 			foreach (var file in _config.ScriptsWithoutTransform)
 			{
 				try

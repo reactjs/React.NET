@@ -122,6 +122,7 @@ namespace React.Tests.Core
 
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(false);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var cache = new Mock<ICache>();
@@ -147,6 +148,7 @@ namespace React.Tests.Core
 
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var cache = new NullCache();
@@ -180,6 +182,7 @@ namespace React.Tests.Core
 
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var cache = new Mock<ICache>();
@@ -203,6 +206,7 @@ namespace React.Tests.Core
 
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var shimsPrecompiledScript = new Mock<IPrecompiledScript>().Object;
@@ -236,6 +240,7 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(false);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var cache = new Mock<ICache>();
@@ -261,6 +266,7 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var cache = new NullCache();
@@ -291,6 +297,7 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var cache = new Mock<ICache>();
@@ -316,6 +323,7 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
 			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 
 			var firstPrecompiledScript = new Mock<IPrecompiledScript>().Object;
@@ -338,6 +346,32 @@ namespace React.Tests.Core
 
 			jsEngine.Verify(x => x.Execute(firstPrecompiledScript));
 			jsEngine.Verify(x => x.Execute(secondPrecompiledScript));
+		}
+
+		[Fact]
+		public void ShouldNotLoadFilesThatDoNotRequireTransformWhenServerSideRenderingIsDisabled()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(false);
+			config.Setup(x => x.UseServerSideRendering).Returns(false);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
+
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			factory.GetEngineForCurrentThread();
+
+			jsEngine.Verify(x => x.Execute("CONTENTS_First.js", "First.js"), Times.Never);
+			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js", "Second.js"), Times.Never);
 		}
 
 		[Fact]
@@ -382,6 +416,7 @@ namespace React.Tests.Core
 		{
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "foo.js" });
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(false);
 			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
@@ -402,6 +437,7 @@ namespace React.Tests.Core
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> {"foo.js"});
 			config.Setup(x => x.LoadReact).Returns(false);
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
 			fileSystem.Setup(x => x.ReadAsString("foo.js")).Returns("FAIL PLZ");
@@ -424,6 +460,7 @@ namespace React.Tests.Core
 		{
 			var config = new Mock<IReactSiteConfiguration>();
 			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> {"foo.js"});
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
 			config.Setup(x => x.LoadReact).Returns(true);
 			var cache = new Mock<ICache>();
 			var fileSystem = new Mock<IFileSystem>();
