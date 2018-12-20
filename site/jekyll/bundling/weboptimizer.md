@@ -42,3 +42,12 @@ bundles.Add(new Bundle("~/bundles/main", new IBundleTransform[]
 	"~/Content/HelloWorld.react.jsx"
 ));
 ```
+
+Note that debug mode should be set to `false` in your `Web.config` file for this to work.
+
+```csharp
+// Web.config
+  <system.web>
+    <compilation debug="false" targetFramework="4.x" />
+  </system.web>
+```
