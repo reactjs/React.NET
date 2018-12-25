@@ -245,7 +245,8 @@ namespace React
 		/// <returns>JavaScript</returns>
 		public virtual void RenderJavaScript(TextWriter writer)
 		{
-			writer.Write(ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
+			writer.Write(
+				!_configuration.UseServerSideRendering || ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
 			WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);
