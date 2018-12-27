@@ -1,7 +1,7 @@
 using System;
-using System.Diagnostics;
 using System.Reflection;
 using JavaScriptEngineSwitcher.Core;
+using React.Exceptions;
 
 namespace React
 {
@@ -36,10 +36,7 @@ namespace React
 		public static bool TryExecuteFileWithPrecompilation(this IJsEngine engine, ICache cache,
 			IFileSystem fileSystem, string path, Func<string, string> scriptLoader = null)
 		{
-			if (!CheckPrecompilationAvailability(engine, cache))
-			{
-				return false;
-			}
+			EnsurePrecompilationAvailability(engine, cache);
 
 			var cacheKey = string.Format(PRECOMPILED_JS_FILE_CACHE_KEY, path);
 			var precompiledScript = cache.Get<IPrecompiledScript>(cacheKey);
@@ -73,10 +70,7 @@ namespace React
 		public static bool TryExecuteResourceWithPrecompilation(this IJsEngine engine, ICache cache,
 			string resourceName, Assembly assembly)
 		{
-			if (!CheckPrecompilationAvailability(engine, cache))
-			{
-				return false;
-			}
+			EnsurePrecompilationAvailability(engine, cache);
 
 			var cacheKey = string.Format(PRECOMPILED_JS_RESOURCE_CACHE_KEY, resourceName);
 			var precompiledScript = cache.Get<IPrecompiledScript>(cacheKey);
@@ -97,27 +91,27 @@ namespace React
 		}
 
 		/// <summary>
-		/// Checks a availability of the script pre-compilation
+		/// Ensures that the script pre-compilation is available.
 		/// </summary>
 		/// <param name="engine">Instance of the JavaScript engine</param>
 		/// <param name="cache">Cache used for storing the pre-compiled scripts</param>
-		/// <returns>true if the script pre-compilation is available; otherwise, false.</returns>
-		private static bool CheckPrecompilationAvailability(IJsEngine engine, ICache cache)
+		private static void EnsurePrecompilationAvailability(IJsEngine engine, ICache cache)
 		{
 			if (!engine.SupportsScriptPrecompilation)
 			{
-				Trace.WriteLine(string.Format("The {0} version {1} does not support the script pre-compilation.",
-					engine.Name, engine.Version));
-				return false;
+				throw new ReactScriptPrecompilationNotAvailableException(string.Format(
+					"The {0} version {1} does not support the script pre-compilation.",
+					engine.Name,
+					engine.Version
+				));
 			}
 
 			if (cache is NullCache)
 			{
-				Trace.WriteLine("Usage of script pre-compilation without caching does not make sense.");
-				return false;
+				throw new ReactScriptPrecompilationNotAvailableException(string.Format(
+					"Usage of the script pre-compilation without caching does not make sense."
+				));
 			}
-
-			return true;
 		}
 	}
 }

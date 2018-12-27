@@ -137,31 +137,6 @@ namespace React.Tests.Core
 		}
 
 		[Fact]
-		public void ShouldLoadResourcesWithPrecompilationAndWithoutCache()
-		{
-			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
-
-			var jsEngine = new Mock<IJsEngine>();
-			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
-			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
-			config.Setup(x => x.LoadReact).Returns(true);
-
-			var cache = new NullCache();
-
-			var fileSystem = new Mock<IFileSystem>();
-
-			var factory = CreateFactory(config.Object, cache, fileSystem.Object, () => jsEngine.Object);
-
-			factory.GetEngineForCurrentThread();
-
-			jsEngine.Verify(x => x.ExecuteResource("React.Core.Resources.shims.js", reactCoreAssembly));
-			jsEngine.Verify(x => x.ExecuteResource("React.Core.Resources.react.generated.min.js", reactCoreAssembly));
-		}
-
-		[Fact]
 		public void ShouldLoadResourcesWithPrecompilationAndEmptyCache()
 		{
 			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
@@ -227,6 +202,56 @@ namespace React.Tests.Core
 		}
 
 		[Fact]
+		public void ShouldThrowIfEngineNotSupportPrecompilationOfResources()
+		{
+			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.Name).Returns("FooJsEngine");
+			jsEngine.Setup(x => x.Version).Returns("1.2.3");
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(false);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			var ex = Assert.Throws<ReactScriptPrecompilationNotAvailableException>(
+				() => factory.GetEngineForCurrentThread());
+			Assert.Equal("The FooJsEngine version 1.2.3 does not support the script pre-compilation.", ex.Message);
+		}
+
+		[Fact]
+		public void ShouldThrowIfPrecompilationOfResourcesIsPerformedWithoutCache()
+		{
+			var reactCoreAssembly = typeof(JavaScriptEngineFactory).GetTypeInfo().Assembly;
+
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new NullCache();
+
+			var fileSystem = new Mock<IFileSystem>();
+
+			var factory = CreateFactory(config.Object, cache, fileSystem.Object, () => jsEngine.Object);
+
+			var ex = Assert.Throws<ReactScriptPrecompilationNotAvailableException>(
+				() => factory.GetEngineForCurrentThread());
+			Assert.Equal("Usage of the script pre-compilation without caching does not make sense.", ex.Message);
+		}
+
+		[Fact]
 		public void ShouldLoadFilesThatDoNotRequireTransformWithoutPrecompilation()
 		{
 			var jsEngine = new Mock<IJsEngine>();
@@ -244,31 +269,6 @@ namespace React.Tests.Core
 			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
 
 			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
-
-			factory.GetEngineForCurrentThread();
-
-			jsEngine.Verify(x => x.Execute("CONTENTS_First.js", "First.js"));
-			jsEngine.Verify(x => x.Execute("CONTENTS_Second.js", "Second.js"));
-		}
-
-		[Fact]
-		public void ShouldLoadFilesThatDoNotRequireTransformWithPrecompilationAndWithoutCache()
-		{
-			var jsEngine = new Mock<IJsEngine>();
-			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
-			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
-
-			var config = new Mock<IReactSiteConfiguration>();
-			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
-			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
-			config.Setup(x => x.LoadReact).Returns(true);
-
-			var cache = new NullCache();
-
-			var fileSystem = new Mock<IFileSystem>();
-			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
-
-			var factory = CreateFactory(config.Object, cache, fileSystem.Object, () => jsEngine.Object);
 
 			factory.GetEngineForCurrentThread();
 
@@ -338,6 +338,56 @@ namespace React.Tests.Core
 
 			jsEngine.Verify(x => x.Execute(firstPrecompiledScript));
 			jsEngine.Verify(x => x.Execute(secondPrecompiledScript));
+		}
+
+		[Fact]
+		public void ShouldThrowIfEngineNotSupportPrecompilationOfFilesThatDoNotRequireTransform()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.Name).Returns("FooJsEngine");
+			jsEngine.Setup(x => x.Version).Returns("1.2.3");
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(false);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new Mock<ICache>();
+
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
+
+			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
+
+			var ex = Assert.Throws<ReactScriptPrecompilationNotAvailableException>(
+				() => factory.GetEngineForCurrentThread());
+			Assert.Equal("The FooJsEngine version 1.2.3 does not support the script pre-compilation.", ex.Message);
+		}
+
+		[Fact]
+		public void ShouldThrowIfPrecompilationOfFilesThatDoNotRequireTransformIsPerformedWithoutCache()
+		{
+			var jsEngine = new Mock<IJsEngine>();
+			jsEngine.Setup(x => x.SupportsScriptPrecompilation).Returns(true);
+			jsEngine.Setup(x => x.Evaluate<int>("1 + 1")).Returns(2);
+
+			var config = new Mock<IReactSiteConfiguration>();
+			config.Setup(x => x.ScriptsWithoutTransform).Returns(new List<string> { "First.js", "Second.js" });
+			config.Setup(x => x.AllowJavaScriptPrecompilation).Returns(true);
+			config.Setup(x => x.LoadReact).Returns(true);
+
+			var cache = new NullCache();
+
+			var fileSystem = new Mock<IFileSystem>();
+			fileSystem.Setup(x => x.ReadAsString(It.IsAny<string>())).Returns<string>(path => "CONTENTS_" + path);
+
+			var factory = CreateFactory(config.Object, cache, fileSystem.Object, () => jsEngine.Object);
+
+			var ex = Assert.Throws<ReactScriptPrecompilationNotAvailableException>(
+				() => factory.GetEngineForCurrentThread());
+			Assert.Equal("Usage of the script pre-compilation without caching does not make sense.", ex.Message);
 		}
 
 		[Fact]
