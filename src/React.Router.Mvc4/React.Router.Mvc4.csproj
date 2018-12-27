@@ -16,7 +16,7 @@
 		<PackageTags>asp.net;mvc;asp;javascript;js;react;facebook;reactjs;babel;router;react router</PackageTags>
 		<PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
 		<PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
-		<PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
+		<PackageLicense>https://github.com/reactjs/React.NET#licence</PackageLicense>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 

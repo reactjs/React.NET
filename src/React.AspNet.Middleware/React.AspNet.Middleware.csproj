@@ -15,7 +15,7 @@
     <PackageTags>asp.net;mvc;asp;javascript;js;react;facebook;reactjs;vnext;asp.net 5;asp.net core</PackageTags>
     <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
     <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/reactjs/React.NET#licence</PackageLicenseUrl>
+    <PackageLicense>https://github.com/reactjs/React.NET#licence</PackageLicense>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
     <RootNamespace>React.AspNet</RootNamespace>
@@ -37,11 +37,11 @@
     <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.0" />
   </ItemGroup>
-  
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <NoWarn>7035</NoWarn>
   </PropertyGroup>
