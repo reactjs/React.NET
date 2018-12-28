@@ -19,47 +19,6 @@ namespace React
 	public static class JavaScriptEngineUtils
 	{
 		/// <summary>
-		/// Determines if the current environment supports the ClearScript V8 engine
-		/// </summary>
-		/// <returns><c>true</c> if ClearScript is supported</returns>
-		public static bool EnvironmentSupportsClearScript()
-		{
-#if NET40
-			return Environment.OSVersion.Platform == PlatformID.Win32NT;
-#else
-			return false;
-#endif
-		}
-
-		/// <summary>
-		/// Attempts to use the specified engine and throws an exception if it doesn't work.
-		/// </summary>
-		public static void EnsureEngineFunctional<TEngine, TException>(
-			Func<Exception, TException> exceptionFactory
-		) 
-			where TEngine : IJsEngine, new()
-			where TException : Exception
-		{
-			int result;
-			try
-			{
-				using (var engine = new TEngine())
-				{
-					result = engine.Evaluate<int>("1 + 1");
-				}
-			}
-			catch (Exception ex)
-			{
-				throw exceptionFactory(ex);
-			}
-
-			if (result != 2)
-			{
-				throw new ReactException("Mathematics is broken. 1 + 1 = " + result);
-			}
-		}
-
-		/// <summary>
 		/// Executes a code from JavaScript file.
 		/// </summary>
 		/// <param name="engine">Engine to execute code from JavaScript file</param>
