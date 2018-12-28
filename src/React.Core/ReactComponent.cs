@@ -195,7 +195,7 @@ namespace React
 						return;
 					}
 				}
-				catch (JsRuntimeException ex)
+				catch (JsException ex)
 				{
 					if (exceptionHandler == null)
 					{

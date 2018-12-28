@@ -466,7 +466,7 @@ namespace React.Tests.Core
 			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
-			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
+			Assert.Equal("Error while loading \"foo.js\": Fail", ex.Message);
 		}
 
 		[Fact]
@@ -489,7 +489,7 @@ namespace React.Tests.Core
 			var factory = CreateFactory(config, cache, fileSystem, () => jsEngine.Object);
 
 			var ex = Assert.Throws<ReactScriptLoadException>(() => factory.GetEngineForCurrentThread());
-			Assert.Equal("Error while loading \"foo.js\": Fail\r\nLine: 42\r\nColumn: 911", ex.Message);
+			Assert.Equal("Error while loading \"foo.js\": Fail", ex.Message);
 		}
 
 		[Fact]

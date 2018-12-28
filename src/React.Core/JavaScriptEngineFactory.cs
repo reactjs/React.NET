@@ -185,18 +185,16 @@ namespace React
 						engine.ExecuteFile(_fileSystem, file);
 					}
 				}
-				catch (JsScriptException ex)
+				catch (JsException ex)
 				{
 					// We can't simply rethrow the exception here, as it's possible this is running
 					// on a background thread (ie. as a response to a file changing). If we did
 					// throw the exception here, it would terminate the entire process. Instead,
 					// save the exception, and then just rethrow it later when getting the engine.
 					_scriptLoadException = new ReactScriptLoadException(string.Format(
-						"Error while loading \"{0}\": {1}\r\nLine: {2}\r\nColumn: {3}",
+						"Error while loading \"{0}\": {1}",
 						file,
-						ex.Message,
-						ex.LineNumber,
-						ex.ColumnNumber
+						ex.Message
 					));
 				}
 				catch (IOException ex)
