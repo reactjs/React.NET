@@ -48,6 +48,9 @@
     <NoWarn>1607</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AdvancedStringBuilder, Version=0.1.0.0, Culture=neutral, PublicKeyToken=e818a2fc08933ddb, processorArchitecture=MSIL">
+      <HintPath>..\packages\AdvancedStringBuilder.0.1.0\lib\net40-client\AdvancedStringBuilder.dll</HintPath>
+    </Reference>
     <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
       <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
       <Private>True</Private>
@@ -69,14 +72,17 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="JavaScriptEngineSwitcher.Core, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.3.0.0-rc1\lib\net40-client\JavaScriptEngineSwitcher.Core.dll</HintPath>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Core.3.0.0\lib\net40-client\JavaScriptEngineSwitcher.Core.dll</HintPath>
     </Reference>
     <Reference Include="JavaScriptEngineSwitcher.Msie, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c608b2a8cc9e4472, processorArchitecture=MSIL">
-      <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.3.0.0-rc1\lib\net40-client\JavaScriptEngineSwitcher.Msie.dll</HintPath>
+      <HintPath>..\packages\JavaScriptEngineSwitcher.Msie.3.0.0\lib\net40-client\JavaScriptEngineSwitcher.Msie.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MsieJavaScriptEngine, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a3a2846a37ac0d3e, processorArchitecture=MSIL">
-      <HintPath>..\packages\MsieJavaScriptEngine.3.0.0-rc1\lib\net40-client\MsieJavaScriptEngine.dll</HintPath>
+      <HintPath>..\packages\MsieJavaScriptEngine.3.0.0\lib\net40-client\MsieJavaScriptEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="PolyfillsForOldDotNet.System.Threading, Version=0.1.1.0, Culture=neutral, PublicKeyToken=7c096c79220f0d91, processorArchitecture=MSIL">
+      <HintPath>..\packages\PolyfillsForOldDotNet.System.Threading.0.1.1\lib\net40-client\PolyfillsForOldDotNet.System.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
