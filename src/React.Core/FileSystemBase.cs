@@ -30,7 +30,7 @@ namespace React
 		public abstract string MapPath(string relativePath);
 
 		/// <summary>
-		/// Converts a path from a full filesystem path to anan application relative path (~/...)
+		/// Converts a path from a full filesystem path to an application relative path (~/...)
 		/// </summary>
 		/// <param name="absolutePath">Full path of the file</param>
 		/// <returns>App-relative path of the file</returns>
