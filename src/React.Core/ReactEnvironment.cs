@@ -215,7 +215,7 @@ namespace React
 						"Error while loading \"{0}\": {1}",
 						file,
 						ex.Message
-					));
+					), ex);
 				}
 			}
 			Engine.SetVariableValue(USER_SCRIPTS_LOADED_KEY, true);

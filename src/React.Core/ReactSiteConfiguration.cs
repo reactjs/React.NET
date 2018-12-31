@@ -50,7 +50,7 @@ namespace React
 					ComponentName,
 					ex.Message,
 					ContainerId
-				));
+				), ex);
 		}
 
 		/// <summary>

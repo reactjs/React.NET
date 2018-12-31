@@ -60,7 +60,7 @@ namespace React
 				throw new ReactException(string.Format(
 					"{0} did not return valid JSON: {1}.\n\n{2}",
 					function, ex.Message, resultJson
-				));
+				), ex);
 			}
 		}
 	}
