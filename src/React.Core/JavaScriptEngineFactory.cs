@@ -195,11 +195,11 @@ namespace React
 						"Error while loading \"{0}\": {1}",
 						file,
 						ex.Message
-					));
+					), ex);
 				}
 				catch (IOException ex)
 				{
-					_scriptLoadException = new ReactScriptLoadException(ex.Message);
+					_scriptLoadException = new ReactScriptLoadException(ex.Message, ex);
 				}
 			}
 		}
