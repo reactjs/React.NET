@@ -38,7 +38,7 @@ namespace React.AspNet
 			{
 				return relativePath;
 			}
-			relativePath = relativePath.TrimStart('~').TrimStart('/');
+			relativePath = relativePath.TrimStart('~').TrimStart('/').TrimStart('\\');
 
 			return Path.GetFullPath(Path.Combine(_hostingEnv.WebRootPath, relativePath));
 		}
