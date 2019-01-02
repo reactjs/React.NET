@@ -1,0 +1,31 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'VS2017-Win2016'
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '6.x'
+
+- script: npm install --global npm
+
+- task: VSBuild@1
+  inputs:
+    solution: 'build.proj'
+    msbuildArgs: '/p:PackageOutputDir="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: 'tests/React.Tests/React.Tests.csproj'
+    arguments: '--no-build --configuration $(buildConfiguration)'
+
+- task: PublishBuildArtifacts@1
