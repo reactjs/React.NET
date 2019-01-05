@@ -45,6 +45,36 @@ We need to install ReactJS.NET to the newly-created project. This is accomplishe
 
 <img src="/img/tutorial/nuget.png" alt="Screenshot: Install NuGet Packages" width="650" />
 
+You will also need to install a JS engine to use (either V8 or ChakraCore are recommended). See the [JSEngineSwitcher docs](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines) for more information.
+
+To use V8, add the following packages:
+
+```
+JavaScriptEngineSwitcher.V8
+JavaScriptEngineSwitcher.V8.Native.win-x64
+```
+
+`ReactConfig.cs` will be automatically generated for you. Update it to register a JS engine:
+
+```csharp
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.V8;
+
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Mvc4.ReactConfig), "Configure")]
+
+namespace React.Sample.Mvc4
+{
+	public static class ReactConfig
+	{
+		public static void Configure()
+		{
+			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
+			JsEngineSwitcher.Current.EngineFactories.AddV8();
+		}
+	}
+}
+```
+
 ### Create basic controller and view
 
 Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover creation of an MVC controller in much detail. To learn more about ASP.NET MVC, refer to [its official website](https://www.asp.net/mvc).
