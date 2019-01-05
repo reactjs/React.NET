@@ -66,6 +66,8 @@ At the top of the file, add:
 
 ```csharp
 using Microsoft.AspNetCore.Http;
+using JavaScriptEngineSwitcher.Core;
+using JavaScriptEngineSwitcher.ChakraCore;
 using React.AspNet;
 ```
 
@@ -81,6 +83,10 @@ Add:
 ```csharp
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddReact();
+
+// Make sure a JS engine is registered, or you will get an error!
+services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+  .AddChakraCore();
 ```
 
 Directly **above**:
