@@ -66,8 +66,8 @@ At the top of the file, add:
 
 ```csharp
 using Microsoft.AspNetCore.Http;
-using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using React.AspNet;
 ```
 
