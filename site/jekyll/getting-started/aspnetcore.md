@@ -10,14 +10,14 @@ This guide covers enabling server-side rendering and Babel compilation. Getting 
 
 ReactJS.NET requires at least Visual Studio 2015 and ASP.NET Core 1.0, but has also been tested with VS 2017 and .NET Core 2.1.
 
-Install the `React.AspNet` package through NuGet. You will also need to install a JS engine to use (either V8 or ChakraCore are recommended). See the [JSEngineSwitcher docs](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines) for more information. After these packages are installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator).
+Install the `React.AspNet` package through NuGet. You will also need to install a JS engine to use (either V8 or ChakraCore are recommended) and `JavaScriptEngineSwitcher.Extensions.MsDependencyInjection` package. See the [JSEngineSwitcher docs](https://github.com/Taritsyn/JavaScriptEngineSwitcher/wiki/Registration-of-JS-engines) for more information. After these packages are installed, ReactJS.NET needs to be initialised in your `Startup.cs` file (unfortunately this can not be done automatically like in previous versions of ASP.NET with WebActivator).
 
 At the top of Startup.cs, add:
 
 ```
 using Microsoft.AspNetCore.Http;
-using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using React.AspNet;
 ```
 
