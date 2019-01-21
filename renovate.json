@@ -1,5 +1,30 @@
 {
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "sourceUrlPrefixes": ["https://github.com/Taritsyn/JavaScriptEngineSwitcher"],
+      "groupName": "JavaScriptEngineSwitcher packages"
+    },
+    {
+      "sourceUrlPrefixes": ["https://github.com/aspnet/Extensions"],
+      "groupName": "ASP.NET Extensions"
+    },
+    {
+      "packagePatterns": ["^Microsoft.AspNetCore"],
+      "groupName": "ASP.NET Core packages"
+    },
+    {
+      "packagePatterns": ["^Microsoft.Owin"],
+      "groupName": "Owin packages"
+    },
+    {
+      "sourceUrlPrefixes": [
+        "https://github.com/aspnet/MetaPackages",
+        "https://github.com/aspnet/AspNetCore"
+      ],
+      "groupName": "ASP.NET Core packages"
+    }
   ]
 }
