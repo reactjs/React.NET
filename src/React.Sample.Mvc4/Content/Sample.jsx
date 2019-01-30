@@ -7,6 +7,11 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+function HooksDemo() {
+	let [count, updateCount] = React.useState(0);
+	return <button onClick={() => updateCount(count + 1)}>Click count: {count}</button>;
+}
+
 class CommentsBox extends React.Component {
 	static propTypes = {
 		initialComments: PropTypes.array.isRequired,
@@ -50,6 +55,7 @@ class CommentsBox extends React.Component {
 
 		return (
 			<div className="comments">
+				<HooksDemo />
 				<h1>Comments</h1>
 				<ol className="commentList">
 					{commentNodes}
