@@ -2,6 +2,9 @@
   "version": "1.0.0",
   "name": "React.Core",
   "private": true,
+  "scripts": {
+    "build": "gulp"
+  },
   "devDependencies": {
     "babel-core": "6.9.1",
     "babel-loader": "6.2.10",
