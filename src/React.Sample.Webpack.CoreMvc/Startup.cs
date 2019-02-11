@@ -51,7 +51,9 @@ namespace React.Sample.Webpack.CoreMvc
 					.SetReuseJavaScriptEngines(true)
 					.SetLoadBabel(false)
 					.SetLoadReact(false)
-					.AddScriptWithoutTransform("~/components-bundle.generated.js");
+					.AddScriptWithoutTransform("~/dist/runtime.js")
+					.AddScriptWithoutTransform("~/dist/vendor.js")
+					.AddScriptWithoutTransform("~/dist/components.js");
 			});
 
 			app.UseMvc(routes =>
