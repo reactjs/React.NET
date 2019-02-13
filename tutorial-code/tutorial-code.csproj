@@ -13,11 +13,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="2.4.29" />
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.linux-x64" Version="2.4.29" />
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.osx-x64" Version="2.4.29" />
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.win-x64" Version="2.4.29" />
-    <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="2.4.0" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="3.0.4" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.linux-x64" Version="3.0.1" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.osx-x64" Version="3.0.1" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.win-x64" Version="3.0.1" />
+    <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="2.0.0" PrivateAssets="All" />
