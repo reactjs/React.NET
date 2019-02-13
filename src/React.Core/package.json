@@ -16,8 +16,8 @@
     "json-loader": "0.5.7",
     "natives": "^1.1.6",
     "prop-types": "15.7.1",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
+    "react": "16.8.1",
+    "react-dom": "16.8.1",
     "vinyl-named": "1.1.0",
     "webpack": "1.13.3",
     "webpack-stream": "3.2.0"
