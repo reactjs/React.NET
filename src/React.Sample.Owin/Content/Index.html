@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta charset="utf-8" />
-	<title>React OWIN Sample</title>
-	<link href="Sample.css" media="all" rel="stylesheet" type="text/css">
-</head>
-<body>
-	<div id="container"></div>
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
-	<script type="text/javascript" src="Sample.jsx"></script>
-	<script type="text/javascript">
-		ReactDOM.render(
-		  React.createElement(CommentsBox),
-		  document.getElementById('container')
-		);
-	</script>
-</body>
+	<head>
+		<meta charset="utf-8" />
+		<title>React OWIN Sample</title>
+		<link href="Sample.css" media="all" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div id="container"></div>
+		<script
+			crossorigin
+			src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"
+		></script>
+		<script
+			crossorigin
+			src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"
+		></script>
+		<script
+			crossorigin
+			src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"
+		></script>
+		<script type="text/javascript" src="Sample.jsx"></script>
+		<script type="text/javascript">
+			ReactDOM.render(
+				React.createElement(CommentsBox),
+				document.getElementById('container'),
+			);
+		</script>
+	</body>
 </html>
