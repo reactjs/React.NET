@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react';
+import { Component, Fragment, useState } from 'react';
 import {
 	Link,
 	BrowserRouter,
@@ -34,6 +34,15 @@ class Navbar extends Component {
 	}
 }
 
+function HooksDemo() {
+	let [count, updateCount] = React.useState(0);
+	return (
+		<button onClick={() => updateCount(count + 1)}>
+			Click count: {count}
+		</button>
+	);
+}
+
 class HomePage extends Component {
 	render() {
 		return (
@@ -51,6 +60,7 @@ class HomePage extends Component {
 				>
 					ReactJS.NET is 🔥🔥
 				</h1>
+				<HooksDemo />
 			</Fragment>
 		);
 	}

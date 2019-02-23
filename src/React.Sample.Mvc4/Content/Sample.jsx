@@ -7,24 +7,33 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+function HooksDemo() {
+	let [count, updateCount] = React.useState(0);
+	return (
+		<button onClick={() => updateCount(count + 1)}>
+			Click count: {count}
+		</button>
+	);
+}
+
 class CommentsBox extends React.Component {
 	static propTypes = {
 		initialComments: PropTypes.array.isRequired,
-		page: PropTypes.number
+		page: PropTypes.number,
 	};
 
-		state = {
-			comments: this.props.initialComments,
-			page: this.props.page,
-			hasMore: true,
-			loadingMore: false
+	state = {
+		comments: this.props.initialComments,
+		page: this.props.page,
+		hasMore: true,
+		loadingMore: false,
 	};
 
-	loadMoreClicked = (evt) => {
+	loadMoreClicked = evt => {
 		var nextPage = this.state.page + 1;
 		this.setState({
 			page: nextPage,
-			loadingMore: true
+			loadingMore: true,
 		});
 
 		var url = evt.target.href;
@@ -36,7 +45,7 @@ class CommentsBox extends React.Component {
 			this.setState({
 				comments: this.state.comments.concat(data.comments),
 				hasMore: data.hasMore,
-				loadingMore: false
+				loadingMore: false,
 			});
 		};
 		xhr.send();
@@ -44,16 +53,15 @@ class CommentsBox extends React.Component {
 	};
 
 	render() {
-		var commentNodes = this.state.comments.map(comment =>
+		var commentNodes = this.state.comments.map(comment => (
 			<Comment author={comment.Author}>{comment.Text}</Comment>
-		);
+		));
 
 		return (
 			<div className="comments">
+				<HooksDemo />
 				<h1>Comments</h1>
-				<ol className="commentList">
-					{commentNodes}
-				</ol>
+				<ol className="commentList">{commentNodes}</ol>
 				{this.renderMoreLink()}
 			</div>
 		);
@@ -64,7 +72,10 @@ class CommentsBox extends React.Component {
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
 			return (
-				<a href={'/comments/page-' + (this.state.page + 1)} onClick={this.loadMoreClicked}>
+				<a
+					href={'/comments/page-' + (this.state.page + 1)}
+					onClick={this.loadMoreClicked}
+				>
 					Load More
 				</a>
 			);
@@ -76,14 +87,15 @@ class CommentsBox extends React.Component {
 
 class Comment extends React.Component {
 	static propTypes = {
-		author: PropTypes.object.isRequired
+		author: PropTypes.object.isRequired,
 	};
 
 	render() {
 		return (
 			<li>
 				<Avatar author={this.props.author} />
-				<strong>{this.props.author.Name}</strong>{': '}
+				<strong>{this.props.author.Name}</strong>
+				{': '}
 				{this.props.children}
 			</li>
 		);
@@ -92,7 +104,7 @@ class Comment extends React.Component {
 
 class Avatar extends React.Component {
 	static propTypes = {
-		author: PropTypes.object.isRequired
+		author: PropTypes.object.isRequired,
 	};
 
 	render() {
@@ -107,7 +119,11 @@ class Avatar extends React.Component {
 		);
 	}
 
-	getPhotoUrl = (author) => {
-		return 'https://avatars.githubusercontent.com/' + author.GithubUsername + '?s=50';
+	getPhotoUrl = author => {
+		return (
+			'https://avatars.githubusercontent.com/' +
+			author.GithubUsername +
+			'?s=50'
+		);
 	};
 }
