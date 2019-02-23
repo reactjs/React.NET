@@ -1,4 +1,4 @@
-﻿@using System.Web.Optimization
+@using System.Web.Optimization
 @model React.Sample.Mvc4.ViewModels.IndexViewModel
 <!DOCTYPE html>
 <html>
@@ -17,8 +17,8 @@
 	@Html.React("CommentsBox", new { initialComments = Model.Comments, page = Model.Page })
 
 	<!-- Load all required scripts (React + the site's scripts) -->
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.0/umd/react.development.js"></script>
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.0/umd/react-dom.development.js"></script>
+	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.1/umd/react.development.js"></script>
+	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.1/umd/react-dom.development.js"></script>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
 	@Scripts.Render("~/bundles/main")
 	<!-- Render the code to initialise the component -->
