@@ -152,6 +152,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Content Include="Content\lib\reactstrap.min.js" />
     <Content Include="Content\Sample.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
