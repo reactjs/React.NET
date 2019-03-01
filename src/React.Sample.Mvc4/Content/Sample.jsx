@@ -7,79 +7,67 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-function HooksDemo() {
-	let [count, updateCount] = React.useState(0);
-	return (
-		<button onClick={() => updateCount(count + 1)}>
-			Click count: {count}
-		</button>
-	);
-}
-
-class CommentsBox extends React.Component {
-	static propTypes = {
-		initialComments: PropTypes.array.isRequired,
-		page: PropTypes.number
-	};
-
-	state = {
-		comments: this.props.initialComments,
-		page: this.props.page,
+function CommentsBox(props) {
+	let [state, updateState] = React.useState({
+		comments: props.initialComments,
+		page: props.page,
 		hasMore: true,
 		loadingMore: false
-	};
+	});
 
-	loadMoreClicked = evt => {
-		var nextPage = this.state.page + 1;
-		this.setState({
+	function loadMoreClicked(evt) {
+		let nextPage = state.page + 1;
+		let comments = state.comments;
+		updateState(prevState => ({
+			...prevState,
 			page: nextPage,
 			loadingMore: true
-		});
+		}));
 
-		var url = '/comments/page-' + (this.state.page + 1);
-		var xhr = new XMLHttpRequest();
+		let url = '/comments/page-' + (state.page + 1);
+		let xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
 		xhr.setRequestHeader('Content-Type', 'application/json');
+
 		xhr.onload = () => {
-			var data = JSON.parse(xhr.responseText);
-			this.setState({
-				comments: this.state.comments.concat(data.comments),
+			let data = JSON.parse(xhr.responseText);
+			updateState(prevState => ({
+				...prevState,
+				comments: comments.concat(data.comments),
 				hasMore: data.hasMore,
 				loadingMore: false
-			});
+			}));
 		};
 		xhr.send();
 		evt.preventDefault();
-	};
-
-	render() {
-		var commentNodes = this.state.comments.map(comment => (
-			<Comment author={comment.Author}>{comment.Text}</Comment>
-		));
-
-		return (
-			<div className="comments">
-				<HooksDemo />
-				<h1>Comments</h1>
-				<ol className="commentList">{commentNodes}</ol>
-				{this.renderMoreLink()}
-			</div>
-		);
 	}
 
-	renderMoreLink = () => {
-		if (this.state.loadingMore) {
+	let commentNodes = state.comments.map(comment => (
+		<Comment author={comment.Author}>{comment.Text}</Comment>
+	));
+
+	function renderMoreLink() {
+		if (state.loadingMore) {
 			return <em>Loading...</em>;
-		} else if (this.state.hasMore) {
+		} else if (state.hasMore) {
 			return (
-				<Reactstrap.Button onClick={this.loadMoreClicked}>
+				<Reactstrap.Button onClick={loadMoreClicked}>
 					Load More
 				</Reactstrap.Button>
 			);
 		} else {
 			return <em>No more comments</em>;
 		}
-	};
+	}
+
+	return (
+		<div className="comments">
+			<h1>Comments</h1>
+			<ol className="commentList">{commentNodes}</ol>
+			{renderMoreLink()}
+			<hr />
+		</div>
+	);
 }
 
 class Comment extends React.Component {
