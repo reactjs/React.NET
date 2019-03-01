@@ -19,24 +19,24 @@ function HooksDemo() {
 class CommentsBox extends React.Component {
 	static propTypes = {
 		initialComments: PropTypes.array.isRequired,
-		page: PropTypes.number,
+		page: PropTypes.number
 	};
 
 	state = {
 		comments: this.props.initialComments,
 		page: this.props.page,
 		hasMore: true,
-		loadingMore: false,
+		loadingMore: false
 	};
 
 	loadMoreClicked = evt => {
 		var nextPage = this.state.page + 1;
 		this.setState({
 			page: nextPage,
-			loadingMore: true,
+			loadingMore: true
 		});
 
-		var url = evt.target.href;
+		var url = '/comments/page-' + (this.state.page + 1);
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', url, true);
 		xhr.setRequestHeader('Content-Type', 'application/json');
@@ -45,7 +45,7 @@ class CommentsBox extends React.Component {
 			this.setState({
 				comments: this.state.comments.concat(data.comments),
 				hasMore: data.hasMore,
-				loadingMore: false,
+				loadingMore: false
 			});
 		};
 		xhr.send();
@@ -72,12 +72,9 @@ class CommentsBox extends React.Component {
 			return <em>Loading...</em>;
 		} else if (this.state.hasMore) {
 			return (
-				<a
-					href={'/comments/page-' + (this.state.page + 1)}
-					onClick={this.loadMoreClicked}
-				>
+				<Reactstrap.Button onClick={this.loadMoreClicked}>
 					Load More
-				</a>
+				</Reactstrap.Button>
 			);
 		} else {
 			return <em>No more comments</em>;
@@ -87,7 +84,7 @@ class CommentsBox extends React.Component {
 
 class Comment extends React.Component {
 	static propTypes = {
-		author: PropTypes.object.isRequired,
+		author: PropTypes.object.isRequired
 	};
 
 	render() {
@@ -104,7 +101,7 @@ class Comment extends React.Component {
 
 class Avatar extends React.Component {
 	static propTypes = {
-		author: PropTypes.object.isRequired,
+		author: PropTypes.object.isRequired
 	};
 
 	render() {
@@ -114,7 +111,7 @@ class Avatar extends React.Component {
 				alt={'Photo of ' + this.props.author.Name}
 				width={50}
 				height={50}
-				className="commentPhoto"
+				className="commentPhoto mr-1"
 			/>
 		);
 	}
