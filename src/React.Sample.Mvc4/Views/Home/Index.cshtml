@@ -5,23 +5,29 @@
 <head>
 	<title>ReactJS.NET Sample</title>
 	<link rel="stylesheet" href="~/Content/Sample.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
 </head>
 <body>
-	<p>
-		This is an example of ReactJS.NET's server-side rendering. The initial state of this
-		comments box is rendered server-side, and additional data is loaded via AJAX and rendered
-		client-side.
-	</p>
-
-	<!-- Render the component server-side, passing initial props -->
-	@Html.React("CommentsBox", new { initialComments = Model.Comments, page = Model.Page })
-
-	<!-- Load all required scripts (React + the site's scripts) -->
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.1/umd/react.development.js"></script>
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.1/umd/react-dom.development.js"></script>
-	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
-	@Scripts.Render("~/bundles/main")
-	<!-- Render the code to initialise the component -->
-	@Html.ReactInitJavaScript()
+	<div class="container">
+		<div class="jumbotron">
+			<h1 class="display-4">ASP.NET MVC Sample</h1>
+			<hr className="my-4" />
+			<p class="lead">
+				This is an example of ReactJS.NET's server-side rendering. The initial state of this
+				comments box is rendered server-side, and additional data is loaded via AJAX and rendered
+				client-side.
+			</p>
+			<!-- Render the component server-side, passing initial props -->
+			@Html.React("CommentsBox", new { initialComments = Model.Comments, page = Model.Page })
+			<!-- Load all required scripts (React + the site's scripts) -->
+			<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.1/umd/react.development.js"></script>
+			<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.1/umd/react-dom.development.js"></script>
+			<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
+			<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/reactstrap/7.1.0/reactstrap.min.js"></script>
+			@Scripts.Render("~/bundles/main")
+			<!-- Render the code to initialise the component -->
+			@Html.ReactInitJavaScript()
+		</div>
+	</div>
 </body>
 </html>
