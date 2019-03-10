@@ -10,13 +10,13 @@
 <body>
 	<div class="container">
 		<div class="jumbotron">
-			<h1 class="display-4">Hello, ReactJS.NET!</h1>
+			<h1 class="display-4">ASP.NET MVC Sample</h1>
+			<hr className="my-4" />
 			<p class="lead">
 				This is an example of ReactJS.NET's server-side rendering. The initial state of this
 				comments box is rendered server-side, and additional data is loaded via AJAX and rendered
 				client-side.
 			</p>
-			<hr class="my-4">
 			<!-- Render the component server-side, passing initial props -->
 			@Html.React("CommentsBox", new { initialComments = Model.Comments, page = Model.Page })
 			<!-- Load all required scripts (React + the site's scripts) -->
