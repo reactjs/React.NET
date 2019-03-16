@@ -24,6 +24,6 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" PrivateAssets="All" />
-    <PackageReference Include="React.AspNet" Version="4.1.0" />
+    <PackageReference Include="React.AspNet" Version="4.1.1" />
   </ItemGroup>
 </Project>
