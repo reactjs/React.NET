@@ -27,6 +27,6 @@
     "babel-loader": "8.0.5",
     "babel-runtime": "6.26.0",
     "webpack": "4.29.6",
-    "webpack-cli": "3.2.3"
+    "webpack-cli": "3.3.0"
   }
 }
