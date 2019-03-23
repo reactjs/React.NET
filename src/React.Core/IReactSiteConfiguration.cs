@@ -159,6 +159,17 @@ namespace React
 		IReactSiteConfiguration SetBabelConfig(BabelConfig value);
 
 		/// <summary>
+		/// Gets or sets the Babel version to use. Supports "babel@6 or babel@7".
+		/// </summary>
+		string BabelVersion { get; set; }
+
+		/// <summary>
+		/// Sets the Babel configuration to use.
+		/// </summary>
+		/// <returns>The configuration, for chaining</returns>
+		IReactSiteConfiguration SetBabelVersion(string value);
+
+		/// <summary>
 		/// Gets or sets whether to use the debug version of React. This is slower, but gives
 		/// useful debugging tips.
 		/// </summary>
