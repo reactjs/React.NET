@@ -5,14 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {transform as babelTransform, version as babelVersion} from 'babel-standalone';
+import {
+	transform as babelTransform,
+	version as babelVersion,
+} from '@babel/core';
 
 export function ReactNET_transform(input, babelConfig, filename) {
-	babelConfig = {
-		...JSON.parse(babelConfig),
+	babelConfig = Object.assign({}, JSON.parse(babelConfig), {
 		ast: false,
 		filename,
-	}
+	});
 	try {
 		return babelTransform(input, babelConfig).code;
 	} catch (ex) {
@@ -22,18 +24,17 @@ export function ReactNET_transform(input, babelConfig, filename) {
 }
 
 export function ReactNET_transform_sourcemap(input, babelConfig, filename) {
-	babelConfig = {
-		...JSON.parse(babelConfig),
+	babelConfig = Object.assign({}, JSON.parse(babelConfig), {
 		ast: false,
 		filename,
 		sourceMaps: true,
-	};
+	});
 	try {
 		var result = babelTransform(input, babelConfig);
 		return JSON.stringify({
 			babelVersion,
 			code: result.code,
-			sourceMap: result.map
+			sourceMap: result.map,
 		});
 	} catch (ex) {
 		// Parsing stack is extremely long and not very useful, so just rethrow the message.
