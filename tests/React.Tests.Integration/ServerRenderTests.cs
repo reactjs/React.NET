@@ -112,7 +112,6 @@ namespace React.Tests.Integration
 		{
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(false)
-				.SetLoadReact(false)
 				.SetLoadBabel(true)
 				.SetBabelVersion(babelVersion);
 
