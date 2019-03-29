@@ -104,9 +104,18 @@ namespace React.Tests.Integration
 			AssemblyRegistration.Container.Unregister<IFileSystem>();
 		}
 
-		[Fact]
-		public void BabelTransformsJSX()
+		[Theory]
+		[InlineData(null)]
+		[InlineData("babel-6")]
+		[InlineData("babel-7")]
+		public void BabelTransformsJSX(string babelVersion)
 		{
+			ReactSiteConfiguration.Configuration
+				.SetReuseJavaScriptEngines(false)
+				.SetLoadReact(false)
+				.SetLoadBabel(true)
+				.SetBabelVersion(babelVersion);
+
 			Assert.Equal(@"React.createElement(
   ""div"",
   null,
