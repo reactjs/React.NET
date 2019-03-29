@@ -5,10 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-	transform as babelTransform,
-	version as babelVersion,
-} from '@babel/core';
+import {transform as babelTransform, version as babelVersion} from '@babel/standalone';
 
 export function ReactNET_transform(input, babelConfig, filename) {
 	babelConfig = Object.assign({}, JSON.parse(babelConfig), {
