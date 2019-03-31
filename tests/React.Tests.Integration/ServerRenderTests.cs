@@ -7,6 +7,7 @@ using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
 using React.Tests.Common;
 using Xunit;
+using System.Collections.Generic;
 
 namespace React.Tests.Integration
 {
@@ -76,10 +77,40 @@ namespace React.Tests.Integration
 			for (int i = 0; i < 20; i++)
 			{
 				var stringWriter = new StringWriter(new StringBuilder(128));
-				ReactEnvironment.GetCurrentOrThrow.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
+				ReactEnvironment.Current.CreateComponent("HelloWorld", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
 				Assert.Equal("<div>Hello Tester!</div>", stringWriter.ToString());
 				ReactEnvironment.Current.ReturnEngineToPool();
 			}
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("babel-6")]
+		public void BabelTransformsJSX(string babelVersion)
+		{
+			ReactEnvironment.Current.Configuration
+				.SetLoadBabel(true)
+				.SetBabelVersion(babelVersion);
+
+			Assert.Equal(@"React.createElement(
+  ""div"",
+  null,
+  ""Hello""
+);", ReactEnvironment.Current.Babel.Transform("<div>Hello</div>"));
+		}
+
+		[Theory]
+		[InlineData("babel-7")]
+		public void BabelTransformsTypescript(string babelVersion)
+		{
+			ReactEnvironment.Current.Configuration
+				.SetLoadBabel(true)
+				.SetBabelConfig(new BabelConfig { Presets = new HashSet<string>(new[] { "typescript", "react" }) })
+				.SetBabelVersion(babelVersion);
+
+			Assert.Equal(@"function render(foo) {
+  return React.createElement(""div"", null, ""Hello "", foo);
+}", ReactEnvironment.Current.Babel.Transform("function render(foo: number) { return (<div>Hello {foo}</div>) }", "test.tsx"));
 		}
 
 #if !NET461
@@ -102,24 +133,6 @@ namespace React.Tests.Integration
 
 			AssemblyRegistration.Container.Unregister<ICache>();
 			AssemblyRegistration.Container.Unregister<IFileSystem>();
-		}
-
-		[Theory]
-		[InlineData(null)]
-		[InlineData("babel-6")]
-		[InlineData("babel-7")]
-		public void BabelTransformsJSX(string babelVersion)
-		{
-			ReactSiteConfiguration.Configuration
-				.SetReuseJavaScriptEngines(false)
-				.SetLoadBabel(true)
-				.SetBabelVersion(babelVersion);
-
-			Assert.Equal(@"React.createElement(
-  ""div"",
-  null,
-  ""Hello""
-);", ReactEnvironment.Current.Babel.Transform("<div>Hello</div>"));
 		}
 	}
 }
