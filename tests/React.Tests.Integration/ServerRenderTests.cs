@@ -1,13 +1,11 @@
 using System;
-using System.Linq;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
 using React.Tests.Common;
 using Xunit;
-using System.Collections.Generic;
+using React.Core;
 
 namespace React.Tests.Integration
 {
@@ -99,18 +97,31 @@ namespace React.Tests.Integration
 );", ReactEnvironment.Current.Babel.Transform("<div>Hello</div>"));
 		}
 
-		[Theory]
-		[InlineData("babel-7")]
-		public void BabelTransformsTypescript(string babelVersion)
+		[Fact]
+		public void BabelTransformsTypescript()
 		{
 			ReactEnvironment.Current.Configuration
 				.SetLoadBabel(true)
-				.SetBabelConfig(new BabelConfig { Presets = new HashSet<string>(new[] { "typescript", "react" }) })
-				.SetBabelVersion(babelVersion);
+				.SetBabelVersion(BabelVersions.Babel7);
 
 			Assert.Equal(@"function render(foo) {
   return React.createElement(""div"", null, ""Hello "", foo);
 }", ReactEnvironment.Current.Babel.Transform("function render(foo: number) { return (<div>Hello {foo}</div>) }", "test.tsx"));
+		}
+
+		[Fact]
+		public void RendersTypescript()
+		{
+			ReactEnvironment.Current.Configuration
+				.SetReuseJavaScriptEngines(false)
+				.SetLoadBabel(true)
+				.AddScript("Sample.tsx")
+				.SetBabelVersion(BabelVersions.Babel7);
+
+			var stringWriter = new StringWriter(new StringBuilder(128));
+			ReactEnvironment.Current.CreateComponent("HelloTypescript", new { name = "Tester" }, serverOnly: true).RenderHtml(stringWriter, renderServerOnly: true);
+			Assert.Equal("<div>Hello Tester! Passed in: no prop</div>", stringWriter.ToString());
+			ReactEnvironment.Current.ReturnEngineToPool();
 		}
 
 #if !NET461

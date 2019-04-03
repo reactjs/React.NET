@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -74,7 +74,7 @@ namespace React
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
 			_config = siteConfig;
-			_babelConfig = siteConfig.BabelConfig.Serialize();
+			_babelConfig = siteConfig.BabelConfig.Serialize(_config.BabelVersion);
 		}
 
 		/// <summary>
