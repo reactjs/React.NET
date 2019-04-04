@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Microsoft.Owin.StaticFiles;
 #else
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.StaticFiles;
 #endif
 
 #if OWIN
@@ -38,7 +39,16 @@ namespace React.AspNet
 		public BabelFileOptions()
 		{
 			Extensions = new[] { ".jsx", ".tsx" };
-			StaticFileOptions = new StaticFileOptions();
+			StaticFileOptions = new StaticFileOptions() { ContentTypeProvider = new JsxContentTypeProvider() } ;
+		}
+
+		private class JsxContentTypeProvider : IContentTypeProvider
+		{
+			public bool TryGetContentType(string subpath, out string contentType)
+			{
+				contentType = "text/javascript";
+				return true;
+			}
 		}
 	}
 }

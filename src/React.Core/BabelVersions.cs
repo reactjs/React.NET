@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace React.Core
+namespace React
 {
 	/// <summary>
 	/// Public string values for babel versions

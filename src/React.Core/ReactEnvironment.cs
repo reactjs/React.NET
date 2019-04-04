@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JSPool;
-using React.Core;
 using React.Exceptions;
 using React.TinyIoC;
 
