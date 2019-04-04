@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -6,6 +6,7 @@
  */
 
 using React;
+using System.Linq;
 
 namespace System.Web.Optimization.React
 {
@@ -23,7 +24,10 @@ namespace System.Web.Optimization.React
 		public void Process(BundleContext context, BundleResponse response)
 		{
 			var environment = ReactEnvironment.Current;
-			response.Content = environment.Babel.Transform(response.Content);
+			response.Content = environment.Babel.Transform(
+				response.Content,
+				response.Files.Any(x => x.IncludedVirtualPath.Contains("tsx")) ? "components.tsx" : "components.jsx"
+			);
 		}
 	}
 }
