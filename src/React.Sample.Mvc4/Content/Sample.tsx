@@ -7,23 +7,36 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
-type Foo = {}
+type AuthorProps = {
+	Name: string;
+	GithubUsername: string;
+};
 
-function CommentsBox(props) {
+type CommentProps = {
+	Author: AuthorProps;
+	Text: string;
+};
+
+type CommentsBoxProps = {
+	initialComments: CommentProps[];
+	page: number;
+};
+
+function CommentsBox(props: CommentsBoxProps) {
 	let [state, updateState] = React.useState({
 		comments: props.initialComments,
 		page: props.page,
 		hasMore: true,
-		loadingMore: false
+		loadingMore: false,
 	});
 
-	function loadMoreClicked(evt) {
+	function loadMoreClicked(evt: { preventDefault: () => void }) {
 		let nextPage = state.page + 1;
 		let comments = state.comments;
 		updateState(prevState => ({
 			...prevState,
 			page: nextPage,
-			loadingMore: true
+			loadingMore: true,
 		}));
 
 		let url = '/comments/page-' + (state.page + 1);
@@ -37,15 +50,15 @@ function CommentsBox(props) {
 				...prevState,
 				comments: comments.concat(data.comments),
 				hasMore: data.hasMore,
-				loadingMore: false
+				loadingMore: false,
 			}));
 		};
 		xhr.send();
 		evt.preventDefault();
 	}
 
-	let commentNodes = state.comments.map(comment => (
-		<Comment author={comment.Author}>{comment.Text}</Comment>
+	let commentNodes = state.comments.map((comment: CommentProps) => (
+		<CommentRow author={comment.Author}>{comment.Text}</CommentRow>
 	));
 
 	function renderMoreLink() {
@@ -72,9 +85,9 @@ function CommentsBox(props) {
 	);
 }
 
-class Comment extends React.Component {
+class CommentRow extends React.Component<{ author: AuthorProps }> {
 	static propTypes = {
-		author: PropTypes.object.isRequired
+		author: PropTypes.object.isRequired,
 	};
 
 	render() {
@@ -89,9 +102,9 @@ class Comment extends React.Component {
 	}
 }
 
-class Avatar extends React.Component {
+class Avatar extends React.Component<{ author: AuthorProps }> {
 	static propTypes = {
-		author: PropTypes.object.isRequired
+		author: PropTypes.object.isRequired,
 	};
 
 	render() {
