@@ -20,7 +20,7 @@ namespace React.Sample.Mvc4
 				.SetReuseJavaScriptEngines(true)
 				.SetAllowJavaScriptPrecompilation(true)
 				.AddScriptWithoutTransform("~/Content/lib/reactstrap.min.js")
-				.SetBabelVersion("babel-7")
+				.SetBabelVersion(BabelVersions.Babel7)
 				.AddScript("~/Content/Sample.tsx");
 
 			JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;

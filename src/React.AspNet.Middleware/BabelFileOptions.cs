@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 #if OWIN
 using Microsoft.Owin.StaticFiles;
+using Microsoft.Owin.StaticFiles.ContentTypes;
 #else
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.StaticFiles;
