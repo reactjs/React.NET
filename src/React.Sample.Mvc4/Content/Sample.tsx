@@ -7,6 +7,8 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  */
 
+type Foo = {}
+
 function CommentsBox(props) {
 	let [state, updateState] = React.useState({
 		comments: props.initialComments,

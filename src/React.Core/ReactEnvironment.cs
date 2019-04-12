@@ -480,7 +480,11 @@ namespace React
 #else
 				var assembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
 #endif
-				const string resourceName = "React.Core.Resources.babel.generated.min.js";
+				string resourceName = _config.BabelVersion == BabelVersions.Babel7
+					? "React.Core.Resources.babel.generated.min.js"
+					: _config.BabelVersion == BabelVersions.Babel6 || _config.BabelVersion == null
+						? "React.Core.Resources.babel-legacy.generated.min.js"
+						: throw new ReactConfigurationException("BabelVersion was not null, but did not contain a valid value.");
 
 				if (_config.AllowJavaScriptPrecompilation
 					&& engine.TryExecuteResourceWithPrecompilation(_cache, resourceName, assembly))

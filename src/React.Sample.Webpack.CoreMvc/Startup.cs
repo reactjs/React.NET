@@ -42,19 +42,20 @@ namespace React.Sample.Webpack.CoreMvc
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseStaticFiles();
-
 			// Initialise ReactJS.NET. Must be before static files.
 			app.UseReact(config =>
 			{
 				config
 					.SetReuseJavaScriptEngines(true)
-					.SetLoadBabel(false)
+					.SetLoadBabel(true)
 					.SetLoadReact(false)
+					.SetBabelVersion(BabelVersions.Babel7)
 					.AddScriptWithoutTransform("~/dist/runtime.js")
 					.AddScriptWithoutTransform("~/dist/vendor.js")
 					.AddScriptWithoutTransform("~/dist/components.js");
 			});
+
+			app.UseStaticFiles();
 
 			app.UseMvc(routes =>
 			{
