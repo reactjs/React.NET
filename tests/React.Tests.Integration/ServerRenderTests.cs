@@ -5,7 +5,6 @@ using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Core;
 using React.Tests.Common;
 using Xunit;
-using React.Core;
 
 namespace React.Tests.Integration
 {
