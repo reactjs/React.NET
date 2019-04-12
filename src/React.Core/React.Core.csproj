@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>ReactJS and Babel tools for .NET. Important: This package does not do much on its own; you probably want an integration package (like React.Web.Mvc4) as well. Please refer to project site (http://reactjs.net/) for more details, usage examples and sample code.</Description>
@@ -21,13 +21,21 @@
 
   <ItemGroup>
     <Compile Remove="node_modules\**" />
+    <Compile Remove="Resources\babel-legacy\node_modules\**" />
     <EmbeddedResource Remove="node_modules\**" />
+    <EmbeddedResource Remove="Resources\babel-legacy\node_modules\**" />
     <None Remove="node_modules\**" />
+    <None Remove="Resources\babel-legacy\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\babel-legacy.generated.min.js" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <EmbeddedResource Include="Resources\babel-legacy.generated.min.js" />
     <EmbeddedResource Include="Resources\shims.js;Resources\react.generated.js;Resources\react.generated.min.js;Resources\babel.generated.min.js" />
   </ItemGroup>
 

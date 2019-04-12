@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using React.Exceptions;
 
 namespace React
 {
@@ -23,27 +25,33 @@ namespace React
 		public ISet<string> Presets { get; set; }
 
 		/// <summary>
-		/// Creates a new instance of <see cref="BabelConfig" />.
-		/// </summary>
-		public BabelConfig()
-		{
-			// Use es2015-no-commonjs by default so Babel doesn't prepend "use strict" to the start of the
-			// output. This messes with the top-level "this", as we're not actually using JavaScript modules
-			// in ReactJS.NET yet.
-			Presets = new HashSet<string> { "es2015-no-commonjs", "stage-1", "react" };
-			Plugins = new HashSet<string>();
-		}
-
-		/// <summary>
 		/// Serializes this Babel configuration into the format required for Babel.
 		/// </summary>
 		/// <returns></returns>
-		public string Serialize()
+		public string Serialize(string babelVersion)
 		{
-			return JsonConvert.SerializeObject(this, new JsonSerializerSettings
-			{
-				ContractResolver = new CamelCasePropertyNamesContractResolver(),
-			});
+			ISet<string> defaultPresets = babelVersion == BabelVersions.Babel7
+				? new HashSet<string> { "typescript", "react" }
+				: babelVersion == BabelVersions.Babel6 || babelVersion == null
+					? new HashSet<string> { "es2015-no-commonjs", "stage-1", "react" }
+					: throw new ArgumentException(nameof(babelVersion));
+
+			ISet<string> defaultPlugins = babelVersion == BabelVersions.Babel7
+				? new HashSet<string> { "proposal-class-properties", "proposal-object-rest-spread" }
+				: babelVersion == BabelVersions.Babel6 || babelVersion == null
+					? new HashSet<string>()
+					: throw new ArgumentException(nameof(babelVersion));
+
+			return JsonConvert.SerializeObject(
+				new BabelConfig
+				{
+					Plugins = Plugins ?? defaultPlugins,
+					Presets = Presets ?? defaultPresets,
+				}, 
+				new JsonSerializerSettings
+				{
+					ContractResolver = new CamelCasePropertyNamesContractResolver(),
+				});
 		}
 	}
 }

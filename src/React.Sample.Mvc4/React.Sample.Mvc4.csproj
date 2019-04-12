@@ -175,7 +175,7 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Sample.jsx" />
+    <None Include="Content\Sample.tsx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TransformBabel.proj" />

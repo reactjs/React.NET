@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -7,8 +7,10 @@
 using System.Collections.Generic;
 #if OWIN
 using Microsoft.Owin.StaticFiles;
+using Microsoft.Owin.StaticFiles.ContentTypes;
 #else
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.StaticFiles;
 #endif
 
 #if OWIN
@@ -37,8 +39,17 @@ namespace React.AspNet
 		/// </summary>
 		public BabelFileOptions()
 		{
-			Extensions = new[] { ".jsx" };
-			StaticFileOptions = new StaticFileOptions();
+			Extensions = new[] { ".jsx", ".tsx" };
+			StaticFileOptions = new StaticFileOptions() { ContentTypeProvider = new JsxContentTypeProvider() } ;
+		}
+
+		private class JsxContentTypeProvider : IContentTypeProvider
+		{
+			public bool TryGetContentType(string subpath, out string contentType)
+			{
+				contentType = "text/javascript";
+				return true;
+			}
 		}
 	}
 }

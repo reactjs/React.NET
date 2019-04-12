@@ -10,18 +10,6 @@ module.exports = [
 			libraryTarget: 'this',
 		},
 		mode: 'development',
-		module: {
-			rules: [
-				{
-					test: /\.jsx?$/,
-					exclude: /node_modules/,
-					loader: 'babel-loader',
-					query: {
-						presets: ['es2015', 'stage-0'],
-					},
-				},
-			],
-		},
 		performance: {
 			hints: false,
 		},
@@ -38,17 +26,8 @@ module.exports = [
 			libraryTarget: 'this',
 		},
 		mode: 'production',
-		module: {
-			rules: [
-				{
-					test: /\.jsx?$/,
-					exclude: /node_modules/,
-					loader: 'babel-loader',
-					query: {
-						presets: ['es2015', 'stage-0'],
-					},
-				},
-			],
+		node: {
+			fs: 'empty',
 		},
 		performance: {
 			hints: false,

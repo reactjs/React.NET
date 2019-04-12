@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -17,7 +17,7 @@ namespace React.Sample.Mvc4
 		{
 			bundles.Add(new BabelBundle("~/bundles/main").Include(
 				// Add your JSX files here
-				"~/Content/Sample.jsx"	
+				"~/Content/Sample.tsx"	
 			));
 
 			// Force minification/combination even in debug mode
