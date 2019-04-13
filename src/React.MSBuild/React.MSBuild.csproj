@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.0.0" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.0.7" />
   </ItemGroup>
 
   <ItemGroup>
