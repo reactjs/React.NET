@@ -154,7 +154,7 @@ Replace the contents of the new view file with the following:
 	<div id="content"></div>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
-<script src="@Url.Content("~/Scripts/Tutorial.jsx")"></script>
+<script src="@Url.Content("~/js/Tutorial.jsx")"></script>
 </body>
 </html>
 ```
