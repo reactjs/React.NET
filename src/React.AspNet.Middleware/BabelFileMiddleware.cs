@@ -15,6 +15,10 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+
 namespace React.AspNet
 {
 	/// <summary>
@@ -23,7 +27,7 @@ namespace React.AspNet
 	public class BabelFileMiddleware
 	{
 		private readonly RequestDelegate _next;
-		private readonly IHostingEnvironment _hostingEnv;
+		private readonly IWebHostEnvironment _hostingEnv;
 		private readonly ILoggerFactory _loggerFactory;
 		private readonly BabelFileOptions _options;
 
@@ -34,7 +38,7 @@ namespace React.AspNet
 		/// <param name="options">The configuration options.</param>
 		/// <param name="hostingEnv">The hosting environment.</param>
 		/// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance used to create loggers.</param>
-		public BabelFileMiddleware(RequestDelegate next, BabelFileOptions options, IHostingEnvironment hostingEnv, ILoggerFactory loggerFactory)
+		public BabelFileMiddleware(RequestDelegate next, BabelFileOptions options, IWebHostEnvironment hostingEnv, ILoggerFactory loggerFactory)
 		{
 			if (next == null)
 				throw new ArgumentNullException("next");
@@ -93,4 +97,3 @@ namespace React.AspNet
 		}
 	}
 }
- 

@@ -11,6 +11,10 @@ using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+
 namespace React.AspNet
 {
 	/// <summary>
@@ -19,14 +23,14 @@ namespace React.AspNet
 	public class MemoryFileCacheCore : ICache
 	{
 		private readonly IMemoryCache _cache;
-		private readonly IHostingEnvironment _hostingEnv;
+		private readonly IWebHostEnvironment _hostingEnv;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryFileCacheCore" /> class.
 		/// </summary>
 		/// <param name="cache">The cache to use</param>
 		/// <param name="hostingEnv">The ASP.NET hosting environment.</param>
-		public MemoryFileCacheCore(IMemoryCache cache, IHostingEnvironment hostingEnv)
+		public MemoryFileCacheCore(IMemoryCache cache, IWebHostEnvironment hostingEnv)
 		{
 			_cache = cache;
 			_hostingEnv = hostingEnv;
@@ -52,7 +56,7 @@ namespace React.AspNet
 		/// <param name="key">The cache key</param>
 		/// <param name="data">Data to cache</param>
 		/// <param name="slidingExpiration">
-		/// Sliding expiration, if cache key is not accessed in this time period it will 
+		/// Sliding expiration, if cache key is not accessed in this time period it will
 		/// automatically be removed from the cache
 		/// </param>
 		/// <param name="cacheDependencyFiles">
