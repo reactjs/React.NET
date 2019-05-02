@@ -206,6 +206,50 @@ namespace React.Tests.Mvc
 
 			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), null, null), Times.Once);
 		}
+
+		[Fact]
+		public void RenderFunctionsCalledNonLazily()
+		{
+			var component = new Mock<IReactComponent>();
+			var fakeRenderFunctions = new Mock<IRenderFunctions>();
+			fakeRenderFunctions.Setup(x => x.PreRender(It.IsAny<Func<string, string>>())).Verifiable();
+			fakeRenderFunctions.Setup(x => x.PostRender(It.IsAny<Func<string, string>>())).Verifiable();
+			fakeRenderFunctions.Setup(x => x.TransformRenderedHtml(It.IsAny<string>())).Returns("HTML");
+
+			component.Setup(x => x.RenderHtml(It.IsAny<TextWriter>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<Action<Exception, string, string>>(), It.IsAny<IRenderFunctions>()))
+				.Callback((TextWriter writer, bool renderContainerOnly, bool renderServerOnly, Action<Exception, string, string> exceptionHandler, IRenderFunctions renderFunctions) => 
+				{
+					renderFunctions.PreRender(_ => "one");
+					writer.Write(renderFunctions.TransformRenderedHtml("HTML"));
+					renderFunctions.PostRender(_ => "two");
+				}).Verifiable();
+
+			var environment = ConfigureMockEnvironment();
+			environment.Setup(x => x.CreateComponent(
+				"ComponentName",
+				new { },
+				null,
+				false,
+				true
+			)).Returns(component.Object);
+
+			var result = HtmlHelperExtensions.React(
+				htmlHelper: null,
+				componentName: "ComponentName",
+				props: new { },
+				htmlTag: "span",
+				clientOnly: false,
+				serverOnly: true,
+				renderFunctions: fakeRenderFunctions.Object
+			);
+
+			// JS calls must happen right away so thrown exceptions do not crash the app.
+			component.Verify(x => x.RenderHtml(It.IsAny<TextWriter>(), It.Is<bool>(y => y == false), It.Is<bool>(z => z == true), It.IsAny<Action<Exception, string, string>>(), It.IsAny<IRenderFunctions>()), Times.Once);
+			fakeRenderFunctions.Verify(x => x.PreRender(It.IsAny<Func<string, string>>()), Times.Once);
+			fakeRenderFunctions.Verify(x => x.PostRender(It.IsAny<Func<string, string>>()), Times.Once);
+
+			Assert.Equal("HTML", result.ToHtmlString());
+		}
 	}
 }
 #endif
