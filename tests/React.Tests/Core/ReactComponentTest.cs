@@ -407,7 +407,37 @@ namespace React.Tests.Core
 			Assert.Equal("postrender-result", firstInstance.PostRenderResult);
 			Assert.Equal("postrender-result", secondInstance.PostRenderResult);
 		}
-		
+
+		[Fact]
+		public void RenderFunctionsCalledServerOnly()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			environment.Setup(x => x.Execute<bool>("typeof Foo !== 'undefined'")).Returns(true);
+			environment.Setup(x => x.Execute<string>(@"outerWrap(ReactDOMServer.renderToStaticMarkup(wrap(React.createElement(Foo, {""hello"":""World""}))))"))
+				.Returns("[HTML]");
+
+			environment.Setup(x => x.Execute<string>(@"prerender();"))
+				.Returns("prerender-result");
+
+			environment.Setup(x => x.Execute<string>(@"postrender();"))
+				.Returns("postrender-result");
+
+			var config = CreateDefaultConfigMock();
+			config.Setup(x => x.UseServerSideRendering).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" }
+			};
+			var renderFunctions = new TestRenderFunctions();
+			var result = component.RenderHtml(renderFunctions: renderFunctions, renderServerOnly: true);
+
+			Assert.Equal(@"[HTML]", result);
+			Assert.Equal(@"prerender-result", renderFunctions.PreRenderResult);
+			Assert.Equal(@"postrender-result", renderFunctions.PostRenderResult);
+		}
+
 		private static Mock<IReactSiteConfiguration> CreateDefaultConfigMock()
 		{
 			var configMock = new Mock<IReactSiteConfiguration>();

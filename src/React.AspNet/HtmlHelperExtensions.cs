@@ -7,12 +7,14 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 #if LEGACYASPNET
 using System.Web;
 using IHtmlHelper = System.Web.Mvc.HtmlHelper;
 #else
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Html;
 using IHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 #endif
 
@@ -27,6 +29,9 @@ namespace React.AspNet
 	/// </summary>
 	public static class HtmlHelperExtensions
 	{
+		[ThreadStatic]
+		private static StringWriter _sharedStringWriter;
+
 		/// <summary>
 		/// Gets the React environment
 		/// </summary>
@@ -66,28 +71,25 @@ namespace React.AspNet
 			IRenderFunctions renderFunctions = null
 		)
 		{
-			return new ActionHtmlString(writer =>
+			try
 			{
-				try
+				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly, serverOnly);
+				if (!string.IsNullOrEmpty(htmlTag))
 				{
-					var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly, serverOnly);
-					if (!string.IsNullOrEmpty(htmlTag))
-					{
-						reactComponent.ContainerTag = htmlTag;
-					}
-
-					if (!string.IsNullOrEmpty(containerClass))
-					{
-						reactComponent.ContainerClass = containerClass;
-					}
-
-					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler, renderFunctions);
+					reactComponent.ContainerTag = htmlTag;
 				}
-				finally
+
+				if (!string.IsNullOrEmpty(containerClass))
 				{
-					Environment.ReturnEngineToPool();
+					reactComponent.ContainerClass = containerClass;
 				}
-			});
+
+				return RenderToString(writer => reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler, renderFunctions));
+			}
+			finally
+			{
+				Environment.ReturnEngineToPool();
+			}
 		}
 
 		/// <summary>
@@ -116,31 +118,32 @@ namespace React.AspNet
 			Action<Exception, string, string> exceptionHandler = null
 		)
 		{
-			return new ActionHtmlString(writer =>
+			try
 			{
-				try
+				var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
+				if (!string.IsNullOrEmpty(htmlTag))
 				{
-					var reactComponent = Environment.CreateComponent(componentName, props, containerId, clientOnly);
-					if (!string.IsNullOrEmpty(htmlTag))
-					{
-						reactComponent.ContainerTag = htmlTag;
-					}
+					reactComponent.ContainerTag = htmlTag;
+				}
 
-					if (!string.IsNullOrEmpty(containerClass))
-					{
-						reactComponent.ContainerClass = containerClass;
-					}
+				if (!string.IsNullOrEmpty(containerClass))
+				{
+					reactComponent.ContainerClass = containerClass;
+				}
 
+				return RenderToString(writer =>
+				{
 					reactComponent.RenderHtml(writer, clientOnly, exceptionHandler: exceptionHandler);
 					writer.WriteLine();
 					WriteScriptTag(writer, bodyWriter => reactComponent.RenderJavaScript(bodyWriter));
-				}
-				finally
-				{
-					Environment.ReturnEngineToPool();
-				}
-			});
-		}
+				});
+					
+			}
+			finally
+			{
+				Environment.ReturnEngineToPool();
+			}
+	}
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will
@@ -149,17 +152,33 @@ namespace React.AspNet
 		/// <returns>JavaScript for all components</returns>
 		public static IHtmlString ReactInitJavaScript(this IHtmlHelper htmlHelper, bool clientOnly = false)
 		{
-			return new ActionHtmlString(writer =>
+			try
 			{
-				try
+				return RenderToString(writer =>
 				{
 					WriteScriptTag(writer, bodyWriter => Environment.GetInitJavaScript(bodyWriter, clientOnly));
-				}
-				finally
-				{
-					Environment.ReturnEngineToPool();
-				}
-			});
+				});
+			}
+			finally
+			{
+				Environment.ReturnEngineToPool();
+			}
+		}
+
+		private static IHtmlString RenderToString(Action<StringWriter> withWriter)
+		{
+			var stringWriter = _sharedStringWriter;
+			if (stringWriter != null)
+			{
+				stringWriter.GetStringBuilder().Clear();
+			}
+			else
+			{
+				_sharedStringWriter = stringWriter = new StringWriter(new StringBuilder(128));
+			}
+
+			withWriter(stringWriter);
+			return new HtmlString(stringWriter.ToString());
 		}
 
 		private static void WriteScriptTag(TextWriter writer, Action<TextWriter> bodyWriter)
