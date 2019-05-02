@@ -57,12 +57,15 @@ namespace React.Sample.Webpack.CoreMvc
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+				endpoints.MapControllerRoute("default", "{path?}", new { controller = "Home", action = "Index" });
+				endpoints.MapControllerRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
+				endpoints.MapControllerRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
 			});
 #else
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute("default", "{path?}", new { controller = "Home", action = "Index" });
+				routes.MapRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
 				routes.MapRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
 			});
 #endif
