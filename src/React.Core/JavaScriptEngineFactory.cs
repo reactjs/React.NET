@@ -289,13 +289,13 @@ namespace React
 				}
 			}
 
-			if (jsEngineSwitcher.EngineFactories.Count() == 0)
+			if (jsEngineSwitcher.EngineFactories.Count == 0)
 			{
 				throw new ReactException("No JS engines were registered. Visit https://reactjs.net/docs for more information.");
 			}
 
 			var exceptionMessages = new List<string>();
-			foreach (var engineFactory in jsEngineSwitcher.EngineFactories)
+			foreach (var engineFactory in jsEngineSwitcher.EngineFactories.GetRegisteredFactories())
 			{
 				IJsEngine engine = null;
 				try
