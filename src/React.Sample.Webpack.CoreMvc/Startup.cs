@@ -53,6 +53,8 @@ namespace React.Sample.Webpack.CoreMvc
 			app.UseStaticFiles();
 
 #if NETCOREAPP3_0
+			app.UseRouting();
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
