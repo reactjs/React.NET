@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "16.8.14",
+    "@types/react": "16.8.17",
     "@types/react-dom": "16.8.4",
     "@types/reactstrap": "8.0.1",
     "typescript": "3.4.4"
