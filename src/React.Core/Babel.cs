@@ -74,7 +74,7 @@ namespace React
 			_fileSystem = fileSystem;
 			_fileCacheHash = fileCacheHash;
 			_config = siteConfig;
-			_babelConfig = siteConfig.BabelConfig.Serialize(_config.BabelVersion);
+			_babelConfig = siteConfig.BabelConfig.Serialize(_config.BabelVersion ?? BabelVersions.Babel7);
 		}
 
 		/// <summary>
@@ -250,7 +250,7 @@ namespace React
 		/// <param name="input">JavaScript</param>
 		/// <param name="filename">Name of the file being transformed</param>
 		/// <returns>JavaScript</returns>
-		public virtual string Transform(string input, string filename = "unknown")
+		public virtual string Transform(string input, string filename = "unknown.jsx")
 		{
 			try
 			{

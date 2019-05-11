@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -53,7 +53,7 @@ namespace React.Tests.Core
 				"ReactNET_transform",
 				"<div>Hello World</div>",
 				It.IsAny<string>(),
-				"unknown" // file name
+				"unknown.jsx" // file name
 			));
 		}
 
@@ -64,7 +64,7 @@ namespace React.Tests.Core
 				"ReactNET_transform",
 				"<div>Hello World</div>",
 				It.IsAny<string>(),
-				"unknown" // file name
+				"unknown.jsx" // file name
 			)).Throws(new Exception("Something broke..."));
 
 			const string input = "<div>Hello World</div>";
