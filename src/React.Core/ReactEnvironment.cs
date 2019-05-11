@@ -480,9 +480,9 @@ namespace React
 #else
 				var assembly = typeof(ReactEnvironment).GetTypeInfo().Assembly;
 #endif
-				string resourceName = _config.BabelVersion == BabelVersions.Babel7
+				string resourceName = _config.BabelVersion == BabelVersions.Babel7 || _config.BabelVersion == null
 					? "React.Core.Resources.babel.generated.min.js"
-					: _config.BabelVersion == BabelVersions.Babel6 || _config.BabelVersion == null
+					: _config.BabelVersion == BabelVersions.Babel6
 						? "React.Core.Resources.babel-legacy.generated.min.js"
 						: throw new ReactConfigurationException("BabelVersion was not null, but did not contain a valid value.");
 

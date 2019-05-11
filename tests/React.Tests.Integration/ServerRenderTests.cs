@@ -80,20 +80,30 @@ namespace React.Tests.Integration
 			}
 		}
 
-		[Theory]
-		[InlineData(null)]
-		[InlineData("babel-6")]
-		public void BabelTransformsJSX(string babelVersion)
+		[Fact]
+		public void Babel6TransformsJSX()
 		{
 			ReactEnvironment.Current.Configuration
 				.SetLoadBabel(true)
-				.SetBabelVersion(babelVersion);
+				.SetBabelVersion(BabelVersions.Babel6);
 
 			Assert.Equal(@"React.createElement(
   ""div"",
   null,
   ""Hello""
 );", ReactEnvironment.Current.Babel.Transform("<div>Hello</div>"));
+		}
+
+		[Theory]
+		[InlineData(null)]
+		[InlineData("babel-7")]
+		public void BabelTransformsJSX(string babelVersion)
+		{
+			ReactEnvironment.Current.Configuration
+				.SetLoadBabel(true)
+				.SetBabelVersion(babelVersion);
+
+			Assert.Equal(@"React.createElement(""div"", null, ""Hello"");", ReactEnvironment.Current.Babel.Transform("<div>Hello</div>"));
 		}
 
 		[Fact]

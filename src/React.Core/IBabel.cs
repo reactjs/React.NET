@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -40,7 +40,7 @@ namespace React
 		/// <param name="input">JavaScript</param>
 		/// <param name="filename">Name of the file being transformed</param>
 		/// <returns>JavaScript</returns>
-		string Transform(string input, string filename = "unknown");
+		string Transform(string input, string filename = "unknown.jsx");
 
 		/// <summary>
 		/// Transforms JavaScript via Babel and also returns a source map to map the compiled
