@@ -35,11 +35,9 @@ Create JSX files
 
 ```javascript
 // /Scripts/HelloWorld.jsx
-class HelloWorld extends React.Component {
-	render() {
-		return <div>Hello {this.props.name}</div>;
-	}
-}
+const HelloWorld = (props) => {
+  return (<div>Hello {props.name}</div>);
+};
 ```
 
 Reference the JSX files from your HTML
