@@ -23,7 +23,7 @@ These packages can be installed either via the
 or via the Package Manager Console:
 
 ```
-Install-Package React.Web.Mvc4
+Install-Package React.AspNet
 ```
 
 ## Development Builds
