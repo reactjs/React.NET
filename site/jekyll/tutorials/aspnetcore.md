@@ -106,8 +106,8 @@ app.UseReact(config =>
   // your components as well as all of their dependencies.
   // See http://reactjs.net/ for more information. Example:
   //config
-  //  .AddScript("~/Scripts/First.jsx")
-  //  .AddScript("~/Scripts/Second.jsx");
+  //  .AddScript("~/js/First.jsx")
+  //  .AddScript("~/js/Second.jsx");
 
   // If you use an external build too (for example, Babel, Webpack,
   // Browserify or Gulp), you can improve performance by disabling
@@ -115,7 +115,7 @@ app.UseReact(config =>
   // scripts. Example:
   //config
   //  .SetLoadBabel(false)
-  //  .AddScriptWithoutTransform("~/Scripts/bundle.server.js");
+  //  .AddScriptWithoutTransform("~/js/bundle.server.js");
 });
 ```
 

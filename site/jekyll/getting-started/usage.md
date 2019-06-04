@@ -7,16 +7,12 @@ Once installed, create your React components as usual.
 
 ```javascript
 // /Scripts/HelloWorld.jsx
-class HelloWorld extends React.Component {
-	render() {
-		return (
-			<div>Hello {this.props.name}</div>
-		);
-	}
-}
+const HelloWorld = (props) => {
+  return (<div>Hello {props.name}</div>);
+};
 ```
 
-On-the-Fly JSX to JavaScript Compilation
+On-the-fly JSX to JavaScript Compilation
 ----------------------------------------
 Hit a JSX file in your browser (eg. `/Scripts/HelloWorld.jsx`) and observe
 the magnificence of JSX being compiled into JavaScript with no precompilation
