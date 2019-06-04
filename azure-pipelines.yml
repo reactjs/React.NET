@@ -28,4 +28,9 @@ steps:
           projects: 'tests/React.Tests/React.Tests.csproj'
           arguments: '--no-build --configuration $(buildConfiguration)'
 
-    - task: PublishBuildArtifacts@1
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'pack'
+        packagesToPack: '**/*.csproj'
+        versioningScheme: 'off'
+    
