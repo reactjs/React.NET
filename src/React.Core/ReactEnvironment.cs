@@ -332,7 +332,7 @@ namespace React
 		public virtual void GetInitJavaScript(TextWriter writer, bool clientOnly = false)
 		{
 			// Propagate any server-side console.log calls to corresponding client-side calls.
-			if (!clientOnly)
+			if (!clientOnly && _components.Count != 0)
 			{
 				var consoleCalls = Execute<string>("console.getCalls()");
 				writer.Write(consoleCalls);

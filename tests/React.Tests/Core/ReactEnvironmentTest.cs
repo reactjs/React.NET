@@ -136,6 +136,24 @@ namespace React.Tests.Core
 			Assert.Equal(string.Empty, environment.GetInitJavaScript());
 		}
 
+		[Theory]
+		[InlineData(false, 0)]
+		[InlineData(true, 1)]
+		public void SSRInitSkippedIfNoComponents(bool renderComponent, int ssrTimes)
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			if (renderComponent)
+			{
+				environment.CreateComponent("HelloWorld", new { name = "Daniel" }, clientOnly: true).RenderHtml();
+			}
+
+			environment.GetInitJavaScript();
+
+			mocks.Engine.Verify(x => x.Evaluate<string>("console.getCalls()"), Times.Exactly(ssrTimes));
+		}
+
 		public class Mocks
 		{
 			public Mock<PooledJsEngine> Engine { get; private set; }
