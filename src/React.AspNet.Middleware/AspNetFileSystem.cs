@@ -25,7 +25,7 @@ namespace React.AspNet
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AspNetFileSystem"/> class.
 		/// </summary>
-		/// <param name="hostingEnv">The ASP.NET 5 hosting environment</param>
+		/// <param name="hostingEnv">The .NET Core hosting environment</param>
 		public AspNetFileSystem(IWebHostEnvironment hostingEnv)
 		{
 			_hostingEnv = hostingEnv;
