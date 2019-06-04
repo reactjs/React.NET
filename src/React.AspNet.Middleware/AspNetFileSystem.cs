@@ -8,6 +8,10 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+
 namespace React.AspNet
 {
 	/// <summary>
@@ -16,13 +20,13 @@ namespace React.AspNet
 	/// </summary>
 	public class AspNetFileSystem : FileSystemBase
 	{
-		private readonly IHostingEnvironment _hostingEnv;
+		private readonly IWebHostEnvironment _hostingEnv;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AspNetFileSystem"/> class.
 		/// </summary>
-		/// <param name="hostingEnv">The ASP.NET 5 hosting environment</param>
-		public AspNetFileSystem(IHostingEnvironment hostingEnv)
+		/// <param name="hostingEnv">The .NET Core hosting environment</param>
+		public AspNetFileSystem(IWebHostEnvironment hostingEnv)
 		{
 			_hostingEnv = hostingEnv;
 		}
