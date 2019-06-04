@@ -1,29 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
-    <AssemblyName>tutorial-code</AssemblyName>
-    <OutputType>Exe</OutputType>
-    <PackageId>tutorial-code</PackageId>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="3.1.1" />
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<AssemblyName>tutorial-code</AssemblyName>
+		<OutputType>Exe</OutputType>
+		<PackageId>tutorial-code</PackageId>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="App.config" />
+		<None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="3.1.1" />
     <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.linux-x64" Version="3.1.1" />
     <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.osx-x64" Version="3.1.1" />
     <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.win-x64" Version="3.1.1" />
     <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Razor" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
-    <PackageReference Include="React.AspNet" Version="4.1.1" />
-  </ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+		<PackageReference Include="React.AspNet" Version="5.0.0-alpha3" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Update="Views\Home\Index.cshtml">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

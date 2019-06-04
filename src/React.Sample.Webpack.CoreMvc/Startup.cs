@@ -35,13 +35,8 @@ namespace React.Sample.Webpack.CoreMvc
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app)
 		{
-			if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-			}
-
 			// Initialise ReactJS.NET. Must be before static files.
 			app.UseReact(config =>
 			{
@@ -57,11 +52,23 @@ namespace React.Sample.Webpack.CoreMvc
 
 			app.UseStaticFiles();
 
+#if NETCOREAPP3_0
+			app.UseRouting();
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllerRoute("default", "{path?}", new { controller = "Home", action = "Index" });
+				endpoints.MapControllerRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
+				endpoints.MapControllerRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
+			});
+#else
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute("default", "{path?}", new { controller = "Home", action = "Index" });
+				routes.MapRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
 				routes.MapRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
 			});
+#endif
 		}
 	}
 }

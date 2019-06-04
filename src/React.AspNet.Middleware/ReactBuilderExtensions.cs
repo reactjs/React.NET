@@ -18,6 +18,10 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.Caching.Memory;
 #endif
 
+#if NETCOREAPP2_0 || NETSTANDARD2_0
+using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+#endif
+
 namespace React.AspNet
 {
 	/// <summary>
@@ -83,7 +87,7 @@ namespace React.AspNet
 		/// <param name="services">ASP.NET dependency injection container</param>
 		private static void RegisterAspNetServices(TinyIoCContainer container, IServiceProvider services)
 		{
-			container.Register(services.GetRequiredService<IHostingEnvironment>());
+			container.Register(services.GetRequiredService<IWebHostEnvironment>());
 #if !NET451
 			container.Register(services.GetRequiredService<IMemoryCache>());
 #endif
