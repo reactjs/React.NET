@@ -9,8 +9,10 @@ namespace React.Router
 	{
 		/// <summary>
 		/// The returned react router context, as a JSON string
+		/// A default value wards off deserialization exceptions
+		/// when server side rendering is disabled
 		/// </summary>
-		public string ReactRouterContext { get; private set; }
+		public string ReactRouterContext { get; private set; } = "{}";
 
 		/// <summary>
 		/// Implementation of PreRender
