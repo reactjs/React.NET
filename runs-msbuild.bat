@@ -17,7 +17,7 @@ for %%s in (
 )
 
 :notfound
-echo Could not find MSBuild.exe. Make sure Visual Studio 2017 is installed and try again.
+echo Could not find MSBuild.exe. Make sure Visual Studio 2019 is installed and try again.
 
 :done
 pause
