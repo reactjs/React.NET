@@ -135,7 +135,7 @@ of patent rights can be found in the PATENTS file in the same directory.
 		</ItemGroup>
 		<Exec
 			WorkingDirectory="$(MSBuildProjectDirectory)"
-			Command="tools\NuGet\nuget.exe push %(PackageFiles.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package -Symbols -SymbolPackageFormat snupkg"
+			Command="tools\NuGet\nuget.exe push %(PackageFiles.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package"
 		/>
 	</Target>
 	<Target Name="PushDev">
