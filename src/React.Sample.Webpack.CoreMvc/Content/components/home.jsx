@@ -56,9 +56,6 @@ class HomePage extends Component {
 }
 
 export default class HomeComponent extends Component {
-	componentDidMount() {
-		import('react-select').then(x => this.setState({ x }));
-	}
 	render() {
 		const app = (
 			<div className="container">
