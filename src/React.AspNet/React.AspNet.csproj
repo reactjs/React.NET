@@ -18,6 +18,8 @@
     <PackageLicense>https://github.com/reactjs/React.NET#licence</PackageLicense>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
+	<IncludeSymbols>true</IncludeSymbols>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
