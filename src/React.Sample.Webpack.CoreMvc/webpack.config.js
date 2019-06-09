@@ -8,6 +8,7 @@ module.exports = {
 		filename: '[name].js',
 		globalObject: 'this',
 		path: path.resolve(__dirname, 'wwwroot/dist'),
+		publicPath: 'dist/'
 	},
 	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 	optimization: {
@@ -17,7 +18,7 @@ module.exports = {
 		splitChunks: {
 			cacheGroups: {
 				commons: {
-					test: /[\\/]node_modules[\\/]/,
+					test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
 					name: 'vendor',
 					chunks: 'all',
 				},
