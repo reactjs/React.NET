@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "lint:ts": "tsc"
+  },
   "devDependencies": {
     "@types/react": "16.8.19",
     "@types/react-dom": "16.8.4",
