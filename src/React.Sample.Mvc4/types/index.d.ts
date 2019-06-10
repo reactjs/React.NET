@@ -1,27 +1,9 @@
-import {
-	Component as _Component,
-	useState as _useState,
-	Dispatch,
-	SetStateAction,
-} from 'react';
-
-// Globally available modules must be declared here
-// Copy type definitions from @types/react/index.d.ts, because namespaces can't be re-exported
+import _React from 'react';
+import _Reactstrap from 'reactstrap';
+import _PropTypes from 'prop-types';
 
 declare global {
-	namespace React {
-		function useState<S>(
-			initialState: S | (() => S),
-		): [S, Dispatch<SetStateAction<S>>];
-		function useState<S = undefined>(): [
-			S | undefined,
-			Dispatch<SetStateAction<S | undefined>>
-		];
-		interface Component<P = {}, S = {}, SS = any>
-			extends ComponentLifecycle<P, S, SS> {}
-	}
-	const Reactstrap: any;
-	const PropTypes: any;
+	const React: typeof _React;
+	const Reactstrap: typeof _Reactstrap;
+	const PropTypes: typeof _PropTypes;
 }
-
-export const test = 1;
