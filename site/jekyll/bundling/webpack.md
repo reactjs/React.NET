@@ -60,15 +60,20 @@ This configuration uses two entry points (`Content/server.js` for the server sid
 
 Our configuration also requires installation of the "babel" loader:
 
-```
+```sh
 npm install --save-dev babel-loader
 ```
 
-You will also need a `.babelrc` in the root of your project:
+You will also need a `.babelrc` in the root of your project, with at least preset-react and preset-env enabled. Note that the plugins and presets need to be separately installed via `npm install --save-dev`.
 
-```
+```json
 {
-	"presets": ["react", "env"]
+	"presets": ["@babel/preset-react", "@babel/preset-env"],
+	"plugins": [
+		"@babel/proposal-object-rest-spread",
+		"@babel/plugin-syntax-dynamic-import",
+		"@babel/proposal-class-properties"
+	]
 }
 ```
 
@@ -76,7 +81,7 @@ Once Webpack has been configured, run `webpack` to build the bundles. Once you h
 
 ```csharp
 ReactSiteConfiguration.Configuration
-  .AddScript("~/build/server.bundle.js");
+  .AddScriptWithoutTransform("~/wwwroot/server.bundle.js");
 ```
 
 This will load all your components into the `Components` global, which can be used from `Html.React` to render any of the components:
@@ -85,6 +90,13 @@ This will load all your components into the `Components` global, which can be us
 @Html.React("Components.CommentsBox", new {
   initialComments = Model.Comments
 })
+```
+
+Reference the built bundle directly in a script tag at the end of the page:
+
+```html
+<script src="~/client.bundle.js"></script>
+@Html.ReactInitJavaScript();
 ```
 
 A full example is available in [the ReactJS.NET repository](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc).
