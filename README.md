@@ -8,42 +8,71 @@ ReactJS.NET is a library that makes it easier to use [Babel](http://babeljs.io/)
 
 # Features
 
--   On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/usage.html) via [Babel](http://babeljs.io/)
+- On-the-fly [JSX to JavaScript compilation](http://reactjs.net/getting-started/usage.html) via [Babel](http://babeljs.io/)
 
-*   JSX to JavaScript compilation via popular minification/combination
-    libraries:
-    -   [ASP.NET Bundling and Minification](http://reactjs.net/bundling/weboptimizer.html)
-    -   [Cassette](http://reactjs.net/bundling/cassette.html)
-    -   [Webpack](http://reactjs.net/bundling/webpack.html)
-    -   [MSBuild](http://reactjs.net/bundling/msbuild.html)
-*   [Server-side component rendering](http://reactjs.net/features/server-side-rendering.html)
-    to make your initial render super-fast (experimental!)
-*   [Runs on Windows, OS X and Linux](http://reactjs.net/getting-started/chakracore.html) via .NET Core and ChakraCore
-*   Supports both ASP.NET 4.0/4.5 and ASP.NET Core
-*   Server-side style rendering with CSS-in-JS libraries
+* JSX to JavaScript compilation via popular minification/combination
+  libraries:
+  - [ASP.NET Bundling and Minification](http://reactjs.net/bundling/weboptimizer.html)
+  - [Cassette](http://reactjs.net/bundling/cassette.html)
+  - [Webpack](http://reactjs.net/bundling/webpack.html)
+  - [MSBuild](http://reactjs.net/bundling/msbuild.html)
+* [Server-side component rendering](http://reactjs.net/features/server-side-rendering.html)
+  to make your initial render super-fast, including support for:
+  - [CSS-in-JS libraries](https://reactjs.net/features/css-in-js.html)
+  - [React Router](https://reactjs.net/features/react-router.html)
+  - [React Helmet](https://reactjs.net/features/react-helmet.html)
+  - Custom JS logic via implementing [IRenderFunctions](https://github.com/reactjs/React.NET/blob/c93921f059bfe9419ad7094c184979da422a4477/src/React.Core/IRenderFunctions.cs) and passing to [Html.React](https://github.com/reactjs/React.NET/blob/c93921f059bfe9419ad7094c184979da422a4477/src/React.AspNet/HtmlHelperExtensions.cs#L71)
+* [Runs on Windows, OS X and Linux](http://reactjs.net/getting-started/chakracore.html) via .NET Core and ChakraCore
+* Supports both ASP.NET 4.0/4.5 and ASP.NET Core
 
 # Quick Start
 
 Install the package
 
-```
+```powershell
 Install-Package React.Web.Mvc4 # For ASP.NET MVC 4 or 5
 Install-Package React.AspNet   # For ASP.NET Core MVC
+```
+
+Install a Javascript engine and configure as the default (more info [here](https://reactjs.net/getting-started/aspnet.html) on how this works)
+
+```powershell
+Install-Package JavaScriptEngineSwitcher.V8
+Install-Package JavaScriptEngineSwitcher.V8.Native.win-x64
+```
+
+```csharp
+public static class ReactConfig
+{
+    public static void Configure()
+    {
+        ReactSiteConfiguration.Configuration
+            .AddScript("~/Content/HelloWorld.jsx");
+
+        JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
+        JsEngineSwitcher.Current.EngineFactories.AddV8();
+    }
+}
 ```
 
 Create JSX files
 
 ```javascript
 // /Scripts/HelloWorld.jsx
-const HelloWorld = (props) => {
-  return (<div>Hello {props.name}</div>);
+const HelloWorld = props => {
+	return <div>Hello {props.greeting}</div>;
 };
 ```
 
 Reference the JSX files from your HTML
 
 ```html
+<!-- Place this where you want the component div to render -->
+@Html.React("HelloWorld", new { Greeting = "friends!" });
+
+<!-- Place these at the end of the page -->
 <script src="@Url.Content("~/Scripts/HelloWorld.jsx")"></script>
+@Html.ReactInitJavaScript();
 ```
 
 Now you can use the `HelloWorld` component.
