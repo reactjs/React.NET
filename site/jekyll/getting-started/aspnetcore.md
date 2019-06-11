@@ -75,10 +75,11 @@ Finally, add this to `Views\_ViewImports.cshtml` (or create it if it doesn't exi
 @using React.AspNet
 ```
 
-Reference JSX files directly in script tags:
+Reference JSX files directly in script tags at the end of the page:
 
 ```html
 <script src="~/Content/Sample.jsx"></script>
+@Html.ReactInitJavaScript();
 ```
 
 You're done! You can now call `Html.React` from within Razor files:
