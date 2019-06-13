@@ -42,9 +42,8 @@ namespace React.Sample.Webpack.CoreMvc
 			{
 				config
 					.SetReuseJavaScriptEngines(true)
-					.SetLoadBabel(true)
+					.SetLoadBabel(false)
 					.SetLoadReact(false)
-					.SetBabelVersion(BabelVersions.Babel7)
 					.AddScriptWithoutTransform("~/dist/runtime.js")
 					.AddScriptWithoutTransform("~/dist/vendor.js")
 					.AddScriptWithoutTransform("~/dist/components.js");
