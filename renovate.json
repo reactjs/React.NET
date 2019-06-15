@@ -26,5 +26,10 @@
       ],
       "groupName": "ASP.NET Core packages"
     }
-  ]
+  ],
+  "separateMinorPatch": true,
+  "automerge": false,
+  "patch": {
+    "automerge": true
+  }
 }
