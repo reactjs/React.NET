@@ -13,9 +13,8 @@ We actively welcome your pull requests on the
 3. If you've changed APIs, update the documentation.
 4. Ensure the test suite passes.
 5. Make sure your code lints.
-6. If you haven't already, complete the Contributor License Agreement ("CLA").
 
-If you don't have Visual Studio 2017, get the [community edition](https://visualstudio.microsoft.com/downloads/) (it's free!)
+Visual Studio 2019 is required to compile ReactJS.NET. If you don't have Visual Studio 2019, get the [community edition](https://visualstudio.microsoft.com/downloads/) (it's free!)
 
 ## Issues
 
