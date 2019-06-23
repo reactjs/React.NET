@@ -15,7 +15,7 @@
     <PackageId>React.Web.Mvc4</PackageId>
     <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel</PackageTags>
     <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
-    <PackageProjectUrl>http://reactjs.net/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/reactjs/react.net</PackageProjectUrl>
     <PackageLicense>https://github.com/reactjs/React.NET/blob/master/LICENSE</PackageLicense>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
