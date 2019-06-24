@@ -32,7 +32,7 @@
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Sourcelink.Github" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Sourcelink.Github" Version="1.0.0-beta2-19324-01" PrivateAssets="All" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
