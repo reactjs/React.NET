@@ -74,7 +74,7 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		string RenderJavaScript();
+		string RenderJavaScript(bool waitForDOMContentLoad);
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise this component client-side. This will

@@ -205,7 +205,7 @@ namespace React.Tests.Core
 			{
 				Props = new { hello = "World" }
 			};
-			var result = component.RenderJavaScript();
+			var result = component.RenderJavaScript(false);
 
 			Assert.Equal(
 				@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
@@ -225,7 +225,7 @@ namespace React.Tests.Core
 				ClientOnly = true,
 				Props = new { hello = "World" }
 			};
-			var result = component.RenderJavaScript();
+			var result = component.RenderJavaScript(false);
 
 			Assert.Equal(
 				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
@@ -245,7 +245,7 @@ namespace React.Tests.Core
 				ClientOnly = false,
 				Props = new { hello = "World" }
 			};
-			var result = component.RenderJavaScript();
+			var result = component.RenderJavaScript(false);
 
 			Assert.Equal(
 				@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
@@ -266,7 +266,7 @@ namespace React.Tests.Core
 				ClientOnly = false,
 				Props = new {hello = "World"}
 			};
-			var result = component.RenderJavaScript();
+			var result = component.RenderJavaScript(false);
 
 			Assert.Equal(
 				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",

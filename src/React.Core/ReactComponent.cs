@@ -231,9 +231,9 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		public virtual string RenderJavaScript()
+		public virtual string RenderJavaScript(bool waitForDOMContentLoad)
 		{
-			return GetStringFromWriter(renderJsWriter => RenderJavaScript(renderJsWriter, waitForDOMContentLoad: false));
+			return GetStringFromWriter(renderJsWriter => RenderJavaScript(renderJsWriter, waitForDOMContentLoad));
 		}
 
 		/// <summary>
