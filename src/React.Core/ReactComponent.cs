@@ -231,9 +231,9 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		public virtual string RenderJavaScript()
+		public virtual string RenderJavaScript(bool waitForDOMContentLoad)
 		{
-			return GetStringFromWriter(renderJsWriter => RenderJavaScript(renderJsWriter));
+			return GetStringFromWriter(renderJsWriter => RenderJavaScript(renderJsWriter, waitForDOMContentLoad));
 		}
 
 		/// <summary>
@@ -242,15 +242,26 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <param name="writer">The <see cref="T:System.IO.TextWriter" /> to which the content is written</param>
+		/// <param name="waitForDOMContentLoad">Delays the component init until the page load event fires. Useful if the component script tags are located after the call to Html.ReactWithInit. </param>
 		/// <returns>JavaScript</returns>
-		public virtual void RenderJavaScript(TextWriter writer)
+		public virtual void RenderJavaScript(TextWriter writer, bool waitForDOMContentLoad)
 		{
+			if (waitForDOMContentLoad)
+			{
+				writer.Write("window.addEventListener('DOMContentLoaded', function() {");
+			}
+
 			writer.Write(
 				!_configuration.UseServerSideRendering || ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
 			WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);
 			writer.Write("\"))");
+
+			if (waitForDOMContentLoad)
+			{
+				writer.Write("});");
+			}
 		}
 
 		/// <summary>

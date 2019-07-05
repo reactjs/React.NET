@@ -57,14 +57,6 @@ namespace React
 		string RenderHtml(bool renderContainerOnly = false, bool renderServerOnly = false, Action<Exception, string, string> exceptionHandler = null, IRenderFunctions renderFunctions = null);
 
 		/// <summary>
-		/// Renders the JavaScript required to initialise this component client-side. This will
-		/// initialise the React component, which includes attach event handlers to the
-		/// server-rendered HTML.
-		/// </summary>
-		/// <returns>JavaScript</returns>
-		string RenderJavaScript();
-
-		/// <summary>
 		/// Renders the HTML for this component. This will execute the component server-side and
 		/// return the rendered HTML.
 		/// </summary>
@@ -82,6 +74,14 @@ namespace React
 		/// server-rendered HTML.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		void RenderJavaScript(TextWriter writer);
+		string RenderJavaScript(bool waitForDOMContentLoad);
+
+		/// <summary>
+		/// Renders the JavaScript required to initialise this component client-side. This will
+		/// initialise the React component, which includes attach event handlers to the
+		/// server-rendered HTML.
+		/// </summary>
+		/// <returns>JavaScript</returns>
+		void RenderJavaScript(TextWriter writer, bool waitForDOMContentLoad);
 	}
 }

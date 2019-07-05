@@ -93,13 +93,23 @@ namespace React.Router
 		/// Client side React Router does not need context nor explicit path parameter.
 		/// </summary>
 		/// <returns>JavaScript</returns>
-		public override void RenderJavaScript(TextWriter writer)
+		public override void RenderJavaScript(TextWriter writer, bool waitForDOMContentLoad)
 		{
+			if (waitForDOMContentLoad)
+			{
+				writer.Write("window.addEventListener('DOMContentLoaded', function() {");
+			}
+
 			writer.Write("ReactDOM.hydrate(");
 			base.WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);
 			writer.Write("\"))");
+
+			if (waitForDOMContentLoad)
+			{
+				writer.Write("});");
+			}
 		}
 	}
 }

@@ -104,8 +104,10 @@ namespace React.AspNet
 		/// <param name="htmlTag">HTML tag to wrap the component in. Defaults to &lt;div&gt;</param>
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <param name="clientOnly">Skip rendering server-side and only output client-side initialisation code. Defaults to <c>false</c></param>
+		/// <param name="serverOnly">Skip rendering React specific data-attributes, container and client-side initialisation during server side rendering. Defaults to <c>false</c></param>
 		/// <param name="containerClass">HTML class(es) to set on the container tag</param>
 		/// <param name="exceptionHandler">A custom exception handler that will be called if a component throws during a render. Args: (Exception ex, string componentName, string containerId)</param>
+		/// <param name="renderFunctions">Functions to call during component render</param>
 		/// <returns>The component's HTML</returns>
 		public static IHtmlString ReactWithInit<T>(
 			this IHtmlHelper htmlHelper,
@@ -114,8 +116,10 @@ namespace React.AspNet
 			string htmlTag = null,
 			string containerId = null,
 			bool clientOnly = false,
+			bool serverOnly = false,
 			string containerClass = null,
-			Action<Exception, string, string> exceptionHandler = null
+			Action<Exception, string, string> exceptionHandler = null,
+			IRenderFunctions renderFunctions = null
 		)
 		{
 			try
@@ -133,11 +137,11 @@ namespace React.AspNet
 
 				return RenderToString(writer =>
 				{
-					reactComponent.RenderHtml(writer, clientOnly, exceptionHandler: exceptionHandler);
+					reactComponent.RenderHtml(writer, clientOnly, serverOnly, exceptionHandler: exceptionHandler, renderFunctions);
 					writer.WriteLine();
-					WriteScriptTag(writer, bodyWriter => reactComponent.RenderJavaScript(bodyWriter));
+					WriteScriptTag(writer, bodyWriter => reactComponent.RenderJavaScript(bodyWriter, waitForDOMContentLoad: true));
 				});
-					
+
 			}
 			finally
 			{
