@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.IO;
 using JavaScriptEngineSwitcher.Core;
 using Moq;
 using React.Exceptions;
@@ -266,11 +267,34 @@ namespace React.Tests.Core
 				Props = new {hello = "World"}
 			};
 			var result = component.RenderJavaScript();
-			
+
 			Assert.Equal(
 				@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 				result
 			);
+		}
+
+		[Fact]
+		public void RenderJavaScriptShouldHandleWaitForContentLoad()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseServerSideRendering).Returns(false);
+
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = false,
+				Props = new {hello = "World"}
+			};
+			using (var writer = new StringWriter())
+			{
+				component.RenderJavaScript(writer, waitForDOMContentLoad: true);
+				Assert.Equal(
+					@"window.addEventListener('DOMContentLoaded', function() {ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))});",
+					writer.ToString()
+				);
+			}
 		}
 
 		[Theory]

@@ -135,7 +135,7 @@ namespace React.AspNet
 				{
 					reactComponent.RenderHtml(writer, clientOnly, exceptionHandler: exceptionHandler);
 					writer.WriteLine();
-					WriteScriptTag(writer, bodyWriter => reactComponent.RenderJavaScript(bodyWriter));
+					WriteScriptTag(writer, bodyWriter => reactComponent.RenderJavaScript(bodyWriter, waitForDOMContentLoad: true));
 				});
 					
 			}
