@@ -13,6 +13,7 @@ using JSPool;
 using Moq;
 using Xunit;
 using React.Exceptions;
+using System.IO;
 
 namespace React.Tests.Core
 {
@@ -123,6 +124,21 @@ namespace React.Tests.Core
 
 			// A single nameless component was successfully added!
 			Assert.Equal(";" + Environment.NewLine, environment.GetInitJavaScript());
+		}
+
+		[Fact]
+		public void GetInitJavaScript()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			var component = new Mock<IReactComponent>();
+
+			component.Setup(x => x.RenderJavaScript(It.IsAny<TextWriter>(), It.IsAny<bool>())).Callback((TextWriter writer, bool waitForDOMContentLoad) => writer.Write(waitForDOMContentLoad ? "waiting for page load JS" : "JS")).Verifiable();
+
+			environment.CreateComponent(component.Object);
+
+			Assert.Equal("JS;" + Environment.NewLine, environment.GetInitJavaScript());
 		}
 
 		[Fact]

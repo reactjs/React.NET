@@ -27,10 +27,29 @@ namespace React.Tests.Router
 			{
 				Props = new { hello = "World" }
 			};
-			var result = component.RenderJavaScript();
+			var result = component.RenderJavaScript(false);
 
 			Assert.Equal(
 				@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
+				result
+			);
+		}
+
+		[Fact]
+		public void RenderJavaScriptShouldHandleWaitForContentLoad()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = new Mock<IReactSiteConfiguration>();
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactRouterComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container", "/bar")
+			{
+				Props = new { hello = "World" }
+			};
+			var result = component.RenderJavaScript(true);
+
+			Assert.Equal(
+				@"window.addEventListener('DOMContentLoaded', function() {ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))});",
 				result
 			);
 		}

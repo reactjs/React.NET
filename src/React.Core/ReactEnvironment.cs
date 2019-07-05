@@ -342,7 +342,7 @@ namespace React
 			{
 				if (!component.ServerOnly)
 				{
-					component.RenderJavaScript(writer);
+					component.RenderJavaScript(writer, waitForDOMContentLoad: false);
 					writer.WriteLine(';');
 				}
 			}
