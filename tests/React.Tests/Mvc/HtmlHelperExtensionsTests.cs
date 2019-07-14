@@ -5,12 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 #if NET452
+using React.Web.Mvc;
+#else
+using React.AspNet;
+#endif
 
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using Moq;
-using React.Web.Mvc;
 using Xunit;
 
 namespace React.Tests.Mvc
@@ -269,4 +272,3 @@ namespace React.Tests.Mvc
 		}
 	}
 }
-#endif
