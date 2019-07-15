@@ -12,8 +12,8 @@ Note that just using the library will compile your Typescript to Javascript, but
 1. Install a supported version of [Node](https://nodejs.org/en/download/) (either LTS or Current is fine)
 1. Create an empty `package.json` to your project root by running `npm init`. Optionally fill out the questions asked by `npm`, or press Enter to accept the defaults.
 1. Run `npm i typescript --save-dev`, which will update the freshly generated `package.json`. It's important that the Typescript version is declared in this file so every developer on your project has the same type checking rules.
-1. Copy the [`.tsconfig`](https://github.com/reactjs/react.net/blob/master/src/React.Sample.Mvc4/tsconfig.json) from the Mvc sample to your project root. If your components are not located in `Content`, change that path to the appropriate directory.
-1. Typescript needs to be informed of the libraries available on the global scope. To do this, create [`types/index.d.ts`](https://github.com/reactjs/react.net/blob/master/src/React.Sample.Mvc4/types/index.d.ts) in your project root:
+1. Copy the [tsconfig.json](https://github.com/reactjs/react.net/blob/master/src/React.Sample.Mvc4/tsconfig.json) file from the Mvc sample to your project root. If your components are not located in `Content`, change that path to the appropriate directory.
+1. Typescript needs to be informed of the libraries available on the global scope. To do this, create [types/index.d.ts](https://github.com/reactjs/react.net/blob/master/src/React.Sample.Mvc4/types/index.d.ts) in your project root:
 
 ```ts
 import _React from 'react';
@@ -27,9 +27,11 @@ declare global {
 }
 ```
 
-Any libaries declared in `tsconfig` must have the types installed in your project first. `react` is handled by the `@types/react` library in the [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react) repo, so install the types package with `npm i --save-dev @types/react`. Sometimes libraries will ship with typescript support; if so, install the package to expose the types. If a library you're using does not ship with types, chances are there will be community-provided types in DefinitelyTyped.
+Libraries imported in `types/index.d.ts` must be listed in `package.json` before typescript will load their type definitions. Types for `react` are defined by the `@types/react` library in the [DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react) repo, so install the types package with `npm i --save-dev @types/react`. Sometimes libraries will ship with typescript support; if so, install the package directly via `npm i --save-dev <library name>` to make the types resolve. If a library you're using does not ship with types, chances are there will be community-provided types in DefinitelyTyped.
 
-Finally, add a compile-time step to your project file to get type checking with every build (works in both ASP.NET and .NET Core):
+To check that everything works at this point, run `node_modules/.bin/tsc` from your project's working directory. You'll see empty output from `tsc` if the type checking succeeds.
+
+Finally, add a compile-time step to your project file to get type checking with every Visual Studio build (works in both ASP.NET and .NET Core):
 
 ```xml
 <Target Name="Typecheck" AfterTargets="AfterBuild">
