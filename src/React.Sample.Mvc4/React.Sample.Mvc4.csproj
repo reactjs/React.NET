@@ -230,6 +230,9 @@
     <Error Condition="!Exists('..\packages\JavaScriptEngineSwitcher.V8.Native.win-x64.3.1.0\build\JavaScriptEngineSwitcher.V8.Native.win-x64.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JavaScriptEngineSwitcher.V8.Native.win-x64.3.1.0\build\JavaScriptEngineSwitcher.V8.Native.win-x64.props'))" />
     <Error Condition="!Exists('..\packages\JavaScriptEngineSwitcher.V8.Native.win-x86.3.1.0\build\JavaScriptEngineSwitcher.V8.Native.win-x86.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\JavaScriptEngineSwitcher.V8.Native.win-x86.3.1.0\build\JavaScriptEngineSwitcher.V8.Native.win-x86.props'))" />
   </Target>
+  <Target Name="Typecheck" AfterTargets="AfterBuild">
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)" Command="node_modules/.bin/tsc" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
