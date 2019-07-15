@@ -104,7 +104,6 @@ of patent rights can be found in the PATENTS file in the same directory.
 		<Exec WorkingDirectory="src/React.Core/Resources/babel-legacy" Command="node_modules/.bin/webpack" />
 		<MSBuild Projects="$(SolutionFile)" Targets="Rebuild" Properties="Configuration=Release;Platform=Any CPU;NoWarn=1607,7035,1701;Version=$(VersionString)" />
 		<Exec WorkingDirectory="src/React.Sample.Webpack.CoreMvc" Command="node_modules/.bin/webpack" />
-		<Exec WorkingDirectory="src/React.Sample.Mvc4" Command="node_modules/.bin/tsc" />
 	</Target>
 
 	<Target Name="Test" DependsOnTargets="Build">
