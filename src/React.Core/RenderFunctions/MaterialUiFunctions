@@ -1,0 +1,43 @@
+using System;
+namespace React.RenderFunctions
+{
+    /// <summary>
+	/// Render functions for @material-ui/styles/ServerStyleSheets.
+	/// Requires `@material-ui/styles/ServerStyleSheets` to be exposed globally as `ServerStyleSheets`
+	/// </summary>
+	public class MaterialUiFunctions : RenderFunctionsBase
+    {
+        /// <summary>
+        /// HTML style tag containing the rendered styles
+        /// </summary>
+        public string RenderedStyles { get; private set; }
+
+        /// <summary>
+        /// Implementation of PreRender
+        /// </summary>
+        /// <param name="executeJs"></param>
+        public override void PreRender(Func<string, string> executeJs)
+        {
+            executeJs("var sheets = new ServerStyleSheets();");
+        }
+
+        /// <summary>
+        /// Implementation of WrapComponent
+        /// </summary>
+        /// <param name="componentToRender"></param>
+        /// <returns></returns>
+        public override string WrapComponent(string componentToRender)
+        {
+            return ($"sheets.collect({componentToRender})");
+        }
+
+        /// <summary>
+        /// Implementation of PostRender
+        /// </summary>
+        /// <param name="executeJs"></param>
+        public override void PostRender(Func<string, string> executeJs)
+        {
+            RenderedStyles = $"{executeJs("sheets.toString()")}";
+        }
+    }
+}
