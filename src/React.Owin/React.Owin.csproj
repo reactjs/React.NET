@@ -14,7 +14,7 @@
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>React.Owin</PackageId>
     <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel;owin</PackageTags>
-    <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+    <PackageIcon>logo_64.png</PackageIcon>
     <PackageProjectUrl>https://github.com/reactjs/react.net</PackageProjectUrl>
     <PackageLicense>https://github.com/reactjs/React.NET#licence</PackageLicense>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -28,6 +28,7 @@
   <ItemGroup>
     <Compile Include="..\SharedAssemblyInfo.cs;..\React.AspNet.Middleware\BabelFileOptions.cs;..\React.AspNet.Middleware\BabelFileSystem.cs" />
     <Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <None Include="..\..\site\jekyll\img\logo_64.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>

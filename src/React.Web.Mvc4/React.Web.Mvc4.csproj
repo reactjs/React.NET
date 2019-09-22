@@ -14,7 +14,7 @@
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>React.Web.Mvc4</PackageId>
     <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel</PackageTags>
-    <PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+    <PackageIcon>logo_64.png</PackageIcon>
     <PackageProjectUrl>https://github.com/reactjs/react.net</PackageProjectUrl>
     <PackageLicense>https://github.com/reactjs/React.NET/blob/master/LICENSE</PackageLicense>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -32,6 +32,7 @@
       <Pack>true</Pack>
       <PackagePath>content\</PackagePath>
     </Content>
+    <None Include="..\..\site\jekyll\img\logo_64.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>

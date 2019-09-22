@@ -13,7 +13,7 @@
 		<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
 		<PackageId>React.Router</PackageId>
 		<PackageTags>asp.net;mvc;asp;javascript;js;react;facebook;reactjs;babel;router;react router</PackageTags>
-		<PackageIconUrl>http://reactjs.net/img/logo_64.png</PackageIconUrl>
+		<PackageIcon>logo_64.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/reactjs/react.net</PackageProjectUrl>
 		<PackageLicense>https://github.com/reactjs/React.NET#licence</PackageLicense>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -27,6 +27,7 @@
 	<ItemGroup>
 		<Compile Include="..\SharedAssemblyInfo.cs" />
 		<Compile Include="..\SharedAssemblyVersionInfo.cs" />
+    <None Include="..\..\site\jekyll\img\logo_64.png" Pack="true" PackagePath="\"/>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-		<FrameworkReference Include="Microsoft.AspNetCore.App" Version="3.0.0-preview3-19153-02" />
+		<FrameworkReference Include="Microsoft.AspNetCore.App" Version="3.0.0-rc1.19457.4" />
 	</ItemGroup>
 
 	<ItemGroup>
