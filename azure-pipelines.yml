@@ -19,7 +19,7 @@ steps:
     - task: DotNetCoreInstaller@0
       inputs:
         packageType: 'sdk'
-        version: '3.0.100-preview5-011568'
+        version: '3.0.100-rc1-014190'
 
     - task: VSBuild@1
       inputs:
