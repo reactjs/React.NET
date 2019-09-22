@@ -13,7 +13,7 @@
     "react-dom": "^16.8.2",
     "react-emotion": "^9.2.12",
     "react-helmet": "^5.2.0",
-    "react-jss": "^8.6.1",
+    "react-jss": "^10.0.0",
     "react-router-dom": "^5.0.0",
     "react-select": "^3.0.4",
     "reactstrap": "^8.0.0",
