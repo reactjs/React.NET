@@ -18,7 +18,7 @@ namespace ReactDemo
 {
 	public class Startup
 	{
-		public Startup(IWebHostEnvironment env)
+		public Startup(IHostingEnvironment env)
 		{
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(env.ContentRootPath)
@@ -43,9 +43,20 @@ namespace ReactDemo
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
-			app.UseDeveloperExceptionPage();
+			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+			loggerFactory.AddDebug();
+
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+				app.UseBrowserLink();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+			}
 
 			// Initialise ReactJS.NET. Must be before static files.
 			app.UseReact(config =>
@@ -74,11 +85,11 @@ namespace ReactDemo
 
 			app.UseStaticFiles();
 
-			app.UseRouting();
-
-			app.UseEndpoints(endpoints =>
+			app.UseMvc(routes =>
 			{
-				endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+				routes.MapRoute(
+					name: "default",
+					template: "{controller=Home}/{action=Index}/{id?}");
 			});
 		}
 	}
