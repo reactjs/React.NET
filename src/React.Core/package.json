@@ -6,7 +6,7 @@
     "build": "webpack"
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
+    "@babel/core": "7.6.2",
     "@babel/standalone": "7.6.2",
     "prop-types": "15.7.2",
     "react": "16.9.0",
