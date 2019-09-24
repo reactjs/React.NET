@@ -11,7 +11,7 @@
     "prop-types": "15.7.2",
     "react": "16.9.0",
     "react-dom": "16.9.0",
-    "webpack": "4.40.2",
+    "webpack": "4.40.3",
     "webpack-cli": "3.3.9"
   }
 }
