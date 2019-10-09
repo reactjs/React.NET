@@ -9,7 +9,7 @@
   "devDependencies": {
     "@types/react": "16.9.5",
     "@types/react-dom": "16.9.1",
-    "@types/reactstrap": "8.0.4",
+    "@types/reactstrap": "8.0.5",
     "typescript": "3.6.3"
   }
 }
