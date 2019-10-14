@@ -20,7 +20,7 @@
     "styled-components": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/core": "7.6.3",
+    "@babel/core": "7.6.4",
     "@babel/plugin-proposal-class-properties": "7.5.5",
     "@babel/plugin-proposal-object-rest-spread": "7.6.2",
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
@@ -28,7 +28,7 @@
     "@babel/preset-react": "7.0.0",
     "babel-loader": "8.0.6",
     "babel-runtime": "6.26.0",
-    "webpack": "4.41.0",
+    "webpack": "4.41.1",
     "webpack-cli": "3.3.9"
   }
 }
