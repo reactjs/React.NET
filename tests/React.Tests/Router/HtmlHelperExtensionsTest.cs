@@ -6,6 +6,7 @@
  */
 #if NET452
 
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Mvc;
 using Moq;
@@ -64,7 +65,7 @@ namespace React.Tests.Router
 			public Mock<HtmlHelper> htmlHelper;
 			public Mock<HttpResponseBase> httpResponse;
 
-			public HtmlHelperMocks()
+			public HtmlHelperMocks(HttpRequestBase request = null)
 			{
 				var viewDataContainer = new Mock<IViewDataContainer>();
 				var viewContext = new Mock<ViewContext>();
@@ -72,12 +73,13 @@ namespace React.Tests.Router
 				htmlHelper = new Mock<HtmlHelper>(viewContext.Object, viewDataContainer.Object);
 				var httpContextBase = new Mock<HttpContextBase>();
 				viewContext.Setup(x => x.HttpContext).Returns(httpContextBase.Object);
+				httpContextBase.Setup(x => x.Request).Returns(request);
 				httpContextBase.Setup(x => x.Response).Returns(httpResponse.Object);
 			}
 		}
 
 		/// <summary>
-		/// Mocks alot of common functionality related to rendering a 
+		/// Mocks alot of common functionality related to rendering a
 		/// React Router component.
 		/// </summary>
 		class ReactRouterMocks
@@ -225,6 +227,46 @@ namespace React.Tests.Router
 				contextHandler: (response, context) => response.StatusCode = context.status.Value
 			);
 			htmlHelperMock.httpResponse.VerifySet(x => x.StatusCode = 200);
+		}
+
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void ShouldHandleQueryParams(bool withOverriddenPath)
+		{
+			var mocks = ConfigureMockReactEnvironment();
+			ConfigureMockConfiguration();
+			ConfigureReactIdGenerator();
+
+			mocks.Engine.Setup(x => x.Evaluate<string>("JSON.stringify(context);"))
+						.Returns("{ status: 200 }");
+
+			var requestMock = new Mock<HttpRequestBase>();
+			requestMock.SetupGet(x => x.Path).Returns("/test");
+			var queryStringMock = new Mock<NameValueCollection>();
+			queryStringMock.Setup(x => x.ToString()).Returns("?a=1&b=2");
+			requestMock.SetupGet(x => x.QueryString).Returns(queryStringMock.Object);
+
+			var htmlHelperMock = new HtmlHelperMocks(requestMock.Object);
+
+			var result = HtmlHelperExtensions.ReactRouter(
+				htmlHelper: htmlHelperMock.htmlHelper.Object,
+				componentName: "ComponentName",
+				props: new { },
+				path: withOverriddenPath ? "/test2?b=1&c=2" : null,
+				contextHandler: (response, context) => response.StatusCode = context.status.Value
+			);
+
+			htmlHelperMock.httpResponse.VerifySet(x => x.StatusCode = 200);
+
+			if (withOverriddenPath)
+			{
+				mocks.Engine.Verify(x => x.Evaluate<string>(@"ReactDOMServer.renderToString(React.createElement(ComponentName, Object.assign({}, { location: '/test2?b=1&c=2', context: context })))"));
+			}
+			else
+			{
+				mocks.Engine.Verify(x => x.Evaluate<string>(@"ReactDOMServer.renderToString(React.createElement(ComponentName, Object.assign({}, { location: '/test?a=1&b=2', context: context })))"));
+			}
 		}
 
 		[Fact]
