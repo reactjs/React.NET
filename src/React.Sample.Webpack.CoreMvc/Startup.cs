@@ -31,6 +31,7 @@ namespace React.Sample.Webpack.CoreMvc
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 			services.AddNodeJS();
+			services.Configure<NodeJSProcessOptions>(options => options.NodeAndV8Options = "--inspect");
 
 			// Build the intermediate service provider then return it
 			services.BuildServiceProvider();

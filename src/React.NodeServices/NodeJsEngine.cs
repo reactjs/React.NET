@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Jering.Javascript.NodeJS;
+using Newtonsoft.Json;
 using React;
 
 namespace React.NodeServices
@@ -11,13 +12,14 @@ namespace React.NodeServices
 		private Dictionary<string, bool> _dict = new Dictionary<string, bool>();
 		private object _lock = new object();
 		private readonly INodeJSService _nodeJSService;
+		private static readonly JsonSerializerSettings _settings = new JsonSerializerSettings { StringEscapeHandling = StringEscapeHandling.EscapeNonAscii };
 
 		private NodeJsEngine(INodeJSService nodeJSService)
 		{
 			_nodeJSService = nodeJSService;
 		}
 
-		private string WrapAsModule(string code) => $"function wrappedCode() {{ {{{code}}} }} module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}";
+		private string WrapAsModule(string code) => $"let wrappedCode = () => eval({JsonConvert.SerializeObject(code, _settings)}); module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}";
 
 		public static INodeJsEngine CreateEngine(INodeJSService nodeJSService) => new NodeJsEngine(nodeJSService);
 		public string Name => throw new NotImplementedException();
@@ -47,6 +49,12 @@ namespace React.NodeServices
 		public void Execute(string code)
 		{
 			_nodeJSService.InvokeFromStringAsync(WrapAsModule(code)).ConfigureAwait(false).GetAwaiter().GetResult();
+		}
+
+		public void ExecuteFile(IFileSystem fileSystem, string path)
+		{
+			var contents = fileSystem.ReadAsString(path);
+			Execute(contents);
 		}
 
 		public void ExecuteResource(string resourceName, Assembly assembly)

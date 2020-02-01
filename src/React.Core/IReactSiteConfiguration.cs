@@ -220,7 +220,7 @@ namespace React
 		/// <summary>
 		/// 
 		/// </summary>
-		Func<INodeJsEngine> NodeJsEngine { get; set; }
+		Func<INodeJsEngine> CreateNodeJsInstance { get; set; }
 
 		/// <summary>
 		/// 

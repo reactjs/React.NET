@@ -363,7 +363,7 @@ namespace React
 		/// <summary>
 		/// The Node engine instance
 		/// </summary>
-		public Func<INodeJsEngine> NodeJsEngine { get; set; }
+		public Func<INodeJsEngine> CreateNodeJsInstance { get; set; }
 
 		/// <summary>
 		/// Sets the Node engine instance
@@ -372,7 +372,7 @@ namespace React
 		/// <returns></returns>
 		public IReactSiteConfiguration SetNodeJsEngine(Func<INodeJsEngine> nodeJsEngine)
 		{
-			NodeJsEngine = nodeJsEngine;
+			CreateNodeJsInstance = nodeJsEngine;
 			return this;
 		}
 	}

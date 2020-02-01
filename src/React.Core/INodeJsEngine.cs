@@ -17,6 +17,8 @@ namespace React
 		void Execute(string code);
 		T Evaluate<T>(string code);
 
+		void ExecuteFile(IFileSystem fileSystem, string path);
+
 		T CallFunctionReturningJson<T>(string function, object[] args);
 
 		void ExecuteResource(string resourceName, Assembly assembly);

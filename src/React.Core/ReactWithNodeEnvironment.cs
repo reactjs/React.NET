@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -130,7 +131,41 @@ namespace React
 			_babelTransformer = new Lazy<IBabel>(() =>
 				new Babel(this, _cache, _fileSystem, _fileCacheHash, _config)
 			);
-			_lazyEngine = new Lazy<INodeJsEngine>(() => _config.NodeJsEngine());
+			_lazyEngine = new Lazy<INodeJsEngine>(() => 
+			{
+				var allFiles = _config.Scripts
+					.Concat(_config.ScriptsWithoutTransform)
+					.Select(_fileSystem.MapPath);
+
+				var nodeInstance = _config.CreateNodeJsInstance();
+
+				LoadUserScripts(nodeInstance);
+
+				return nodeInstance;
+			});
+		}
+
+
+		/// <summary>
+		/// Loads any user-provided scripts. Only scripts that don't need JSX transformation can
+		/// run immediately here. JSX files are loaded in ReactEnvironment.
+		/// </summary>
+		/// <param name="engine">Engine to load scripts into</param>
+		private void LoadUserScripts(INodeJsEngine engine)
+		{
+			foreach (var file in _config.ScriptsWithoutTransform)
+			{
+				try
+				{
+					engine.ExecuteFile(_fileSystem, file);
+				}
+				catch (NodeJsException ex)
+				{
+				}
+				catch (IOException ex)
+				{
+				}
+			}
 		}
 
 		/// <summary>
@@ -168,7 +203,7 @@ namespace React
 		/// </summary>
 		protected virtual void EnsureUserScriptsLoaded()
 		{
-			// Scripts already loaded into this environment, don't load them again
+			// Scripts already loaded into this environment, don't load them agai	n
 			if (Engine.HasVariable(USER_SCRIPTS_LOADED_KEY) || _config == null)
 			{
 				return;
@@ -303,13 +338,6 @@ namespace React
 		/// <returns>JavaScript for all components</returns>
 		public virtual void GetInitJavaScript(TextWriter writer, bool clientOnly = false)
 		{
-			// Propagate any server-side console.log calls to corresponding client-side calls.
-			if (!clientOnly && _components.Count != 0)
-			{
-				var consoleCalls = Execute<string>("console.getCalls()");
-				writer.Write(consoleCalls);
-			}
-
 			foreach (var component in _components)
 			{
 				if (!component.ServerOnly)
