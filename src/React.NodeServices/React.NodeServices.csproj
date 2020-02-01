@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\React.AspNet.Middleware\React.AspNet.Middleware.csproj" />
     <ProjectReference Include="..\React.Core\React.Core.csproj" />
   </ItemGroup>
 </Project>

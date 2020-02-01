@@ -7,16 +7,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading;
 using React.Exceptions;
 using React.TinyIoC;
 
-namespace React
+namespace React.NodeServices
 {
 	/// <summary>
 	/// Request-specific ReactJS.NET environment. This is unique to the individual request and is

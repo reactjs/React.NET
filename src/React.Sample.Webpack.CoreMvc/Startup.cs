@@ -41,7 +41,7 @@ namespace React.Sample.Webpack.CoreMvc
 		public void Configure(IApplicationBuilder app)
 		{
 			// Initialise ReactJS.NET. Must be before static files.
-			app.UseReact(config =>
+			app.UseReactWithEnvironment<ReactWithNodeEnvironment>(config =>
 			{
 				config
 					.SetReuseJavaScriptEngines(true)
@@ -51,7 +51,7 @@ namespace React.Sample.Webpack.CoreMvc
 					.AddScriptWithoutTransform("~/dist/runtime.js")
 					.AddScriptWithoutTransform("~/dist/vendor.js")
 					.AddScriptWithoutTransform("~/dist/components.js");
-			}, useNodeEnvironment: true);
+			});
 
 			app.UseStaticFiles();
 

@@ -9,7 +9,6 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using React.Exceptions;
 using React.TinyIoC;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -27,21 +26,19 @@ namespace React.AspNet
 	/// <summary>
 	/// Handles registering ReactJS.NET middleware in an ASP.NET <see cref="IApplicationBuilder"/>.
 	/// </summary>
-    public static class ReactBuilderExtensions
-    {
+	public static class ReactBuilderExtensions
+	{
 		/// <summary>
 		/// Initialises ReactJS.NET for this application
 		/// </summary>
 		/// <param name="app">ASP.NET application builder</param>
 		/// <param name="configure">ReactJS.NET configuration</param>
 		/// <param name="fileOptions">Options to use for serving files</param>
-		/// <param name="useNodeEnvironment"></param>
 		/// <returns>The application builder (for chaining)</returns>
 		public static IApplicationBuilder UseReact(
 			this IApplicationBuilder app,
 			Action<IReactSiteConfiguration> configure,
-			BabelFileOptions fileOptions = null,
-			bool useNodeEnvironment = false
+			BabelFileOptions fileOptions = null
 		)
 		{
 			RegisterAspNetServices(React.AssemblyRegistration.Container, app.ApplicationServices);
@@ -56,12 +53,6 @@ namespace React.AspNet
 				new CamelCasePropertyNamesContractResolver();
 
 			configure(ReactSiteConfiguration.Configuration);
-
-			if (useNodeEnvironment)
-			{
-				TinyIoCContainer.Current.Unregister<IReactEnvironment>();
-				TinyIoCContainer.Current.Register<IReactEnvironment, ReactWithNodeEnvironment>();
-			}
 
 			// Allow serving of .jsx files
 			app.UseMiddleware<BabelFileMiddleware>(fileOptions ?? new BabelFileOptions());
