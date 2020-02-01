@@ -19,9 +19,15 @@ namespace React.NodeServices
 			_nodeJSService = nodeJSService;
 		}
 
-		private string WrapAsModule(string code) => $"let wrappedCode = () => eval({JsonConvert.SerializeObject(code, _settings)}); module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}";
+		private string WrapAsModule(string code) => $"let wrappedCode = () => vm.runInContext({JsonConvert.SerializeObject(code, _settings)}, vmContext	); module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}";
 
-		public static INodeJsEngine CreateEngine(INodeJSService nodeJSService) => new NodeJsEngine(nodeJSService);
+		public static INodeJsEngine CreateEngine(INodeJSService nodeJSService)
+		{
+			var engine = new NodeJsEngine(nodeJSService);
+			engine._nodeJSService.InvokeFromStringAsync("let wrappedCode = () => { global.vmContext = {}; vm.createContext(global.vmContext); }; module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}").ConfigureAwait(false).GetAwaiter().GetResult();
+			return engine;	
+		}
+
 		public string Name => throw new NotImplementedException();
 
 		public string Version => throw new NotImplementedException();

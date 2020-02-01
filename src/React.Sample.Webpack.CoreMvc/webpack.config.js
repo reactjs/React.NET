@@ -6,7 +6,7 @@ module.exports = {
 	},
 	output: {
 		filename: '[name].js',
-		globalObject: 'global',
+		globalObject: 'this',
 		path: path.resolve(__dirname, 'wwwroot/dist'),
 		publicPath: 'dist/'
 	},
