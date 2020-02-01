@@ -1,8 +1,6 @@
-using System;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,7 +49,6 @@ namespace React.Sample.Webpack.CoreMvc
 
 			app.UseStaticFiles();
 
-#if NETCOREAPP3_0
 			app.UseRouting();
 
 			app.UseEndpoints(endpoints =>
@@ -60,14 +57,6 @@ namespace React.Sample.Webpack.CoreMvc
 				endpoints.MapControllerRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
 				endpoints.MapControllerRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
 			});
-#else
-			app.UseMvc(routes =>
-			{
-				routes.MapRoute("default", "{path?}", new { controller = "Home", action = "Index" });
-				routes.MapRoute("comments-root", "comments", new { controller = "Home", action = "Index" });
-				routes.MapRoute("comments", "comments/page-{page}", new { controller = "Home", action = "Comments" });
-			});
-#endif
 		}
 	}
 }
