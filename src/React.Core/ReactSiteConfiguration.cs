@@ -359,5 +359,21 @@ namespace React
 			ScriptNonceProvider = provider;
 			return this;
 		}
+
+		/// <summary>
+		/// The Node engine instance
+		/// </summary>
+		public Func<INodeJsEngine> NodeJsEngine { get; set; }
+
+		/// <summary>
+		/// Sets the Node engine instance
+		/// </summary>
+		/// <param name="nodeJsEngine"></param>
+		/// <returns></returns>
+		public IReactSiteConfiguration SetNodeJsEngine(Func<INodeJsEngine> nodeJsEngine)
+		{
+			NodeJsEngine = nodeJsEngine;
+			return this;
+		}
 	}
 }

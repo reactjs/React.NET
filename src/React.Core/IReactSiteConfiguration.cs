@@ -216,5 +216,18 @@ namespace React
 		/// <param name="provider"></param>
 		/// <returns></returns>
 		IReactSiteConfiguration SetScriptNonceProvider(Func<string> provider);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		Func<INodeJsEngine> NodeJsEngine { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="nodeJsEngine"></param>
+		/// <returns></returns>
+		IReactSiteConfiguration SetNodeJsEngine(Func<INodeJsEngine> nodeJsEngine);
+
 	}
 }

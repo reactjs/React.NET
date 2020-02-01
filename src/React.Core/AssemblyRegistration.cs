@@ -37,7 +37,7 @@ namespace React
 			container.Register<IJavaScriptEngineFactory, JavaScriptEngineFactory>().AsSingleton();
 			container.Register<IReactIdGenerator, ReactIdGenerator>().AsSingleton();
 
-			container.Register<IReactEnvironment, ReactEnvironment>().AsPerRequestSingleton();
+			container.Register<IReactEnvironment, ReactWithNodeEnvironment>().AsPerRequestSingleton();
 		}
 	}
 }

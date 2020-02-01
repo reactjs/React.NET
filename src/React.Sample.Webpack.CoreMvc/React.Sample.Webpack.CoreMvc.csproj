@@ -30,5 +30,6 @@
     <ProjectReference Include="..\React.AspNet\React.AspNet.csproj" />
     <ProjectReference Include="..\React.Core\React.Core.csproj" />
     <ProjectReference Include="..\React.Router\React.Router.csproj" />
+    <ProjectReference Include="..\React.NodeServices\React.NodeServices.csproj" />
   </ItemGroup>
 </Project>
