@@ -50,7 +50,7 @@ namespace React.Sample.Webpack.CoreMvc
 					.AddScriptWithoutTransform("~/dist/runtime.js")
 					.AddScriptWithoutTransform("~/dist/vendor.js")
 					.AddScriptWithoutTransform("~/dist/components.js");
-			});
+			}, useNodeEnvironment: true);
 
 			app.UseStaticFiles();
 

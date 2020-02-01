@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -35,11 +35,13 @@ namespace React.AspNet
 		/// <param name="app">ASP.NET application builder</param>
 		/// <param name="configure">ReactJS.NET configuration</param>
 		/// <param name="fileOptions">Options to use for serving files</param>
+		/// <param name="useNodeEnvironment"></param>
 		/// <returns>The application builder (for chaining)</returns>
 		public static IApplicationBuilder UseReact(
 			this IApplicationBuilder app,
 			Action<IReactSiteConfiguration> configure,
-			BabelFileOptions fileOptions = null
+			BabelFileOptions fileOptions = null,
+			bool useNodeEnvironment = false
 		)
 		{
 			RegisterAspNetServices(React.AssemblyRegistration.Container, app.ApplicationServices);
@@ -54,6 +56,12 @@ namespace React.AspNet
 				new CamelCasePropertyNamesContractResolver();
 
 			configure(ReactSiteConfiguration.Configuration);
+
+			if (useNodeEnvironment)
+			{
+				TinyIoCContainer.Current.Unregister<IReactEnvironment>();
+				TinyIoCContainer.Current.Register<IReactEnvironment, ReactWithNodeEnvironment>();
+			}
 
 			// Allow serving of .jsx files
 			app.UseMiddleware<BabelFileMiddleware>(fileOptions ?? new BabelFileOptions());
