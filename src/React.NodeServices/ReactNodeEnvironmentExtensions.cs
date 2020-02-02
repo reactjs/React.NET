@@ -23,7 +23,7 @@ namespace React.NodeServices
 		{
 			var appInstance = app.UseReact(configure, fileOptions);
 			TinyIoCContainer.Current.Unregister<IReactEnvironment>();
-			TinyIoCContainer.Current.Register<IReactEnvironment, T>();
+			TinyIoCContainer.Current.Register<IReactEnvironment, T>().AsPerRequestSingleton();
 
 			return appInstance;
 		}
