@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Jering.Javascript.NodeJS;
 using Newtonsoft.Json;
@@ -22,8 +23,8 @@ namespace React.NodeServices
 		private string WrapAsModule(string code) => $@"
 let wrappedCode = () => vm.runInThisContext({JsonConvert.SerializeObject(code, _settings)});
 
-module.exports = function(callback, message) {{
-	callback(null, wrappedCode());
+module.exports = function(callback, ...args) {{
+	callback(null, wrappedCode(args));
 }}";
 
 		public static INodeJsEngine CreateEngine(INodeJSService nodeJSService)
@@ -31,18 +32,18 @@ module.exports = function(callback, message) {{
 			return new NodeJsEngine(nodeJSService);
 		}
 
-		public string Name => throw new NotImplementedException();
+		public string Name => nameof(NodeJsEngine);
 
-		public string Version => throw new NotImplementedException();
+		public string Version => "0.0.1";
 
 		public T CallFunctionReturningJson<T>(string function, object[] args)
 		{
-			throw new NotImplementedException();
+			return _nodeJSService.InvokeFromStringAsync<T>(WrapAsModule(function), args: args).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			_nodeJSService.Dispose();
 		}
 
 		public T Evaluate<T>(string code)
@@ -67,7 +68,13 @@ module.exports = function(callback, message) {{
 
 		public void ExecuteResource(string resourceName, Assembly assembly)
 		{
-			throw new NotImplementedException();
+			string result;
+			using(Stream stream = assembly.GetManifestResourceStream(resourceName))
+			using (StreamReader reader = new StreamReader(stream))
+			{
+				result = reader.ReadToEnd();
+			}
+			Execute(result);
 		}
 
 		public bool HasVariable(string key)

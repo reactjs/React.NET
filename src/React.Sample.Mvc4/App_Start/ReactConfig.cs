@@ -22,12 +22,13 @@ namespace React.Sample.Mvc4
 		{
 			var services = new ServiceCollection();
 			services.AddNodeJS();
+			services.Configure<NodeJSProcessOptions>(options => options.NodeAndV8Options = "--inspect");
 			ServiceProvider serviceProvider = services.BuildServiceProvider();
 
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(true)
 				.SetAllowJavaScriptPrecompilation(true)
-				.AddScriptWithoutTransform("~/Content/lib/reactstrap.min.js")
+				//.AddScriptWithoutTransform("~/Content/lib/reactstrap.min.js")
 				.SetNodeJsEngine(() => NodeJsEngine.CreateEngine(serviceProvider.GetRequiredService<INodeJSService>()))
 				.SetBabelVersion(BabelVersions.Babel7)
 				.AddScript("~/Content/Sample.tsx");
