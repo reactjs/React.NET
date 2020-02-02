@@ -19,13 +19,16 @@ namespace React.NodeServices
 			_nodeJSService = nodeJSService;
 		}
 
-		private string WrapAsModule(string code) => $"let wrappedCode = () => vm.runInContext({JsonConvert.SerializeObject(code, _settings)}, vmContext	); module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}";
+		private string WrapAsModule(string code) => $@"
+let wrappedCode = () => vm.runInThisContext({JsonConvert.SerializeObject(code, _settings)});
+
+module.exports = function(callback, message) {{
+	callback(null, wrappedCode());
+}}";
 
 		public static INodeJsEngine CreateEngine(INodeJSService nodeJSService)
 		{
-			var engine = new NodeJsEngine(nodeJSService);
-			engine._nodeJSService.InvokeFromStringAsync("let wrappedCode = () => { global.vmContext = {}; vm.createContext(global.vmContext); }; module.exports = function(callback, message) {{ callback(null, wrappedCode()); }}").ConfigureAwait(false).GetAwaiter().GetResult();
-			return engine;	
+			return new NodeJsEngine(nodeJSService);
 		}
 
 		public string Name => throw new NotImplementedException();
@@ -59,8 +62,7 @@ namespace React.NodeServices
 
 		public void ExecuteFile(IFileSystem fileSystem, string path)
 		{
-			var contents = fileSystem.ReadAsString(path);
-			Execute(contents);
+			_nodeJSService.InvokeFromStringAsync(WrapAsModule($"require(path.resolve({JsonConvert.SerializeObject(fileSystem.MapPath(path), _settings)}));")).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
 		public void ExecuteResource(string resourceName, Assembly assembly)

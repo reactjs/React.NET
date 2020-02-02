@@ -18,3 +18,5 @@ global.EmotionServer = { renderStylesToString };
 global.Helmet = Helmet;
 
 global.RootComponent = RootComponent;
+
+export default (resolve) => resolve();

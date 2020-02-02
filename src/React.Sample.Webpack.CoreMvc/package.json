@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack"
+    "build": "rimraf wwwroot/dist && rimraf wwwroot/server && webpack"
   },
   "dependencies": {
     "emotion": "^9.2.12",
@@ -17,6 +17,7 @@
     "react-router-dom": "^5.0.0",
     "react-select": "^3.0.4",
     "reactstrap": "^8.0.0",
+    "rimraf": "^3.0.1",
     "styled-components": "^4.0.0"
   },
   "devDependencies": {

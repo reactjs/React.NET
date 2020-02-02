@@ -48,9 +48,7 @@ namespace React.Sample.Webpack.CoreMvc
 					.SetLoadBabel(false)
 					.SetLoadReact(false)
 					.SetNodeJsEngine(() => NodeJsEngine.CreateEngine(app.ApplicationServices.GetService<INodeJSService>()))
-					.AddScriptWithoutTransform("~/dist/runtime.js")
-					.AddScriptWithoutTransform("~/dist/vendor.js")
-					.AddScriptWithoutTransform("~/dist/components.js");
+					.AddScriptWithoutTransform("~/server/dist/components.js");
 			});
 
 			app.UseStaticFiles();
