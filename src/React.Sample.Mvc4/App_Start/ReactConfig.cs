@@ -7,6 +7,10 @@
 
 using JavaScriptEngineSwitcher.Core;
 using JavaScriptEngineSwitcher.V8;
+using Jering.Javascript.NodeJS;
+using Microsoft.Extensions.DependencyInjection;
+using React.NodeServices;
+using React.TinyIoC;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(React.Sample.Mvc4.ReactConfig), "Configure")]
 
@@ -16,10 +20,15 @@ namespace React.Sample.Mvc4
 	{
 		public static void Configure()
 		{
+			var services = new ServiceCollection();
+			services.AddNodeJS();
+			ServiceProvider serviceProvider = services.BuildServiceProvider();
+
 			ReactSiteConfiguration.Configuration
 				.SetReuseJavaScriptEngines(true)
 				.SetAllowJavaScriptPrecompilation(true)
 				.AddScriptWithoutTransform("~/Content/lib/reactstrap.min.js")
+				.SetNodeJsEngine(() => NodeJsEngine.CreateEngine(serviceProvider.GetRequiredService<INodeJSService>()))
 				.SetBabelVersion(BabelVersions.Babel7)
 				.AddScript("~/Content/Sample.tsx");
 

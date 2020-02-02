@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -8,6 +8,8 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using React.NodeServices;
+using React.TinyIoC;
 
 namespace React.Sample.Mvc4
 {
@@ -21,6 +23,9 @@ namespace React.Sample.Mvc4
 			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 			BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+			TinyIoCContainer.Current.Unregister<IReactEnvironment>();
+			TinyIoCContainer.Current.Register<IReactEnvironment, ReactWithNodeEnvironment>().AsPerRequestSingleton();
 		}
 	}
 }
