@@ -66,9 +66,9 @@ function CommentsBox(props: CommentsBoxProps) {
 			return <em>Loading...</em>;
 		} else if (state.hasMore) {
 			return (
-				<Reactstrap.Button onClick={loadMoreClicked}>
+				<button onClick={loadMoreClicked}>
 					Load More
-				</Reactstrap.Button>
+				</button>
 			);
 		} else {
 			return <em>No more comments</em>;

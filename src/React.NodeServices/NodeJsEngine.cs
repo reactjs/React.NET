@@ -38,7 +38,7 @@ module.exports = function(callback, ...args) {{
 
 		public T CallFunctionReturningJson<T>(string function, object[] args)
 		{
-			return _nodeJSService.InvokeFromStringAsync<T>(WrapAsModule(function), args: args).ConfigureAwait(false).GetAwaiter().GetResult();
+			return _nodeJSService.InvokeFromStringAsync<T>(WrapAsModule($"{function}(...{JsonConvert.SerializeObject(args ?? new object[0])})")).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
 		public void Dispose()
@@ -51,10 +51,7 @@ module.exports = function(callback, ...args) {{
 			return _nodeJSService.InvokeFromStringAsync<T>(WrapAsModule(code)).ConfigureAwait(false).GetAwaiter().GetResult();
 		}
 
-		public void Execute(string contents, string file)
-		{
-			throw new NotImplementedException();
-		}
+		public void Execute(string contents, string file) => Execute(contents);
 
 		public void Execute(string code)
 		{

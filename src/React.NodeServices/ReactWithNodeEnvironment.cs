@@ -136,6 +136,14 @@ namespace React.NodeServices
 
 				var nodeInstance = _config.CreateNodeJsInstance();
 
+				if (_config.LoadReact)
+				{
+					nodeInstance.ExecuteResource(_config.UseDebugReact
+							? "React.Core.Resources.react.generated.js"
+							: "React.Core.Resources.react.generated.min.js",
+						typeof(ReactEnvironment).Assembly);
+				}
+
 				LoadUserScripts(nodeInstance);
 
 				return nodeInstance;
