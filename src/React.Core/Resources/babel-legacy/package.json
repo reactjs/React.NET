@@ -13,7 +13,7 @@
     "babel-preset-stage-0": "6.24.1",
     "babel-standalone": "6.26.0",
     "webpack": "4.41.6",
-    "webpack-cli": "3.3.10"
+    "webpack-cli": "3.3.11"
   },
   "author": "",
   "license": "MIT"
