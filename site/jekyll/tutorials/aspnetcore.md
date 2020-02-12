@@ -43,7 +43,7 @@ Start by creating a new ASP.NET Core MVC project:
 4. Enter "ReactDemo" for the project name and location to store it.
 5. Click "Create".
 6. In the "Create a new ASP.NET Core web application" dialog, select the "Web Application (Model-View-Controller)" template. Also, ensure "Change Authentication" is set to "No Authentication".
-   [<img src="/img/tutorial/new_webapp_2019_600.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />](/img/tutorial/new_webapp_2019.png)
+   [<img src="/img/tutorial/new_webapp_600_2019.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />](/img/tutorial/new_webapp_2019.png)
 7. Click "Create".
 
 Note: We are using .NET Core 3.1 in this tutorial.
@@ -59,7 +59,7 @@ The default Web Application template includes some example content that we don't
 
 We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages...". Click the "Browse" tab, search for "React.AspNet", and install the **React.AspNet** package.
 
-[<img src="/img/tutorial/nuget_core_2019_650.png" alt="Screenshot: Install NuGet Packages" width="650" />](/img/tutorial/nuget_core_2019.png)
+[<img src="/img/tutorial/nuget_core_650_2019.png" alt="Screenshot: Install NuGet Packages" width="650" />](/img/tutorial/nuget_core_2019.png)
 
 ### Install a JS engine
 
