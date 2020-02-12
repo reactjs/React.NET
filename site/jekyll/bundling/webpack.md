@@ -45,13 +45,13 @@ global.Components = { RootComponent };
 
 Once Webpack has been configured, run `npm run build` to build the bundles. Once you have verified that the bundle is being created correctly, you can modify your ReactJS.NET configuration (normally `App_Start\ReactConfig.cs`) to load the newly-created bundle.
 
+With the recommended webpack configuration, an asset manifest is generated automatically by the `webpack-asset-manifest` plugin, written to `asset-manifest.json`. This file contains a list of all of the bundles required to run your app. To use it, call `.SetReactAppBuildPath("~/dist")`. However, you may still provide exact paths to files if you need to by calling `AddScriptWithoutTransform("~/dist/path-to-your-file.js")`.
+
 ```csharp
 ReactSiteConfiguration.Configuration
   .SetLoadBabel(false)
   .SetLoadReact(false)
-  .AddScriptWithoutTransform("~/dist/runtime.js")
-  .AddScriptWithoutTransform("~/dist/vendor.js")
-  .AddScriptWithoutTransform("~/dist/components.js");
+  .SetReactAppBuildPath("~/dist");
 ```
 
 This will load all your components into the `Components` global, which can be used from `Html.React` to render any of the components:
@@ -72,10 +72,14 @@ Reference the built bundle directly in a script tag at the end of the page in `_
 @using React.AspNet
 
 // before the closing </body> tag
-<script src="/dist/runtime.js"></script>
-<script src="/dist/vendor.js"></script>
-<script src="/dist/components.js"></script>
-@Html.ReactInitJavaScript()
+@Html.ReactGetScriptPaths()
+@Html.ReactInitJavascript()
+```
+
+If you're importing `.css` files or using CSS modules in your React components, reference the built stylesheet in the `<head>` element of your layout:
+
+```html
+@Html.ReactGetStylePaths()
 ```
 
 A full example is available in [the ReactJS.NET repository](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc).

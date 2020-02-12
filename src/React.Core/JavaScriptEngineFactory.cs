@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JSPool;
+using Newtonsoft.Json;
 using React.Exceptions;
 
 namespace React
@@ -171,6 +172,16 @@ namespace React
 		/// <param name="engine">Engine to load scripts into</param>
 		private void LoadUserScripts(IJsEngine engine)
 		{
+			if (_config.ReactAppBuildPath != null)
+			{
+				var webpackAssets = JsonConvert.DeserializeObject<ReactAppAssetManifest>(_fileSystem.ReadAsString($"{_config.ReactAppBuildPath}/asset-manifest.json"));
+
+				foreach (var file in webpackAssets.Entrypoints?.Where(x => x.EndsWith(".js")))
+				{
+					engine.ExecuteFile(_fileSystem, file);
+				}
+			}
+
 			foreach (var file in _config.ScriptsWithoutTransform)
 			{
 				try
