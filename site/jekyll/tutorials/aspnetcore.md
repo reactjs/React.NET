@@ -6,7 +6,7 @@ layout: docs
 
 > Note:
 >
-> This tutorial is for Visual Studio 2015 and ASP.NET Core MVC. If you're still using ASP.NET 4 and ASP.NET MVC 5, you can [follow the ASP.NET 4 tutorial instead](/tutorials/aspnet4.html)
+> This tutorial is for Visual Studio 2019 and ASP.NET Core MVC. If you're still using ASP.NET 4 and ASP.NET MVC 5, you can [follow the ASP.NET 4 tutorial instead](/tutorials/aspnet4.html)
 
 This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](https://reactjs.org/tutorial/tutorial.html) but has been modified specifically for ReactJS.NET.
 
@@ -24,26 +24,29 @@ It'll also have a few neat features:
 -   **Live updates:** other users' comments are popped into the comment view in real time.
 -   **Markdown formatting:** users can use Markdown to format their text.
 
-## Want to skip all this and just see the source?
+## Want to skip all this and see the source?
 
 [It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/tutorial-code).
 
 ## Getting started
 
-For this tutorial we'll be using Visual Studio 2015. If you do not already have a copy of Visual Studio, [the Community version](https://www.visualstudio.com/vs/community/) is free. We will be using ASP.NET Core MVC.
+For this tutorial we'll be using Visual Studio 2019. If you do not already have a copy of Visual Studio, [the Community version](https://www.visualstudio.com/vs/community/) is free. We will be using ASP.NET Core MVC.
 
 ### New Project
 
 Start by creating a new ASP.NET Core MVC project:
 
-1. File → New → Project
-2. Ensure ".NET Framework 4.6" is selected in the dropdown list at the top
-3. Go to Templates → Visual C# → Web and select the "ASP.NET Core Web Application (.NET Framework)" template. Call it "ReactDemo"
-   [<img src="/img/tutorial/newproject_core_600.png" alt="Screenshot: New Project" width="600" />](/img/tutorial/newproject_core.png)
-4. In the "New ASP.NET Core Web Application" dialog, select the Web Application template. Also, click "Change Authentication" and select "No Authentication"
-   [<img src="/img/tutorial/new_webapp_600.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />](/img/tutorial/new_webapp.png)
+1. File → New → Project...
+2. Select "ASP.NET Core Web Application". You may search for it via the search box or narrow down your choices via the drop-downs - C#, All platforms, Web is a good way to get it as the first result.
+	[<img src="/img/tutorial/r_newproject_core_600.png" alt="Screenshot: New Project" width="592" />](/img/tutorial/newproject_core_2019.png)
+3. Click "Next".
+4. Enter "ReactDemo" for the project name and location to store it.
+5. Click "Create".
+6. In the "Create a new ASP.NET Core web application" dialog, select the "Web Application (Model-View-Controller)" template. Also, ensure "Change Authentication" is set to "No Authentication".
+   [<img src="/img/tutorial/new_webapp_600_2019.png" alt="Screenshot: New ASP.NET Core MVC Project dialog" width="600" />](/img/tutorial/new_webapp_2019.png)
+7. Click "Create".
 
-Note: We are using .NET Framework in this tutorial, but you can instead use .NET Core if you want to be able to run your site on Linux or Mac OS. Currently .NET Core is missing some of the functionality provided by .NET Framework, so it is recommended to use .NET Framework unless you have a reason to use .NET Core specifically (eg. cross-platform support).
+Note: We are using .NET Core 3.1 in this tutorial.
 
 ### Remove example content
 
@@ -51,14 +54,40 @@ The default Web Application template includes some example content that we don't
 
 -   `Controllers\HomeController.cs`
 -   `Views\Home` and `Views\Shared` folders
--   `bundleconfig.json`
--   `Project_Readme.html`
 
 ### Install ReactJS.NET
 
-We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages". Click the "Browse" tab, search for "React.AspNet", and install the **React.AspNet** package.
+We need to install ReactJS.NET to the newly-created project. This is accomplished using NuGet, a package manager for .NET. Right-click on the "ReactDemo" project in the Solution Explorer and select "Manage NuGet Packages...". Click the "Browse" tab, search for "React.AspNet", and install the **React.AspNet** package.
 
-[<img src="/img/tutorial/nuget_core_650.png" alt="Screenshot: Install NuGet Packages" width="650" />](/img/tutorial/nuget_core.png)
+[<img src="/img/tutorial/nuget_core_650_2019.png" alt="Screenshot: Install NuGet Packages" width="650" />](/img/tutorial/nuget_core_2019.png)
+
+### Install a JS engine
+
+While we're managing NuGet packages, we need to install a JS engine. Search for and install one of either:
+
+-	`JavaScriptEngineSwitcher.V8` (what this tutorial uses)
+-	`JavaScriptEngineSwitcher.ChakraCore`
+
+If you choose ChakraCore, make sure you change any code/using statements in this tutorial where needed.
+
+Now, install the native assembly based on your architecture and engine choice:
+
+V8:
+
+-	`JavaScriptEngineSwitcher.V8.Native.win-x86`
+-	`JavaScriptEngineSwitcher.V8.Native.win-x64` (what this tutorial uses)
+
+Chakra:
+
+-	`JavaScriptEngineSwitcher.ChakraCore.Native.win-x86`
+-	`JavaScriptEngineSwitcher.ChakraCore.Native.win-x64`
+-	`JavaScriptEngineSwitcher.ChakraCore.Native.win-arm`
+-	`JavaScriptEngineSwitcher.ChakraCore.Native.linux-x64`
+-	`JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64`
+
+Lastly, install `JavaScriptEngineSwitcher.Extensions.MsDependencyInjection`.
+
+### Modify Startup.cs
 
 We also need to modify the `Startup.cs` file to initialize ReactJS.NET. You can learn more about this on the [Getting Started on ASP.NET Core](/getting-started/aspnetcore.html) page. Open `Startup.cs` and perform the following changes:
 
@@ -66,7 +95,7 @@ At the top of the file, add:
 
 ```csharp
 using Microsoft.AspNetCore.Http;
-using JavaScriptEngineSwitcher.ChakraCore;
+using JavaScriptEngineSwitcher.V8;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using React.AspNet;
 ```
@@ -74,8 +103,7 @@ using React.AspNet;
 Directly above:
 
 ```csharp
-// Add framework services.
-services.AddMvc();
+services.AddControllersWithViews();
 ```
 
 Add:
@@ -85,8 +113,8 @@ services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddReact();
 
 // Make sure a JS engine is registered, or you will get an error!
-services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
-  .AddChakraCore();
+services.AddJsEngineSwitcher(options => options.DefaultEngineName = V8JsEngine.EngineName)
+  .AddV8();
 ```
 
 Directly **above**:
@@ -119,7 +147,7 @@ app.UseReact(config =>
 });
 ```
 
-Finally, add this to `Views\_ViewImports.cshtml`:
+Finally, add this to the top of `Views\_ViewImports.cshtml`:
 
 ```csharp
 @using React.AspNet
@@ -127,18 +155,19 @@ Finally, add this to `Views\_ViewImports.cshtml`:
 
 ### Create basic controller and view
 
-Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover creation of an MVC controller in much detail. To learn more about ASP.NET MVC, refer to [its official website](http://www.asp.net/mvc).
+Since this tutorial focuses mainly on ReactJS.NET itself, we will not cover creation of an MVC controller in much detail. To learn more about ASP.NET MVC, refer to [its official website](https://dotnet.microsoft.com/apps/aspnet/mvc).
 
-1. Right-click on the Controllers folder and select Add → New Item
-2. Select .NET Core → ASP.NET → MVC Controller Class
+1. Right-click on the Controllers folder and select Add → New Item...
+2. Select ASP.NET Core → Controller Class
 3. Name the file `HomeController.cs`
+4. Click "Add"
 
 Once the controller has been created, we also need to create a view
 
-1. Right-click on the Views folder, click "New Folder", and create a "Home" folder
-2. Right-click on the Views\Home folder and select Add → New Item
-3. Select .NET Core → ASP.NET → MVC View Page
-4. Name the file `Index.cshtml`
+1. Right-click on the Views folder, select Add → New Folder, and create a "Home" folder
+2. Right-click on the Views\Home folder and select Add → View...
+3. Name the view file `Index`
+4. Click "Add"
 
 Replace the contents of the new view file with the following:
 
@@ -154,6 +183,7 @@ Replace the contents of the new view file with the following:
 	<div id="content"></div>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
 	<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js"></script>
 <script src="@Url.Content("~/js/Tutorial.jsx")"></script>
 </body>
 </html>
@@ -161,7 +191,7 @@ Replace the contents of the new view file with the following:
 
 _Note: In a real ASP.NET MVC site, you'd use a layout. However, to keep this tutorial simple, we will keep all HTML in the one view file._
 
-We also need to create the referenced JavaScript file (`tutorial.jsx`). Right-click on `wwwroot\js` and select Add → New Item. Select .NET Core → Client-side → JavaScript File, enter "tutorial.jsx" as the file name, and click "Add".
+We also need to create the referenced JavaScript file (`tutorial.jsx`). Right-click on `wwwroot\js` and select Add → New Item. Select ASP.NET Core → Web → Scripts → JavaScript File, enter "tutorial.jsx" as the file name, and click "Add".
 
 For the remainder of this tutorial, we'll be writing our JavaScript code in this file.
 
@@ -176,7 +206,7 @@ React is all about modular, composable components. For our comment box example, 
   - CommentForm
 ```
 
-Let's build the `CommentBox` component, which just displays a simple `<div>`. Add this code to `Tutorial.jsx`:
+Let's build the `CommentBox` component, which displays a simple `<div>`. Add this code to `Tutorial.jsx`:
 
 ```javascript
 class CommentBox extends React.Component {
@@ -194,7 +224,7 @@ Note that native HTML element names start with a lowercase letter, while custom 
 
 At this point, run your application by clicking the "Play" button in Visual Studio. If successful, your default browser should start and you should see "Hello, world! I am a CommentBox."
 
-<img src="/img/tutorial/helloworld.png" alt="Screenshot: Hello ReactJS.NET World!" width="335" />
+<img src="/img/tutorial/helloworld-2019.png" alt="Screenshot: Hello ReactJS.NET World!" width="450" />
 
 If you see this, congratulations! You've just built your first React component. You can leave the application running while you continue this tutorial. Simply change the JSX file and refresh to see your changes.
 
@@ -320,12 +350,21 @@ Note that we have passed some data from the parent `CommentList` component to th
 
 Markdown is a simple way to format your text inline. For example, surrounding text with asterisks will make it emphasized.
 
-In this tutorial we use a third-party library called [remarkable](https://github.com/jonschlinkert/remarkable) which takes Markdown text and converts it to raw HTML. We already included this library with the original markup for the page, so we can just start using it. Let's convert the comment text to Markdown and output it:
+In this tutorial we use a third-party library called [remarkable](https://github.com/jonschlinkert/remarkable) which takes Markdown text and converts it to raw HTML. We already included this library with the original markup for the page, so we can start using it right away. Let's convert the comment text to Markdown and output it:
 
-```javascript{3,9}
+```javascript{12,18}
+function createRemarkable() {
+    var remarkable =
+        'undefined' != typeof global && global.Remarkable
+            ? global.Remarkable
+            : window.Remarkable;
+
+    return new remarkable();
+}
+
 class Comment extends React.Component {
 	render() {
-		const md = new Remarkable();
+		const md = createRemarkable();
 		return (
 			<div className="comment">
 				<h2 className="commentAuthor">{this.props.author}</h2>
@@ -336,7 +375,7 @@ class Comment extends React.Component {
 }
 ```
 
-All we're doing here is calling the remarkable library. We need to convert `this.props.children` from React's wrapped text to a raw string that remarkable will understand so we explicitly call `toString()`.
+All we're doing here is finding and calling the remarkable library. We need to convert `this.props.children` from React's wrapped text to a raw string that remarkable will understand so we explicitly call `toString()`.
 
 But there's a problem! Our rendered comments look like this in the browser: "`<p>`This is `<em>`another`</em>` comment`</p>`". We want those tags to actually render as HTML.
 
@@ -370,15 +409,15 @@ So far we've been inserting the comments directly in the source code. Instead, l
 
 ```javascript
 const data = [
-	{ Id: 1, Author: 'Daniel Lo Nigro', Text: 'Hello ReactJS.NET World!' },
-	{ Id: 2, Author: 'Pete Hunt', Text: 'This is one comment' },
-	{ Id: 3, Author: 'Jordan Walke', Text: 'This is *another* comment' },
+	{ id: 1, author: 'Daniel Lo Nigro', text: 'Hello ReactJS.NET World!' },
+	{ id: 2, author: 'Pete Hunt', text: 'This is one comment' },
+	{ id: 3, author: 'Jordan Walke', text: 'This is *another* comment' },
 ];
 ```
 
 We need to get this data into `CommentList` in a modular way. Modify `CommentBox` and the `ReactDOM.render()` call to pass this data into the `CommentList` via props:
 
-```javascript{6,14}
+```javascript{6,13}
 class CommentBox extends React.Component {
 	render() {
 		return (
@@ -396,12 +435,12 @@ ReactDOM.render(<CommentBox data={data} />, document.getElementById('content'));
 
 Now that the data is available in the `CommentList`, let's render the comments dynamically:
 
-```javascript{3-7,10}
+```javascript{3-8}
 class CommentList extends React.Component {
 	render() {
 		const commentNodes = this.props.data.map(comment => (
-			<Comment author={comment.Author} key={comment.Id}>
-				{comment.Text}
+			<Comment author={comment.author} key={comment.id}>
+				{comment.text}
 			</Comment>
 		));
 		return <div className="commentList">{commentNodes}</div>;
@@ -413,7 +452,7 @@ That's it!
 
 ### Server-side Data
 
-Let's return some data from the server. To do so, we need to first create a C# class to represent our comments. Right-click on ReactDemo and select Add → New Folder and name the folder "Models". Once the models folder has been created, right click on it, select Add → Class, and enter "CommentModel.cs" as the file name. We'll create a basic comment model:
+Let's return some data from the server. If you are still debugging, end it by pressing the Stop button. To do so, we need to first create a C# class to represent our comments. You should have a "Models" folder, but if not, right-click on ReactDemo and select Add → New Folder and name the folder "Models". Once the models folder exists, right click on it, select Add → Class..., and enter "CommentModel.cs" as the file name. We'll create a basic comment model:
 
 ```csharp
 namespace ReactDemo.Models
@@ -427,7 +466,7 @@ namespace ReactDemo.Models
 }
 ```
 
-In a real application, you'd use the repository pattern here, and retrieve the comments from a database. For simplicity, we'll just modify our controller to have a hard-coded list of comments.
+In a real application, you'd use the repository pattern here, and retrieve the comments from a database. For simplicity, we'll modify our controller to have a hard-coded list of comments.
 
 ```csharp{9,13-33}
 using System.Collections.Generic;
@@ -488,7 +527,7 @@ The `Route` attribute specifies that this action should be used when `/comments`
 
 The `ResponseCache` attribute is used here to prevent browsers from caching the response. When designing a real world API, caching of API requests should be considered more carefully. For this tutorial it is easiest to simply disable caching.
 
-If you hit `/comments` in your browser, you should now see the data encoded as JSON:
+Let's restart debugging (press the play button) and hit `/comments` in your browser, you should now see the data encoded as JSON:
 
 <img src="/img/tutorial/json.png" alt="Screenshot: JSON data source" width="468" />
 
@@ -499,7 +538,7 @@ Now that we have a data source, we can replace the hard-coded data with the dyna
 ```javascript{2}
 ReactDOM.render(
 	<CommentBox url="/comments" />,
-	document.getElementById('content'),
+	document.getElementById('content')
 );
 ```
 
@@ -570,7 +609,7 @@ Below, we're using `componentDidMount()`, a method called automatically by React
 
 The key to these dynamic updates is the call to `this.setState()`. We replace the old array of comments with the new one from the server and the UI automatically updates itself. Because of this reactivity, it is only a minor change to add live updates. We will use simple polling here but you could easily use [SignalR](http://signalr.net/) or other technologies.
 
-```javascript{6,15-18,31}
+```javascript{6,15-21,34}
 class CommentBox extends React.Component {
 	constructor(props) {
 		super(props);
@@ -613,7 +652,7 @@ All we have done here is move the AJAX call to a separate method and call it whe
 
 ### Adding new comments
 
-To accept new comments, we need to first add a controller action to handle it. This will just be some simple C# code that appends the new comment to the static list of comments:
+To accept new comments, we need to first add a controller action to handle it. This will be some simple C# code that appends the new comment to the static list of comments:
 
 ```csharp
 [Route("comments/new")]
@@ -651,7 +690,7 @@ With the traditional DOM, `input` elements are rendered and the browser manages 
 
 Hence, we will be using `this.state` to save the user's input as it is entered. We define an initial `state` with two properties `author` and `text` and set them to be empty strings. In our `<input>` elements, we set the `value` prop to reflect the `state` of the component and attach `onChange` handlers to them. These `<input>` elements with a `value` set are called controlled components. Read more about controlled components on the [Forms article](https://reactjs.org/docs/forms.html#controlled-components).
 
-```javascript{2-13,16-28}
+```javascript{2-13,17-28}
 class CommentForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -754,7 +793,7 @@ When a user submits a comment, we will need to refresh the list of comments to i
 
 We need to pass data from the child component back up to its parent. We do this in our parent's `render` method by passing a new callback (`handleCommentSubmit`) into the child, binding it to the child's `onCommentSubmit` event. Whenever the event is triggered, the callback will be invoked:
 
-```javascript{5,16-18,28}
+```javascript{5,16-18,31}
 class CommentBox extends React.Component {
 	constructor(props) {
 		super(props);
@@ -816,7 +855,7 @@ class CommentForm extends React.Component {
 		if (!text || !author) {
 			return;
 		}
-		this.props.onCommentSubmit({ Author: author, Text: text });
+		this.props.onCommentSubmit({ author: author, text: text });
 		this.setState({ author: '', text: '' });
 	}
 	render() {
@@ -843,7 +882,7 @@ class CommentForm extends React.Component {
 
 Now that the callbacks are in place, all we have to do is submit to the server and refresh the list:
 
-```javascript{16-25,42}
+```javascript{16-25,45-49}
 class CommentBox extends React.Component {
 	constructor(props) {
 		super(props);
@@ -861,8 +900,8 @@ class CommentBox extends React.Component {
 	}
 	handleCommentSubmit(comment) {
 		const data = new FormData();
-		data.append('author', comment.Author);
-		data.append('text', comment.Text);
+		data.append('author', comment.author);
+		data.append('text', comment.text);
 
 		const xhr = new XMLHttpRequest();
 		xhr.open('post', this.props.submitUrl, true);
@@ -930,13 +969,13 @@ class CommentBox extends React.Component {
 		// Optimistically set an id on the new comment. It will be replaced by an
 		// id generated by the server. In a production application you would likely
 		// use a more robust system for ID generation.
-		comment.Id = comments.length + 1;
+		comment.id = comments.length + 1;
 		const newComments = comments.concat([comment]);
 		this.setState({ data: newComments });
 
 		const data = new FormData();
-		data.append('Author', comment.Author);
-		data.append('Text', comment.Text);
+		data.append('Author', comment.author);
+		data.append('Text', comment.text);
 
 		const xhr = new XMLHttpRequest();
 		xhr.open('post', this.props.submitUrl, true);
@@ -972,7 +1011,7 @@ There used to be a section on bundling and minification in this tutorial, but un
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using the client. Server-side rendering enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required. Also, we need to remove the `ReactDOM.render` call from the JSX file, as server-side rendering automatically outputs the correct `ReactDOM.render` call for you.
+We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the initial `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required. 
 
 ```javascript{4,31-33}
 class CommentBox extends React.Component {
@@ -1023,33 +1062,28 @@ class CommentBox extends React.Component {
 }
 ```
 
-We also need to update the `Comment` component to use `Remarkable` from either `global` or `window`, due to a bug in Remarkable:
+Also, we need to remove the `ReactDOM.render` call from the JSX file, as server-side rendering automatically outputs the correct `ReactDOM.render` call for you.
+
+```csharp
+// ReactDOM.render(
+//     <CommentBox
+//         url="/comments"
+//         submitUrl="/comments/new"
+//         pollInterval={2000}
+//     />,
+//     document.getElementById('content')
+// );
+```
+
+We need to update the Comment component to use Remarkable from either global or window, due to a bug in Remarkable. A utility function was provided earlier in the tutorial.
 
 ```javascript{3}
-function createRemarkable() {
-	var remarkable =
-		'undefined' != typeof global && global.Remarkable
-			? global.Remarkable
-			: window.Remarkable;
-
-	return new remarkable();
-}
-
 class Comment extends React.Component {
-	rawMarkup() {
-		const md = createRemarkable();
-		const rawMarkup = md.render(this.props.children.toString());
-		return { __html: rawMarkup };
-	}
-	render() {
-		return (
-			<div className="comment">
-				<h2 className="commentAuthor">{this.props.author}</h2>
-				<span dangerouslySetInnerHTML={this.rawMarkup()} />
-			</div>
-		);
-	}
-}
+    rawMarkup() {
+        const md = createRemarkable();
+        const rawMarkup = md.render(this.props.children.toString());
+        return { __html: rawMarkup };
+    }
 ```
 
 In the view, we will accept the list of comments as the model, and use `Html.React` to render the component. This will replace the `ReactDOM.render` call that currently exists in Tutorial.jsx. All the props from the current `ReactDOM.render` call should be moved here, and the `ReactDOM.render` call should be deleted.
@@ -1091,7 +1125,7 @@ public ActionResult Index()
 
 We also need to modify `Startup.cs` to tell ReactJS.NET which JavaScript files it requires for the server-side rendering:
 
-```csharp{4-10}
+```csharp{4-6}
 // Initialise ReactJS.NET. Must be before static files.
 app.UseReact(config =>
 {
@@ -1101,7 +1135,7 @@ app.UseReact(config =>
 });
 ```
 
-Note that we need a copy of Remarkable in order to load it for server-side rendering. In a production app you'd probably use Bower or npm for this, but for our tutorial you can just [download the file from CDNJS](https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js) and save it into `~/js`.
+Note that we need a copy of Remarkable in order to load it for server-side rendering. In a production app you'd probably use Bower or npm for this, but for our tutorial you can [download the file from CDNJS](https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.7.1/remarkable.min.js) and save it into `~/js`.
 
 That's it! Now if you build and refresh your application, you should notice that the comments box is rendered immediately rather than having a slight delay. If you view the source of the page, you will see the initial comments directly in the HTML itself:
 
@@ -1111,13 +1145,12 @@ That's it! Now if you build and refresh your application, you should notice that
   <title>Hello React</title>
 </head>
 <body>
-  <div id="react1">
-    <div class="commentBox" data-reactid=".2ged0u96as7" data-react-checksum="118121939">
-      <h1 data-reactid=".2ged0u96as7.0">Comments</h1>
-      <div class="commentList" data-reactid=".2ged0u96as7.1">
-        <div class="comment" data-reactid=".2ged0u96as7.1.0">
-          <h2 class="commentAuthor" data-reactid=".2ged0u96as7.1.0.0">Daniel Lo Nigro</h2>
-          <span data-reactid=".2ged0u96as7.1.0.1"><p>Hello ReactJS.NET World!</p></span>
+  <div id="react_0HLTCOER4L8KP">
+    <div class="commentBox" data-reactroot="">Comments</h1>
+      <div class="commentList">
+        <div class="comment">
+          <h2 class="commentAuthor">Daniel Lo Nigro</h2>
+          <span><p>Hello ReactJS.NET World!</p></span>
         </div>
 
 	<!-- Rest of the contents ommitted for brevity -->
