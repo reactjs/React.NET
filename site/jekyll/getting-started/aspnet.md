@@ -4,7 +4,7 @@ layout: docs
 title: Getting Started (ASP.NET 4.x)
 ---
 
-Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
+#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
 
 This guide covers enabling server-side rendering and Babel compilation. If you want a step-by-step guide on configuring a brand new site, see [the ReactJS.NET tutorial for ASP.NET](/tutorials/aspnet4.html).
 
