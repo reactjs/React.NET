@@ -17,4 +17,4 @@ global.ReactJss = { JssProvider, SheetsRegistry };
 global.EmotionServer = { renderStylesToString };
 global.Helmet = Helmet;
 
-global.RootComponent = RootComponent;
+global.Components = { RootComponent };

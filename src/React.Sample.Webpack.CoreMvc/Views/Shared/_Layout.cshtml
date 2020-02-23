@@ -1,3 +1,4 @@
+@using React.AspNet
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,5 +10,9 @@
 </head>
 <body>
 	@RenderBody()
+	<script src="/dist/runtime.js"></script>
+	<script src="/dist/vendor.js"></script>
+	<script src="/dist/components.js"></script>
+	@Html.ReactInitJavaScript()
 </body>
 </html>
