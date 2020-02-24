@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading;
 using JavaScriptEngineSwitcher.Core;
 using JSPool;
-using Newtonsoft.Json;
 using React.Exceptions;
 
 namespace React
@@ -85,8 +84,11 @@ namespace React
 		protected virtual IJsPool CreatePool()
 		{
 			var allFiles = _config.Scripts
-				.Concat(_config.ScriptsWithoutTransform)
-				.Select(_fileSystem.MapPath);
+					.Concat(_config.ScriptsWithoutTransform)
+					.Concat(_config.ReactAppBuildPath != null
+						? new[] { $"{_config.ReactAppBuildPath}/asset-manifest.json"}
+						: Enumerable.Empty<string>())
+					.Select(_fileSystem.MapPath);
 
 			var poolConfig = new JsPoolConfig
 			{
@@ -141,7 +143,7 @@ namespace React
 			if (!_config.LoadReact && _scriptLoadException == null)
 			{
 				// We expect the user to have loaded their own version of React in the scripts that
-				// were loaded above, let's ensure that's the case. 
+				// were loaded above, let's ensure that's the case.
 				EnsureReactLoaded(engine);
 			}
 		}
@@ -174,11 +176,18 @@ namespace React
 		{
 			if (_config.ReactAppBuildPath != null)
 			{
-				var webpackAssets = JsonConvert.DeserializeObject<ReactAppAssetManifest>(_fileSystem.ReadAsString($"{_config.ReactAppBuildPath}/asset-manifest.json"));
-
-				foreach (var file in webpackAssets.Entrypoints?.Where(x => x.EndsWith(".js")))
+				var manifest = ReactAppAssetManifest.LoadManifest(_config, _fileSystem, _cache, useCacheRead: false);
+				foreach (var file in manifest.Entrypoints?.Where(x => x != null && x.EndsWith(".js")))
 				{
-					engine.ExecuteFile(_fileSystem, file);
+					if (_config.AllowJavaScriptPrecompilation
+						&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
+					{
+						// Do nothing.
+					}
+					else
+					{
+						engine.ExecuteFile(_fileSystem, file);
+					}
 				}
 			}
 

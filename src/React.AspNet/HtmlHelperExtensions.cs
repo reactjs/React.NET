@@ -171,7 +171,7 @@ namespace React.AspNet
 		}
 
 		/// <summary>
-		/// Writes script tags based on the webpack asset manifest
+		/// Returns script tags based on the webpack asset manifest
 		/// </summary>
 		/// <param name="htmlHelper"></param>
 		/// <returns></returns>
@@ -186,7 +186,7 @@ namespace React.AspNet
 		}
 
 		/// <summary>
-		/// Writes style tags based on the webpack asset manifest
+		/// Returns style tags based on the webpack asset manifest
 		/// </summary>
 		/// <param name="htmlHelper"></param>
 		/// <returns></returns>
