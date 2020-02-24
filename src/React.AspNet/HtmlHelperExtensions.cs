@@ -7,6 +7,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 #if LEGACYASPNET
@@ -167,6 +168,32 @@ namespace React.AspNet
 			{
 				Environment.ReturnEngineToPool();
 			}
+		}
+
+		/// <summary>
+		/// Returns script tags based on the webpack asset manifest
+		/// </summary>
+		/// <param name="htmlHelper"></param>
+		/// <returns></returns>
+		public static IHtmlString ReactGetScriptPaths(this IHtmlHelper htmlHelper)
+		{
+			string nonce = Environment.Configuration.ScriptNonceProvider != null
+				? $" nonce=\"{Environment.Configuration.ScriptNonceProvider()}\""
+				: "";
+
+			return new HtmlString(string.Join("", Environment.GetScriptPaths()
+				.Select(scriptPath => $"<script{nonce} src=\"{scriptPath}\"></script>")));
+		}
+
+		/// <summary>
+		/// Returns style tags based on the webpack asset manifest
+		/// </summary>
+		/// <param name="htmlHelper"></param>
+		/// <returns></returns>
+		public static IHtmlString ReactGetStylePaths(this IHtmlHelper htmlHelper)
+		{
+			return new HtmlString(string.Join("", Environment.GetStylePaths()
+				.Select(stylePath => $"<link rel=\"stylesheet\" href=\"{stylePath}\" />")));
 		}
 
 		private static IHtmlString RenderToString(Action<StringWriter> withWriter)

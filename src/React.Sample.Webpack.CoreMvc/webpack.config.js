@@ -1,11 +1,10 @@
 const path = require('path');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
-	entry: {
-		components: './Content/components/expose-components.js',
-	},
+	entry: './Content/components/expose-components.js',
 	output: {
-		filename: '[name].js',
+		filename: '[name].js', // change this to '[name].[contenthash:8].js' if using the asset manifest for better caching
 		globalObject: 'this',
 		path: path.resolve(__dirname, 'wwwroot/dist'),
 		publicPath: 'dist/'
@@ -34,4 +33,22 @@ module.exports = {
 			},
 		],
 	},
+	plugins: [
+		new ManifestPlugin({
+			fileName: 'asset-manifest.json',
+			generate: (seed, files) => {
+				const manifestFiles = files.reduce((manifest, file) => {
+					manifest[file.name] = file.path;
+					return manifest;
+				}, seed);
+
+				const entrypointFiles = files.filter(x => x.isInitial && !x.name.endsWith('.map')).map(x => x.path);
+
+				return {
+					files: manifestFiles,
+					entrypoints: entrypointFiles,
+				};
+			},
+		}),
+	]
 };
