@@ -270,5 +270,44 @@ namespace React.Tests.Mvc
 
 			Assert.Equal("HTML", result.ToHtmlString());
 		}
+
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void ReactGetScriptPaths(bool withNonce)
+		{
+			var config = new Mock<IReactSiteConfiguration>();
+			var environment = ConfigureMockEnvironment(config.Object);
+
+			if (withNonce)
+			{
+				config.Setup(x => x.ScriptNonceProvider).Returns(() => "test1234");
+			}
+
+			environment.Setup(x => x.GetScriptPaths()).Returns(new[] { "/dist/vendor.js", "/dist/app.js" });
+
+			var result = HtmlHelperExtensions.ReactGetScriptPaths(null);
+
+			if (withNonce)
+			{
+				Assert.Equal("<script nonce=\"test1234\" src=\"/dist/vendor.js\"></script><script nonce=\"test1234\" src=\"/dist/app.js\"></script>", result.ToHtmlString());
+			}
+			else
+			{
+				Assert.Equal("<script src=\"/dist/vendor.js\"></script><script src=\"/dist/app.js\"></script>", result.ToHtmlString());
+			}
+		}
+
+		[Fact]
+		public void ReactGetStylePaths()
+		{
+			var environment = ConfigureMockEnvironment();
+
+			environment.Setup(x => x.GetStylePaths()).Returns(new[] { "/dist/vendor.css", "/dist/app.css" });
+
+			var result = HtmlHelperExtensions.ReactGetStylePaths(null);
+
+			Assert.Equal("<link rel=\"stylesheet\" href=\"/dist/vendor.css\" /><link rel=\"stylesheet\" href=\"/dist/app.css\" />", result.ToHtmlString());
+		}
 	}
 }

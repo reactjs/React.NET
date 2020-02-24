@@ -19,11 +19,11 @@ namespace React
 		/// <summary>
 		/// Adds a script to the list of scripts that are executed. This should be called for all
 		/// React components and their dependencies. If the script does not have any JSX in it
-		/// (for example, it's built using Webpack or Gulp), use 
+		/// (for example, it's built using Webpack or Gulp), use
 		/// <see cref="AddScriptWithoutTransform"/> instead.
 		/// </summary>
 		/// <param name="filename">
-		/// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
+		/// Name of the file to execute. Should be a server relative path starting with ~ (eg.
 		/// <c>~/Scripts/Awesome.js</c>)
 		/// </param>
 		/// <returns>This configuration, for chaining</returns>
@@ -35,7 +35,7 @@ namespace React
 		/// more efficient.
 		/// </summary>
 		/// <param name="filename">
-		/// Name of the file to execute. Should be a server relative path starting with ~ (eg. 
+		/// Name of the file to execute. Should be a server relative path starting with ~ (eg.
 		/// <c>~/Scripts/Awesome.js</c>)
 		/// </param>
 		/// <returns>The configuration, for chaining</returns>
@@ -48,15 +48,15 @@ namespace React
 		IEnumerable<string> Scripts { get; }
 
 		/// <summary>
-		/// Gets a list of all the scripts that have been added to this configuration and do not 
+		/// Gets a list of all the scripts that have been added to this configuration and do not
 		/// require JSX transformation to be run.
 		/// </summary>
-		IEnumerable<string> ScriptsWithoutTransform { get; } 
+		IEnumerable<string> ScriptsWithoutTransform { get; }
 
 		/// <summary>
 		/// Gets or sets whether JavaScript engines should be reused across requests.
 		/// </summary>
-		/// 
+		///
 		bool ReuseJavaScriptEngines { get; set; }
 		/// <summary>
 		/// Sets whether JavaScript engines should be reused across requests.
@@ -79,23 +79,23 @@ namespace React
 		IReactSiteConfiguration SetJsonSerializerSettings(JsonSerializerSettings settings);
 
 		/// <summary>
-		/// Gets or sets the number of engines to initially start when a pool is created. 
+		/// Gets or sets the number of engines to initially start when a pool is created.
 		/// Defaults to <c>10</c>.
 		/// </summary>
 		int? StartEngines { get; set; }
 		/// <summary>
-		/// Sets the number of engines to initially start when a pool is created. 
+		/// Sets the number of engines to initially start when a pool is created.
 		/// Defaults to <c>10</c>.
 		/// </summary>
 		IReactSiteConfiguration SetStartEngines(int? startEngines);
 
 		/// <summary>
-		/// Gets or sets the maximum number of engines that will be created in the pool. 
+		/// Gets or sets the maximum number of engines that will be created in the pool.
 		/// Defaults to <c>25</c>.
 		/// </summary>
 		int? MaxEngines { get; set; }
 		/// <summary>
-		/// Sets the maximum number of engines that will be created in the pool. 
+		/// Sets the maximum number of engines that will be created in the pool.
 		/// Defaults to <c>25</c>.
 		/// </summary>
 		IReactSiteConfiguration SetMaxEngines(int? maxEngines);
@@ -129,7 +129,7 @@ namespace React
 		/// </summary>
 		bool LoadReact { get; set; }
 		/// <summary>
-		/// Sets whether the built-in version of React is loaded. If <c>false</c>, you must 
+		/// Sets whether the built-in version of React is loaded. If <c>false</c>, you must
 		/// provide your own version of React.
 		/// </summary>
 		/// <returns>The configuration, for chaining</returns>
@@ -204,17 +204,29 @@ namespace React
 		IReactSiteConfiguration SetExceptionHandler(Action<Exception, string, string> handler);
 
 		/// <summary>
-		/// A provider that returns a nonce to be used on any script tags on the page. 
+		/// A provider that returns a nonce to be used on any script tags on the page.
 		/// This value must match the nonce used in the Content Security Policy header on the response.
 		/// </summary>
 		Func<string> ScriptNonceProvider { get; set; }
 
 		/// <summary>
-		/// Sets a provider that returns a nonce to be used on any script tags on the page. 
+		/// Sets a provider that returns a nonce to be used on any script tags on the page.
 		/// This value must match the nonce used in the Content Security Policy header on the response.
 		/// </summary>
 		/// <param name="provider"></param>
 		/// <returns></returns>
 		IReactSiteConfiguration SetScriptNonceProvider(Func<string> provider);
+
+		/// <summary>
+		/// The path to the application bundles built by webpack or create-react-app
+		/// </summary>
+		string ReactAppBuildPath { get; set; }
+
+		/// <summary>
+		/// Sets the path to the application bundles built by webpack or create-react-app
+		/// </summary>
+		/// <param name="reactAppBuildPath"></param>
+		/// <returns></returns>
+		IReactSiteConfiguration SetReactAppBuildPath(string reactAppBuildPath);
 	}
 }
