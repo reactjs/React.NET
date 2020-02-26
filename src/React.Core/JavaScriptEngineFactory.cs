@@ -174,19 +174,40 @@ namespace React
 		/// <param name="engine">Engine to load scripts into</param>
 		private void LoadUserScripts(IJsEngine engine)
 		{
-			if (_config.ReactAppBuildPath != null)
+			ReactAppAssetManifest manifest = null;
+			bool devServerUsed = false;
+			if (_config.WebpackDevServerUrl != null)
+				manifest = ReactAppAssetManifest.LoadManifestFromWebpackDevServer(_config);
+
+			if (manifest != null)
 			{
-				var manifest = ReactAppAssetManifest.LoadManifest(_config, _fileSystem, _cache, useCacheRead: false);
+				devServerUsed = true;
+			}
+			else if (_config.ReactAppBuildPath != null)
+			{
+				manifest = ReactAppAssetManifest.LoadManifest(_config, _fileSystem, _cache, useCacheRead: false);
+			}
+
+			if (manifest != null)
+			{
 				foreach (var file in manifest.Entrypoints?.Where(x => x != null && x.EndsWith(".js")))
 				{
-					if (_config.AllowJavaScriptPrecompilation
-						&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
+					if (devServerUsed)
 					{
-						// Do nothing.
+						var script = ReactAppAssetManifest.FetchStringFromUrl(new Uri(_config.WebpackDevServerUrl + file));
+						engine.Execute(script);
 					}
 					else
 					{
-						engine.ExecuteFile(_fileSystem, file);
+						if (_config.AllowJavaScriptPrecompilation
+							&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
+						{
+							// Do nothing.
+						}
+						else
+						{
+							engine.ExecuteFile(_fileSystem, file);
+						}
 					}
 				}
 			}

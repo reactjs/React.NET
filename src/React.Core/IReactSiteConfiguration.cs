@@ -228,5 +228,17 @@ namespace React
 		/// <param name="reactAppBuildPath"></param>
 		/// <returns></returns>
 		IReactSiteConfiguration SetReactAppBuildPath(string reactAppBuildPath);
+
+		/// <summary>
+		/// The URL to the local webpack dev server instance
+		/// </summary>
+		string WebpackDevServerUrl { get; set; }
+
+		/// <summary>
+		/// Sets the URL to the local webpack dev server instance
+		/// </summary>
+		/// <param name="webpackDevServerUrl"></param>
+		/// <returns></returns>
+		IReactSiteConfiguration SetWebpackDevServerUrl(string webpackDevServerUrl);
 	}
 }

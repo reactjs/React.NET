@@ -7,6 +7,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace React
@@ -32,6 +35,38 @@ namespace React
 
 			cache.Set(cacheKey, manifest, TimeSpan.FromHours(1));
 			return manifest;
+		}
+
+		public static ReactAppAssetManifest LoadManifestFromWebpackDevServer(IReactSiteConfiguration _config)
+		{
+			var manifestString = FetchStringFromUrl(new Uri(_config.WebpackDevServerUrl + "asset-manifest.json"));
+			return JsonConvert.DeserializeObject<ReactAppAssetManifest>(manifestString);
+		}
+
+		public static string FetchStringFromUrl(Uri url)
+		{
+			// Really wish we could use HttpClient here, but no async is a recipe for potential deadlocks
+			// An async request pipeline would be needed to pull that off, which this library (today) has no concept of
+			var request = WebRequest.Create(url);
+			request.Timeout = 1000;
+			{
+				using (var response = (HttpWebResponse) request.GetResponse())
+				{
+					if (response.StatusCode != HttpStatusCode.OK)
+						return null;
+
+					return GetString(response);
+				}
+			}
+		}
+
+		private static string GetString(HttpWebResponse response)
+		{
+			using (var responseStream = response.GetResponseStream())
+			{
+				StreamReader reader = new StreamReader(responseStream, Encoding.UTF8);
+				return reader.ReadToEnd();
+			}
 		}
 	}
 }
