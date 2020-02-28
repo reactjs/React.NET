@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when the script pre-compilation is not available.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class ReactScriptPrecompilationNotAvailableException : ReactException
 	{
 		/// <summary>
@@ -24,12 +22,10 @@ namespace React.Exceptions
 		/// <param name="message">The message that describes the error.</param>
 		public ReactScriptPrecompilationNotAvailableException(string message) : base(message) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected ReactScriptPrecompilationNotAvailableException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
-#endif
 	}
 }

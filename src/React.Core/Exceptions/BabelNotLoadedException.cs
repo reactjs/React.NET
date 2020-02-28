@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when Babel is required but has not been loaded.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class BabelNotLoadedException : ReactException
 	{
 		/// <summary>
@@ -23,14 +21,12 @@ namespace React.Exceptions
 		/// </summary>
 		public BabelNotLoadedException() : base(GetMessage()) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected BabelNotLoadedException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{ }
-#endif
 
 		/// <summary>
 		/// Gets a message that describes the current exception.

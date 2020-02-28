@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Base class for all ReactJS.NET exceptions
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class ReactException : Exception
 	{
 		/// <summary>
@@ -35,13 +33,11 @@ namespace React.Exceptions
 		public ReactException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
-		protected ReactException(SerializationInfo info, StreamingContext context) 
+		protected ReactException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{ }
-#endif
 	}
 }
