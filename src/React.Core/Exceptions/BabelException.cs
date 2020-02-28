@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when an error occurs when transforming a JavaScript file via Babel.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class BabelException : ReactException
 	{
 		/// <summary>
@@ -31,12 +29,10 @@ namespace React.Exceptions
 		public BabelException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
-		protected BabelException(SerializationInfo info, StreamingContext context) 
+		protected BabelException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
-#endif
 	}
 }

@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when React has not been initialised correctly.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class ReactNotInitialisedException : ReactException
 	{
 		/// <summary>
@@ -32,12 +30,10 @@ namespace React.Exceptions
 		public ReactNotInitialisedException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected ReactNotInitialisedException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
-#endif
 	}
 }
