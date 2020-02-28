@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when a non-existent component is rendered.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class ReactInvalidComponentException : ReactException
 	{
 		/// <summary>
@@ -31,12 +29,10 @@ namespace React.Exceptions
 		public ReactInvalidComponentException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
-		protected ReactInvalidComponentException(SerializationInfo info, StreamingContext context) 
+		protected ReactInvalidComponentException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
-#endif
 	}
 }

@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when an error occurs while reading a site configuration file.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class ReactConfigurationException : ReactException
 	{
 		/// <summary>
@@ -31,12 +29,10 @@ namespace React.Exceptions
 		public ReactConfigurationException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
-		protected ReactConfigurationException(SerializationInfo info, StreamingContext context) 
+		protected ReactConfigurationException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
-#endif
 	}
 }

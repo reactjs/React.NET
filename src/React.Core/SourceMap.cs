@@ -15,9 +15,7 @@ namespace React
 	/// <summary>
 	/// Represents the data contained in a source map
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class SourceMap
 	{
 		/// <summary>
@@ -33,7 +31,7 @@ namespace React
 
 		/// <summary>
 		/// An optional source root, useful for relocating source files on a server or
-		/// removing repeated values in the <see cref="Sources"/> entry.  This value is 
+		/// removing repeated values in the <see cref="Sources"/> entry.  This value is
 		/// prepended to the individual entries in the <see cref="Sources"/> field.
 		/// </summary>
 		public string SourceRoot { get; set; }
@@ -44,8 +42,8 @@ namespace React
 		public IList<string> Sources { get; set; }
 
 		/// <summary>
-		/// An optional list of source content, useful when the <see cref="Sources"/> can't 
-		/// be hosted. The contents are listed in the same order as the <see cref="Sources"/>. 
+		/// An optional list of source content, useful when the <see cref="Sources"/> can't
+		/// be hosted. The contents are listed in the same order as the <see cref="Sources"/>.
 		/// <c>null</c> may be used if some original sources should be retrieved by name.
 		/// </summary>
 		public IList<string> SourcesContent { get; set; }

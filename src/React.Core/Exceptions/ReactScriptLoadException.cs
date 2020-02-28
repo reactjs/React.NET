@@ -13,9 +13,7 @@ namespace React.Exceptions
 	/// <summary>
 	/// Thrown when an error is encountered while loading a JavaScript file.
 	/// </summary>
-#if !NETSTANDARD1_6
 	[Serializable]
-#endif
 	public class ReactScriptLoadException : ReactException
 	{
 		/// <summary>
@@ -32,12 +30,10 @@ namespace React.Exceptions
 		public ReactScriptLoadException(string message, Exception innerException)
 			: base(message, innerException) { }
 
-#if !NETSTANDARD1_6
 		/// <summary>
 		/// Used by deserialization
 		/// </summary>
 		protected ReactScriptLoadException(SerializationInfo info, StreamingContext context)
 			: base(info, context) { }
-#endif
 	}
 }
