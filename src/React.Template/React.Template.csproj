@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <PackageVersion>1.0</PackageVersion>
     <PackageId>React.Template</PackageId>
+    <PackageProjectUrl>https://github.com/reactjs/react.net</PackageProjectUrl>
+    <PackageLicense>https://github.com/reactjs/React.NET#licence</PackageLicense>
     <Title>ReactJS.NET Template Pack</Title>
     <Authors>ReactJS.NET contributors</Authors>
     <Description>Templates to use for bootstrapping new ReactJS.NET applications.</Description>
