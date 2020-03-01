@@ -27,58 +27,16 @@ ReactJS.NET is a library that makes it easier to use [Babel](http://babeljs.io/)
 
 # Quick Start
 
-Install the package
-
-```powershell
-Install-Package React.Web.Mvc4 # For ASP.NET MVC 4 or 5
-Install-Package React.AspNet   # For ASP.NET Core MVC
+```
+dotnet new -i React.Template
+dotnet new reactnet-vanilla
+dotnet run
 ```
 
-Install a Javascript engine and configure as the default (more info [here](https://reactjs.net/getting-started/aspnet.html) on how this works)
+See also:
 
-```powershell
-Install-Package JavaScriptEngineSwitcher.V8
-Install-Package JavaScriptEngineSwitcher.V8.Native.win-x64
-```
-
-```csharp
-public static class ReactConfig
-{
-    public static void Configure()
-    {
-        ReactSiteConfiguration.Configuration
-            .AddScript("~/Content/HelloWorld.jsx");
-
-        JsEngineSwitcher.Current.DefaultEngineName = V8JsEngine.EngineName;
-        JsEngineSwitcher.Current.EngineFactories.AddV8();
-    }
-}
-```
-
-Create JSX files
-
-```javascript
-// /Scripts/HelloWorld.jsx
-const HelloWorld = props => {
-	return <div>Hello {props.greeting}</div>;
-};
-```
-
-Reference the JSX files from your HTML
-
-```html
-<!-- Place this where you want the component div to render -->
-@Html.React("HelloWorld", new { Greeting = "friends!" });
-
-<!-- Place these at the end of the page -->
-<script src="@Url.Content("~/Scripts/HelloWorld.jsx")"></script>
-@Html.ReactInitJavaScript();
-```
-
-Now you can use the `HelloWorld` component.
-
-For information on more advanced topics (including precompilation and
-server-side rendering), check out [the documentation](http://reactjs.net/docs)
+- [Getting Started](https://reactjs.net/getting-started/aspnetcore.html)
+- [Tutorial](https://reactjs.net/tutorials/aspnetcore.html)
 
 ## Building Manually and Contributing
 
