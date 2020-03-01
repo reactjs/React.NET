@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -69,6 +69,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Tests.Integration", "..\tests\React.Tests.Integration\React.Tests.Integration.csproj", "{5EBC5EA6-7234-40E0-A07B-75D01385FAD2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "React.Tests.Common", "..\tests\React.Tests.Common\React.Tests.Common.csproj", "{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "React.Template", "React.Template\React.Template.csproj", "{FE067035-C82A-49D4-BFBE-4B0AF82F0817}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -156,6 +158,10 @@ Global
 		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29F7122F-ECBB-4EBE-A2BB-3A00CED73C19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE067035-C82A-49D4-BFBE-4B0AF82F0817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE067035-C82A-49D4-BFBE-4B0AF82F0817}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE067035-C82A-49D4-BFBE-4B0AF82F0817}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE067035-C82A-49D4-BFBE-4B0AF82F0817}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
