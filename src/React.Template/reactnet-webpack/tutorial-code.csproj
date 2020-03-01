@@ -16,9 +16,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\React.AspNet.Middleware\React.AspNet.Middleware.csproj" />
     <ProjectReference Include="..\React.AspNet\React.AspNet.csproj" />
-    <ProjectReference Include="..\React.Core\React.Core.csproj" />
     <ProjectReference Include="..\React.Router\React.Router.csproj" />
   </ItemGroup>
 </Project>
