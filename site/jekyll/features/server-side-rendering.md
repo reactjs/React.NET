@@ -49,8 +49,8 @@ code.
 ```html
 <!-- Load all your scripts normally before calling ReactInitJavaScript -->
 <!-- Assumes minification/combination is configured as per previous section -->
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
 @Scripts.Render("~/bundles/main")
 @Html.ReactInitJavaScript()
 ```
@@ -65,8 +65,8 @@ code.
 	</div>
 </div>
 
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.0/umd/react.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.0/umd/react-dom.development.js"></script>
 <script src="/Scripts/HelloWorld.js"></script>
 <script>ReactDOM.render(HelloWorld({"name":"Daniel"}), document.getElementById("react1"));</script>
 ```
