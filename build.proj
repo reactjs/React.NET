@@ -118,14 +118,15 @@ of patent rights can be found in the PATENTS file in the same directory.
 		/>
 	</Target>
 
-	<Target Name="BuildTemplates" DependsOnTargets="Build">
+	<Target Name="PackageTemplates" DependsOnTargets="Build;PackageLibrary">
+		<Exec WorkingDirectory="src/React.Template/reactnet-vanilla" Command="dotnet restore ReactDemo.sln" />
 		<Exec WorkingDirectory="src/React.Template/reactnet-vanilla" Command="dotnet add package React.AspNet -v $(VersionString) -n" />
-		<Exec WorkingDirectory="src/React.Template/reactnet-vanilla" Command="dotnet restore ReactDemo.sln -s ../../../output " />
+		<Exec WorkingDirectory="src/React.Template/reactnet-vanilla" Command="dotnet restore ReactDemo.sln -s $(PackageOutputDir) " />
 		<Exec WorkingDirectory="src/React.Template/reactnet-vanilla" Command="dotnet build ReactDemo.sln -c Release -p:Version=$(VersionString)" />
-		<Exec WorkingDirectory="src/React.Template" Command="dotnet build React.Template.csproj -c Release -p:Version=$(VersionString)" />
+		<Exec WorkingDirectory="src/React.Template" Command="dotnet pack --output $(PackageOutputDir) React.Template.csproj -c Release /p:Version=$(VersionString)" />
 	</Target>
 
-	<Target Name="Package" DependsOnTargets="Build;BuildTemplates">
+	<Target Name="PackageLibrary" DependsOnTargets="Build">
 		<!-- Delete old packages -->
 		<RemoveDir Directories="$(PackageOutputDir)" />
 
@@ -135,6 +136,11 @@ of patent rights can be found in the PATENTS file in the same directory.
 			WorkingDirectory="$(MSBuildProjectDirectory)"
 			Command="dotnet pack --output $(PackageOutputDir) --configuration Release  --no-build src/%(PackageAssemblies.Identity) /p:Version=$(VersionString)"
 		/>
+	</Target>
+
+	<Target Name="Package">
+		<CallTarget Targets="PackageLibrary" />
+		<CallTarget Targets="PackageTemplates" />
 	</Target>
 
 	<Target Name="Push">
