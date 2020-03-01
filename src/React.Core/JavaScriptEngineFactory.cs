@@ -188,7 +188,7 @@ namespace React
 				manifest = ReactAppAssetManifest.LoadManifest(_config, _fileSystem, _cache, useCacheRead: false);
 			}
 
-			if (manifest != null)
+			if (manifest?.Entrypoints != null)
 			{
 				foreach (var file in manifest.Entrypoints?.Where(x => x != null && x.EndsWith(".js")))
 				{

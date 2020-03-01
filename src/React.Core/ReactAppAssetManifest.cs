@@ -37,9 +37,9 @@ namespace React
 			return manifest;
 		}
 
-		public static ReactAppAssetManifest LoadManifestFromWebpackDevServer(IReactSiteConfiguration _config)
+		public static ReactAppAssetManifest LoadManifestFromWebpackDevServer(IReactSiteConfiguration config)
 		{
-			var manifestString = FetchStringFromUrl(new Uri(_config.WebpackDevServerUrl + "asset-manifest.json"));
+			var manifestString = FetchStringFromUrl(new Uri(config.WebpackDevServerUrl + "asset-manifest.json"));
 			return JsonConvert.DeserializeObject<ReactAppAssetManifest>(manifestString);
 		}
 
@@ -48,7 +48,7 @@ namespace React
 			// Really wish we could use HttpClient here, but no async is a recipe for potential deadlocks
 			// An async request pipeline would be needed to pull that off, which this library (today) has no concept of
 			var request = WebRequest.Create(url);
-			request.Timeout = 1000;
+			request.Timeout = 5000;
 			{
 				using (var response = (HttpWebResponse) request.GetResponse())
 				{
