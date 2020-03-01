@@ -26,7 +26,7 @@ It'll also have a few neat features:
 
 ## Want to skip all this and see the source?
 
-[It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/tutorial-code).
+[It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-vanilla).
 
 ## Getting started
 
@@ -1011,7 +1011,7 @@ There used to be a section on bundling and minification in this tutorial, but un
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using the client. Server-side rendering enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the initial `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required. 
+We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the initial `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required.
 
 ```javascript{4,31-33}
 class CommentBox extends React.Component {
