@@ -1,0 +1,13 @@
+{
+	"author": "ReactJS.NET contributors",
+	"classifications": [
+		"Web"
+	],
+	"name": "React.NET Starter Template",
+	"identity": "React.Template.NetCore",
+	"shortName": "reactnet-vanilla",
+	"tags": {
+		"language": "C#"
+	},
+	"preferNameDirectory": "true"
+}

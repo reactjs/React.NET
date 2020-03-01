@@ -131,7 +131,7 @@ bundles.Add(new JsxBundle("~/bundles/main").Include(
   <hr class="home-divider" />
   <section class="home-bottom-section">
     <div class="buttons-unit">
-      <a href="/getting-started/download.html" class="button">Get Started</a>
+      <a href="/getting-started/aspnetcore.html" class="button">Get Started</a>
       <a href="/tutorials/aspnetcore" class="button">Tutorial</a>
     </div>
   </section>

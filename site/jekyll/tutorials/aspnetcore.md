@@ -8,6 +8,16 @@ layout: docs
 >
 > This tutorial is for Visual Studio 2019 and ASP.NET Core MVC. If you're still using ASP.NET 4 and ASP.NET MVC 5, you can [follow the ASP.NET 4 tutorial instead](/tutorials/aspnet4.html)
 
+## Quick start
+
+```
+dotnet new -i React.Template
+dotnet new reactnet-vanilla
+dotnet run
+```
+
+## Step by step version
+
 This tutorial covers the end-to-end process of creating a brand new ASP.NET MVC website and adding a React component in it. We will start from scratch and end with a fully functioning component. It assumes you have basic knowledge of ASP.NET MVC and using Visual Studio. This tutorial is based off the [original React tutorial](https://reactjs.org/tutorial/tutorial.html) but has been modified specifically for ReactJS.NET.
 
 We'll be building a simple, but realistic comments box that you can drop into a blog, a basic version of the realtime comments offered by Disqus, LiveFyre or Facebook comments.
@@ -26,7 +36,7 @@ It'll also have a few neat features:
 
 ## Want to skip all this and see the source?
 
-[It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/tutorial-code).
+[It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-vanilla).
 
 ## Getting started
 
@@ -1011,7 +1021,7 @@ There used to be a section on bundling and minification in this tutorial, but un
 
 Server-side rendering means that your application initially renders the components on the server-side, rather than fetching data from the server and rendering using the client. Server-side rendering enhances the performance of your application since the user will see the initial state immediately.
 
-We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the initial `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required. 
+We need to make some modifications to `CommentBox` to support server-side rendering. Firstly, we need to accept an `initialData` prop, which will be used to set the initial state of the component, rather than doing an AJAX request. We also need to remove the initial `loadCommentsFromServer` call from `componentDidMount`, since it is no longer required.
 
 ```javascript{4,31-33}
 class CommentBox extends React.Component {
