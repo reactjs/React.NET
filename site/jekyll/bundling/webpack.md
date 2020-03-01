@@ -19,7 +19,7 @@ dotnet run
 
 Your project will bundle its own copy of react and react-dom with webpack, and ReactJS.NET will be used only for server-side rendering.
 
-For new projects, copy from the sample project to the root of your project:
+Copy from the sample project to the root of your project:
 
 - [package.json](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/package.json), which includes everything you need to bundle with webpack
 - [webpack.config.js](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/webpack.config.js), which contains the configuration needed for webpack to create the bundles
