@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Content Include="reactnet-vanilla\**\*" Exclude="reactnet-vanilla\**\bin\**;reactnet-vanilla\**\obj\**" />
+    <Content Include="reactnet-webpack\**\*" Exclude="reactnet-webpack\**\bin\**;reactnet-webpack\**\obj\**;reactnet-webpack\node_modules\**;reactnet-webpack\wwwroot\dist\**" />
     <Compile Remove="**\*" />
   </ItemGroup>
 

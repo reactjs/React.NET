@@ -3,17 +3,27 @@ layout: docs
 title: Webpack
 ---
 
-#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc).
+#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack).
+
+## For new projects:
+
+```
+dotnet new -i React.Template
+dotnet new reactnet-webpack
+dotnet run
+```
+
+## For existing projects:
 
 [Webpack](https://webpack.js.org/) is a popular module bundling system built on top of Node.js. It can handle not only combination and minification of JavaScript and CSS files, but also other assets such as image files (spriting) through the use of plugins. Webpack is the recommended bundling solution and should be preferred over Cassette or ASP.NET Bundling.
 
 Your project will bundle its own copy of react and react-dom with webpack, and ReactJS.NET will be used only for server-side rendering.
 
-For new projects, copy from the sample project to the root of your project:
+Copy from the sample project to the root of your project:
 
-- [package.json](https://github.com/reactjs/React.NET/blob/master/src/React.Sample.Webpack.CoreMvc/package.json), which includes everything you need to bundle with webpack
-- [webpack.config.js](https://github.com/reactjs/React.NET/blob/master/src/React.Sample.Webpack.CoreMvc/webpack.config.js), which contains the configuration needed for webpack to create the bundles
-- [.babelrc](https://github.com/reactjs/React.NET/blob/master/src/React.Sample.Webpack.CoreMvc/.babelrc), which contains the Babel settings needed to compile JSX files
+- [package.json](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/package.json), which includes everything you need to bundle with webpack
+- [webpack.config.js](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/webpack.config.js), which contains the configuration needed for webpack to create the bundles
+- [.babelrc](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/.babelrc), which contains the Babel settings needed to compile JSX files
 
 Run `npm install` to start the package restore process.
 
@@ -85,7 +95,7 @@ Reference the built bundle directly in a script tag at the end of the page in `_
 </body>
 ```
 
-A full example is available in [the ReactJS.NET repository](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc).
+A full example is available in [the ReactJS.NET repository](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack).
 
 ### 💡  Beta feature: Asset manifest handling
 

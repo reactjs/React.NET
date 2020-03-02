@@ -1,0 +1,1 @@
+The sample has been moved to .NET Core templates [here](../React.Template)

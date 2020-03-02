@@ -3,7 +3,7 @@ layout: docs
 title: Server-Side Rendering
 ---
 
-Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc).
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack).
 
 Server-side rendering allows you to pre-render the initial state of your React
 components server-side. This speeds up initial page loads as users do not need

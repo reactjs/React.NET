@@ -3,7 +3,7 @@ layout: docs
 title: React Router
 ---
 
-Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc).
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack).
 
 [React Router](https://github.com/ReactTraining/react-router) is a Javascript routing library. By using the `React.Router` package, you can add server-side route resolution by deferring to React Router.
 
