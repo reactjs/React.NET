@@ -1,0 +1,13 @@
+{
+	"author": "ReactJS.NET contributors",
+	"classifications": [
+		"Web"
+	],
+	"name": "React.NET Webpack Starter Template",
+	"identity": "React.Template.NetCore.Webpack",
+	"shortName": "reactnet-webpack",
+	"tags": {
+		"language": "C#"
+	},
+	"preferNameDirectory": "true"
+}

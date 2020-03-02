@@ -3,7 +3,7 @@ layout: docs
 title: Babel compilation (ES6+)
 ---
 
-Just want to see the code? Check out the [webpack](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Webpack.CoreMvc) and [on-the-fly JSX compliation](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4) sample projects.
+Just want to see the code? Check out the [webpack](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack) and [on-the-fly JSX compliation](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4) sample projects.
 
 ReactJS.NET supports the use of ES6+ features, thanks to [Babel](http://babeljs.io/). These features include:
 
