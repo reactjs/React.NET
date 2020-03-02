@@ -33,6 +33,8 @@ dotnet new reactnet-vanilla
 dotnet run
 ```
 
+#### Planning on using `require` or `import` module syntax in your application? Use the `reactnet-webpack` template instead for webpack support.
+
 See also:
 
 - [Getting Started](https://reactjs.net/getting-started/aspnetcore.html)

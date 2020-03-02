@@ -14,6 +14,8 @@ dotnet new reactnet-vanilla
 dotnet run
 ```
 
+#### Heads up! This configuration only supports globally-scoped modules. If you're planning on using `require` or `import` module syntax in your application, use the `reactnet-webpack` template instead for webpack support.
+
 ## For existing projects:
 
 This guide covers enabling server-side rendering and Babel compilation. Getting started with ReactJS.NET on ASP.NET Core requires a few more steps compared to previous versions of ASP.NET and MVC. If you want a step-by-step guide on configuring a brand new site, see [the ReactJS.NET tutorial for ASP.NET Core](/tutorials/aspnetcore.html).
