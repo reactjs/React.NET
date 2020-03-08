@@ -14,8 +14,8 @@
     <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.1.8" />
     <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
-    <PackageReference Include="React.AspNet" Version="5.1.2" />
-    <PackageReference Include="React.Router" Version="5.1.2" />
+    <PackageReference Include="React.AspNet" Version="5.2.1" />
+    <PackageReference Include="React.Router" Version="5.2.1" />
   </ItemGroup>
 
   <Target Name="ReactBuild" AfterTargets="Build">
