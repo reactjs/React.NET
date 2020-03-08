@@ -200,8 +200,8 @@ namespace React.Tests.Core
 
 			var scripts = environment.GetScriptPaths().ToList();
 			Assert.Equal(2, scripts.Count);
-			Assert.Equal("/dist/static/js/runtime-main.62ca1b0d.js", scripts[0]);
-			Assert.Equal("/dist/static/js/main.04394e4f.chunk.js", scripts[1]);
+			Assert.Equal("static/js/runtime-main.62ca1b0d.js", scripts[0]);
+			Assert.Equal("static/js/main.04394e4f.chunk.js", scripts[1]);
 		}
 
 		[Fact]
@@ -214,8 +214,8 @@ namespace React.Tests.Core
 
 			var styles = environment.GetStylePaths().ToList();
 			Assert.Equal(2, styles.Count);
-			Assert.Equal("/dist/static/css/main.43b75f57.chunk.css", styles[0]);
-			Assert.Equal("/dist/static/css/another-stylesheet.css", styles[1]);
+			Assert.Equal("static/css/main.43b75f57.chunk.css", styles[0]);
+			Assert.Equal("static/css/another-stylesheet.css", styles[1]);
 		}
 
 		public class Mocks

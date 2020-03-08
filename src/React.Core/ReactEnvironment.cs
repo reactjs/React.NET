@@ -357,8 +357,7 @@ namespace React
 		public virtual IEnumerable<string> GetScriptPaths()
 		{
 			return GetAppManifest().Entrypoints
-				.Where(path => path.EndsWith(".js"))
-				.Select(file => $"{_config.ReactAppBuildPath.Replace("~/", "/")}/{file}");
+				.Where(path => path.EndsWith(".js"));
 		}
 
 		/// <summary>
@@ -367,8 +366,7 @@ namespace React
 		public virtual IEnumerable<string> GetStylePaths()
 		{
 			return GetAppManifest().Entrypoints
-				.Where(path => path.EndsWith(".css"))
-				.Select(file => $"{_config.ReactAppBuildPath.Replace("~/", "/")}/{file}");
+				.Where(path => path.EndsWith(".css"));
 		}
 
 		/// <summary>
