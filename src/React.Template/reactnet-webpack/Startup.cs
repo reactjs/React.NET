@@ -42,11 +42,7 @@ namespace React.Sample.Webpack.CoreMvc
 					.SetReuseJavaScriptEngines(true)
 					.SetLoadBabel(false)
 					.SetLoadReact(false)
-					.AddScriptWithoutTransform("~/dist/runtime.js")
-					.AddScriptWithoutTransform("~/dist/vendor.js")
-					.AddScriptWithoutTransform("~/dist/main.js");
-
-				// Beta feature: Call .SetReactAppBuildPath("~/dist") to use the asset manifest instead of listing each file
+					.SetReactAppBuildPath("~/dist");
 			});
 
 			app.UseStaticFiles();
