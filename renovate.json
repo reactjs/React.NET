@@ -25,6 +25,10 @@
         "https://github.com/aspnet/AspNetCore"
       ],
       "groupName": "ASP.NET Core packages"
+    },
+    {
+      "packagePatterns": ["^React"],
+      "groupName": "React.NET packages"
     }
   ],
   "separateMinorPatch": true,
