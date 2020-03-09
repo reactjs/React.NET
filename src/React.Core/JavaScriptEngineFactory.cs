@@ -174,53 +174,47 @@ namespace React
 		/// <param name="engine">Engine to load scripts into</param>
 		private void LoadUserScripts(IJsEngine engine)
 		{
-			if (_config.ReactAppBuildPath != null)
+			try
 			{
-				var manifest = ReactAppAssetManifest.LoadManifest(_config, _fileSystem, _cache, useCacheRead: false);
-				foreach (var file in manifest.Entrypoints?.Where(x => x != null && x.EndsWith(".js")))
+				IEnumerable<string> manifestFiles = Enumerable.Empty<string>();
+				if (_config.ReactAppBuildPath != null)
 				{
-					if (_config.AllowJavaScriptPrecompilation
-						&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
+					var manifest = ReactAppAssetManifest.LoadManifest(_config, _fileSystem, _cache, useCacheRead: false);
+					manifestFiles = (manifest?.Entrypoints?.Where(x => x != null && x.EndsWith(".js"))) ?? Enumerable.Empty<string>();
+				}
+
+				foreach (var file in _config.ScriptsWithoutTransform.Concat(manifestFiles))
+				{
+					try
 					{
-						// Do nothing.
+						if (_config.AllowJavaScriptPrecompilation
+							&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
+						{
+							// Do nothing.
+						}
+						else
+						{
+							engine.ExecuteFile(_fileSystem, file);
+						}
 					}
-					else
+					catch (JsException ex)
 					{
-						engine.ExecuteFile(_fileSystem, file);
+						// We can't simply rethrow the exception here, as it's possible this is running
+						// on a background thread (ie. as a response to a file changing). If we did
+						// throw the exception here, it would terminate the entire process. Instead,
+						// save the exception, and then just rethrow it later when getting the engine.
+						_scriptLoadException = new ReactScriptLoadException(string.Format(
+							"Error while loading \"{0}\": {1}",
+							file,
+							ex.Message
+						), ex);
 					}
 				}
 			}
-
-			foreach (var file in _config.ScriptsWithoutTransform)
+			catch (IOException ex)
 			{
-				try
-				{
-					if (_config.AllowJavaScriptPrecompilation
-						&& engine.TryExecuteFileWithPrecompilation(_cache, _fileSystem, file))
-					{
-						// Do nothing.
-					}
-					else
-					{
-						engine.ExecuteFile(_fileSystem, file);
-					}
-				}
-				catch (JsException ex)
-				{
-					// We can't simply rethrow the exception here, as it's possible this is running
-					// on a background thread (ie. as a response to a file changing). If we did
-					// throw the exception here, it would terminate the entire process. Instead,
-					// save the exception, and then just rethrow it later when getting the engine.
-					_scriptLoadException = new ReactScriptLoadException(string.Format(
-						"Error while loading \"{0}\": {1}",
-						file,
-						ex.Message
-					), ex);
-				}
-				catch (IOException ex)
-				{
-					_scriptLoadException = new ReactScriptLoadException(ex.Message, ex);
-				}
+				// Files could be in the process of being rebuilt by JS build tooling
+				_scriptLoadException = new ReactScriptLoadException(ex.Message, ex);;
 			}
 		}
 
@@ -228,14 +222,14 @@ namespace React
 		/// Ensures that React has been correctly loaded into the specified engine.
 		/// </summary>
 		/// <param name="engine">Engine to check</param>
-		private static void EnsureReactLoaded(IJsEngine engine)
+		private void EnsureReactLoaded(IJsEngine engine)
 		{
 			var globalsString = engine.CallFunction<string>("ReactNET_initReact");
 			string[] globals = globalsString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
 			if (globals.Length != 0)
 			{
-				throw new ReactNotInitialisedException(
+				_scriptLoadException = new ReactNotInitialisedException(
 					$"React has not been loaded correctly: missing ({string.Join(", ", globals)})." +
 					"Please expose your version of React as global variables named " +
 					"'React', 'ReactDOM', and 'ReactDOMServer', or enable the 'LoadReact'" +
