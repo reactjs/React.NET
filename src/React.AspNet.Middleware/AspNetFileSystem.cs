@@ -7,6 +7,7 @@
 
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using React.Exceptions;
 
 #if NETCOREAPP2_0 || NETSTANDARD2_0
 using IWebHostEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -38,6 +39,11 @@ namespace React.AspNet
 		/// <returns>Full path of the file</returns>
 		public override string MapPath(string relativePath)
 		{
+			if (_hostingEnv.WebRootPath == null)
+			{
+				throw new ReactException("WebRootPath was null, has the wwwroot folder been deployed along with your app?");
+			}
+
 			if (relativePath.StartsWith(_hostingEnv.WebRootPath))
 			{
 				return relativePath;
