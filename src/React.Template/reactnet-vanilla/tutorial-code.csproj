@@ -7,7 +7,7 @@
 		<PackageId>tutorial-code</PackageId>
 	</PropertyGroup>
 	<ItemGroup>
-		<None Include="App.config" />
+		<None Include="app.config" />
 		<None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</None>
