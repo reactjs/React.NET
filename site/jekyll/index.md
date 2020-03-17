@@ -16,8 +16,8 @@ id: home
   <section class="home-section">
     <p>
       ReactJS.NET makes it easier to use Facebook's
-      [React](http://facebook.github.io/react/) and
-      [JSX](http://facebook.github.io/react/docs/jsx-in-depth.html) from C# and
+      [React](https://reactjs.org/) and
+      [JSX](https://reactjs.org/docs/jsx-in-depth.html) from C# and
       other .NET languages, focusing specifically on ASP.NET MVC (although it
       also works in other environments). It supports both ASP.NET 4 (with MVC 4 or 5),
       and ASP.NET Core MVC. It is cross-platform and can run on Linux via Mono

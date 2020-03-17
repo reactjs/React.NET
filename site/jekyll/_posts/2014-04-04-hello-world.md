@@ -3,7 +3,7 @@ title: "Use React and JSX in ASP.NET MVC"
 layout: post
 author: Daniel Lo Nigro
 ---
-*Cross-posted from [the official React blog](http://facebook.github.io/react/blog/2014/04/04/reactnet.html).*
+*Cross-posted from [the official React blog](https://reactjs.org/blog/2014/04/04/reactnet.html).*
 ____
 
 Today we're happy to announce the initial release of
