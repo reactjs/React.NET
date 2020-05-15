@@ -50,7 +50,7 @@ Start by creating a new ASP.NET Core MVC project:
 
 1. File → New → Project...
 2. Select "ASP.NET Core Web Application". You may search for it via the search box or narrow down your choices via the drop-downs - C#, All platforms, Web is a good way to get it as the first result.
-	[<img src="/img/tutorial/r_newproject_core_600.png" alt="Screenshot: New Project" width="592" />](/img/tutorial/newproject_core_2019.png)
+	[<img src="/img/tutorial/newproject_core_600.png" alt="Screenshot: New Project" width="592" />](/img/tutorial/newproject_core.png)
 3. Click "Next".
 4. Enter "ReactDemo" for the project name and location to store it.
 5. Click "Create".
