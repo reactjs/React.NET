@@ -52,6 +52,17 @@ html {
   background: $pageBg;
 }
 
+.grayscale {
+  filter:grayscale(100%);
+  -webkit-filter:grayscale(100%);
+}
+
+.top-banner {
+  font-size: 20px;
+  height: 60px;
+  text-align: center;
+  padding: 20px;
+}
 
 
 .left {
@@ -64,7 +75,7 @@ html {
 
 
 .container {
-  padding-top: $navHeight;
+  padding-top: 110px;
   min-width: $contentWidth + (2 * $contentPadding);
 }
 
@@ -120,7 +131,7 @@ h1, h2, h3, h4, h5, h6 {
   color: $lightTextColor;
   position: fixed;
   top: 0;
-  height: $navHeight;
+  height: 110px;
   box-shadow: 0 0 5px rgba(0, 0, 0, .5);
   width: 100%;
   z-index: 100;
