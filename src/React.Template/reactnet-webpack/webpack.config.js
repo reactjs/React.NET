@@ -7,7 +7,7 @@ module.exports = {
 		filename: '[name].[contenthash:8].js',
 		globalObject: 'this',
 		path: path.resolve(__dirname, 'wwwroot/dist'),
-		publicPath: 'dist/'
+		publicPath: '/dist/'
 	},
 	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 	optimization: {
