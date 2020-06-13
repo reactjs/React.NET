@@ -4,10 +4,10 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 module.exports = {
 	entry: './Content/components/expose-components.js',
 	output: {
-		filename: '[name].js', // change this to '[name].[contenthash:8].js' if using the asset manifest for better caching
+		filename: '[name].[contenthash:8].js',
 		globalObject: 'this',
 		path: path.resolve(__dirname, 'wwwroot/dist'),
-		publicPath: 'dist/'
+		publicPath: '/dist/'
 	},
 	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 	optimization: {
