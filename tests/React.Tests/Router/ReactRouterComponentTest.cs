@@ -38,7 +38,8 @@ namespace React.Tests.Router
 					@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 					result
 				);
-			} else
+			} 
+			else 
 			{
 				Assert.Equal(
 					@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
@@ -73,7 +74,7 @@ namespace React.Tests.Router
 					result
 				);
 			}
-			else
+			else 
 			{
 				Assert.Equal(
 					@"window.addEventListener('DOMContentLoaded', function() {ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))});",

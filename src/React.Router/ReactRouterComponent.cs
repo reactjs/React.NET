@@ -100,7 +100,6 @@ namespace React.Router
 		/// <returns>JavaScript</returns>
 		public override void RenderJavaScript(TextWriter writer, bool waitForDOMContentLoad)
 		{
-			
 			if (waitForDOMContentLoad)
 			{
 				writer.Write("window.addEventListener('DOMContentLoaded', function() {");
