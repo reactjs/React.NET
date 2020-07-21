@@ -92,7 +92,8 @@ namespace React.Tests.Router
 			public ReactRouterMocks(
 				Mock<IReactSiteConfiguration> conf,
 				Mock<IReactEnvironment> env,
-				Mock<IReactIdGenerator> idGenerator
+				Mock<IReactIdGenerator> idGenerator,
+				bool clientOnly = false
 			)
 			{
 				config = conf;
@@ -105,7 +106,8 @@ namespace React.Tests.Router
 					reactIdGenerator.Object,
 					"ComponentName",
 					"",
-					"/"
+					"/",
+					clientOnly
 				);
 				var execResult = new Mock<ExecutionResult>();
 
@@ -126,7 +128,7 @@ namespace React.Tests.Router
 			var config = ConfigureMockConfiguration();
 			var environment = ConfigureMockEnvironment();
 			var reactIdGenerator = ConfigureReactIdGenerator();
-			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator);
+			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator, true);
 			var htmlHelperMock = new HtmlHelperMocks();
 
 			environment.Verify(x => x.ReturnEngineToPool(), Times.Never);
@@ -150,7 +152,7 @@ namespace React.Tests.Router
 			var htmlHelperMock = new HtmlHelperMocks();
 			var environment = ConfigureMockEnvironment();
 			var reactIdGenerator = ConfigureReactIdGenerator();
-			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator);
+			var routerMocks = new ReactRouterMocks(config, environment, reactIdGenerator, true);
 
 			var result = HtmlHelperExtensions.ReactRouter(
 				htmlHelper: htmlHelperMock.htmlHelper.Object,

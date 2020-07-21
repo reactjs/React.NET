@@ -30,15 +30,18 @@ namespace React.Router
 		/// <param name="componentName">Name of the component.</param>
 		/// <param name="containerId">The ID of the container DIV for this component</param>
 		/// <param name="path">F.x. from Request.Path. Used by React Static Router to determine context and routing.</param>
+		/// <param name="clientOnly">True if server-side rendering will be bypassed</param>
 		public ReactRouterComponent(
 			IReactEnvironment environment,
 			IReactSiteConfiguration configuration,
 			IReactIdGenerator reactIdGenerator,
 			string componentName,
 			string containerId,
-			string path
+			string path,
+			bool clientOnly
 		) : base(environment, configuration, reactIdGenerator, componentName, containerId)
 		{
+			ClientOnly = clientOnly;
 			_path = path;
 		}
 
@@ -97,12 +100,14 @@ namespace React.Router
 		/// <returns>JavaScript</returns>
 		public override void RenderJavaScript(TextWriter writer, bool waitForDOMContentLoad)
 		{
+			
 			if (waitForDOMContentLoad)
 			{
 				writer.Write("window.addEventListener('DOMContentLoaded', function() {");
 			}
 
-			writer.Write("ReactDOM.hydrate(");
+			writer.Write(
+				!_configuration.UseServerSideRendering || ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
 			base.WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);

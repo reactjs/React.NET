@@ -39,7 +39,8 @@ namespace React.Router
 				AssemblyRegistration.Container.Resolve<IReactIdGenerator>(),
 				componentName, 
 				containerId, 
-				path
+				path,
+				clientOnly
 			)
 			{
 				Props = props,
