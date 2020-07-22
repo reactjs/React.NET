@@ -102,7 +102,8 @@ namespace React.Router
 				writer.Write("window.addEventListener('DOMContentLoaded', function() {");
 			}
 
-			writer.Write("ReactDOM.hydrate(");
+			writer.Write(
+				!_configuration.UseServerSideRendering || ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
 			base.WriteComponentInitialiser(writer);
 			writer.Write(", document.getElementById(\"");
 			writer.Write(ContainerId);

@@ -43,6 +43,7 @@ namespace React.Router
 			)
 			{
 				Props = props,
+				ClientOnly = clientOnly,
 			};
 
 			return env.CreateComponent(component, clientOnly) as ReactRouterComponent;
