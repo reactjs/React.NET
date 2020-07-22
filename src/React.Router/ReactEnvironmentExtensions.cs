@@ -39,11 +39,11 @@ namespace React.Router
 				AssemblyRegistration.Container.Resolve<IReactIdGenerator>(),
 				componentName, 
 				containerId, 
-				path,
-				clientOnly
+				path
 			)
 			{
 				Props = props,
+				ClientOnly = clientOnly,
 			};
 
 			return env.CreateComponent(component, clientOnly) as ReactRouterComponent;

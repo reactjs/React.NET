@@ -26,9 +26,10 @@ namespace React.Tests.Router
 			config.Setup(x => x.UseServerSideRendering).Returns(useServerSideRendering);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactRouterComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container", "/bar", clientOnly)
+			var component = new ReactRouterComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container", "/bar")
 			{
-				Props = new { hello = "World" }
+				Props = new { hello = "World" },
+				ClientOnly = clientOnly,
 			};
 			var result = component.RenderJavaScript(false);
 
@@ -61,9 +62,10 @@ namespace React.Tests.Router
 			config.Setup(x => x.UseServerSideRendering).Returns(useServerSideRendering);
 			var reactIdGenerator = new Mock<IReactIdGenerator>();
 
-			var component = new ReactRouterComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container", "/bar", clientOnly)
+			var component = new ReactRouterComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container", "/bar")
 			{
-				Props = new { hello = "World" }
+				Props = new { hello = "World" },
+				ClientOnly = clientOnly
 			};
 			var result = component.RenderJavaScript(true);
 

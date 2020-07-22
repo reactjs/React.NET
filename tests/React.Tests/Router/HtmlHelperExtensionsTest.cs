@@ -106,8 +106,7 @@ namespace React.Tests.Router
 					reactIdGenerator.Object,
 					"ComponentName",
 					"",
-					"/",
-					clientOnly
+					"/"
 				);
 				var execResult = new Mock<ExecutionResult>();
 
