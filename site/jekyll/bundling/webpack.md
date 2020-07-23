@@ -3,7 +3,7 @@ layout: docs
 title: Webpack
 ---
 
-#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack).
+#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/main/src/React.Template/reactnet-webpack).
 
 ## For new projects:
 
@@ -21,9 +21,9 @@ Your project will bundle its own copy of react and react-dom with webpack, and R
 
 Copy from the sample project to the root of your project:
 
-- [package.json](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/package.json), which includes everything you need to bundle with webpack
-- [webpack.config.js](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/webpack.config.js), which contains the configuration needed for webpack to create the bundles
-- [.babelrc](https://github.com/reactjs/React.NET/blob/master/src/React.Template/reactnet-webpack/.babelrc), which contains the Babel settings needed to compile JSX files
+- [package.json](https://github.com/reactjs/React.NET/blob/main/src/React.Template/reactnet-webpack/package.json), which includes everything you need to bundle with webpack
+- [webpack.config.js](https://github.com/reactjs/React.NET/blob/main/src/React.Template/reactnet-webpack/webpack.config.js), which contains the configuration needed for webpack to create the bundles
+- [.babelrc](https://github.com/reactjs/React.NET/blob/main/src/React.Template/reactnet-webpack/.babelrc), which contains the Babel settings needed to compile JSX files
 
 Run `npm install` to start the package restore process.
 
@@ -95,7 +95,7 @@ Reference the built bundle directly in a script tag at the end of the page in `_
 </body>
 ```
 
-A full example is available in [the ReactJS.NET repository](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack).
+A full example is available in [the ReactJS.NET repository](https://github.com/reactjs/React.NET/tree/main/src/React.Template/reactnet-webpack).
 
 ### 💡  Beta feature: Asset manifest handling
 

@@ -16,7 +16,7 @@
     <PackageTags>asp.net;mvc;asp;jquery;javascript;js;react;facebook;reactjs;babel</PackageTags>
     <PackageIcon>logo_64.png</PackageIcon>
     <PackageProjectUrl>https://github.com/reactjs/react.net</PackageProjectUrl>
-    <PackageLicense>https://github.com/reactjs/React.NET/blob/master/LICENSE</PackageLicense>
+    <PackageLicense>https://github.com/reactjs/React.NET/blob/main/LICENSE</PackageLicense>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>

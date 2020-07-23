@@ -2,7 +2,7 @@
 
 ReactJS.NET is a library that makes it easier to use [Babel](http://babeljs.io/) along with Facebook's [React](https://reactjs.org/) and [JSX](https://reactjs.org/docs/jsx-in-depth.html) from C#.
 
-[![Build status](https://img.shields.io/appveyor/ci/Daniel15/react-net/master.svg)](https://ci.appveyor.com/project/Daniel15/react-net/branch/master)&nbsp;
+![.NET Core Desktop](https://github.com/reactjs/React.NET/workflows/.NET%20Core%20Desktop/badge.svg)
 [![NuGet version](http://img.shields.io/nuget/v/React.Core.svg)](https://www.nuget.org/packages/React.Core/)
 [![Download count](https://img.shields.io/nuget/dt/React.Core.svg)](https://www.nuget.org/packages/React.Core/)
 

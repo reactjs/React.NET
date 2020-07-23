@@ -5,7 +5,7 @@ title: macOS/Linux
 
 ReactJS.NET supports running on non-Windows platforms via both Mono and .NET Core. This guide focuses on Linux / macOS support via the ChakraCore engine and .NET Core, which uses precompiled binaries. To use the full .NET Framework with Mono, please see the [Mono guide](/guides/mono.html).
 
-Add `React.AspNet` as a dependency to your .NET Core project. Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-webpack) or the [documentation](https://reactjs.net/getting-started/aspnetcore.html) if you need more details on that.
+Add `React.AspNet` as a dependency to your .NET Core project. Check out the [sample project](https://github.com/reactjs/React.NET/tree/main/src/React.Template/reactnet-webpack) or the [documentation](https://reactjs.net/getting-started/aspnetcore.html) if you need more details on that.
 
 Next, install the `JavascriptEngineSwitcher.ChakraCore` and `JavaScriptEngineSwitcher.Extensions.MsDependencyInjection` NuGet packages. Depending on the platform(s) you want to support, also install one or more of these NuGet packages:
 

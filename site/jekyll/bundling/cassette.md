@@ -7,7 +7,7 @@ title: Cassette (ASP.NET 4.x)
 >
 > This guide applies only to ASP.NET 4.x. Please consider using [webpack](/bundling/webpack.html) if possible.
 
-Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Cassette).
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/main/src/React.Sample.Cassette).
 
 [Cassette](http://getcassette.net/) is an asset bundling library for ASP.NET.
 You can learn more on [its website at getcassette.net](http://getcassette.net/).
@@ -48,7 +48,7 @@ render from your view using Cassette:
 </body>
 ```
 
-See the [React.Samples.Cassette](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Cassette)
+See the [React.Samples.Cassette](https://github.com/reactjs/React.NET/tree/main/src/React.Sample.Cassette)
 project for an example.
 
 # Precompilation

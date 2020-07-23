@@ -7,7 +7,7 @@ title: MSBuild (ASP.NET 4.x)
 >
 > This guide applies only to ASP.NET 4.x. Please consider using [webpack](/bundling/webpack.html) if possible.
 
-Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
+Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/main/src/React.Sample.Mvc4).
 
 ReactJS.NET includes an MSBuild task for compiling JSX into JavaScript. This is
 handy to improve the start time of your application, especially if you have a

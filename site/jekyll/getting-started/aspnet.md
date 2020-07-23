@@ -4,7 +4,7 @@ layout: docs
 title: Getting Started (ASP.NET 4.x)
 ---
 
-#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4).
+#### 👀  Just want to see the code? Check out the [sample project](https://github.com/reactjs/React.NET/tree/main/src/React.Sample.Mvc4).
 
 This guide covers enabling server-side rendering and Babel compilation. If you want a step-by-step guide on configuring a brand new site, see [the ReactJS.NET tutorial for ASP.NET](/tutorials/aspnet4.html).
 
@@ -58,4 +58,4 @@ You're done! You can now call `Html.React` from within Razor files:
 
 You can also use [webpack](/guides/webpack.html) or [System.Web.Optimization](/guides/weboptimizer.html) to bundle your scripts together.
 
-Check out the [sample project](https://github.com/reactjs/React.NET/tree/master/src/React.Sample.Mvc4) for a working demo.
+Check out the [sample project](https://github.com/reactjs/React.NET/tree/main/src/React.Sample.Mvc4) for a working demo.

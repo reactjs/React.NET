@@ -38,7 +38,7 @@ It'll also have a few neat features:
 
 ## Want to skip all this and see the source?
 
-[It's all on GitHub](https://github.com/reactjs/React.NET/tree/master/src/React.Template/reactnet-vanilla).
+[It's all on GitHub](https://github.com/reactjs/React.NET/tree/main/src/React.Template/reactnet-vanilla).
 
 ## Getting started
 
