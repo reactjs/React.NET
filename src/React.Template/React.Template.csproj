@@ -15,11 +15,12 @@
     <IncludeContentInPack>true</IncludeContentInPack>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <ContentTargetFolders>content</ContentTargetFolders>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="reactnet-vanilla\**\*" Exclude="reactnet-vanilla\**\bin\**;reactnet-vanilla\**\obj\**" />
-    <Content Include="reactnet-webpack\**\*" Exclude="reactnet-webpack\**\bin\**;reactnet-webpack\**\obj\**;reactnet-webpack\node_modules\**;reactnet-webpack\wwwroot\dist\**" />
+    <Content Include="reactnet-vanilla\**\*" Exclude="reactnet-vanilla\**\bin\**;reactnet-vanilla\**\obj\**;**\.template.config\**" />
+    <Content Include="reactnet-webpack\**\*" Exclude="reactnet-webpack\**\bin\**;reactnet-webpack\**\obj\**;reactnet-webpack\node_modules\**;reactnet-webpack\wwwroot\dist\**;**\.template.config\**" />
     <Compile Remove="**\*" />
   </ItemGroup>
 
