@@ -20,7 +20,7 @@
 		<PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.1.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
-		<PackageReference Include="React.AspNet" Version="5.2.7" />
+		<PackageReference Include="React.AspNet" Version="5.2.8" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="Views\Home\Index.cshtml">
