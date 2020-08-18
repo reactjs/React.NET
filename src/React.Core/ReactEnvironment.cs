@@ -273,8 +273,9 @@ namespace React
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <param name="serverOnly">True if this component only should be rendered server-side. Defaults to false.</param>
+		/// <param name="skipLazyInit">Skip adding to components list, which is used during GetInitJavascript</param>
 		/// <returns>The component</returns>
-		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false, bool serverOnly = false)
+		public virtual IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false, bool serverOnly = false, bool skipLazyInit = false)
 		{
 			if (!clientOnly)
 			{
@@ -287,7 +288,11 @@ namespace React
 				Props = props,
 				ServerOnly = serverOnly
 			};
-			_components.Add(component);
+
+			if (!skipLazyInit)
+			{
+				_components.Add(component);
+			}
 			return component;
 		}
 

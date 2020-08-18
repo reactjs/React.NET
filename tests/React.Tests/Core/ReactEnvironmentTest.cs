@@ -218,6 +218,16 @@ namespace React.Tests.Core
 			Assert.Equal("static/css/another-stylesheet.css", styles[1]);
 		}
 
+		[Fact]
+		public void SkipLazyInit()
+		{
+			var mocks = new Mocks();
+			var environment = mocks.CreateReactEnvironment();
+
+			environment.CreateComponent("ComponentName", new { }, skipLazyInit: true);
+			Assert.Equal("", environment.GetInitJavaScript());
+		}
+
 		public class Mocks
 		{
 			public Mock<PooledJsEngine> Engine { get; private set; }

@@ -49,6 +49,7 @@ namespace React.Tests.Mvc
 				new { },
 				null,
 				false,
+				false,
 				false
 			)).Returns(component.Object);
 
@@ -109,6 +110,7 @@ namespace React.Tests.Mvc
 				new { },
 				null,
 				false,
+				false,
 				false
 			)).Returns(component.Object);
 
@@ -154,6 +156,7 @@ namespace React.Tests.Mvc
 				new { },
 				null,
 				true,
+				false,
 				false
 			)).Returns(component.Object);
 
@@ -184,6 +187,7 @@ namespace React.Tests.Mvc
 				new { },
 				null,
 				true,
+				false,
 				false
 			)).Returns(component.Object);
 
@@ -212,7 +216,8 @@ namespace React.Tests.Mvc
 				new { },
 				null,
 				false,
-				true
+				true,
+				false
 			)).Returns(component.Object);
 
 			var result = HtmlHelperExtensions.React(
@@ -250,7 +255,8 @@ namespace React.Tests.Mvc
 				new { },
 				null,
 				false,
-				true
+				true,
+				false
 			)).Returns(component.Object);
 
 			var result = HtmlHelperExtensions.React(
