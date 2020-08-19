@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "emotion": "^9.2.12",
-    "emotion-server": "^9.2.12",
+    "emotion-server": "^10.0.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-emotion": "^9.2.12",
