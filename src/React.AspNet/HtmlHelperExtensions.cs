@@ -13,10 +13,12 @@ using System.Text;
 #if LEGACYASPNET
 using System.Web;
 using IHtmlHelper = System.Web.Mvc.HtmlHelper;
+using IUrlHelper = System.Web.Mvc.UrlHelper;
 #else
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Html;
 using IHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
+using Microsoft.AspNetCore.Mvc;
 #endif
 
 #if LEGACYASPNET
@@ -148,7 +150,7 @@ namespace React.AspNet
 			{
 				Environment.ReturnEngineToPool();
 			}
-	}
+		}
 
 		/// <summary>
 		/// Renders the JavaScript required to initialise all components client-side. This will
@@ -174,26 +176,28 @@ namespace React.AspNet
 		/// Returns script tags based on the webpack asset manifest
 		/// </summary>
 		/// <param name="htmlHelper"></param>
+		/// <param name="urlHelper">Optional IUrlHelper instance. Enables the use of tilde/relative (~/) paths inside the expose-components.js file.</param>
 		/// <returns></returns>
-		public static IHtmlString ReactGetScriptPaths(this IHtmlHelper htmlHelper)
+		public static IHtmlString ReactGetScriptPaths(this IHtmlHelper htmlHelper, IUrlHelper urlHelper = null)
 		{
 			string nonce = Environment.Configuration.ScriptNonceProvider != null
 				? $" nonce=\"{Environment.Configuration.ScriptNonceProvider()}\""
 				: "";
 
 			return new HtmlString(string.Join("", Environment.GetScriptPaths()
-				.Select(scriptPath => $"<script{nonce} src=\"{scriptPath}\"></script>")));
+				.Select(scriptPath => $"<script{nonce} src=\"{(urlHelper == null ? scriptPath : urlHelper.Content(scriptPath))}\"></script>")));
 		}
 
 		/// <summary>
 		/// Returns style tags based on the webpack asset manifest
 		/// </summary>
 		/// <param name="htmlHelper"></param>
+		/// <param name="urlHelper">Optional IUrlHelper instance. Enables the use of tilde/relative (~/) paths inside the expose-components.js file.</param>
 		/// <returns></returns>
-		public static IHtmlString ReactGetStylePaths(this IHtmlHelper htmlHelper)
+		public static IHtmlString ReactGetStylePaths(this IHtmlHelper htmlHelper, IUrlHelper urlHelper = null)
 		{
 			return new HtmlString(string.Join("", Environment.GetStylePaths()
-				.Select(stylePath => $"<link rel=\"stylesheet\" href=\"{stylePath}\" />")));
+				.Select(stylePath => $"<link rel=\"stylesheet\" href=\"{(urlHelper == null ? stylePath : urlHelper.Content(stylePath))}\" />")));
 		}
 
 		private static IHtmlString RenderToString(Action<StringWriter> withWriter)
