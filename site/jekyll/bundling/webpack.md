@@ -91,7 +91,7 @@ Reference the built bundle directly in a script tag at the end of the page in `_
   <script src="/dist/runtime.js"></script>
   <script src="/dist/vendor.js"></script>
   <script src="/dist/main.js"></script>
-  @Html.ReactInitJavascript()
+  @Html.ReactInitJavaScript()
 </body>
 ```
 
@@ -121,6 +121,6 @@ Then, make calls to `@Html.ReactGetScriptPaths()` and `@Html.ReactGetStylePaths(
   @RenderBody()
 
   @Html.ReactGetScriptPaths()
-  @Html.ReactInitJavascript()
+  @Html.ReactInitJavaScript()
 </body>
 ```
