@@ -1,5 +1,6 @@
 trigger:
     - main
+	- ci-updates
 
 pool:
     vmImage: 'windows-2019'
@@ -19,7 +20,7 @@ steps:
     - task: DotNetCoreInstaller@0
       inputs:
         packageType: 'sdk'
-        version: '3.1.x'
+        version: '3.1'
 
     - task: VSBuild@1
       inputs:
