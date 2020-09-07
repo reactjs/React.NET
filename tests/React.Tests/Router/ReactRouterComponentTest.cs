@@ -4,7 +4,7 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-#if NET452 || NETCOREAPP2_0
+#if NET452 || NETCOREAPP
 
 using Moq;
 using Xunit;
@@ -39,15 +39,15 @@ namespace React.Tests.Router
 					@"ReactDOM.render(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 					result
 				);
-			} 
-			else 
+			}
+			else
 			{
 				Assert.Equal(
 					@"ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))",
 					result
 				);
 			}
-			
+
 		}
 
 		[Theory]
@@ -76,7 +76,7 @@ namespace React.Tests.Router
 					result
 				);
 			}
-			else 
+			else
 			{
 				Assert.Equal(
 					@"window.addEventListener('DOMContentLoaded', function() {ReactDOM.hydrate(React.createElement(Foo, {""hello"":""World""}), document.getElementById(""container""))});",
