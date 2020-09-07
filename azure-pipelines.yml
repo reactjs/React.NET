@@ -1,6 +1,6 @@
 trigger:
     - main
-	- ci-updates
+    - ci-updates
 
 pool:
     vmImage: 'windows-2019'
