@@ -36,9 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.FileSystems" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Owin.FileSystems" Version="4.1.1" />
+    <PackageReference Include="Microsoft.Owin.StaticFiles" Version="4.1.1" />
     <PackageReference Include="Microsoft.Sourcelink.Github" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="Owin" Version="1.0.0" />
   </ItemGroup>
