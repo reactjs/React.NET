@@ -1,4 +1,4 @@
-#if NETCOREAPP2_0
+#if NETCOREAPP
 
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +13,7 @@ namespace React.Tests.Core
 		[Fact]
 		public void ForwardSlashesAreTransformed()
 		{
-			var environment = new Mock<IHostingEnvironment>();
+			var environment = new Mock<IWebHostEnvironment>();
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				environment.Setup(x => x.WebRootPath).Returns("c:\\temp");

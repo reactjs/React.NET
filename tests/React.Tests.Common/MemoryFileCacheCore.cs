@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#if NETCOREAPP2_0
+#if NETCOREAPP
 
 using System;
 using System.Collections.Generic;

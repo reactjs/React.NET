@@ -48,7 +48,7 @@ namespace React.Tests.Core
 			environment.ExecuteWithBabel<int>("foo");
 			mocks.Engine.Verify(x => x.CallFunction<int>("foo"), Times.Exactly(1));
 		}
-#if NET452 || NETCOREAPP2_0
+#if NET452 || NETCOREAPP
 
 		[Fact]
 		public void ExecuteWithBabelWithNewThread()
