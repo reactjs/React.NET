@@ -82,8 +82,9 @@ namespace React
 		/// <param name="containerId">ID to use for the container HTML tag. Defaults to an auto-generated ID</param>
 		/// <param name="clientOnly">True if server-side rendering will be bypassed. Defaults to false.</param>
 		/// <param name="serverOnly">True if this component only should be rendered server-side. Defaults to false.</param>
+		/// <param name="skipLazyInit">Skip adding to components list, which is used during GetInitJavascript</param>
 		/// <returns>The component</returns>
-		IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false, bool serverOnly = false);
+		IReactComponent CreateComponent<T>(string componentName, T props, string containerId = null, bool clientOnly = false, bool serverOnly = false, bool skipLazyInit = false);
 
 		/// <summary>
 		/// Adds the provided <see cref="IReactComponent"/> to the list of components to render client side.
