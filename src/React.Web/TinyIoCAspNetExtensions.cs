@@ -63,9 +63,10 @@ namespace React.Web.TinyIoC
 			var item = GetObject() as IDisposable;
 
 			if (item != null)
+			{
 				item.Dispose();
-
-			SetObject(null);
+				SetObject(null);
+			}
 		}
 
 		/// <summary>
