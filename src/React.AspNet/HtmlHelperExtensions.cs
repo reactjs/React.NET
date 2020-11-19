@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -193,11 +194,26 @@ namespace React.AspNet
 		/// </summary>
 		/// <param name="htmlHelper"></param>
 		/// <param name="urlHelper">Optional IUrlHelper instance. Enables the use of tilde/relative (~/) paths inside the expose-components.js file.</param>
+		/// <param name="lazy">Specifies if lazy style load technique should be used</param>
 		/// <returns></returns>
-		public static IHtmlString ReactGetStylePaths(this IHtmlHelper htmlHelper, IUrlHelper urlHelper = null)
+		public static IHtmlString ReactGetStylePaths(this IHtmlHelper htmlHelper, IUrlHelper urlHelper = null, bool lazy = false)
 		{
-			return new HtmlString(string.Join("", Environment.GetStylePaths()
+			return lazy
+				? GetStylePaths(urlHelper)
+				: GetStylePathsLazy(urlHelper);
+		}
+
+		private static IHtmlString GetStylePaths(IUrlHelper urlHelper = null)
+		{
+			return new HtmlString(string.Concat(Environment.GetStylePaths()
 				.Select(stylePath => $"<link rel=\"stylesheet\" href=\"{(urlHelper == null ? stylePath : urlHelper.Content(stylePath))}\" />")));
+		}
+
+		private static IHtmlString GetStylePathsLazy(IUrlHelper urlHelper = null)
+		{
+			var elements = Environment.GetStylePaths()
+				.Select(stylePath => $"createStyleElem('{(urlHelper == null ? stylePath : urlHelper.Content(stylePath))}');");
+			return new HtmlString($"<script>(function(){{function createStyleElem(link){{var e=document.createElement('link');e.href=link;e.rel='stylesheet';e.type='text/css';document.getElementsByTagName('head')[0].appendChild(e);}}{ string.Concat(elements) }}})();</script>");
 		}
 
 		private static IHtmlString RenderToString(Action<StringWriter> withWriter)

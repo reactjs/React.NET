@@ -315,5 +315,17 @@ namespace React.Tests.Mvc
 
 			Assert.Equal("<link rel=\"stylesheet\" href=\"/dist/vendor.css\" /><link rel=\"stylesheet\" href=\"/dist/app.css\" />", result.ToHtmlString());
 		}
+
+		[Fact]
+		public void ReactGetStylePathsLazy()
+		{
+			var environment = ConfigureMockEnvironment();
+
+			environment.Setup(x => x.GetStylePaths()).Returns(new[] { "/dist/vendor.css", "/dist/app.css" });
+
+			var result = HtmlHelperExtensions.ReactGetStylePaths(null, lazy: true);
+
+			Assert.Equal("(function(){function createStyleElem(link){var e=document.createElement('link');e.href=link;e.rel='stylesheet';e.type='text/css';document.getElementsByTagName('head')[0].appendChild(e);}createStyleElem('/dist/vendor.css');createStyleElem('/dist/app.css');})()", result.ToHtmlString());
+		}
 	}
 }
