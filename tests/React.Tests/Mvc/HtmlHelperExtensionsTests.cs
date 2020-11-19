@@ -325,7 +325,7 @@ namespace React.Tests.Mvc
 
 			var result = HtmlHelperExtensions.ReactGetStylePaths(null, lazy: true);
 
-			Assert.Equal("(function(){function createStyleElem(link){var e=document.createElement('link');e.href=link;e.rel='stylesheet';e.type='text/css';document.getElementsByTagName('head')[0].appendChild(e);}createStyleElem('/dist/vendor.css');createStyleElem('/dist/app.css');})()", result.ToHtmlString());
+			Assert.Equal("<script>(function(){function createStyleElem(link){var e=document.createElement('link');e.href=link;e.rel='stylesheet';e.type='text/css';document.getElementsByTagName('head')[0].appendChild(e);}createStyleElem('/dist/vendor.css');createStyleElem('/dist/app.css');})();</script>", result.ToHtmlString());
 		}
 	}
 }

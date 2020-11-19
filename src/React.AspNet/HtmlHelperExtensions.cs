@@ -199,8 +199,8 @@ namespace React.AspNet
 		public static IHtmlString ReactGetStylePaths(this IHtmlHelper htmlHelper, IUrlHelper urlHelper = null, bool lazy = false)
 		{
 			return lazy
-				? GetStylePaths(urlHelper)
-				: GetStylePathsLazy(urlHelper);
+				? GetStylePathsLazy(urlHelper)
+				: GetStylePaths(urlHelper);
 		}
 
 		private static IHtmlString GetStylePaths(IUrlHelper urlHelper = null)
