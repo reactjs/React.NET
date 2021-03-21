@@ -52,6 +52,7 @@ jobs:
     - name: Build
       run: msbuild build.proj /p:PackageOutputDir="${{ env.GITHUB_WORKSPACE }}/nuget-output" /p:Configuration=${{ matrix.configuration }}
       env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         Configuration: ${{ matrix.configuration }}
 
     - name: Upload build artifacts
