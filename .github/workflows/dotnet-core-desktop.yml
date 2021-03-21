@@ -48,6 +48,8 @@ jobs:
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@2008f912f56e61277eefaac6d1888b750582aa16
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     - name: Build
       run: msbuild build.proj /p:PackageOutputDir="${{ env.GITHUB_WORKSPACE }}/nuget-output" /p:Configuration=${{ matrix.configuration }}
