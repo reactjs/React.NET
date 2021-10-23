@@ -102,7 +102,12 @@ namespace React.Router
 			{
 				var response = htmlHelper.ViewContext.HttpContext.Response;
 				var request = htmlHelper.ViewContext.HttpContext.Request;
-				path = path ?? request.Path.ToString() + request.QueryString;
+				var queryString = request != null && request.QueryString != null ? request.QueryString.ToString() : "";
+				if (!string.IsNullOrWhiteSpace(queryString) && !queryString.StartsWith("?"))
+				{
+					queryString = $"?{queryString}";
+				}
+				path = path ?? request.Path.ToString() + queryString;
 
 				var reactComponent
 					= Environment.CreateRouterComponent(
