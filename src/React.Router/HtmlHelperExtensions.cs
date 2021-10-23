@@ -102,7 +102,7 @@ namespace React.Router
 			{
 				var response = htmlHelper.ViewContext.HttpContext.Response;
 				var request = htmlHelper.ViewContext.HttpContext.Request;
-				var queryString = request.QueryString != null ? request.QueryString.ToString() : "";
+				var queryString = request != null && request.QueryString != null ? request.QueryString.ToString() : "";
 				if (!string.IsNullOrWhiteSpace(queryString) && !queryString.StartsWith("?"))
 				{
 					queryString = $"?{queryString}";
