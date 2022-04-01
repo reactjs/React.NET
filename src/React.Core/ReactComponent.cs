@@ -251,12 +251,14 @@ namespace React
 				writer.Write("window.addEventListener('DOMContentLoaded', function() {");
 			}
 
-			writer.Write(
-				!_configuration.UseServerSideRendering || ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
-			WriteComponentInitialiser(writer);
-			writer.Write(", document.getElementById(\"");
-			writer.Write(ContainerId);
-			writer.Write("\"))");
+			if (_configuration.UseRootAPI)
+			{
+				WriteComponentInitialization(writer);
+			}
+			else
+			{
+				WriteLegacyComponentInitialization(writer);
+			}
 
 			if (waitForDOMContentLoad)
 			{
@@ -264,6 +266,47 @@ namespace React
 			}
 		}
 
+		/// <summary>
+		/// Writes initialization code using the React 18 root API
+		/// </summary>
+		private void WriteComponentInitialization(TextWriter writer)
+		{
+			var hydrate = _configuration.UseServerSideRendering && !ClientOnly;
+			if (hydrate)
+			{
+				writer.Write("ReactDOM.hydrateRoot(");
+				writer.Write("document.getElementById(\"");
+				writer.Write(ContainerId);
+				writer.Write("\")");
+				writer.Write(", ");
+				WriteComponentInitialiser(writer);
+				writer.Write(")");
+			}
+			else
+			{
+				writer.Write("ReactDOM.createRoot(");
+				writer.Write("document.getElementById(\"");
+				writer.Write(ContainerId);
+				writer.Write("\"))");
+				writer.Write(".render(");
+				WriteComponentInitialiser(writer);
+				writer.Write(")");	
+			}
+		}
+
+		/// <summary>
+		/// Writes initialization code using the old ReactDOM.render / ReactDOM.hydrate APIs.
+		/// </summary>
+		private void WriteLegacyComponentInitialization(TextWriter writer)
+		{
+			writer.Write(
+				!_configuration.UseServerSideRendering || ClientOnly ? "ReactDOM.render(" : "ReactDOM.hydrate(");
+			WriteComponentInitialiser(writer);
+			writer.Write(", document.getElementById(\"");
+			writer.Write(ContainerId);
+			writer.Write("\"))");
+		}
+		
 		/// <summary>
 		/// Ensures that this component exists in global scope
 		/// </summary>
