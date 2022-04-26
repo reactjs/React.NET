@@ -340,7 +340,7 @@ namespace React
 			// Propagate any server-side console.log calls to corresponding client-side calls.
 			if (!clientOnly && _components.Count != 0)
 			{
-				var consoleCalls = Execute<string>("console.getCalls()");
+				var consoleCalls = Execute<string>("console.drainCalls()");
 				writer.Write(consoleCalls);
 			}
 

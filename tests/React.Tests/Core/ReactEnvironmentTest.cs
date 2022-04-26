@@ -187,7 +187,7 @@ namespace React.Tests.Core
 
 			environment.GetInitJavaScript();
 
-			mocks.Engine.Verify(x => x.Evaluate<string>("console.getCalls()"), Times.Exactly(ssrTimes));
+			mocks.Engine.Verify(x => x.Evaluate<string>("console.drainCalls()"), Times.Exactly(ssrTimes));
 		}
 
 		[Fact]

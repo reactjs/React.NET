@@ -31,8 +31,10 @@ MockConsole.prototype = {
 	_formatCall: function(call) {
 		return 'console.' + call.method + '("[.NET]", ' + call.args.join(', ') + ', ' + JSON.stringify(call.stack) + ');';
 	},
-	getCalls: function() {
-		return this._calls.map(this._formatCall).join('\n');
+	drainCalls: function() {
+		var calls = this._calls.map(this._formatCall).join('\n');
+		this._calls = [];
+		return calls;
 	}
 };
 var console = new MockConsole();
