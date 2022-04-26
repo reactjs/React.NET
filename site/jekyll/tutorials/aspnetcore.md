@@ -149,7 +149,7 @@ app.UseReact(config =>
   //  .AddScript("~/js/First.jsx")
   //  .AddScript("~/js/Second.jsx");
 
-  // If you use an external build too (for example, Babel, Webpack,
+  // If you use an external build tool (for example, Babel, Webpack,
   // Browserify or Gulp), you can improve performance by disabling
   // ReactJS.NET's version of Babel and loading the pre-transpiled
   // scripts. Example:
