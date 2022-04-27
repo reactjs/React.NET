@@ -296,6 +296,114 @@ namespace React.Tests.Core
 				);
 			}
 		}
+		
+		[Fact]
+		public void RenderJavaScriptShouldCallRenderComponentUsingRootAPI()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseRootAPI).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				Props = new { hello = "World" }
+			};
+			var result = component.RenderJavaScript(false);
+
+			Assert.Equal(
+				@"ReactDOM.hydrateRoot(document.getElementById(""container""), React.createElement(Foo, {""hello"":""World""}))",
+				result
+			);
+		}
+		
+		[Fact]
+		public void RenderJavaScriptShouldCallRenderComponentWithRootRender()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseRootAPI).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = true,
+				Props = new { hello = "World" }
+			};
+			var result = component.RenderJavaScript(false);
+
+			Assert.Equal(
+				@"ReactDOM.createRoot(document.getElementById(""container"")).render(React.createElement(Foo, {""hello"":""World""}))",
+				result
+			);
+		}
+		
+		[Fact]
+		public void RenderJavaScriptShouldCallRenderComponentwithReactDOMHydrateRoot()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseRootAPI).Returns(true);
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = false,
+				Props = new { hello = "World" }
+			};
+			var result = component.RenderJavaScript(false);
+
+			Assert.Equal(
+				@"ReactDOM.hydrateRoot(document.getElementById(""container""), React.createElement(Foo, {""hello"":""World""}))",
+				result
+			);
+		}
+		
+		[Fact]
+		public void RenderJavaScriptShouldCallRootRenderWhenSsrDisabled()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseServerSideRendering).Returns(false);
+			config.SetupGet(x => x.UseRootAPI).Returns(true);
+
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = false,
+				Props = new {hello = "World"}
+			};
+			var result = component.RenderJavaScript(false);
+
+			Assert.Equal(
+				@"ReactDOM.createRoot(document.getElementById(""container"")).render(React.createElement(Foo, {""hello"":""World""}))",
+				result
+			);
+		}
+		
+		[Fact]
+		public void RenderJavaScriptShouldHandleWaitForContentLoadWhenUsingRootAPI()
+		{
+			var environment = new Mock<IReactEnvironment>();
+			var config = CreateDefaultConfigMock();
+			config.SetupGet(x => x.UseServerSideRendering).Returns(false);
+			config.SetupGet(x => x.UseRootAPI).Returns(true);
+
+			var reactIdGenerator = new Mock<IReactIdGenerator>();
+			var component = new ReactComponent(environment.Object, config.Object, reactIdGenerator.Object, "Foo", "container")
+			{
+				ClientOnly = false,
+				Props = new {hello = "World"}
+			};
+			using (var writer = new StringWriter())
+			{
+				component.RenderJavaScript(writer, waitForDOMContentLoad: true);
+				Assert.Equal(
+					@"window.addEventListener('DOMContentLoaded', function() {ReactDOM.createRoot(document.getElementById(""container"")).render(React.createElement(Foo, {""hello"":""World""}))});",
+					writer.ToString()
+				);
+			}
+		}
 
 		[Theory]
 		[InlineData("Foo", true)]

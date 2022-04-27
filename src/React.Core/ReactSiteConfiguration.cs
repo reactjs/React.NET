@@ -375,5 +375,20 @@ namespace React
 			ReactAppBuildPath = reactAppBuildPath;
 			return this;
 		}
+		
+		/// <summary>
+		/// Gets or sets if the React 18+ create root api should be used for rendering / hydration.
+		/// If false ReactDOM.render / ReactDOM.hydrate will be used. 
+		/// </summary>
+		public bool UseRootAPI { get; set; }
+
+		/// <summary>
+		/// Enables usage of the React 18 root API when rendering / hydrating.
+		/// </summary>
+		/// <returns></returns>
+		public void EnableReact18RootAPI()
+		{
+			UseRootAPI = true;
+		}
 	}
 }

@@ -228,5 +228,17 @@ namespace React
 		/// <param name="reactAppBuildPath"></param>
 		/// <returns></returns>
 		IReactSiteConfiguration SetReactAppBuildPath(string reactAppBuildPath);
+		
+		/// <summary>
+		/// Gets or sets if the React 18+ create root api should be used for rendering / hydration.
+		/// If false ReactDOM.render / ReactDOM.hydrate will be used. 
+		/// </summary>
+		bool UseRootAPI { get; set; }
+
+		/// <summary>
+		/// Enables usage of the React 18 root API when rendering / hydrating.
+		/// </summary>
+		/// <returns></returns>
+		void EnableReact18RootAPI();
 	}
 }
