@@ -190,3 +190,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+src/.idea

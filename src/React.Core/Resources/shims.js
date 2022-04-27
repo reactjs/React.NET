@@ -19,7 +19,7 @@ MockConsole.prototype = {
 	_handleCall: function(methodName/*, ...args*/) {
 		var serializedArgs = [];
 		for (var i = 1; i < arguments.length; i++) {
-			serializedArgs.push(JSON.stringify(arguments[i]));
+			serializedArgs.push(typeof arguments[i] === 'undefined' ? 'undefined' : JSON.stringify(arguments[i]));
 		}
 
 		this._calls.push({
