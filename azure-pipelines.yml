@@ -3,7 +3,7 @@ trigger:
     - ci-updates
 
 pool:
-    vmImage: 'windows-2019'
+    vmImage: 'windows-2022'
 
 variables:
     buildPlatform: 'Any CPU'
@@ -13,7 +13,7 @@ variables:
 steps:
     - task: NodeTool@0
       inputs:
-          versionSpec: '10.x'
+          versionSpec: '16.x'
 
     - script: npm install --global npm
 
