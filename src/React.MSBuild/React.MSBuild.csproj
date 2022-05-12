@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.1.0" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.4.3" />
     <PackageReference Include="Microsoft.Sourcelink.Github" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 

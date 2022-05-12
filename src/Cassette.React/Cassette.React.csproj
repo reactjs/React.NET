@@ -34,7 +34,7 @@
   <ItemGroup>
     <PackageReference Include="Cassette" Version="2.4.2" />
     <PackageReference Include="Microsoft.Sourcelink.Github" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.1.0" />
+    <PackageReference Include="JavaScriptEngineSwitcher.Msie" Version="3.4.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
